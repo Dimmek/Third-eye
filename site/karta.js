@@ -215,8 +215,9 @@ const compass = () => '<svg class="kcomp" viewBox="0 0 200 200" aria-hidden="tru
   + '<g class="kneedle"><path d="M100 100 L110 96 L100 30 L90 96 Z" fill="var(--k-acc)"/><path d="M100 100 L110 104 L100 170 L90 104 Z" fill="var(--k-cool)" opacity=".75"/></g><circle cx="100" cy="100" r="6" fill="var(--k-text)" stroke="var(--k-acc)" stroke-width="2"/></svg>';
 
 // тело (силуэт) и зоны по знакам
-const BODYPTS = [[100, 38], [100, 70], [58, 118], [100, 102], [118, 124], [100, 158], [124, 186], [100, 214], [84, 258], [84, 300], [84, 336], [84, 372]];
-const bodySvg = zones => '<svg class="kbody" viewBox="0 0 200 390" aria-hidden="true"><g fill="none" stroke="var(--k-line2)" stroke-width="1.6"><circle cx="100" cy="38" r="24"/><path d="M100 62v14M60 84q40-14 80 0l8 102-12 4-6-80-4 74q2 24 0 40l-10 152h-18l-6-140-6 140H68L60 236q-2-16 0-40l-4-74-6 80-12-4z"/></g>'
+// sign → body zone (Aries head … Pisces feet) on the symmetric figure below
+const BODYPTS = [[100, 34], [100, 64], [53, 150], [100, 136], [88, 108], [100, 162], [116, 186], [100, 212], [86, 256], [86, 300], [86, 338], [86, 372]];
+const bodySvg = zones => '<svg class="kbody" viewBox="0 0 200 390" aria-hidden="true"><g fill="var(--k-panel2)" stroke="var(--k-line2)" stroke-width="1.6" stroke-linejoin="round"><circle cx="100" cy="34" r="22"/><path d="M91 56 L90 70 Q62 72 58 88 L38 192 Q38 206 46 204 L50 194 L68 112 L74 168 Q70 186 72 202 L76 366 Q74 380 84 380 L94 380 Q96 372 94 364 L98 236 Q100 230 102 236 L106 364 Q104 372 106 380 L116 380 Q126 380 124 366 L128 202 Q130 186 126 168 L132 112 L150 194 L154 204 Q162 206 162 192 L142 88 Q138 72 110 70 L109 56Z"/></g>'
   + zones.map((z, i) => { const [x, y] = BODYPTS[z.sign]; return '<g><circle cx="' + x + '" cy="' + y + '" r="12" fill="var(--k-acc)" fill-opacity=".9"/><text x="' + x + '" y="' + (y + 4.5) + '" text-anchor="middle" font-size="12" font-weight="700" fill="var(--k-bg)" font-family="Inter Tight,sans-serif">' + (i + 1) + '</text></g>'; }).join('') + '</svg>';
 
 function worldDraw(cv, ch, cities) {

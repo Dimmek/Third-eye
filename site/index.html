@@ -2454,7 +2454,7 @@ function showRoom(id) {
   if (r.habit) $('rHabit').innerHTML = Object.entries(HABITS).map(([k, h]) => '<button type="button" data-h="' + k + '" aria-pressed="' + (k === r.habit) + '">' + h.label + '</button>').join('');
   $('rIntent').value = intentOf(r);
   $('rWhyT').textContent = r.whyT; $('rWhy').textContent = r.why; $('rNote').innerHTML = r.note;
-  $('rSteps').innerHTML = r.phases.map(p => '<li style="color:' + rgba(CH[p.tone].c, 1) + '"><i></i><div><span class="eyes">' + EYES[eyesOf(p)][1] + EYES[eyesOf(p)][0] + '</span><b>' + p.name + (p.beat ? '<em class="hz">' + (p.beat >= 8 ? 'α ' : 'θ ') + p.beat + ' Гц</em>' : '') + '</b><small>' + p.text + '</small></div><span class="d">' + fmt(p.dur) + '</span></li>').join('');
+  $('rSteps').innerHTML = (r.bare ? [] : [INTENT_PH]).concat(phasesFor(r)).map(p => '<li style="color:' + rgba(CH[p.tone].c, 1) + '"><i></i><div><span class="eyes">' + EYES[eyesOf(p)][1] + EYES[eyesOf(p)][0] + '</span><b>' + p.name + (p.beat ? '<em class="hz">' + (p.beat >= 8 ? 'α ' : 'θ ') + p.beat + ' Гц</em>' : '') + '</b><small>' + p.text + '</small></div><span class="d">' + fmt(p.dur) + '</span></li>').join('');
   const prev = ROOMS[(idx + ROOMS.length - 1) % ROOMS.length], next = ROOMS[(idx + 1) % ROOMS.length];
   $('rNav').innerHTML = '<a href="#room-' + prev.id + '"><span class="eyebrow">← Предыдущее пространство</span><b>' + prev.name + '</b></a><a href="#room-' + next.id + '"><span class="eyebrow">Следующее пространство →</span><b>' + next.name + '</b></a>';
   levelUI(r); roomLock(r);
@@ -2694,7 +2694,7 @@ function levelUI(r) {
   const locked = r.pro && !isPro(); $('rLock').hidden = !locked; $('rStart').disabled = locked; $('rStart').style.opacity = locked ? 0.45 : '';
   if (locked) $('rLock').textContent = 'Пространство для практикующих. Открывается отдельно (' + PRICE_AJNA.toLocaleString('ru') + ' ₽, навсегда, в подписку не входит), когда вы выберете полный формат и пройдёте 7 практик (сейчас: ' + Math.min(7, practiceCount()) + ' из 7).';
 }
-$('rLevel').addEventListener('click', e => { const b = e.target.closest('button[data-l]'); if (!b) return; store.set('level', b.dataset.l); levelUI(curRoom); });
+$('rLevel').addEventListener('click', e => { const b = e.target.closest('button[data-l]'); if (!b) return; store.set('level', b.dataset.l); const y = scrollY; showRoom(curRoom.id); scrollTo(0, y); });
 function openPlayer(r) {
   if (r.pro && !isPro()) return; P.room = r; P.phases = r.bare ? phasesFor(r) : [INTENT_PH].concat(phasesFor(r)); P.m0 = r.bare ? 0 : 3; P.m1 = P.phases.length - (P.phases[P.phases.length - 1].key === 'return' ? 1 : 0); P.intent = ($('rIntent').value || '').trim() || intentOf(r); $('pIntent').textContent = P.intent; $('pIntent').classList.remove('on'); P.idx = -1; P.running = false; P.elapsed = 0;
   $('player').hidden = false; document.body.style.overflow = 'hidden';
@@ -3003,4 +3003,4 @@ accUI(); refreshLocks(); route(); requestAnimationFrame(frame);
 </script>
 <button type="button" id="ownerSw" class="owner-sw"></button>
 <style>.owner-sw{position:fixed;left:12px;bottom:12px;z-index:90;font:600 12px/1 var(--ff,system-ui);padding:9px 13px;border-radius:999px;border:1px solid rgba(220,189,134,.5);background:rgba(14,11,18,.85);color:#dcbd86;backdrop-filter:blur(8px);cursor:pointer}.owner-sw.off{color:#cfc6b8;border-color:rgba(255,255,255,.2)}@media(max-width:760px){.owner-sw{bottom:84px}}</style>
-<script>(function(){var b=document.getElementById('ownerSw');function on(){try{return localStorage.getItem('owner')!=='0'}catch(e){return true}}b.textContent=on()?'Владелец · всё открыто':'Вид клиента · вернуть всё';b.className='owner-sw'+(on()?'':' off');b.title=on()?'Нажмите, чтобы посмотреть сайт глазами клиента (с замками)':'Нажмите, чтобы снова открыть всё';b.onclick=function(){try{localStorage.setItem('owner',on()?'0':'1')}catch(e){}location.reload()};})();</script>
+<script>(function(){var b=document.getElementById('ownerSw');function on(){try{return localStorage.getItem('owner')!=='0'}catch(e){return true}}b.textContent=on()?'Владелец · всё открыто':'Вид клиента · вернуть всё';b.className='owner-sw'+(on()?'':' off');b.title=on()?'Нажмите, чтобы посмотреть сайт глазами нового клиента: тестовые покупки сбросятся, всё платное закроется':'Нажмите, чтобы снова открыть всё';b.onclick=function(){try{if(on()){['ent','karta_unlock','karta_extra','karta_edits','daily'].forEach(function(k){localStorage.removeItem(k)})}localStorage.setItem('owner',on()?'0':'1')}catch(e){}if(/[?&]owner=/.test(location.search))location.replace(location.pathname+location.hash);else location.reload()};})();</script>
