@@ -325,15 +325,15 @@ body:has(.safe:not([hidden])) :is(.totop, .mbar, .owner-sw), body:has(#player:no
 .pfocus.on { opacity: 1; }
 .pfocus i { position: absolute; left: -22px; top: -22px; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--fc, #fff); box-shadow: 0 0 22px var(--fc, #fff), inset 0 0 14px var(--fc, #fff); animation: fpulse 2.4s ease-in-out infinite; }
 .pfocus i::after { content: ""; position: absolute; inset: -14px; border-radius: 50%; border: 1px solid var(--fc, #fff); opacity: .5; animation: fring 2.4s ease-out infinite; }
-.pfocus span { position: absolute; left: 34px; top: -14px; white-space: nowrap; font-size: 14px; font-weight: 600; color: #fff; padding: 5px 12px; border-radius: 999px; background: rgba(6,5,11,.55); border: 1px solid var(--fc, #fff); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.pfocus span { position: absolute; left: 50%; top: 30px; transform: translateX(-50%); white-space: nowrap; font-size: 14px; font-weight: 600; color: #fff; padding: 5px 12px; border-radius: 999px; background: rgba(6,5,11,.55); border: 1px solid var(--fc, #fff); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 @keyframes fpulse { 0%,100% { transform: scale(.85); } 50% { transform: scale(1.1); } } @keyframes fring { 0% { transform: scale(.7); opacity: .7; } 100% { transform: scale(1.6); opacity: 0; } }
-@media (max-width: 700px) { .pfocus span { left: 50%; top: 30px; transform: translateX(-50%); font-size: 12.5px; } }
+@media (max-width: 700px) { .pfocus span { font-size: 12.5px; } }
 .pbr { position: absolute; z-index: 3; top: 50%; transform: translateY(-50%); height: min(46vh, 380px); width: 14px; border-radius: 999px; background: rgba(246,241,232,.14); border: 1px solid rgba(246,241,232,.28); opacity: 0; transition: opacity .8s; pointer-events: none; }
-.pbr.on { opacity: 1; } .pbr--l b, .pbr--l em { left: 0; } .pbr--r b, .pbr--r em { right: 0; } .pbr--l { left: max(18px, env(safe-area-inset-left, 0px)); } .pbr--r { right: max(18px, env(safe-area-inset-right, 0px)); }
+.pbr.on { opacity: 1; } .pbr--l b, .pbr--l em { left: 0; } .pbr--r b, .pbr--r em { right: 0; } .player { --fh: min(58vh, 112vw); } .pbr { top: 37%; height: calc(var(--fh) * .62); } .pbr--l { left: max(14px, calc(50% - var(--fh) * .375 - 34px)); } .pbr--r { right: max(14px, calc(50% - var(--fh) * .375 - 34px)); }
 .pbr i { position: absolute; left: 0; right: 0; bottom: 0; height: 0; border-radius: 999px; background: linear-gradient(0deg, #8fe0bd, #dcbd86 60%, #fbf1dc); box-shadow: 0 0 24px rgba(220,189,134,.7); }
 .pbr b { position: absolute; top: calc(100% + 12px); font-size: 15px; font-weight: 700; letter-spacing: .06em; color: #fbf1dc; white-space: nowrap; text-shadow: 0 1px 10px rgba(0,0,0,.8); }
 .pbr em { position: absolute; bottom: calc(100% + 10px); font: 700 22px/1 var(--ff); color: #fff; font-style: normal; }
-@media (max-width: 700px) { .pbr { width: 10px; height: 36vh; } .pbr b { font-size: 12.5px; } }
+@media (max-width: 700px) { .pbr { width: 10px; } .pbr b { font-size: 12.5px; } }
 .pintent.big { top: calc(70px + env(safe-area-inset-top, 0px)); font-size: clamp(30px, 4.4vw, 54px); opacity: 1; padding-inline: 24px; text-shadow: 0 0 30px rgba(0,0,0,.7); }
 .ptop { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .ptop .ttl { font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold-l); font-weight: 600; text-align: center; }
@@ -624,6 +624,7 @@ body:has(.safe:not([hidden])) :is(.totop, .mbar, .owner-sw), body:has(#player:no
 .kform__g { border: 0; padding: 0; margin: 0; display: flex; gap: 10px; flex-wrap: wrap; } .kform__g legend { font-size: 14px; color: #e7ddcc; font-weight: 500; margin-bottom: 8px; padding: 0; }
 .kform__g label { display: flex !important; align-items: center; gap: 8px; padding: 10px 16px; border: 1px solid rgba(246,241,232,.18); border-radius: 999px; cursor: pointer; font-weight: 400 !important; } .kform__g label:has(input:checked) { border-color: var(--gold-l); background: rgba(220,189,134,.12); color: #fff; } .kform__g input { width: auto !important; }
 
+.safe--sos ul li:not(.safe__ep), .safe--sos .check:has(#safeOk), .safe--sos .small { display: none; }
 .safe { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 16px; background: rgba(2,1,6,.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); color: var(--on-dark); }
 .safe[hidden] { display: none; }
 .safe__box { width: min(560px, 100%); max-height: calc(100dvh - 32px); overflow: auto; display: grid; gap: 14px; padding: clamp(20px, 4vw, 34px); border-radius: 22px; background: rgba(16,13,22,.94); border: 1px solid rgba(210,168,102,.28); box-shadow: 0 40px 120px -30px rgba(0,0,0,.9); }
@@ -1193,7 +1194,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     <div class="safe__exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M9 9l6 6M15 9l-6 6"/></svg><div><b>Выйти из практики можно в любой момент.</b><span>Если стало плохо, тревожно или неприятно — нажмите <b>✕</b> в левом верхнем углу или кнопку паузы. Откройте глаза и дышите обычно. С непривычки так бывает: начните с версии «Новичок» и входите постепенно.</span></div></div>
     <ul>
       <li><b>Не за рулём</b> и не во время работы с техникой. Только сидя или лёжа.</li>
-      <li><b>Эпилепсия или судороги, светочувствительность:</b> включите «Спокойный экран» ниже или слушайте с закрытыми глазами. Ритмичный звук и движущееся изображение могут быть нежелательны.</li>
+      <li class="safe__ep"><b>Эпилепсия или судороги, светочувствительность:</b> включите «Спокойный экран» ниже или слушайте с закрытыми глазами. Ритмичный звук и движущееся изображение могут быть нежелательны.</li>
       <li><b>Беременность, болезни сердца и сосудов, кардиостимулятор, глаукома:</b> дышите спокойно, без задержек и форсирования.</li>
       <li><b>Психиатрический диагноз, ПТСР, тяжёлая депрессия:</b> посоветуйтесь с врачом. Если станет хуже — остановите практику.</li>
       <li>Головокружение, тревога, неприятные ощущения — откройте глаза, дышите обычно, сделайте паузу.</li>
@@ -2599,9 +2600,11 @@ function applyAudio(ph) {
   padRoot(CH[ph.tone].tone); levels(4);
 }
 let bowlO = null, bowlG = null;
-function bowl(f) { // a soft singing-bowl tone on the target centre's note, swelling on each exhale
+// solfeggio frequencies by the usual tradition, root → crown
+const SOL = [396, 417, 528, 639, 741, 852, 963];
+function bowl(f) { // the focus centre's solfeggio tone (with a soft sub-octave), swelling on each exhale
   if (!actx) return;
-  if (!bowlO) { bowlG = actx.createGain(); bowlG.gain.value = 0; bowlG.connect(duck); bowlO = [1, 2.76, 5.4].map((m, i) => { const o = actx.createOscillator(), g = actx.createGain(); o.type = 'sine'; g.gain.value = [1, 0.28, 0.08][i]; o.connect(g).connect(bowlG); o.start(); return { o, m }; }); }
+  if (!bowlO) { bowlG = actx.createGain(); bowlG.gain.value = 0; bowlG.connect(duck); bowlO = [1, 0.5, 2].map((m, i) => { const o = actx.createOscillator(), g = actx.createGain(); o.type = 'sine'; g.gain.value = [1, 0.35, 0.06][i]; o.connect(g).connect(bowlG); o.start(); return { o, m }; }); }
   bowlO.forEach(v => v.o.frequency.setTargetAtTime((f || 200) * v.m, actx.currentTime, 1.5)); bowl.on = !!f;
 }
 function levels(tc) {
@@ -2706,7 +2709,7 @@ function enter(i) {
   if (i > 0) bell(1, CH[ph.tone].tone);
   const tg = P.room && TARGET[P.room.id], focus = tg && i === P.m0 ? ['Перенесите внимание ' + CH_ACC[tg.ch[0]] + '.', 'Почувствуйте там мягкое тепло и вибрацию звука.'] : [];
   const lines = i === P.m0 && P.intent && P.m0 ? ['Помните, зачем вы здесь.', P.intent + '.', ...focus, ...ph.say] : [...focus, ...ph.say];
-  if (tg && i >= P.m0 && i < P.m1) { const named = P.room.sleep ? -1 : namedCentre(ph), c = named >= 0 ? named : P.room.bare ? -1 : tg.ch[(i - P.m0) % tg.ch.length]; P.fc = c; bowl(c >= 0 ? CH[c].tone : 0); if (i === P.m0 && c >= 0) $('pInstr').textContent = 'Внимание — ' + CH[c].where + '. ' + ph.text; } else bowl(0);
+  if (tg && i >= P.m0 && i < P.m1) { const named = P.room.sleep ? -1 : namedCentre(ph), c = named >= 0 ? named : P.room.bare ? -1 : tg.ch[(i - P.m0) % tg.ch.length]; P.fc = c; bowl(c >= 0 ? SOL[c] : 0); if (i === P.m0 && c >= 0) $('pInstr').textContent = 'Внимание — ' + CH[c].where + '. ' + ph.text; } else bowl(0);
   setTimeout(() => { if (P.running && !P.paused && P.idx === i) guide(ph.key, lines); }, i > 0 ? 2600 : 900);
 }
 const CH_WORDS = [[0, /основани|копчик|корн|стоп/], [1, /низ живота|ниже пупка|таз/], [2, /солнечн|под рёбрами/], [3, /груд|сердц/], [4, /горл/], [5, /между бровей|лоб/], [6, /макушк|темя/]];
@@ -2717,12 +2720,12 @@ function focusUI(c, ph) { const f = $('pFocus'), img = $('pCoc');
   if (c == null || c < 0 || !img.classList.contains('on')) { f.classList.remove('on'); return; }
   const r = img.getBoundingClientRect(), col = CH[c].c, eyes = ph ? eyesOf(ph) : 'any';
   f.style.left = (r.left + r.width / 2) + 'px'; f.style.top = (r.top + r.height * FOCUS_Y[c]) + 'px'; f.style.setProperty('--fc', 'rgb(' + col.join(',') + ')');
-  const t = (eyes === 'closed' ? 'Глаза закрыты · внимание: ' : 'Смотрите сюда · ') + CH[c].where; if (f.lastChild.textContent !== t) f.lastChild.textContent = t; f.classList.add('on'); }
+  const t = (eyes === 'closed' ? 'Глаза закрыты · внимание: ' : 'Смотрите сюда · ') + CH[c].where + ' · ' + SOL[c] + ' Гц'; if (f.lastChild.textContent !== t) f.lastChild.textContent = t; f.classList.add('on'); }
 // breath guide on both sides: fills on the inhale, empties on the exhale
 function breathUI(st, ph) { [$('pBrL'), $('pBrR')].forEach(e => { if (!st) { e.classList.remove('on'); return; } e.classList.add('on'); e.children[1].style.height = (st.b * 100).toFixed(1) + '%'; e.children[2].textContent = st.label; e.children[0].textContent = st.left != null ? Math.max(1, Math.ceil(st.left)) : ''; }); }
 function chakra(k) {
   P.ch = k; const c = CH[k]; $('pPhase').textContent = c.n; $('pInstr').textContent = c.where[0].toUpperCase() + c.where.slice(1) + '. Мысленно звучит «' + c.bija + '».';
-  padRoot(c.tone); bell(1, c.tone); setTimeout(() => { if (P.running && !P.paused && P.ch === k) guide('c' + (k + 1), c.say); }, k ? 1800 : 6000);
+  padRoot(c.tone); bell(1, c.tone); bowl(SOL[k]); setTimeout(() => { if (P.running && !P.paused && P.ch === k) guide('c' + (k + 1), c.say); }, k ? 1800 : 6000);
 }
 async function play() {
   initAudio(); if (actx && actx.state === 'suspended') await actx.resume().catch(() => {});
@@ -2775,12 +2778,12 @@ function afterCheck(r, rec) {
     $('afterRes').hidden = false; $('afterSkip').hidden = true; $('afterOk').textContent = 'Готово'; };
 }
 function safety(go) {
-  const box = $('safe'), ok = $('safeOk'), soft = $('safeSoft');
+  const box = $('safe'), ok = $('safeOk'), soft = $('safeSoft'), sos = !!(P.room && P.room.id === 'sos'); box.classList.toggle('safe--sos', sos);
   ok.checked = +store.get('safeOk') > Date.now() - 864e5 * 30; soft.checked = store.get('soft') === '1'; $('safeGo').disabled = !ok.checked;
-  const r = P.room, qs = r && TARGET[r.id] ? qsFor(r) : null; $('mBefore').hidden = !qs; if (qs) { $('mBeforeQs').innerHTML = slidersHTML(qs); bindSliders($('mBeforeQs')); }
+  const r = P.room, qs = r && TARGET[r.id] && !sos ? qsFor(r) : null; if (sos) { ok.checked = true; $('safeGo').disabled = false; } $('safeT').textContent = sos ? 'Одна проверка — и начинаем' : 'Короткая проверка безопасности'; $('mBefore').hidden = !qs; if (qs) { $('mBeforeQs').innerHTML = slidersHTML(qs); bindSliders($('mBeforeQs')); }
   box.hidden = false; ok.onchange = () => { $('safeGo').disabled = !ok.checked; };
   $('safeNo').onclick = () => { box.hidden = true; };
-  $('safeGo').onclick = () => { store.set('safeOk', Date.now()); store.set('soft', soft.checked ? '1' : '0'); $('player').classList.toggle('soft', soft.checked); box.hidden = true;
+  $('safeGo').onclick = () => { if (!sos) store.set('safeOk', Date.now()); store.set('soft', soft.checked ? '1' : '0'); $('player').classList.toggle('soft', soft.checked); box.hidden = true;
     P.rec = qs ? { t: Date.now(), room: r.id, lvl: LEVEL(), planned: sum(P.phases), before: readSliders($('mBeforeQs'), r), course: store.get('activeCourse') || null } : null; P.before = qs ? P.rec.before.own : null; go(); };
 }
 function sessionEnded(done) { const rec = P.rec; P.rec = null; if (!rec) return; rec.elapsed = Math.round(Math.min(P.elapsed, rec.planned)); rec.completed = !!done;
@@ -2975,7 +2978,7 @@ function frame(now) {
       if (ph.key === 'chakras' && pt > 4) { const k = Math.min(6, Math.floor((pt - 4) / 30)); if (k !== P.ch) chakra(k); }
       const st = ph.breath ? breathAt(ph.breath, pt) : null;
       if (actx && breathGain) { const on = st && $('sbreath').checked, lvl = on ? (ph.cue ? 0.42 : 0.2) * (0.06 + 0.94 * st.b) : 0; breathGain.gain.setTargetAtTime(lvl, actx.currentTime, 0.18); breathLP.frequency.setTargetAtTime(280 + 1400 * (st ? st.b : 0), actx.currentTime, 0.18); }
-      if (bowlG) bowlG.gain.setTargetAtTime(bowl.on && P.running && !P.paused && $('music').checked ? 0.035 * (0.35 + 0.65 * (st ? 1 - st.b : 0.5)) : 0, actx.currentTime, 0.4);
+      if (bowlG) bowlG.gain.setTargetAtTime(bowl.on && P.running && !P.paused && $('music').checked ? 0.055 * (0.45 + 0.55 * (st ? 1 - st.b : 0.5)) : 0, actx.currentTime, 0.4);
       if (st && ph.cue && st.label !== P.lastLabel) { if (P.lastLabel && st.label !== 'Пауза' && $('vBreath').checked && !playRec({ 'Вдох': 'inhale', 'Выдох': 'exhale' }[st.label] || '') && synth && !synth.speaking) speak([st.label], { rate: 0.7, gap: 0 }); P.lastLabel = st.label; }
       const inMain = P.idx >= P.m0 && P.idx < P.m1, el = P.elapsed - P.phases.slice(0, P.m0).reduce((a, p) => a + p.dur, 0);
       $('pIntent').classList.toggle('big', ph.key === 'intent'); $('pIntent').classList.toggle('on', ph.key === 'intent' || (inMain && (el % 75) < 9));
