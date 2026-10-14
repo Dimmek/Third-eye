@@ -30,6 +30,8 @@
   color-scheme: light;
 }
 [hidden] { display: none !important; }
+html { font-variant-numeric: lining-nums; }
+html { font-variant-numeric: lining-nums; }
 #siteNet { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
 main, .footer, .stats, .marquee { position: relative; z-index: 1; }
 .stats { background: rgba(255,253,249,.82); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
@@ -76,6 +78,19 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 .header { position: fixed; z-index: 30; top: 0; left: 0; right: 0; padding-top: env(safe-area-inset-top, 0px); color: var(--on-dark); transition: background .4s, color .4s, border-color .4s; border-bottom: 1px solid transparent; }
 .back { position: fixed; z-index: 29; top: calc(env(safe-area-inset-top, 0px) + 90px); left: calc(max(0px, (100% - var(--container)) / 2) + max(env(safe-area-inset-left, 0px), clamp(16px, 4vw, 40px))); display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px 9px 11px; border-radius: 999px; font-size: 14px; font-weight: 500; color: #f6f1e8; background: rgba(14,12,20,.5); border: 1px solid rgba(246,241,232,.22); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transition: background .25s, border-color .25s, transform .3s, opacity .3s; }
 .back svg { width: 18px; height: 18px; }
+.ctarow { margin-top: clamp(30px, 4vw, 48px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; padding: 22px 26px; border-radius: var(--r-lg); background: var(--white); border: 1px solid var(--line); box-shadow: var(--shadow); }
+.ctarow p { margin: 0; color: var(--ink); font-size: 17px; max-width: 46ch; } .ctarow > div { display: flex; flex-wrap: wrap; gap: 10px; } .ctarow--c { justify-content: center; background: transparent; border: 0; box-shadow: none; padding: 0; }
+.dark .ctarow, .mission .ctarow--c { background: transparent; }
+@media (max-width: 560px) { .ctarow { padding: 20px; } .ctarow > div, .ctarow > div .btn { width: 100%; justify-content: center; } }
+.way .btn { justify-self: start; }
+.totop { position: fixed; z-index: 35; right: max(18px, env(safe-area-inset-right, 0px)); bottom: calc(env(safe-area-inset-bottom, 0px) + 22px); width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: linear-gradient(135deg, #d2a866, var(--gold) 55%, var(--gold-d)); box-shadow: 0 14px 34px -12px rgba(143,106,56,.75); transition: opacity .3s, transform .3s; }
+.totop svg { width: 22px; height: 22px; } .totop:hover { transform: translateY(-3px); } .totop:focus-visible { outline: 2px solid var(--gold-l); outline-offset: 3px; }
+.totop.hide { opacity: 0; pointer-events: none; transform: translateY(10px); }
+.mbar { display: none; }
+@media (max-width: 760px) { .mbar { position: fixed; z-index: 34; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 10px max(12px, env(safe-area-inset-left, 0px)) calc(env(safe-area-inset-bottom, 0px) + 10px); background: rgba(14,12,20,.86); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-top: 1px solid rgba(246,241,232,.12); transition: transform .35s; }
+  .mbar .btn { justify-content: center; padding: 13px 10px; font-size: 15px; } .mbar .btn--line { color: #f6f1e8; border-color: rgba(246,241,232,.35); }
+  .mbar.hide { transform: translateY(110%); } .mbar[hidden] { display: none; }
+  body.has-mbar .totop { bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); } body.has-mbar .footer { padding-bottom: 80px; } }
 .back.gone { opacity: 0; pointer-events: none; transform: translateY(-8px); }
 .back.light { color: var(--ink); background: rgba(255,253,249,.85); border-color: var(--line); } .back.light:hover { background: #fff; border-color: var(--gold); }
 .back:hover { background: rgba(14,12,20,.72); border-color: var(--gold-l); transform: translateX(-2px); }
@@ -114,6 +129,12 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 .hero__inner { max-width: 600px; }
 .hero .display { margin: 0 0 28px; }
 .hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 38px; }
+.btn--astro { background: linear-gradient(120deg, #7b5cff 0%, #b07cff 38%, #d9a865 100%); color: #fff; box-shadow: 0 16px 40px -16px rgba(123,92,255,.75); }
+.btn--astro:hover { filter: brightness(1.08); }
+.hmap { margin-top: 30px; display: flex; align-items: center; gap: 16px; max-width: 560px; padding: 14px 14px 14px 18px; border-radius: 20px; background: rgba(20,14,34,.55); border: 1px solid rgba(176,124,255,.45); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: #f6f1e8; transition: border-color .3s, transform .3s; }
+.hmap:hover { border-color: #d9a865; transform: translateY(-2px); }
+.hmap__i { width: 40px; height: 40px; flex: none; color: #d9b7ff; } .hmap span { display: grid; gap: 2px; flex: 1; min-width: 0; } .hmap small { font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: #c9a8ff; } .hmap b { font-size: 16px; font-weight: 600; line-height: 1.3; } .hmap em { font-style: normal; flex: none; font-family: var(--ff); font-weight: 600; color: #fff; }
+@media (max-width: 560px) { .hmap { flex-wrap: wrap; } .hmap em { width: 100%; justify-content: center; } }
 .hero__meta { display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 42px; font-size: 14px; color: #bdb5a8; }
 .hero__meta span { display: inline-flex; align-items: center; gap: 8px; }
 .hero__meta span::before { content: "✦"; color: var(--gold-l); font-size: 12px; }
@@ -407,6 +428,19 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 @media (prefers-reduced-motion: reduce) { .pcoc.on { animation: none; transform: translate(-50%, -50%); } }
 .player.soft .pcoc { opacity: .15; }
 .pvis { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; mix-blend-mode: screen; opacity: 0; transition: opacity 2s ease; }
+.pick { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.4fr); gap: clamp(20px, 3vw, 40px); align-items: start; padding: clamp(22px, 3vw, 36px); margin-bottom: 30px; border-radius: var(--r-lg); background: linear-gradient(135deg, #fff9ee, #f6ead6); border: 1px solid #e8d3a8; box-shadow: var(--shadow); }
+@media (max-width: 900px) { .pick { grid-template-columns: 1fr; } }
+.pick__h { display: grid; gap: 12px; justify-items: start; } .pick__h h2 { font-family: var(--ff-serif); font-weight: 500; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.05; color: var(--ink); } .pick__h p { color: var(--ink-2); }
+.pick__g { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; } @media (max-width: 640px) { .pick__g { grid-template-columns: 1fr 1fr; } }
+.pick__g a { display: grid; gap: 4px; padding: 14px 16px; border-radius: 16px; background: var(--white); border: 1px solid var(--line); transition: border-color .25s, transform .25s, box-shadow .25s; } .pick__g a:hover { border-color: var(--gold); transform: translateY(-2px); box-shadow: var(--shadow); }
+.pick__g b { color: var(--ink); font-size: 15px; font-weight: 600; } .pick__g small { color: var(--gold-d); font-size: 13px; }
+.rlv { display: grid; gap: 10px; max-width: 640px; } .rlv__t { font-size: 12.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-l); font-weight: 600; }
+.rlv__g { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } @media (max-width: 520px) { .rlv__g { grid-template-columns: 1fr; } }
+.rlv__g button { text-align: left; display: grid; grid-template-columns: auto 1fr auto; grid-template-areas: "i b e" "s s s"; align-items: center; gap: 6px 10px; padding: 16px 18px; border-radius: 18px; background: rgba(255,255,255,.07); border: 1.5px solid rgba(246,241,232,.22); color: #f6f1e8; transition: border-color .25s, background .25s, transform .25s; }
+.rlv__g button:hover { border-color: var(--gold-l); transform: translateY(-2px); }
+.rlv__g i { grid-area: i; width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(246,241,232,.5); } .rlv__g b { grid-area: b; font-size: 18px; font-weight: 600; } .rlv__g em { grid-area: e; font-style: normal; font-family: var(--ff); font-size: 14px; color: var(--gold-l); font-weight: 600; } .rlv__g small { grid-area: s; font-size: 13.5px; line-height: 1.45; color: #d6d1c8; }
+.rlv__g button[aria-checked=true] { background: linear-gradient(135deg, rgba(210,168,102,.28), rgba(210,168,102,.1)); border-color: var(--gold-l); box-shadow: 0 14px 34px -16px rgba(210,168,102,.7); }
+.rlv__g button[aria-checked=true] i { border-color: var(--gold-l); background: radial-gradient(circle, var(--gold-l) 45%, transparent 50%); }
 .rlevel { display: inline-flex; border: 1px solid rgba(246,241,232,.25); border-radius: 999px; padding: 3px; justify-self: start; } .rlevel button { padding: 9px 16px; border-radius: 999px; font-size: 14px; color: #d6d1c8; } .rlevel button[aria-pressed=true] { background: rgba(220,189,134,.18); color: #fff; box-shadow: inset 0 0 0 1px var(--gold-l); }
 .rlock { color: #e7ddcc; font-size: 15px; max-width: 52ch; padding: 12px 16px; border-left: 2px solid var(--gold-l); background: rgba(255,255,255,.04); }
 .way { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; } @media (max-width: 860px) { .way { grid-template-columns: 1fr; } }
@@ -622,6 +656,8 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
 
 <canvas id="siteNet" aria-hidden="true"></canvas>
 <button class="back" id="backBtn" type="button" hidden aria-label="Назад"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg><span>Назад</span></button>
+<button class="totop" id="toTop" type="button" aria-label="Наверх" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+<nav class="mbar" id="mBar" aria-label="Быстрые действия" hidden><a class="btn btn--gold" href="#prostranstva">Практика</a><a class="btn btn--astro" href="#karta">Карта жизни</a></nav>
 <header class="header" id="nav">
   <div class="container">
     <a class="logo" href="#top" aria-label="Дорога к себе — на главную"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="17" stroke="#dcbd86" stroke-width="1"/><path d="M20 5l3.2 11.8L35 20l-11.8 3.2L20 35l-3.2-11.8L5 20l11.8-3.2z" stroke="#dcbd86" stroke-width="1.1" stroke-linejoin="round"/><circle cx="20" cy="20" r="3" fill="#dcbd86"/></svg>ДОРОГА К СЕБЕ</a>
@@ -641,13 +677,14 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     <canvas id="heroNet"></canvas>
     <div class="container">
       <div class="hero__inner">
-        <span class="eyebrow dot">Медитации и карта жизни</span>
+        <span class="eyebrow dot">17 пространств медитации</span>
         <h1 class="display">Здесь шум <em>стихает.</em></h1>
-        <p class="lead">Узнайте по своей карте жизни, где вы сейчас и что вам нужно. Затем пятнадцать минут практики — и вы спокойнее, яснее и ближе к себе. Голос ведёт, вам остаётся только слушать.</p>
+        <p class="lead">Пятнадцать минут — и вы спокойнее, яснее и ближе к себе. Голос ведёт, музыка поддерживает, вам остаётся только слушать.</p>
         <div class="hero__cta">
           <a class="btn btn--gold" href="#prostranstva">Выбрать практику <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
-          <a class="btn btn--line" href="#karta">Построить карту жизни <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+          <a class="btn btn--line" href="#how">Как проходит сеанс</a>
         </div>
+        <a class="hmap" href="#karta"><svg class="hmap__i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9.5"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2"/><path d="M15.5 8.5L13 13l-4.5 2.5L11 11z" fill="currentColor" fill-opacity=".35"/></svg><span><small>Отдельно · бесплатно</small><b>Карта жизни: что говорят звёзды о вашем пути</b></span><em class="btn btn--astro btn--sm">Построить карту <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></em></a>
         <div class="hero__meta"><span>Засыпать без мыслей по кругу</span><span>Меньше тревоги и раздражения</span><span>Свобода от того, что держит</span></div>
       </div>
     </div>
@@ -666,9 +703,9 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
       <div class="shead"><div><span class="eyebrow">Как это устроено</span><h2 class="h2">Два инструмента — <em>один путь.</em></h2></div>
         <p class="lead">Карта жизни показывает, где вы сейчас и какая тема у вашего периода. Практики помогают пройти этот путь спокойно и осознанно — каждый день по пятнадцать минут.</p></div>
       <ol class="way">
-        <li><span class="way__n">01</span><h3>Узнайте себя</h3><p>Введите дату, время и место рождения. Через минуту — ваша карта: сильные стороны, тема года, влияния сейчас. Профиль бесплатно.</p><a href="#karta">Построить карту <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></li>
-        <li><span class="way__n">02</span><h3>Выберите практику</h3><p>Карта подскажет три пространства под ваш период. Или выберите по самочувствию: тревога, усталость, важное событие, привычка.</p><a href="#prostranstva">17 пространств <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></li>
-        <li><span class="way__n">03</span><h3>Идите своим путём</h3><p>Короткие практики для начала, полные — когда освоитесь. Карта показывает периоды на год вперёд, практики дают опору в каждом из них.</p><a href="#how">Как проходит сеанс <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></li>
+        <li><span class="way__n">01</span><h3>Узнайте себя</h3><p>Введите дату, время и место рождения. Через минуту — ваша карта: сильные стороны, тема года, влияния сейчас. Профиль бесплатно.</p><a class="btn btn--astro btn--sm" href="#karta">Построить карту <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></li>
+        <li><span class="way__n">02</span><h3>Выберите практику</h3><p>Карта подскажет три пространства под ваш период. Или выберите по самочувствию: тревога, усталость, важное событие, привычка.</p><a class="btn btn--line btn--sm" href="#prostranstva">Выбрать практику <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></li>
+        <li><span class="way__n">03</span><h3>Идите своим путём</h3><p>Короткие практики для начала, полные — когда освоитесь. Карта показывает периоды на год вперёд, практики дают опору в каждом из них.</p><a class="btn btn--line btn--sm" href="#how">Как проходит сеанс <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></li>
       </ol>
     </div>
   </section>
@@ -678,7 +715,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
       <div class="kteaser__txt"><span class="eyebrow">Карта жизни</span><h2 class="h2">Ваш путь, <em>рассчитанный по звёздам.</em></h2>
         <p>Дата, время и место рождения — и через минуту вы видите свою карту: сильные стороны, тему этого года, влияния планет сейчас и три практики, которые нужны именно вам.</p>
         <ul><li>Расчёт по астрономическим эфемеридам, с точностью до минуты дуги</li><li>Профиль и тема года — бесплатно</li><li>Полная карта и прогноз на 12 месяцев — по желанию</li></ul>
-        <a class="btn btn--gold" href="#karta">Построить мою карту <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
+        <a class="btn btn--astro" href="#karta">Построить мою карту <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
       <figure class="kteaser__art"><canvas id="kTeaserCv" aria-label="Небо сейчас"></canvas><figcaption>Небо над Москвой прямо сейчас</figcaption></figure>
     </div>
     <div class="container kinside">
@@ -717,6 +754,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
         <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h16M14 6l6 6-6 6"/></svg></span><h3>Свобода от лишнего</h3><p>Тяга к сигаретам, сладкому, телефону слабеет. Старые установки перестают управлять вами.</p></div>
         <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg></span><h3>Встреча с собой</h3><p>Тишина, в которой слышно главное: чего вы на самом деле хотите и куда идёте.</p></div>
       </div>
+      <div class="ctarow"><p>Начните с практики, которая нужна именно сейчас — первая бесплатно.</p><div><a class="btn btn--gold" href="#room-cleanse">Начать с Очищения <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><a class="btn btn--line" href="#prostranstva">Все пространства <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div></div>
     </div>
   </section>
 
@@ -738,6 +776,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
         <div class="step card"><span class="n">03</span><h3>Сеанс</h3><p>Вы внутри своей практики. Образы, музыка и голос ведут к тому, ради чего вы пришли.</p></div>
         <div class="step card"><span class="n">04</span><h3>Возвращение</h3><p>Мягкий выход. Остаются лёгкость, ясность и ощущение, что вы снова на своей стороне.</p></div>
       </div>
+      <div class="ctarow"><p>Наденьте наушники — первый сеанс займёт около 7 минут.</p><div><a class="btn btn--gold" href="#room-cleanse">Попробовать бесплатно <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div></div>
     </div>
   </section>
 
@@ -746,6 +785,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
       <span class="eyebrow">Зачем мы это сделали</span>
       <blockquote>Мир шумит всё громче. <em>Пятнадцать минут тишины</em> возвращают вас себе.</blockquote>
       <p>Новости, чаты, чужие ожидания — внимание раздёргано, и своё желание трудно отличить от навязанного. «Дорога к себе» — место, где можно выдохнуть, услышать себя и шаг за шагом стать спокойнее, сильнее и свободнее.</p>
+      <div class="ctarow ctarow--c"><div><a class="btn btn--astro" href="#karta">Построить карту жизни <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><a class="btn btn--gold" href="#prostranstva">Выбрать практику <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div></div>
     </div>
   </section>
 
@@ -777,6 +817,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
         <details><summary>А если не получается сосредоточиться?<i></i></summary><p>Это нормально. Мысли уходят — вы возвращаетесь. Каждое такое возвращение и есть тренировка.</p></details>
         <details><summary>Кому стоит быть осторожнее?<i></i></summary><p>При эпилепсии, серьёзных психических расстройствах и после травм головы сначала посоветуйтесь с врачом. Не слушайте за рулём. Практика поддерживает, но не заменяет лечение.</p></details>
       </div>
+      <div class="ctarow"><p>Остались вопросы? Лучший ответ — один спокойный сеанс.</p><div><a class="btn btn--gold" href="#room-cleanse">Начать бесплатно <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><a class="btn btn--line" href="#karta">Карта жизни <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div></div>
     </div>
   </section>
 
@@ -962,6 +1003,10 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
   </section>
   <section class="section" style="padding-top:20px">
     <div class="container">
+      <div class="pick">
+        <div class="pick__h"><span class="eyebrow">Подбор за 5 секунд</span><h2>Не знаете, с чего начать?</h2><p>Выберите, как вы себя чувствуете, — откроется практика, которая поможет именно сейчас. Впервые здесь — начните с Очищения, оно бесплатное.</p><a class="btn btn--gold" href="#room-cleanse">Начать с Очищения <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
+        <div class="pick__g" id="catMoods"></div>
+      </div>
       <div class="filters" id="filters" role="group" aria-label="Фильтр"></div>
       <div class="rooms" id="roomGrid"></div>
     </div>
@@ -979,7 +1024,9 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
       <div class="chips" id="rChips"></div>
       <div class="habit" id="rHabitBox" hidden><span class="eyebrow">Ваша привычка</span><div class="hchips" id="rHabit" role="group" aria-label="Привычка"></div></div>
       <label class="intent"><span class="eyebrow">Ваше намерение</span><input id="rIntent" type="text" maxlength="80" autocomplete="off"></label>
-      <div class="rlevel" id="rLevel" role="radiogroup" aria-label="Длительность"><button type="button" data-l="new"></button><button type="button" data-l="pro"></button></div>
+      <div class="rlv"><span class="rlv__t">Выберите свой уровень</span><div class="rlv__g" id="rLevel" role="radiogroup" aria-label="Уровень">
+        <button type="button" data-l="new" role="radio"><i></i><b>Новичок</b><em></em><small>Впервые или давно не практиковали: короткая версия, чтобы войти мягко</small></button>
+        <button type="button" data-l="pro" role="radio"><i></i><b>Полная</b><em></em><small>Уже есть опыт: все этапы практики целиком</small></button></div></div>
       <p class="rlock" id="rLock" hidden></p>
       <div><button class="btn btn--gold" id="rStart" type="button">Начать сеанс <svg class="ico" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3v10l8-5z"/></svg></button></div>
     </div>
@@ -1959,6 +2006,7 @@ $('filters').innerHTML = Object.entries(CATS).map(([k, v]) => '<button type="but
 $('filters').addEventListener('click', e => { const b = e.target.closest('button[data-c]'); if (b) filterCat(b.dataset.c); });
 filterCat('all');
 const MOODS = [['Устал после работы', 'Выключить внутренний шум', 'silence'], ['Тревожно, всё сжато', 'Три техники дыхания', 'breathe'], ['Нет сил', 'Поднять энергию', 'energy'], ['Впереди важное событие', 'Спокойствие при любом исходе', 'event'], ['Обида не отпускает', 'Отпустить и стать легче', 'release'], ['Ругаю себя', 'Стать себе другом', 'selflove'], ['Тянет к привычке', 'Пережить волну тяги', 'habits'], ['Хочу перемен', 'Снять шоры', 'blinders'], ['Не понимаю, чего хочу', 'Услышать себя', 'purpose']];
+$('catMoods').innerHTML = MOODS.map(([t, s, id]) => '<a href="#room-' + id + '"><b>' + t + '</b><small>' + s + ' →</small></a>').join('');
 $('moods').innerHTML = MOODS.map(([t, s, id]) => '<a class="mood" href="#room-' + id + '"><span><b>' + t + '</b><small>' + s + '</small></span>' + ARROW + '</a>').join('');
 const names = ROOMS.filter(r => !r.pro).map(r => '<span>' + r.name + '</span>').join('');
 $('marquee').innerHTML = names + names;
@@ -2195,12 +2243,17 @@ function markPractice() { let days = []; try { days = JSON.parse(store.get('ajna
 const plural = (n, a, b, c) => { const m10 = n % 10, m100 = n % 100; return m10 === 1 && m100 !== 11 ? a : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? b : c; };
 function renderStreak() { const n = streakDays(); $('streak').textContent = n ? 'Вы практикуете ' + n + ' ' + plural(n, 'день', 'дня', 'дней') + ' подряд' : 'Первая сессия — первый шаг.'; }
 renderStreak();
-addEventListener('scroll', () => $('backBtn').classList.toggle('gone', scrollY > 260), { passive: true });
+const onScrollUI = () => { const y = scrollY, onHome = curPage === 'home', mob = innerWidth <= 760;
+  $('backBtn').classList.toggle('gone', y > 260);
+  const tt = $('toTop'); tt.hidden = false; tt.classList.toggle('hide', y < 700);
+  const mb = $('mBar'); mb.hidden = !(onHome && mob); mb.classList.toggle('hide', y < innerHeight * 0.8); document.body.classList.toggle('has-mbar', onHome && mob && y >= innerHeight * 0.8); };
+addEventListener('scroll', onScrollUI, { passive: true }); addEventListener('resize', onScrollUI);
+$('toTop').onclick = () => scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
 let navDepth = 0; addEventListener('hashchange', () => navDepth++);
 const BACK_TO = { roomPage: '#prostranstva', article: '#zhurnal', catalog: '#top', journal: '#top', karta: '#top', docs: '#top' };
 $('backBtn').onclick = () => { if (navDepth > 0 && history.length > 1) { navDepth -= 2; history.back(); } else location.hash = BACK_TO[curPage] || '#top'; };
 let curPage = 'home';
-function show(page) { curPage = page; $('backBtn').hidden = page === 'home'; $('backBtn').classList.toggle('light', ['catalog', 'journal', 'article', 'docs'].includes(page)); ['home', 'catalog', 'roomPage', 'journal', 'article', 'karta', 'docs'].forEach(id => $(id).hidden = id !== page); setTimeout(solidHeader, 0); document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('on', (a.dataset.r === 'prostranstva' && (page === 'catalog' || page === 'roomPage')) || (a.dataset.r === 'zhurnal' && (page === 'journal' || page === 'article')) || (a.dataset.r === 'karta' && page === 'karta'))); $('mnav').hidden = true; }
+function show(page) { curPage = page; setTimeout(onScrollUI, 0); $('backBtn').hidden = page === 'home'; $('backBtn').classList.toggle('light', ['catalog', 'journal', 'article', 'docs'].includes(page)); ['home', 'catalog', 'roomPage', 'journal', 'article', 'karta', 'docs'].forEach(id => $(id).hidden = id !== page); setTimeout(solidHeader, 0); document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('on', (a.dataset.r === 'prostranstva' && (page === 'catalog' || page === 'roomPage')) || (a.dataset.r === 'zhurnal' && (page === 'journal' || page === 'article')) || (a.dataset.r === 'karta' && page === 'karta'))); $('mnav').hidden = true; }
 function showHome(anchor) {
   show('home');
   if (anchor) { const el = $(anchor); if (el) setTimeout(() => el.scrollIntoView(), 0); } else scrollTo(0, 0);
@@ -2399,8 +2452,8 @@ function phasesFor(r) {
 function levelUI(r) {
   const nw = phasesFor(Object.assign({}, r)), full = r.phases, cur = LEVEL();
   const shortDur = (() => { const save = store.get('level'); return sum([Object.assign({}, COCOON, { dur: 100 }), Object.assign({}, BREATHE, { dur: 50 })]) + 230 + 40; })();
-  const [bn, bp] = $('rLevel').children; bn.textContent = 'Новичок · ' + mins(shortDur); bp.textContent = 'Полная · ' + mins(sum(full));
-  bn.setAttribute('aria-pressed', cur === 'new'); bp.setAttribute('aria-pressed', cur === 'pro');
+  const [bn, bp] = $('rLevel').children; bn.querySelector('em').textContent = mins(shortDur); bp.querySelector('em').textContent = mins(sum(full));
+  bn.setAttribute('aria-checked', cur === 'new'); bp.setAttribute('aria-checked', cur === 'pro');
   const locked = r.pro && !isPro(); $('rLock').hidden = !locked; $('rStart').disabled = locked; $('rStart').style.opacity = locked ? 0.45 : '';
   if (locked) $('rLock').textContent = 'Пространство для практикующих. Откроется, когда вы выберете полный формат и пройдёте 7 практик (сейчас: ' + Math.min(7, practiceCount()) + ' из 7).';
 }
