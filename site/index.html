@@ -76,6 +76,7 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 .header { position: fixed; z-index: 30; top: 0; left: 0; right: 0; padding-top: env(safe-area-inset-top, 0px); color: var(--on-dark); transition: background .4s, color .4s, border-color .4s; border-bottom: 1px solid transparent; }
 .back { position: fixed; z-index: 29; top: calc(env(safe-area-inset-top, 0px) + 90px); left: calc(max(0px, (100% - var(--container)) / 2) + max(env(safe-area-inset-left, 0px), clamp(16px, 4vw, 40px))); display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px 9px 11px; border-radius: 999px; font-size: 14px; font-weight: 500; color: #f6f1e8; background: rgba(14,12,20,.5); border: 1px solid rgba(246,241,232,.22); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transition: background .25s, border-color .25s, transform .25s; }
 .back svg { width: 18px; height: 18px; }
+.back.light { color: var(--ink); background: rgba(255,253,249,.85); border-color: var(--line); } .back.light:hover { background: #fff; border-color: var(--gold); }
 .back:hover { background: rgba(14,12,20,.72); border-color: var(--gold-l); transform: translateX(-2px); }
 .back:focus-visible { outline: 2px solid var(--gold-l); outline-offset: 3px; }
 @media (max-width: 600px) { .back { top: calc(env(safe-area-inset-top, 0px) + 84px); padding: 8px 14px 8px 9px; } }
@@ -391,6 +392,22 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 .krect { grid-template-columns: 1fr auto; align-items: center; gap: 20px; } @media (max-width: 700px) { .krect { grid-template-columns: 1fr; justify-items: start; } }
 .warpv { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; mix-blend-mode: screen; opacity: 0; transition: opacity .9s ease; }
 .warpv.on { opacity: 1; } .warpv.off { opacity: 0; transition-duration: 1.6s; }
+.docs-hero { background: var(--pearl); position: relative; z-index: 1; } .docs-hero .container { padding-block: 150px 40px; display: grid; gap: 20px; }
+.docs-hero .display { font-size: clamp(42px, 5.6vw, 80px); color: var(--ink); } .docs-hero .lead { font-size: 19px; color: var(--ink-2); max-width: 60ch; }
+.docs-toc { display: flex; flex-wrap: wrap; gap: 8px; } .docs-toc a { padding: 9px 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--white); font-size: 14px; color: var(--ink); }
+.docs-toc a:hover { border-color: var(--gold); }
+.docs-draft { font-size: 13.5px; color: var(--mute); padding: 12px 16px; border-left: 2px solid var(--gold); background: var(--white); max-width: 80ch; }
+.docs { display: grid; gap: 30px; padding-bottom: 100px; position: relative; z-index: 1; }
+.doc { display: grid; gap: 14px; padding: clamp(22px, 3vw, 40px); border-radius: var(--r-lg); background: var(--white); border: 1px solid var(--line); box-shadow: var(--shadow); max-width: 900px; color: var(--ink-2); font-size: 16px; line-height: 1.65; }
+.doc h2 { font-family: var(--ff-serif); font-weight: 500; font-size: clamp(28px, 3.4vw, 40px); color: var(--ink); line-height: 1.1; } .doc h3 { font-size: 18px; color: var(--ink); margin-top: 8px; }
+.doc ul, .doc ol { margin: 0; padding-left: 22px; display: grid; gap: 10px; } .doc b { color: var(--ink); } .doc a { color: var(--gold-d); text-decoration: underline; text-underline-offset: 3px; }
+.docs-sum { padding: 16px 20px; border-radius: 14px; background: var(--gold-soft, #f4ead8); border: 1px solid #e8d3a8; } .docs-note { font-size: 14.5px; color: var(--mute); }
+.kform__ok { font-size: 13px !important; line-height: 1.5; align-items: flex-start !important; } .kform__ok input { margin-top: 3px; flex: none; } .kform__ok a { color: var(--gold-l); }
+#kPayOkL { font-size: 13.5px; line-height: 1.5; color: #d6d1c8; align-items: flex-start; } #kPayOkL a { color: var(--gold-l); } #kPayOkL input { margin-top: 3px; flex: none; }
+.kread { max-width: var(--container); margin: 0 auto; padding: 40px max(var(--gut), clamp(16px, 4vw, 40px)) 0; position: relative; z-index: 1; }
+.kread__in { display: grid; grid-template-columns: auto 1fr; gap: 18px 26px; padding: 22px 26px; border-radius: var(--r); background: var(--white); border: 1px solid #e8d3a8; }
+.kread__in h3 { font-size: 18px; color: var(--ink); } .kread__in ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 15px; color: var(--ink-2); } .kread__in a { color: var(--gold-d); }
+@media (max-width: 700px) { .kread__in { grid-template-columns: 1fr; } }
 .safe { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 16px; background: rgba(2,1,6,.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); color: var(--on-dark); }
 .safe[hidden] { display: none; }
 .safe__box { width: min(560px, 100%); max-height: calc(100dvh - 32px); overflow: auto; display: grid; gap: 14px; padding: clamp(20px, 4vw, 34px); border-radius: 22px; background: rgba(16,13,22,.94); border: 1px solid rgba(210,168,102,.28); box-shadow: 0 40px 120px -30px rgba(0,0,0,.9); }
@@ -621,6 +638,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
           <label>Долгота<input id="kLon" type="number" step="0.001" placeholder="37.617"></label>
           <label class="wide">Часовой пояс<select id="kTz"></select></label>
         </div>
+        <label class="check kform__ok"><input type="checkbox" id="kOk"> <span>Я понимаю: карта — инструмент самопознания. Она описывает темы и периоды, а не события, и ничего не гарантирует. Решения о здоровье, деньгах, отношениях и законе я принимаю сам(а). <a href="#d-map">Как относиться к карте</a> · <a href="#d-terms">Условия</a></span></label>
         <p class="kform__err" id="kErr" role="alert"></p>
         <button class="btn btn--gold" id="kGo" type="submit">Построить карту</button>
       </form>
@@ -629,8 +647,109 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
   <div id="kResult" hidden></div>
   <div class="safe" id="kPay" hidden role="dialog" aria-modal="true" aria-labelledby="kPayT"><div class="safe__box">
     <span class="eyebrow">Оплата</span><h2 id="kPayT"></h2><p id="kPayText" style="color:#d6d1c8"></p>
+    <label class="check" id="kPayOkL"><input type="checkbox" id="kPayOk"> <span>Прошу открыть доступ сразу. Понимаю, что отчёт носит информационно-развлекательный характер, не является прогнозом событий и не гарантирует результат; услуга считается оказанной после формирования отчёта. С <a href="#d-terms">офертой</a> и <a href="#d-refund">условиями возврата</a> согласен(а).</span></label>
     <div class="safe__act"><button class="ghost" id="kPayClose" type="button">Закрыть</button><button class="btn btn--gold" id="kPayDemo" type="button">Открыть в тестовом режиме</button></div>
   </div></div>
+</main>
+
+<main id="docs" hidden>
+  <section class="docs-hero"><div class="container">
+    <span class="eyebrow">Документы</span><h1 class="display">Честные <em>правила</em></h1>
+    <p class="lead">Коротко и по-человечески — что мы даём, чего не обещаем и как защищены ваши права. Ниже — полные тексты.</p>
+    <nav class="docs-toc" aria-label="Документы"><a href="#d-map">Как относиться к Карте жизни</a><a href="#d-disclaimer">Отказ от гарантий</a><a href="#d-terms">Соглашение и оферта</a><a href="#d-refund">Возвраты и отмена</a><a href="#d-privacy">Персональные данные</a><a href="#d-safety">Безопасность практик</a></nav>
+    <p class="docs-draft">Черновая редакция от 14.10.2026. До запуска оплаты тексты проверит юрист в каждой стране, где работает сервис. Реквизиты в квадратных скобках будут заполнены.</p>
+  </div></section>
+  <div class="container docs">
+
+    <section class="doc" id="d-map">
+      <h2>Как относиться к Карте жизни</h2>
+      <div class="docs-sum"><b>Главное в трёх строках.</b> Положения планет мы рассчитываем точно, по астрономическим эфемеридам. Толкование этих положений — многовековая традиция и язык для размышления о себе, а не научно доказанный закон. Карта описывает темы и периоды, а не события, и ничего не гарантирует.</div>
+      <h3>Что в карте точно</h3>
+      <p>Дата, время и место рождения переводятся во всемирное время с учётом исторических часовых поясов. Положения Солнца, Луны и планет считаются астрономической библиотекой с точностью до долей угловой минуты. Это та же астрономия, по которой рассчитывают восход Луны и затмения.</p>
+      <h3>Что в карте — толкование</h3>
+      <p>Описания знаков, домов, аспектов, «тема года» и прогноз по периодам основаны на астрологической традиции. Научные проверки не подтвердили, что положение планет определяет характер или события жизни (подробно — в статьях журнала «<a href="#j-astro-science">Астрология и наука</a>» и «<a href="#j-barnum">Эффект Барнума</a>»). Поэтому мы предлагаем читать карту как набор вопросов к себе, а не как ответы.</p>
+      <h3>Что влияет на то, сбудется ли «прогноз»</h3>
+      <ul>
+        <li><b>Ваши решения и действия.</b> Благоприятный период без действий ничего не принесёт, а трудный период проходят по-разному в зависимости от того, что вы делаете.</li>
+        <li><b>Другие люди.</b> У каждого из них своя воля, планы и обстоятельства.</li>
+        <li><b>Обстоятельства:</b> здоровье, экономика, работа, место жизни, законы, случайности.</li>
+        <li><b>Точность данных.</b> Ошибка во времени рождения на 20–30 минут сдвигает Асцендент, дома и сроки периодов. Без точного времени дома не рассчитываются.</li>
+        <li><b>Ожидания.</b> Ожидание «плохого периода» само может менять поведение. Поэтому мы описываем периоды как темы и задачи, а не как приговор.</li>
+      </ul>
+      <h3>Чего карта не делает</h3>
+      <ul>
+        <li>Не предсказывает конкретные события, даты и их исход.</li>
+        <li>Не ставит диагнозов и не даёт медицинских, психологических, финансовых, юридических или инвестиционных рекомендаций.</li>
+        <li>Не определяет совместимость людей и не может быть основанием для решений о браке, разводе, найме, увольнении, переезде, вложениях или лечении.</li>
+      </ul>
+      <p>Решения о здоровье, деньгах, отношениях и правовых вопросах принимайте сами и с профильными специалистами. Если вам тяжело, обратитесь к врачу или в службу помощи: в России 112 или 8-800-2000-122 (телефон доверия), в Великобритании 111 или Samaritans 116 123, в США 988.</p>
+    </section>
+
+    <section class="doc" id="d-disclaimer">
+      <h2>Отказ от гарантий</h2>
+      <ol>
+        <li><b>Не медицина.</b> Практики сервиса — это материалы для расслабления, внимания и самопознания. Сервис не является медицинским изделием, медицинской или психологической помощью и не предназначен для диагностики, лечения или профилактики каких-либо заболеваний, включая тревожные расстройства, депрессию, бессонницу, зависимости и расстройства пищевого поведения.</li>
+        <li><b>Не отменяйте лечение.</b> Не прекращайте и не меняйте лечение и дозы лекарств без врача. При физической зависимости от алкоголя резкий отказ может быть опасен — сначала проконсультируйтесь с врачом.</li>
+        <li><b>Астрология.</b> Карта жизни и прогнозы носят информационно-развлекательный характер и предназначены для самопознания. Астрология не является наукой; отчёты не предсказывают будущие события и не гарантируют результат.</li>
+        <li><b>Практики «Изобилие», «Удача», «Отношения» и подобные</b> поддерживают внимание и мотивацию, но не гарантируют дохода, удачи или изменения в отношениях и не являются финансовой или юридической консультацией.</li>
+        <li><b>Результаты индивидуальны.</b> Отзывы других людей не являются обещанием такого же результата.</li>
+        <li><b>Голос и тексты.</b> Часть голосов и текстов создана с помощью искусственного интеллекта; возможны неточности.</li>
+        <li><b>Не экстренная служба.</b> Сервис не предназначен для кризисных ситуаций. При угрозе жизни звоните 112 (Россия, ЕС), 999 (Великобритания), 911 (США).</li>
+      </ol>
+    </section>
+
+    <section class="doc" id="d-terms">
+      <h2>Пользовательское соглашение и публичная оферта</h2>
+      <p class="docs-note">Для пользователей из России действует публичная оферта российского исполнителя [ООО / ИП «…», ОГРН, ИНН, адрес]. Для остальных стран — Terms of Service компании [название, номер в реестре, адрес]. Ниже — основные положения, общие для обоих документов.</p>
+      <ol>
+        <li><b>Стороны и акцепт.</b> Настоящий документ — публичная оферта (ст. 435, п. 2 ст. 437 ГК РФ). Регистрация на сайте и/или оплата означают полное принятие условий (п. 3 ст. 438 ГК РФ). Изменения публикуются не позднее чем за 10 дней; для уже оплаченного периода действуют прежние условия.</li>
+        <li><b>Возраст.</b> Сервис предназначен для лиц старше 18 лет (18+).</li>
+        <li><b>Предмет.</b> Исполнитель предоставляет доступ к аудиовизуальным практикам, статьям и персональным астрологическим отчётам. Это информационно-развлекательные и wellness-услуги, не медицинские и не психологические.</li>
+        <li><b>Бесплатная и платная части.</b> Бесплатно: регистрация, практика «Очищение», базовая часть Карты жизни. Платно: отдельные практики, полная Карта жизни, прогноз на год, подписка, ректификация. Цены указываются на сайте до оплаты, в рублях — для России, с налогами — для Великобритании и ЕС.</li>
+        <li><b>Подписка.</b> Подписка продлевается автоматически на тот же срок по той же цене, пока вы её не отмените. Отдельное согласие на автопродление даётся при оплате. Мы напоминаем о списании заранее (для годовой подписки — за 7–30 дней). Отключить продление можно в личном кабинете в один-два клика; доступ сохраняется до конца оплаченного периода. Об изменении цены сообщаем за 30 дней.</li>
+        <li><b>Персональные отчёты.</b> Отчёт формируется автоматически по данным, которые вы ввели. За точность данных рождения отвечаете вы. Пересчёт по исправленным данным в течение 30 дней — бесплатно.</li>
+        <li><b>Обязанности пользователя.</b> Перед практикой ознакомиться с предупреждением о безопасности; не использовать практики за рулём, при работе с техникой и в воде; прекратить практику при ухудшении самочувствия.</li>
+        <li><b>Лицензия.</b> Вы получаете простую неисключительную лицензию на личное некоммерческое использование материалов (ст. 1286 ГК РФ). Запрещено копировать, записывать, перепродавать материалы и использовать их для обучения ИИ.</li>
+        <li><b>Ответственность.</b> Исполнитель отвечает в соответствии с законом. Исполнитель не отвечает за решения, принятые пользователем на основании астрологических отчётов, и за последствия несоблюдения предупреждений о безопасности. Ничто в условиях не ограничивает ответственность за вред жизни и здоровью и права потребителя, предусмотренные законом (в т.ч. Законом РФ «О защите прав потребителей», UK Consumer Rights Act 2015, законодательством ЕС).</li>
+        <li><b>Споры.</b> Сначала пишите нам — мы стараемся решить любой вопрос за 10 дней. Потребитель вправе обратиться в суд по месту своего жительства. Применимое право: для России — право РФ; для остальных — право Англии и Уэльса без лишения потребителя защиты по праву его страны. Для США — отдельное арбитражное соглашение с правом отказа от него в течение 30 дней.</li>
+        <li><b>Реквизиты и контакты.</b> [Наименование, регистрационные данные, адрес, e-mail поддержки.]</li>
+      </ol>
+    </section>
+
+    <section class="doc" id="d-refund">
+      <h2>Возвраты и отмена</h2>
+      <div class="docs-sum"><b>Коротко.</b> Отмена подписки — в личном кабинете в любой момент. Если что-то не подошло — напишите в течение 14 дней после оплаты, и мы вернём деньги.</div>
+      <ul>
+        <li><b>Подписка.</b> Отменить можно в любой момент. Если вы откажетесь в течение 14 дней после оплаты, вернём деньги за вычетом стоимости уже использованного периода. В России — пропорционально неиспользованному периоду (ст. 32 Закона «О защите прав потребителей»).</li>
+        <li><b>Разовые покупки</b> (практика, полная карта, прогноз). При оплате вы можете попросить открыть доступ сразу. Пользователи из ЕС и Великобритании при этом подтверждают, что теряют 14-дневное право отказа с момента начала воспроизведения или формирования отчёта. Независимо от этого действует наша гарантия: недовольны — напишите в течение 14 дней.</li>
+        <li><b>Ректификация.</b> До начала работы астролога — полный возврат; после — пропорционально выполненной работе.</li>
+        <li><b>Сроки и способ.</b> Возврат — в течение 10 дней тем же способом оплаты.</li>
+      </ul>
+    </section>
+
+    <section class="doc" id="d-privacy">
+      <h2>Персональные данные</h2>
+      <ul>
+        <li><b>Что собираем.</b> E-mail и имя для аккаунта; дату, время и место рождения для Карты жизни; историю прослушиваний; технические данные и согласия. Платёжные данные обрабатывает платёжный провайдер, у нас их нет.</li>
+        <li><b>Чего не собираем.</b> Сведения о здоровье, диагнозах, курении, алкоголе и питании. Практики можно проходить, ничего о себе не рассказывая.</li>
+        <li><b>Сейчас (тестовая версия)</b> данные Карты жизни хранятся только в вашем браузере и никуда не отправляются.</li>
+        <li><b>После запуска.</b> Данные хранятся у проверенных провайдеров; для пользователей из России — на серверах в России (152-ФЗ); для ЕС и Великобритании — по GDPR / UK GDPR. Данные не продаём и не используем для обучения ИИ.</li>
+        <li><b>Ваши права.</b> Узнать, исправить, выгрузить и удалить свои данные, отозвать согласие — через личный кабинет или по e-mail [support@…].</li>
+      </ul>
+    </section>
+
+    <section class="doc" id="d-safety">
+      <h2>Безопасность практик</h2>
+      <p>Перед каждым сеансом мы показываем короткое предупреждение и просим подтверждения. Его полный текст:</p>
+      <ul>
+        <li>Не за рулём и не во время работы с техникой; только сидя или лёжа; никогда в воде.</li>
+        <li>Эпилепсия, судороги, светочувствительность: включите «Спокойный экран» или слушайте с закрытыми глазами.</li>
+        <li>Беременность, болезни сердца и сосудов, кардиостимулятор, глаукома: дышите спокойно, без задержек и форсирования.</li>
+        <li>Психиатрический диагноз, ПТСР, тяжёлая депрессия: посоветуйтесь с врачом; если становится хуже — остановитесь.</li>
+        <li>Головокружение, тревога, неприятные ощущения — откройте глаза, дышите обычно, сделайте паузу.</li>
+      </ul>
+    </section>
+  </div>
 </main>
 
 <main id="journal" hidden>
@@ -697,7 +816,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
   <div><a class="logo" href="#top" style="color:var(--ink)"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="17" stroke="#b0844a" stroke-width="1"/><path d="M20 5l3.2 11.8L35 20l-11.8 3.2L20 35l-3.2-11.8L5 20l11.8-3.2z" stroke="#b0844a" stroke-width="1.1" stroke-linejoin="round"/><circle cx="20" cy="20" r="3" fill="#b0844a"/></svg>ДОРОГА К СЕБЕ</a>
     <p class="about">Пространство медитации. Пятнадцать минут, чтобы выдохнуть, услышать себя и вернуться в день спокойнее.</p></div>
   <div><h4>Пространства</h4><ul id="footRooms"></ul></div>
-  <div><h4>Проект</h4><ul><li><a href="#benefits">Что вы получите</a></li><li><a href="#how">Как проходит сеанс</a></li><li><a href="#path">Ваш путь</a></li><li><a href="#zhurnal">Журнал</a></li><li><a href="#faq">Вопросы</a></li></ul></div>
+  <div><h4>Проект</h4><ul><li><a href="#benefits">Что вы получите</a></li><li><a href="#how">Как проходит сеанс</a></li><li><a href="#path">Ваш путь</a></li><li><a href="#zhurnal">Журнал</a></li><li><a href="#faq">Вопросы</a></li><li><a href="#dokumenty">Документы и условия</a></li><li><a href="#d-map">Как относиться к Карте жизни</a></li></ul></div>
   <div class="bottom"><span>© Дорога к себе</span><span>Слушайте в наушниках · практика не заменяет лечение</span></div>
 </div></footer>
 
@@ -1859,10 +1978,10 @@ const plural = (n, a, b, c) => { const m10 = n % 10, m100 = n % 100; return m10 
 function renderStreak() { const n = streakDays(); $('streak').textContent = n ? 'Вы практикуете ' + n + ' ' + plural(n, 'день', 'дня', 'дней') + ' подряд' : 'Первая сессия — первый шаг.'; }
 renderStreak();
 let navDepth = 0; addEventListener('hashchange', () => navDepth++);
-const BACK_TO = { roomPage: '#prostranstva', article: '#zhurnal', catalog: '#top', journal: '#top', karta: '#top' };
+const BACK_TO = { roomPage: '#prostranstva', article: '#zhurnal', catalog: '#top', journal: '#top', karta: '#top', docs: '#top' };
 $('backBtn').onclick = () => { if (navDepth > 0 && history.length > 1) { navDepth -= 2; history.back(); } else location.hash = BACK_TO[curPage] || '#top'; };
 let curPage = 'home';
-function show(page) { curPage = page; $('backBtn').hidden = page === 'home'; ['home', 'catalog', 'roomPage', 'journal', 'article', 'karta'].forEach(id => $(id).hidden = id !== page); setTimeout(solidHeader, 0); document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('on', (a.dataset.r === 'prostranstva' && (page === 'catalog' || page === 'roomPage')) || (a.dataset.r === 'zhurnal' && (page === 'journal' || page === 'article')) || (a.dataset.r === 'karta' && page === 'karta'))); $('mnav').hidden = true; }
+function show(page) { curPage = page; $('backBtn').hidden = page === 'home'; $('backBtn').classList.toggle('light', ['catalog', 'journal', 'article', 'docs'].includes(page)); ['home', 'catalog', 'roomPage', 'journal', 'article', 'karta', 'docs'].forEach(id => $(id).hidden = id !== page); setTimeout(solidHeader, 0); document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('on', (a.dataset.r === 'prostranstva' && (page === 'catalog' || page === 'roomPage')) || (a.dataset.r === 'zhurnal' && (page === 'journal' || page === 'article')) || (a.dataset.r === 'karta' && page === 'karta'))); $('mnav').hidden = true; }
 function showHome(anchor) {
   show('home');
   if (anchor) { const el = $(anchor); if (el) setTimeout(() => el.scrollIntoView(), 0); } else scrollTo(0, 0);
@@ -1899,6 +2018,7 @@ function route() {
   if (h === 'prostranstva') { show('catalog'); scrollTo(0, 0); }
   else if (h === 'zhurnal') { show('journal'); scrollTo(0, 0); }
   else if (h === 'karta') { show('karta'); scrollTo(0, 0); loadKarta(); }
+  else if (h === 'dokumenty' || h.startsWith('d-')) { show('docs'); const el = h.startsWith('d-') && $(h); setTimeout(() => el ? scrollTo(0, el.getBoundingClientRect().top + scrollY - 100) : scrollTo(0, 0), 0); }
   else if (h.startsWith('j-')) showArticle(h.slice(2));
   else if (h.startsWith('room-')) showRoom(h.slice(5));
   else if (h && $(h) && $('home').contains($(h))) showHome(h);
@@ -1907,7 +2027,7 @@ function route() {
 addEventListener('hashchange', route);
 $('burger').onclick = () => { $('mnav').hidden = !$('mnav').hidden; };
 $('mnav').addEventListener('click', e => { if (e.target.closest('a')) $('mnav').hidden = true; });
-const solidHeader = () => $('nav').classList.toggle('solid', scrollY > 40 || !$('catalog').hidden || !$('journal').hidden || !$('article').hidden);
+const solidHeader = () => $('nav').classList.toggle('solid', scrollY > 40 || !$('catalog').hidden || !$('journal').hidden || !$('article').hidden || !$('docs').hidden);
 addEventListener('scroll', solidHeader, { passive: true }); solidHeader();
 $('rStart').onclick = () => openPlayer(curRoom);
 

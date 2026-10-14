@@ -128,6 +128,7 @@ function render(ch) {
     + '<div><small>Асцендент · образ</small><b>' + (asc != null ? K.GLYPH[asc] + ' ' + K.SIGNS[asc] : '—') + '</b><span>' + (asc != null ? K.fmtDeg(ch.ang.asc) : 'нужно время рождения') + '</span></div></div>'
     + '<div class="kact"><button class="ghost" type="button" id="kEdit">Изменить данные</button><a class="ghost" href="#kOffer">Полная карта и прогноз</a></div></div>'
     + '<div class="kwheel"><canvas id="kWheel" aria-label="Круг натальной карты"></canvas></div></div>';
+  h += '<div class="kread"><div class="kread__in"><h3>Как читать<br>эту карту</h3><ul><li><b>Положения планет</b> рассчитаны точно, по астрономическим эфемеридам. <b>Толкования</b> — традиция и язык для размышления, а не доказанный закон.</li><li>Карта описывает <b>темы и периоды, а не события</b>. Что произойдёт, зависит от ваших решений, других людей и обстоятельств.</li><li>Читайте каждый раздел как вопрос к себе: «Где это про меня? Где нет?» Не принимайте важных решений только по карте.</li><li>Подробно: <a href="#d-map">как относиться к карте</a> · <a href="#j-astro-science">астрология и наука</a> · <a href="#j-fate">карта — не приговор</a></li></ul></div></div>';
   if (!ch.known) h += '<div class="kwarn"><b>Время рождения неизвестно.</b> Карта построена на 12:00: положения планет верны, а дома, Асцендент и MC не рассчитываются. Луна может отличаться на ±6°. Точное время можно восстановить ректификацией — см. ниже.</div>';
 
   // 00 сейчас
@@ -159,7 +160,7 @@ function render(ch) {
   // 03 прогноз на год
   const yearBody = () => { const by = {}; tr.forEach(o => { const k = o.peak.getFullYear() * 12 + o.peak.getMonth(); (by[k] = by[k] || []).push(o); });
     return '<div class="kmonths">' + Object.keys(by).sort((a, b) => a - b).map(k => '<div class="kmonth"><h3>' + MON1[k % 12] + ' ' + Math.floor(k / 12) + '</h3><ul class="ktr">' + by[k].map(trLine).join('') + '</ul></div>').join('') + '</div>'; };
-  h += sec('03', 'Прогноз на год', 'Ваши 12 месяцев', tr.length + ' периодов влияния медленных планет на личные точки карты.', has('year') ? yearBody() : lockBox('year', 'Прогноз по месяцам на год вперёд', (tr[0] ? MON1[tr[0].peak.getMonth()] + ': ' + PNAME[tr[0].p] + ' ' + tr[0].name + ' ' + (PNAME[tr[0].n] || 'MC') + '…' : 'Месяц за месяцем: возможности и осторожность…')));
+  h += sec('03', 'Прогноз на год', 'Ваши 12 месяцев', tr.length + ' периодов влияния медленных планет на личные точки карты. Это темы и настроение периодов, а не события: результат зависит от ваших действий и обстоятельств.', has('year') ? yearBody() : lockBox('year', 'Прогноз по месяцам на год вперёд', (tr[0] ? MON1[tr[0].peak.getMonth()] + ': ' + PNAME[tr[0].p] + ' ' + tr[0].name + ' ' + (PNAME[tr[0].n] || 'MC') + '…' : 'Месяц за месяцем: возможности и осторожность…')));
 
   // 04–09 полная карта
   const full = has('full');
@@ -194,8 +195,8 @@ function buy(kind) {
   const m = $k('kPay'); const p = PRICE[kind];
   $k('kPayT').textContent = kind === 'rect' ? 'Ректификация' : p[0] + ' · ' + p[1].toLocaleString('ru') + ' ₽';
   $k('kPayText').textContent = kind === 'rect' ? 'Приём заявок на ректификацию откроется вместе с оплатой. Сейчас сайт в тестовом режиме.' : 'Оплата подключается к запуску. Сейчас сайт в тестовом режиме: можно открыть полную версию, чтобы посмотреть, как она выглядит.';
-  $k('kPayDemo').hidden = kind === 'rect'; m.hidden = false;
-  $k('kPayDemo').onclick = () => { const u = (st.get('karta_unlock') || '') + ',' + kind; st.set('karta_unlock', u); m.hidden = true; if (window.KARTA_LAST) render(window.KARTA_LAST); setTimeout(() => { const el = $k('kOffer'); }, 0); };
+  $k('kPayDemo').hidden = kind === 'rect'; $k('kPayOkL').hidden = kind === 'rect'; $k('kPayOk').checked = false; $k('kPayDemo').disabled = true; $k('kPayOk').onchange = () => $k('kPayDemo').disabled = !$k('kPayOk').checked; m.hidden = false;
+  $k('kPayDemo').onclick = () => { st.set('karta_pay_consent', JSON.stringify({ kind, v: '2026-10-14', at: new Date().toISOString() })); const u = (st.get('karta_unlock') || '') + ',' + kind; st.set('karta_unlock', u); m.hidden = true; if (window.KARTA_LAST) render(window.KARTA_LAST); setTimeout(() => { const el = $k('kOffer'); }, 0); };
   $k('kPayClose').onclick = () => m.hidden = true;
 }
 
@@ -207,19 +208,20 @@ function initForm() {
   $k('kManualT').onclick = () => { $k('kManual').hidden = !$k('kManual').hidden; };
   const tzs = (Intl.supportedValuesOf ? Intl.supportedValuesOf('timeZone') : [...new Set(cities.map(c => c[4]))]);
   $k('kTz').innerHTML = tzs.map(z => '<option>' + z + '</option>').join(''); $k('kTz').value = 'Europe/Moscow';
-  const saved = st.get('karta_input'); if (saved) { try { const v = JSON.parse(saved); $k('kName').value = v.name || ''; $k('kDate').value = v.date; $k('kTime').value = v.time || ''; $k('kNoTime').checked = !v.time; $k('kTime').disabled = !v.time; $k('kPlace').value = v.place; } catch (e) {} }
+  const saved = st.get('karta_input'); if (st.get('karta_consent')) $k('kOk').checked = true; if (saved) { try { const v = JSON.parse(saved); $k('kName').value = v.name || ''; $k('kDate').value = v.date; $k('kTime').value = v.time || ''; $k('kNoTime').checked = !v.time; $k('kTime').disabled = !v.time; $k('kPlace').value = v.place; } catch (e) {} }
   $k('kForm').onsubmit = e => {
     e.preventDefault(); const err = $k('kErr'); err.textContent = '';
     const date = $k('kDate').value, time = $k('kNoTime').checked ? '' : $k('kTime').value, place = $k('kPlace').value.trim();
     if (!date) return err.textContent = 'Укажите дату рождения.';
     if (!$k('kNoTime').checked && !time) return err.textContent = 'Укажите время или отметьте «Не знаю точного времени».';
+    if (!$k('kOk').checked) return err.textContent = 'Подтвердите, что понимаете, как относиться к карте.';
     let lat, lon, tz;
     if (!$k('kManual').hidden && $k('kLat').value && $k('kLon').value) { lat = +$k('kLat').value; lon = +$k('kLon').value; tz = $k('kTz').value; }
     else { const c = cities.find(c => (c[0] + ', ' + c[1]).toLowerCase() === place.toLowerCase()) || cities.find(c => c[0].toLowerCase() === place.toLowerCase().split(',')[0].trim());
       if (!c) return err.textContent = 'Город не найден. Выберите из списка или введите координаты вручную.'; [lat, lon, tz] = [c[2], c[3], c[4]]; }
     if (isNaN(lat) || isNaN(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180) return err.textContent = 'Проверьте координаты.';
     const inp = { name: $k('kName').value.trim(), date, time, place: place || (lat.toFixed(2) + ', ' + lon.toFixed(2)), lat, lon, tz };
-    st.set('karta_input', JSON.stringify(inp));
+    st.set('karta_input', JSON.stringify(inp)); st.set('karta_consent', JSON.stringify({ v: '2026-10-14', at: new Date().toISOString() }));
     const btn = $k('kGo'); btn.disabled = true; btn.textContent = 'Считаем положение планет…';
     setTimeout(() => { try { render(K.computeChart(inp)); scrollTo(0, 0); } catch (x) { err.textContent = 'Не получилось рассчитать: ' + x.message; } btn.disabled = false; btn.textContent = 'Построить карту'; }, 60);
   };
