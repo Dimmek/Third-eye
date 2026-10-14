@@ -436,6 +436,8 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 .pick__g { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; } @media (max-width: 640px) { .pick__g { grid-template-columns: 1fr 1fr; } }
 .pick__g a { display: grid; gap: 4px; padding: 14px 16px; border-radius: 16px; background: var(--white); border: 1px solid var(--line); transition: border-color .25s, transform .25s, box-shadow .25s; } .pick__g a:hover { border-color: var(--gold); transform: translateY(-2px); box-shadow: var(--shadow); }
 .pick__g b { color: var(--ink); font-size: 15px; font-weight: 600; } .pick__g small { color: var(--gold-d); font-size: 13px; }
+.rsound { display: grid; gap: 10px; max-width: 640px; } .rsnd { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; } @media (max-width: 560px) { .rsnd { grid-template-columns: 1fr 1fr; } }
+.rsnd div { display: grid; gap: 3px; padding: 12px 14px; border-radius: 14px; background: rgba(255,255,255,.06); border: 1px solid rgba(246,241,232,.16); } .rsnd small { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold-l); } .rsnd b { color: #f6f1e8; font-size: 14.5px; font-weight: 600; line-height: 1.3; }
 .rlv { display: grid; gap: 10px; max-width: 640px; } .rlv__t { font-size: 12.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-l); font-weight: 600; }
 .rlv__g { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } @media (max-width: 520px) { .rlv__g { grid-template-columns: 1fr; } }
 .rlv__g button { text-align: left; display: grid; grid-template-columns: auto 1fr auto; grid-template-areas: "i b e" "s s s"; align-items: center; gap: 6px 10px; padding: 16px 18px; border-radius: 18px; background: rgba(255,255,255,.07); border: 1.5px solid rgba(246,241,232,.22); color: #f6f1e8; transition: border-color .25s, background .25s, transform .25s; }
@@ -650,6 +652,11 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
 .article .abody .refs h2 { font-size: 20px; margin: 0 0 14px; }
 .article .abody .refs ol { gap: 8px; }
 .article .abody .refs a { word-break: break-word; }
+.article .abody .jroom { display: grid; gap: 12px; }
+.jr { display: grid; gap: 8px; padding: 22px 24px; border-radius: var(--r-lg); background: var(--white); border: 1px solid var(--line); box-shadow: var(--shadow); text-decoration: none !important; color: var(--ink-2) !important; justify-items: start; transition: border-color .25s, transform .25s; }
+.jr:hover { border-color: var(--gold); transform: translateY(-2px); } .jr--main { background: linear-gradient(135deg, #fff9ee, #f6ead6); border-color: #e8d3a8; }
+.jr__k { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-d); font-weight: 600; } .jr b { font-family: var(--ff-serif); font-weight: 500; font-size: 30px; line-height: 1.05; color: var(--ink); } .jr p { margin: 0; font-size: 16px; }
+.jr ol { margin: 0 !important; padding-left: 20px; font-size: 15px; display: grid; gap: 2px !important; } .jr ol li { margin: 0; } .jr em.btn { font-family: var(--ff); font-style: normal; } .jr small { font-size: 13px; color: var(--mute); } .jr em { font-style: normal; margin-top: 4px; }
 .aprog { position: fixed; left: 0; top: 0; height: 2px; width: 0; z-index: 30; background: linear-gradient(90deg, #d2a866, var(--gold)); transition: width .1s linear; }
 .article .abody .todo { padding: 14px 18px; border-radius: 12px; background: #fff4dc; border: 1px dashed var(--gold); font-size: 15px; color: var(--ink-2); }
 .article .abody ul { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; }
@@ -1028,6 +1035,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
       <div class="chips" id="rChips"></div>
       <div class="habit" id="rHabitBox" hidden><span class="eyebrow">Ваша привычка</span><div class="hchips" id="rHabit" role="group" aria-label="Привычка"></div></div>
       <label class="intent"><span class="eyebrow">Ваше намерение</span><input id="rIntent" type="text" maxlength="80" autocomplete="off"></label>
+      <div class="rsound" id="rSound" hidden></div>
       <div class="rlv"><span class="rlv__t">Выберите свой уровень</span><div class="rlv__g" id="rLevel" role="radiogroup" aria-label="Уровень">
         <button type="button" data-l="new" role="radio"><i></i><b>Новичок</b><em></em><small>Впервые или давно не практиковали: короткая версия, чтобы войти мягко</small></button>
         <button type="button" data-l="pro" role="radio"><i></i><b>Полная</b><em></em><small>Уже есть опыт: все этапы практики целиком</small></button></div></div>
@@ -1312,14 +1320,41 @@ function habitMain(k) {
 }
 const INTENT = { cleanse: 'Я отпускаю всё лишнее', energy: 'Сила возвращается ко мне', health: 'Моё тело в покое и заботе', abundance: 'Я вижу возможности и действую', luck: 'Я замечаю свои шансы', purpose: 'Я слышу себя', silence: 'Мой ум спокоен', ajna: 'Внимание в одной точке', chakras: 'Я целый', blinders: 'Мир шире, чем мне казалось', breathe: 'С каждым выдохом мне спокойнее', event: 'Внутри меня спокойствие при любом исходе', release: 'Я отпускаю то, что тяжело нести', selflove: 'Я на своей стороне', relations: 'В моём сердце есть место для тепла', food: 'Я слышу своё тело' };
 const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
-function setPhases(r) { r.main.forEach((s, i) => { s.key = s.key || r.id + '-' + (i + 1); s.tone = r.ci; }); r.phases = [COCOON, BREATHE, ...r.main, RETURN]; }
+// Each space has its own sound signature: binaural rhythm, carrier, breathing pattern, musical mode and tempo, noise colour.
+// Rhythm bands follow the EEG convention (θ 4–8 deep rest and imagery, α 8–12 calm wakefulness, low β 12–15 alert calm).
+const MODES = { major: [0, 2, 4, 7, 9, 12, 14, 16, 19], minor: [0, 3, 5, 7, 10, 12, 15, 17, 19], lydian: [0, 2, 4, 6, 7, 11, 12, 14, 16], dorian: [0, 2, 3, 7, 9, 12, 14, 15, 19], suspended: [0, 2, 5, 7, 10, 12, 14, 17, 19] };
+const MODE_RU = { major: 'светлый мажор', minor: 'мягкий минор', lydian: 'лидийский лад', dorian: 'дорийский лад', suspended: 'открытый лад' };
+const SOUND = {
+  cleanse:   { beats: [8, 7, 6], carrier: 180, breath: 'long',      mode: 'suspended', tempo: [9, 14], noise: 'pink',  goal: 'отпустить напряжение' },
+  energy:    { beats: [10, 12, 14], carrier: 240, breath: 'lift',   mode: 'major',     tempo: [3, 5],  noise: 'white', goal: 'бодрость без суеты' },
+  health:    { beats: [8, 6, 6], carrier: 190, breath: 'resonance', mode: 'suspended', tempo: [8, 12], noise: 'pink',  goal: 'восстановление' },
+  blinders:  { beats: [10, 10, 12, 12, 14], carrier: 220, breath: 'calm', mode: 'lydian', tempo: [5, 8],  noise: 'pink',  goal: 'ясность и смелость' },
+  abundance: { beats: [10, 10, 12], carrier: 230, breath: 'heart',  mode: 'major',     tempo: [4, 7],  noise: 'pink',  goal: 'открытость возможностям' },
+  luck:      { beats: [10, 12, 10], carrier: 230, breath: 'heart',  mode: 'lydian',    tempo: [4, 7],  noise: 'pink',  goal: 'внимательность к шансам' },
+  purpose:   { beats: [6, 6, 8], carrier: 200, breath: 'resonance', mode: 'lydian',    tempo: [7, 11], noise: 'pink',  goal: 'услышать себя' },
+  silence:   { beats: [6, 5, 4], carrier: 160, breath: 'long',      mode: 'suspended', tempo: [12, 18], noise: 'brown', goal: 'тишина ума и сон' },
+  breathe:   { beats: [8, 6, 6], carrier: 180, breath: null,        mode: 'suspended', tempo: [10, 15], noise: 'brown', goal: 'снять стресс' },
+  event:     { beats: [10, 12, 10], carrier: 220, breath: 'box',    mode: 'dorian',    tempo: [5, 8],  noise: 'pink',  goal: 'собранность' },
+  release:   { beats: [6, 6, 5], carrier: 170, breath: 'long',      mode: 'minor',     tempo: [9, 14], noise: 'brown', goal: 'отпустить и простить' },
+  selflove:  { beats: [8, 8, 7], carrier: 190, breath: 'heart',     mode: 'major',     tempo: [7, 11], noise: 'pink',  goal: 'тепло к себе' },
+  relations: { beats: [8, 8, 7], carrier: 190, breath: 'heart',     mode: 'dorian',    tempo: [7, 11], noise: 'pink',  goal: 'тепло к другим' },
+  food:      { beats: [8, 7, 7], carrier: 190, breath: 'calm',      mode: 'suspended', tempo: [8, 12], noise: 'pink',  goal: 'слышать тело' },
+  ajna:      { beats: [10, 7, 6], carrier: 210, breath: 'resonance', mode: 'lydian',   tempo: [8, 13], noise: 'pink',  goal: 'внимание в одной точке' },
+  chakras:   { beats: [7, 8, 9, 10, 11, 12, 6], carrier: 200, breath: 'resonance', mode: 'major', tempo: [6, 10], noise: 'pink', goal: 'целостность' },
+  habits:    { beats: [10, 10, 8], carrier: 200, breath: 'calm',    mode: 'dorian',    tempo: [7, 11], noise: 'pink',  goal: 'пережить волну тяги' }
+};
+const BAND = h => h < 8 ? 'θ' : h < 12 ? 'α' : 'β';
+const BREATH_RU = { long: 'длинный выдох 4–8', lift: 'бодрящее 3–3', heart: 'ровное 5–5', resonance: 'резонансное 5,5–5,5', calm: 'успокаивающее 4–6', box: 'квадрат 4–4–4–4', sigh: 'двойной вдох' };
+function setPhases(r) { const sp = SOUND[r.id]; r.main.forEach((s, i) => { s.key = s.key || r.id + '-' + (i + 1); s.tone = r.ci;
+    if (sp && s.beat !== 0 && !s.beatFixed) s.beat = sp.beats[Math.min(i, sp.beats.length - 1)];
+    if (sp && sp.breath && s.breath === 'resonance') s.breath = sp.breath; }); r.phases = [COCOON, BREATHE, ...r.main, RETURN]; }
 function setHabit(r, k) { r.habit = k; r.main = habitMain(k); setPhases(r); }
 const ORDER = ['cleanse', 'energy', 'health', 'blinders', 'abundance', 'luck', 'purpose', 'silence', 'breathe', 'event', 'release', 'selflove', 'relations', 'food', 'ajna', 'chakras', 'habits'];
 ROOMS.sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id));
 ROOMS.forEach(r => { r.color = CH[r.ci].c; if (r.id === 'habits') setHabit(r, store.get('ajna-habit') in HABITS ? store.get('ajna-habit') : 'smoke'); else setPhases(r); });
 const intentOf = r => store.get('ajna-intent-' + r.id + (r.habit ? '-' + r.habit : '')) || (r.habit ? HABITS[r.habit].intent : INTENT[r.id]);
 
-const BREATH = { resonance: [5.45, 0, 5.45, 0], calm: [4, 0, 6, 0], box: [4, 4, 4, 4], sigh: [3, 0, 6, 0] };
+const BREATH = { resonance: [5.45, 0, 5.45, 0], calm: [4, 0, 6, 0], box: [4, 4, 4, 4], sigh: [3, 0, 6, 0], long: [4, 0, 8, 0], lift: [3, 0, 3, 0], heart: [5, 0, 5, 0] };
 const EYES = { open: ['Смотрите на экран', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>'],
   closed: ['Можно закрыть глаза', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10c2.5 3 5.5 4.5 9 4.5s6.5-1.5 9-4.5M6 13.5l-1.5 2M12 15v2.5M18 13.5l1.5 2"/></svg>'],
   any: ['Смотрите или закройте глаза', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12z" opacity=".5"/><circle cx="12" cy="12" r="3"/></svg>'] };
@@ -2198,7 +2233,10 @@ addEventListener('scroll', () => { const on = location.hash.startsWith('#j-'), h
 function showArticle(id) {
   const j = JOURNAL.find(x => x.id === id); if (!j) return show('journal');
   show('article'); const i = JOURNAL.indexOf(j), nx = JOURNAL[(i + 1) % JOURNAL.length];
-  const fill = (title, lead, body, src) => { $('aCat').textContent = j.cat + ' · ' + readTime(body); $('aTitle').textContent = title; $('aLead').textContent = lead; $('aBody').innerHTML = body; $('aSrc').innerHTML = src; };
+  const fill = (title, lead, body, src) => { $('aCat').textContent = j.cat + ' · ' + readTime(body); $('aTitle').textContent = title; $('aLead').textContent = lead; $('aBody').innerHTML = body; $('aSrc').innerHTML = src;
+    $('aBody').querySelectorAll('.jroom').forEach(el => { el.innerHTML = el.dataset.rooms.split(',').map(id => ROOMS.find(r => r.id === id)).filter(Boolean).map((r, i) => { const sp = SOUND[r.id], ph = phasesFor(r);
+      return '<a class="jr' + (i ? '' : ' jr--main') + '" href="#room-' + r.id + '"><span class="jr__k">' + (i ? 'Ещё подойдёт' : 'Наша практика') + ' · ' + mins(sum(ph)) + (r.id === 'cleanse' ? ' · бесплатно' : '') + '</span><b>' + r.name + '</b><p>' + r.tag + '</p>'
+        + (i ? '' : '<ol>' + r.main.map(m => '<li>' + m.name + '</li>').join('') + '</ol>' + (sp ? '<small>Ритм ' + [...new Set(sp.beats.map(BAND))].join('→') + ' · дыхание: ' + (sp.breath ? BREATH_RU[sp.breath] : 'три техники') + '</small>' : '')) + '<em class="btn btn--gold btn--sm">Начать практику ' + ARROW + '</em></a>'; }).join(''); }); };
   const short = () => fill(j.title, j.lead, j.body, j.src.length ? '<b style="color:var(--ink)">Источники</b>' + j.src.map(k => '<span>' + SRC[k] + '</span>').join('') : '');
   if (!j.long) short();
   else { fill(j.title, j.lead, '<p style="color:var(--mute)">Загружаем статью…</p>', ''); $('aCat').textContent = j.cat + ' · ' + j.read + ' чтения';
@@ -2228,6 +2266,10 @@ function showRoom(id) {
   $('rCrumb').textContent = r.name;
   $('rName').textContent = r.name; $('rTag').textContent = r.tag;
   $('rChips').innerHTML = '<span class="chip">' + mins(sum(r.phases)) + '</span><span class="chip">' + r.ev[1] + '</span><span class="chip">Наушники</span><span class="chip">' + (r.main.some(p => eyesOf(p) === 'open') ? 'Есть шаги с открытыми глазами' : 'Можно с закрытыми глазами') + '</span>';
+  const sp = SOUND[r.id];
+  if (sp) { const bs = [...new Set(sp.beats)], rng = Math.min(...bs) + (bs.length > 1 ? '–' + Math.max(...bs) : '') + ' Гц', bands = [...new Set(bs.map(BAND))].join('→');
+    $('rSound').innerHTML = '<span class="eyebrow">Звучание пространства</span><div class="rsnd"><div><small>Ритм</small><b>' + bands + ' ' + rng + '</b></div><div><small>Дыхание</small><b>' + (sp.breath ? BREATH_RU[sp.breath] : 'три техники по очереди') + '</b></div><div><small>Музыка</small><b>' + MODE_RU[sp.mode] + ', ' + (sp.tempo[0] < 5 ? 'живой темп' : sp.tempo[0] > 9 ? 'очень редкие ноты' : 'спокойный темп') + '</b></div><div><small>Задача</small><b>' + sp.goal + '</b></div></div>'; $('rSound').hidden = false; }
+  else $('rSound').hidden = true;
   $('rHabitBox').hidden = !r.habit;
   if (r.habit) $('rHabit').innerHTML = Object.entries(HABITS).map(([k, h]) => '<button type="button" data-h="' + k + '" aria-pressed="' + (k === r.habit) + '">' + h.label + '</button>').join('');
   $('rIntent').value = intentOf(r);
@@ -2342,7 +2384,7 @@ function initAudio() {
   const gL = actx.createGain(), gR = actx.createGain(); gL.gain.value = gR.gain.value = 0.5;
   oscL = actx.createOscillator(); oscR = actx.createOscillator(); oscL.frequency.value = CARRIER; oscR.frequency.value = CARRIER + 10;
   oscL.connect(gL).connect(mg, 0, 0); oscR.connect(gR).connect(mg, 0, 1); oscL.start(); oscR.start();
-  const src = actx.createBufferSource(); src.buffer = pink(actx); src.loop = true; const lp = actx.createBiquadFilter(); lp.frequency.value = 1400;
+  const src = actx.createBufferSource(); src.buffer = pink(actx); src.loop = true; const lp = actx.createBiquadFilter(); lp.frequency.value = 1400; window.noiseLP = lp;
   noiseGain = actx.createGain(); noiseGain.gain.value = 0; src.connect(lp).connect(noiseGain).connect(duck); src.start();
   const bsrc = actx.createBufferSource(); bsrc.buffer = src.buffer; bsrc.loop = true; breathLP = actx.createBiquadFilter(); breathLP.type = 'lowpass'; breathLP.frequency.value = 400; breathLP.Q.value = 0.8;
   breathGain = actx.createGain(); breathGain.gain.value = 0; bsrc.connect(breathLP).connect(breathGain).connect(master); bsrc.start(0, 1.7);
@@ -2363,16 +2405,18 @@ const PENTA = [0, 2, 4, 7, 9, 12, 14, 16, 19];
 function melodyNote() { // a slow random walk on the major pentatonic of the current room's tone
   if (!actx) return;
   deg = Math.max(0, Math.min(PENTA.length - 1, deg + [-2, -1, -1, 1, 1, 2][Math.floor(Math.random() * 6)]));
-  const f = curRoot * 2 * Math.pow(2, PENTA[deg] / 12), t0 = actx.currentTime;
+  const sc = MODES[(P.room && SOUND[P.room.id] || {}).mode] || PENTA, f = curRoot * 2 * Math.pow(2, sc[Math.min(deg, sc.length - 1)] / 12), t0 = actx.currentTime;
   [[1, 'sine', 0.22], [2, 'triangle', 0.035]].forEach(([m, type, a]) => { const o = actx.createOscillator(), gg = actx.createGain(); o.type = type; o.frequency.value = f * m;
     gg.gain.setValueAtTime(0, t0); gg.gain.linearRampToValueAtTime(a, t0 + 0.9); gg.gain.exponentialRampToValueAtTime(0.0001, t0 + 8); o.connect(gg).connect(melBus); o.start(t0); o.stop(t0 + 8.2); });
 }
-setInterval(() => { if (!actx || !P.running || P.paused || !$('melody').checked || !$('music').checked) return; const n = performance.now(); if (n >= nextNote) { melodyNote(); nextNote = n + 5000 + Math.random() * 6000; } }, 500);
+setInterval(() => { if (!actx || !P.running || P.paused || !$('melody').checked || !$('music').checked) return; const n = performance.now(); if (n >= nextNote) { melodyNote(); const tp = (P.room && SOUND[P.room.id] || {}).tempo || [5, 11]; nextNote = n + (tp[0] + Math.random() * (tp[1] - tp[0])) * 1000; } }, 500);
 function padRoot(f) { curRoot = f; if (actx) padVoices.forEach(v => v.o.frequency.setTargetAtTime(f * v.mult / 2, actx.currentTime, 2.5)); }
 let beatOn = 1;
 function applyAudio(ph) {
   if (!actx) return; beatOn = ph.beat > 0 ? 1 : 0;
-  if (beatOn) { oscL.frequency.setTargetAtTime(CARRIER, actx.currentTime, 3); oscR.frequency.setTargetAtTime(CARRIER + ph.beat, actx.currentTime, 3); }
+  const sp = (P.room && SOUND[P.room.id]) || {}, car = sp.carrier || CARRIER;
+  if (beatOn) { oscL.frequency.setTargetAtTime(car, actx.currentTime, 3); oscR.frequency.setTargetAtTime(car + ph.beat, actx.currentTime, 3); }
+  if (window.noiseLP) noiseLP.frequency.setTargetAtTime(sp.noise === 'brown' ? 380 : sp.noise === 'white' ? 6000 : 1600, actx.currentTime, 2);
   padRoot(CH[ph.tone].tone); levels(4);
 }
 function levels(tc) {
