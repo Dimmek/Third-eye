@@ -334,6 +334,7 @@ body:has(.safe:not([hidden])) :is(.totop, .mbar, .owner-sw), body:has(#player:no
 .pbr b { position: absolute; top: calc(100% + 12px); font-size: 15px; font-weight: 700; letter-spacing: .06em; color: #fbf1dc; white-space: nowrap; text-shadow: 0 1px 10px rgba(0,0,0,.8); }
 .pbr em { position: absolute; bottom: calc(100% + 10px); font: 700 22px/1 var(--ff); color: #fff; font-style: normal; }
 @media (max-width: 700px) { .pbr { width: 10px; } .pbr b { font-size: 12.5px; } }
+.pintent.big::before { content: 'Ваше намерение'; display: block; margin-bottom: 10px; font: 600 13px/1 var(--ff); font-style: normal; letter-spacing: .2em; text-transform: uppercase; color: var(--gold-l); }
 .pintent.big { top: calc(70px + env(safe-area-inset-top, 0px)); font-size: clamp(30px, 4.4vw, 54px); opacity: 1; padding-inline: 24px; text-shadow: 0 0 30px rgba(0,0,0,.7); }
 .ptop { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .ptop .ttl { font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold-l); font-weight: 600; text-align: center; }
@@ -451,7 +452,7 @@ body:has(.safe:not([hidden])) :is(.totop, .mbar, .owner-sw), body:has(#player:no
 .krect { grid-template-columns: 1fr auto; align-items: center; gap: 20px; } @media (max-width: 700px) { .krect { grid-template-columns: 1fr; justify-items: start; } }
 .pcoc { position: absolute; left: 50%; top: 37%; height: min(58vh, 112vw); -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%); mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%); aspect-ratio: 3 / 4; transform: translate(-50%, -50%) scale(.96); opacity: 0; pointer-events: none; transition: opacity 2.2s ease;
   -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 58%, transparent 100%); mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 58%, transparent 100%); }
-.pcoc.on { opacity: 1; animation: cocbreath 11s ease-in-out infinite; } @keyframes cocbreath { 0%,100% { transform: translate(-50%, -50%) scale(.96); filter: brightness(.95) saturate(1); } 50% { transform: translate(-50%, -50%) scale(1.02); filter: brightness(1.12) saturate(1.1); } }
+.pcoc.on { opacity: 1; animation: cocbreath 11s ease-in-out infinite; } .player.grow .pcoc.on { animation: none; transition: opacity 2.2s ease, filter .35s linear, transform .35s linear; } @keyframes cocbreath { 0%,100% { transform: translate(-50%, -50%) scale(.96); filter: brightness(.95) saturate(1); } 50% { transform: translate(-50%, -50%) scale(1.02); filter: brightness(1.12) saturate(1.1); } }
 @media (prefers-reduced-motion: reduce) { .pcoc.on { animation: none; transform: translate(-50%, -50%); } }
 .player.soft .pcoc { opacity: .5; }
 .pvis { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; mix-blend-mode: screen; opacity: 0; transition: opacity 2s ease; }
@@ -1273,8 +1274,8 @@ const CH = [
 ];
 
 const COCOON = { key: 'cocoon', name: 'Вход', dur: 160, visual: 'cocoon', breath: 'calm', beat: 8, tone: 3, eyes: 'closed',
-  text: 'Закройте глаза. Энергия земли поднимается через стопы и позвоночник и уходит вверх, в космос. Оттуда спускается золотой свет — через макушку в сердце. На выдохе свет из сердца наполняет золотой кокон вокруг вас.',
-  say: ['Сядьте удобно. Спина ровная, стопы на полу, руки свободно лежат на коленях.', 'Закройте глаза.', 'Сделайте медленный вдох. И длинный выдох.', 'Почувствуйте стопы. Под ними земля — тёплая, надёжная.', 'Представьте, как из земли через стопы в вас входит энергия.', 'Она поднимается по ногам, вдоль позвоночника, всё выше и выше.', 'Проходит через макушку и уходит вверх, в космос. И там расширяется, как свет звёзд.', 'Теперь почувствуйте, как из космоса к вам спускается золотой свет.', 'Тёплый, мягкий. Он входит через макушку и опускается прямо в сердце.', 'Сердце наполняется этим светом.', 'На выдохе отправляйте свет из сердца наружу.', 'Вокруг вас появляется золотой кокон. Примерно два метра во все стороны.', 'С каждым выдохом он плотнее и ярче. Он тихо вибрирует.', 'Эта вибрация защищает вас со всех сторон. Сверху, снизу, спереди и сзади.', 'Всё лишнее может выйти наружу. Внутрь проходит только свет.', 'Вы в безопасности. Можно идти дальше.'] };
+  text: 'Закройте глаза. Энергия земли поднимается через стопы и позвоночник и уходит вверх, в космос. Оттуда спускается золотой свет — через макушку в центр груди, в область сердца. На выдохе свет из груди наполняет золотой кокон, и с каждым выдохом он ярче.',
+  say: ['Сядьте удобно. Спина ровная, стопы на полу, руки свободно лежат на коленях.', 'Закройте глаза.', 'Сделайте медленный вдох. И длинный выдох.', 'Почувствуйте стопы. Под ними земля — тёплая, надёжная.', 'Представьте, как из земли через стопы в вас входит энергия.', 'Она поднимается по ногам, вдоль позвоночника, всё выше и выше.', 'Проходит через макушку и уходит вверх, в космос. И там расширяется, как свет звёзд.', 'Теперь почувствуйте, как из космоса к вам спускается золотой свет.', 'Тёплый, мягкий. Он входит через макушку и опускается в центр груди — в область сердца, четвёртую чакру.', 'Центр груди наполняется этим светом.', 'На выдохе отправляйте свет из груди наружу.', 'Вокруг вас появляется золотой кокон. Примерно два метра во все стороны.', 'С каждым выдохом он плотнее и ярче. Он тихо вибрирует.', 'Эта вибрация защищает вас со всех сторон. Сверху, снизу, спереди и сзади.', 'Всё лишнее может выйти наружу. Внутрь проходит только свет.', 'Вы в безопасности. Можно идти дальше.'] };
 const BREATHE = { key: 'breath', name: 'Погружение', dur: 120, visual: 'breath', breath: 'resonance', beat: 10, tone: 3, cue: true,
   text: 'Вдох пять с половиной секунд, выдох столько же. Животом, мягко, без усилия.',
   say: ['Теперь дышите вместе с полосами по бокам.', 'Полоса поднимается — вдох. Опускается — выдох.', 'Вдох и выдох одинаковые, мягкие. Кокон остаётся вокруг вас.'] };
@@ -1368,7 +1369,7 @@ const ROOMS = [
     whyT: 'Видеть яснее, а не «больше других»', why: 'Это пространство не про сверхспособности и не про то, чтобы «открыть третий глаз» и получить преимущество. Его смысл — ясность: замечать тоньше, понимать глубже себя, людей и мир, действовать из спокойного внимания. Классическая тратака — неподвижный взгляд в одну точку, затем внутренний образ с закрытыми глазами — тренирует концентрацию и внутреннее видение. Подходит тем, у кого уже есть опыт регулярных практик.',
     note: '<b>Основа:</b> тратака из «Хатха-йога-прадипики». Небольшие исследования: рост внимания и рабочей памяти. При болезнях глаз этап взгляда пропустите. Открывается после 7 практик в полном формате.',
     main: [
-      R(180, 'Взгляд', 'eye', 'Смотрите на золотую точку в центре круга. Моргайте реже, без напряжения.', ['Смотрите на золотую точку в центре круга на экране.', 'Оставайтесь взглядом с ней.', 'Моргайте реже. Без напряжения.'], { breath: null, beat: 10 }),
+      R(180, 'Взгляд', 'eye', 'Смотрите на светящуюся точку между бровей фигуры. Моргайте реже, без напряжения.', ['Смотрите на светящуюся точку между бровей на экране.', 'Оставайтесь взглядом с ней.', 'Моргайте реже. Без напряжения.'], { breath: null, beat: 10 }),
       R(90, 'Внутренний свет', 'dark', 'Закройте глаза. Удерживайте образ между бровей.', ['Теперь закройте глаза.', 'Образ остался внутри. Между бровей.', 'Просто смотрите на него.'], { breath: null, beat: 6 }),
       R(120, 'Тишина', 'flight', 'Глаза закрыты. Мысли приходят и уходят.', ['Отпустите дыхание.', 'Ничего не нужно делать.', 'Просто будьте здесь.'], { beat: 6 })
     ] },
@@ -1465,7 +1466,7 @@ function habitMain(k) {
     R(60, 'Якорь', 'urge', 'Когда потянет: три медленных выдоха и это чувство свободы.', ['Когда потянет, сделайте три медленных выдоха.', 'И вспомните это чувство.'], { key: key(5), beat: 10 })
   ];
 }
-const INTENT = { cleanse: 'Я отпускаю всё лишнее', energy: 'Сила возвращается ко мне', health: 'Моё тело в покое и заботе', abundance: 'Я вижу возможности и действую', luck: 'Я замечаю свои шансы', purpose: 'Я слышу себя', silence: 'Мой ум спокоен', ajna: 'Внимание в одной точке', chakras: 'Я целый', blinders: 'Мир шире, чем мне казалось', breathe: 'С каждым выдохом мне спокойнее', event: 'Внутри меня спокойствие при любом исходе', release: 'Я отпускаю то, что тяжело нести', selflove: 'Я на своей стороне', relations: 'В моём сердце есть место для тепла', sos: 'Я в безопасности, волна пройдёт', sleep: 'Я отдыхаю', food: 'Я слышу своё тело' };
+const INTENT = { cleanse: 'Я отпускаю всё лишнее', energy: 'Сила возвращается ко мне', health: 'Моё тело в покое и заботе', abundance: 'Я вижу возможности и действую', luck: 'Я замечаю свои шансы', purpose: 'Я слышу себя', silence: 'Мой ум спокоен', ajna: 'Я развиваю интуицию и раскрываю третий глаз', chakras: 'Я целый', blinders: 'Мир шире, чем мне казалось', breathe: 'С каждым выдохом мне спокойнее', event: 'Внутри меня спокойствие при любом исходе', release: 'Я отпускаю то, что тяжело нести', selflove: 'Я на своей стороне', relations: 'В моём сердце есть место для тепла', sos: 'Я в безопасности, волна пройдёт', sleep: 'Я отдыхаю', food: 'Я слышу своё тело' };
 const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
 // Owner preview before launch: everything is open; ?owner=0 or the corner switch shows the client view
 (() => { const q = new URLSearchParams(location.search).get('owner'); if (q === '0' || q === '1') store.set('owner', q); })();
@@ -2495,13 +2496,12 @@ function vis(ph) {
   setTimeout(() => { if (P.vid !== want) return; v.src = 'media/v/' + want + (innerWidth < 700 ? '-m' : '') + '.mp4'; v.play().then(() => { v.style.opacity = 1; }).catch(() => { P.vid = null; }); }, P.vid ? 900 : 0);
 }
 // endless flight through the stars under every practice (the author's clip, looped seamlessly)
-const FLY_LVL = { cocoon: 0.32, breath: 0.42, dark: 0.1, release: 0.3, chakras: 0.35, eye: 0.3 };
 function fly(ph) {
   const v = $('pFly'); if (!v) return;
   if (!ph || reduce || $('player').classList.contains('soft')) { v.style.opacity = 0; setTimeout(() => { if (v.style.opacity === '0') v.pause(); }, 2600); return; }
-  if (!v.src) { const h264 = v.canPlayType('video/mp4; codecs="avc1.42E01E"'); v.src = !h264 ? 'media/fly.webm' : innerWidth < 700 ? 'media/fly-m.mp4' : 'media/fly.mp4'; }
-  v.playbackRate = 0.6; v.play().then(() => { v.playbackRate = 0.6; }).catch(() => {});
-  v.style.opacity = FLY_LVL[ph.visual] != null ? FLY_LVL[ph.visual] : 0.5;
+  if (!v.src) { const h264 = v.canPlayType('video/mp4; codecs="avc1.42E01E"'); v.src = !h264 ? 'media/flybg.webm' : innerWidth < 700 ? 'media/flybg-m.mp4' : 'media/flybg.mp4'; }
+  v.play().catch(() => {});
+  v.style.opacity = ph.visual === 'dark' ? 0.6 : 0.95;
 }
 function warp(anchor, from, to) {
   if (reduce || !anchor) return;
@@ -2705,7 +2705,7 @@ function openPlayer(r) {
 function closePlayer() { stop(); $('player').hidden = true; document.body.style.overflow = ''; $('drawer').classList.remove('open'); }
 function enter(i) {
   P.idx = i; P.start = P.elapsed; P.ch = -1; P.fc = -1; P.lastLabel = '';
-  const ph = P.phases[i]; setTimeout(() => P.running && P.idx === i && fly(ph), i === 0 ? 7000 : 0); vis(ph); $('pEyes').innerHTML = EYES[eyesOf(ph)][1] + EYES[eyesOf(ph)][0]; $('pPhase').textContent = ph.name; $('pInstr').textContent = ph.text; applyAudio(ph);
+  const ph = P.phases[i]; setTimeout(() => P.running && P.idx === i && fly(ph), i === 0 ? 2500 : 0); vis(ph); $('pEyes').innerHTML = EYES[eyesOf(ph)][1] + EYES[eyesOf(ph)][0]; $('pPhase').textContent = ph.name; $('pInstr').textContent = ph.text; applyAudio(ph);
   if (i > 0) bell(1, CH[ph.tone].tone);
   const tg = P.room && TARGET[P.room.id], focus = tg && i === P.m0 ? ['Перенесите внимание ' + CH_ACC[tg.ch[0]] + '.', 'Почувствуйте там мягкое тепло и вибрацию звука.'] : [];
   const lines = i === P.m0 && P.intent && P.m0 ? ['Помните, зачем вы здесь.', P.intent + '.', ...focus, ...ph.say] : [...focus, ...ph.say];
@@ -2723,6 +2723,14 @@ function focusUI(c, ph) { const f = $('pFocus'), img = $('pCoc');
   const t = (eyes === 'closed' ? 'Глаза закрыты · внимание: ' : 'Смотрите сюда · ') + CH[c].where + ' · ' + SOL[c] + ' Гц'; if (f.lastChild.textContent !== t) f.lastChild.textContent = t; f.classList.add('on'); }
 // breath guide on both sides: fills on the inhale, empties on the exhale
 function breathUI(st, ph) { [$('pBrL'), $('pBrR')].forEach(e => { if (!st) { e.classList.remove('on'); return; } e.classList.add('on'); e.children[1].style.height = (st.b * 100).toFixed(1) + '%'; e.children[2].textContent = st.label; e.children[0].textContent = st.left != null ? Math.max(1, Math.ceil(st.left)) : ''; }); }
+// the cocoon gets brighter with every exhale while it is being built, then keeps that glow for the session
+function cocoonGlow(ph, pt, st) { const img = $('pCoc'), pl = $('player');
+  if (!ph || !P.running) { pl.classList.remove('grow'); img.style.filter = img.style.transform = ''; P.glow = 0; return; }
+  if (ph.key === 'cocoon') P.glow = Math.max(P.glow || 0, Math.min(1, pt / ph.dur));
+  else if (P.idx < 1) P.glow = 0;
+  const g = P.glow || 0, ex = st ? 1 - st.b : 0.5, b = 0.85 + 0.55 * g + 0.18 * g * ex;
+  pl.classList.add('grow'); img.style.filter = 'brightness(' + b.toFixed(3) + ') saturate(' + (1 + 0.35 * g).toFixed(3) + ') drop-shadow(0 0 ' + Math.round(8 + 46 * g * (0.7 + 0.3 * ex)) + 'px rgba(240,200,120,' + (0.25 + 0.5 * g).toFixed(2) + '))';
+  img.style.transform = 'translate(-50%, -50%) scale(' + (0.96 + 0.05 * g * ex).toFixed(4) + ')'; }
 function chakra(k) {
   P.ch = k; const c = CH[k]; $('pPhase').textContent = c.n; $('pInstr').textContent = c.where[0].toUpperCase() + c.where.slice(1) + '. Мысленно звучит «' + c.bija + '».';
   padRoot(c.tone); bell(1, c.tone); bowl(SOL[k]); setTimeout(() => { if (P.running && !P.paused && P.ch === k) guide('c' + (k + 1), c.say); }, k ? 1800 : 6000);
@@ -2742,11 +2750,11 @@ function stop(done) {
   sessionEnded(done);
   if (done) { bell(3, 220); $('pPhase').textContent = 'Сессия завершена'; $('pInstr').textContent = 'Посидите минуту с закрытыми глазами. Заметьте, что изменилось. Каждая практика — ещё один шаг.'; }
   else { $('pPhase').textContent = P.room ? P.room.name : ''; $('pInstr').textContent = 'Можно начать снова, когда будете готовы.'; }
-  $('pIco').innerHTML = '<path d="M8 5.5v13l11-6.5z"/>'; $('pProg').style.width = '0'; P.idx = -1; $('pEyes').innerHTML = ''; $('pIntent').classList.remove('on', 'big'); focusUI(-1); breathUI(null);
+  $('pIco').innerHTML = '<path d="M8 5.5v13l11-6.5z"/>'; $('pProg').style.width = '0'; P.idx = -1; $('pEyes').innerHTML = ''; $('pIntent').classList.remove('on', 'big'); focusUI(-1); breathUI(null); cocoonGlow(null);
   try { P.wake && P.wake.release(); } catch (e) {} P.wake = null; poke();
 }
 window.__skipSession = () => { P.elapsed += 1e5; };
-window.__seekPhase = i => { P.elapsed = sum(P.phases.slice(0, i)) + 3; enter(i); };
+window.__seekPhase = (i, at) => { enter(i); P.elapsed = sum(P.phases.slice(0, i)) + (at || 3); P.start = sum(P.phases.slice(0, i)); };
 // ======================= account, access, diary, goals, courses (test mode: stored in this browser) =======================
 const J = (k, d) => { try { const v = JSON.parse(store.get(k)); return v == null ? d : v; } catch (e) { return d; } };
 const SJ = (k, v) => store.set(k, JSON.stringify(v));
@@ -2982,7 +2990,7 @@ function frame(now) {
       if (st && ph.cue && st.label !== P.lastLabel) { if (P.lastLabel && st.label !== 'Пауза' && $('vBreath').checked && !playRec({ 'Вдох': 'inhale', 'Выдох': 'exhale' }[st.label] || '') && synth && !synth.speaking) speak([st.label], { rate: 0.7, gap: 0 }); P.lastLabel = st.label; }
       const inMain = P.idx >= P.m0 && P.idx < P.m1, el = P.elapsed - P.phases.slice(0, P.m0).reduce((a, p) => a + p.dur, 0);
       $('pIntent').classList.toggle('big', ph.key === 'intent'); $('pIntent').classList.toggle('on', ph.key === 'intent' || (inMain && (el % 75) < 9));
-      focusUI(inMain || ph.key === 'chakras' ? (ph.key === 'chakras' ? P.ch : P.fc) : -1, ph); breathUI(st, ph);
+      focusUI(ph.key === 'chakras' ? P.ch : ph.key === 'cocoon' ? (pt > ph.dur * 0.45 ? 3 : -1) : ph.key === 'intent' ? (TARGET[P.room.id] ? TARGET[P.room.id].ch[0] : -1) : inMain ? P.fc : -1, ph); breathUI(st, ph); cocoonGlow(ph, pt, st);
       $('pEye').textContent = 'Шаг ' + (P.idx + 1) + ' из ' + P.phases.length + ' · ' + fmt(ph.dur - pt);
       $('pTime').textContent = fmt(tot - P.elapsed); $('pProg').style.width = (P.elapsed / tot * 100).toFixed(2) + '%';
     }
