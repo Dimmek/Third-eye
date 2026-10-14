@@ -434,13 +434,14 @@ function render(ch) {
   // ПРЕДЛОЖЕНИЕ + футер
   h += '<section class="km-s" id="km-offer"><div class="km-w"><span class="km-eb">Открыть полностью</span><h2 class="km-h">Полная карта и прогноз</h2><p class="km-lead">Расчёт по эфемеридам на момент вашего рождения. Карта сохраняется у вас и не требует повторной оплаты.</p><div class="km-g3">'
     + ['year', 'full', 'all'].map(k => '<div class="km-c km-price' + (k === 'all' ? ' km-price--best' : '') + '"><small>' + (k === 'all' ? 'Выгоднее' : 'Разово') + '</small><h3>' + PRICE[k][0] + '</h3><p>' + PRICE[k][2] + '</p><b>' + PRICE[k][1].toLocaleString('ru') + ' ₽</b><button class="btn ' + (k === 'all' ? 'btn--gold' : 'ghost') + '" type="button" data-buy="' + k + '">' + (has(k) ? 'Открыто' : 'Открыть') + '</button></div>').join('')
-    + '</div><div class="km-c km-rect"><div><small>Отдельная услуга</small><h3>Ректификация времени рождения · 4 990 ₽</h3><p>Если точное время неизвестно или есть сомнения. Астролог сверяет 5–10 важных событий вашей жизни с картой и уточняет время до минут. От него зависят Асцендент, дома, города и сроки.</p></div><button class="ghost" type="button" data-buy="rect">Оставить заявку</button></div></div></section>';
+    + '</div><div class="km-c km-rect"><div><small>Отдельная услуга</small><h3>Уточнение времени рождения · автоматически</h3><p>Если точное время неизвестно или есть сомнения. Введите 5–10 важных событий жизни с датами — сайт переберёт время с шагом 2 минуты и покажет 3 самых вероятных варианта. От времени зависят Асцендент, дома, города и сроки.</p></div><button class="ghost" type="button" id="kRectOpen">Уточнить время</button></div></div></section>';
   h += '<footer class="km-foot"><div class="km-w"><p>Составлено ' + fdate(now) + ' · ' + dd + '.' + mmm + '.' + yy + ', ' + (ch.known ? ch.inp.time : 'время неизвестно') + ', ' + esc(ch.inp.place.split(',')[0]) + '.</p><p>Астрология — инструмент для размышлений, а не гарантия. Не является медицинской, психологической, финансовой или юридической консультацией. <a href="#d-map">Как относиться к карте</a> · <a href="#dokumenty">Условия</a>. Фото: Unsplash.</p></div></footer>';
 
   const R = $k('kResult'); R.className = 'km km--' + g; R.innerHTML = h; R.hidden = false; $k('kFormWrap').hidden = true;
   requestAnimationFrame(() => { const w = $k('kWheel'); if (w) drawWheel(w, ch); const wd = $k('kWorld'); if (wd) worldDraw(wd, ch, picks.map(p => p.x)); });
   $k('kEdit').onclick = () => { $k('kFormWrap').hidden = false; R.hidden = true; scrollTo(0, 0); };
   R.querySelectorAll('[data-buy]').forEach(b => b.onclick = () => buy(b.dataset.buy));
+  const ro = $k('kRectOpen'); if (ro) ro.onclick = () => { $k('kFormWrap').hidden = false; R.hidden = true; scrollTo(0, 0); $k('kRect').hidden = true; $k('kRectT').click(); };
   R.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { const el = $k('km-' + b.dataset.go); if (el) scrollTo({ top: el.getBoundingClientRect().top + scrollY - 120, behavior: 'smooth' }); });
   window.KARTA_LAST = ch; window.KARTA_PICKS = picks.map(p => p.x);
 }
@@ -460,6 +461,31 @@ function initForm() {
   list.innerHTML = cities.map(c => '<option value="' + c[0] + ', ' + c[1] + '"></option>').join('');
   $k('kNoTime').onchange = () => { $k('kTime').disabled = $k('kNoTime').checked; };
   $k('kManualT').onclick = () => { $k('kManual').hidden = !$k('kManual').hidden; };
+  // --- автоматическое уточнение времени ---
+  const ETY = [['marriage', 'Свадьба'], ['divorce', 'Развод / расставание'], ['child', 'Рождение ребёнка'], ['career', 'Новая работа / повышение / своё дело'], ['jobloss', 'Увольнение / закрытие дела'], ['move', 'Переезд'], ['loss', 'Утрата близкого'], ['health', 'Операция / травма / болезнь'], ['love', 'Начало важных отношений'], ['money', 'Крупная покупка / сделка / потеря денег']];
+  const addEv = () => { const d = document.createElement('div'); d.className = 'krt__ev'; d.innerHTML = '<input type="date" min="1900-01-01" aria-label="Дата события"><select aria-label="Тип события">' + ETY.map(([v, t]) => '<option value="' + v + '">' + t + '</option>').join('') + '</select><button type="button" aria-label="Удалить">×</button>'; d.querySelector('button').onclick = () => d.remove(); $k('kRectEvs').appendChild(d); };
+  $k('kRectT').onclick = () => { const p = $k('kRect'); p.hidden = !p.hidden; if (!p.hidden && !$k('kRectEvs').children.length) for (let i = 0; i < 5; i++) addEv(); };
+  $k('kRectAdd').onclick = addEv;
+  $k('kRectGo').onclick = () => {
+    const er = $k('kRectErr'), out = $k('kRectRes'); er.textContent = ''; out.innerHTML = '';
+    const date = $k('kDate').value, place = $k('kPlace').value.trim(); if (!date) return er.textContent = 'Сначала укажите дату рождения.';
+    let lat, lon, tz; if (!$k('kManual').hidden && $k('kLat').value) { lat = +$k('kLat').value; lon = +$k('kLon').value; tz = $k('kTz').value; } else { const c = cities.find(c => (c[0] + ', ' + c[1]).toLowerCase() === place.toLowerCase()) || cities.find(c => c[0].toLowerCase() === place.toLowerCase().split(',')[0].trim()); if (!c) return er.textContent = 'Сначала выберите город рождения.'; [lat, lon, tz] = [c[2], c[3], c[4]]; }
+    const evs = [...$k('kRectEvs').children].map(r => ({ date: r.querySelector('input').value, type: r.querySelector('select').value })).filter(e => e.date && e.date > date);
+    if (evs.length < 4) return er.textContent = 'Нужно минимум 4 события с точными датами (после даты рождения). Лучше 6–10.';
+    const w = $k('kRectWin').value; let from, to;
+    if (w === 'around') { const t = $k('kTime').value; if (!t) return er.textContent = 'Укажите примерное время в поле «Время рождения».'; const [h, m] = t.split(':').map(Number); from = Math.max(0, h * 60 + m - 120); to = Math.min(1439, h * 60 + m + 120); }
+    else if (w === 'night') { from = 0; to = 1439; } else [from, to] = w.split('-').map(Number);
+    $k('kRectGo').disabled = true; $k('kRectGo').textContent = 'Считаем…';
+    setTimeout(() => { try {
+      let r = K.rectify({ date, tz, lat, lon }, evs, from, to, 2);
+      if (w === 'night') { const n = K.rectify({ date, tz, lat, lon }, evs, 0, 300, 2), e2 = K.rectify({ date, tz, lat, lon }, evs, 1380, 1439, 2); r = n.top[0] && (!e2.top[0] || n.top[0].smooth >= e2.top[0].smooth) ? Object.assign(n, { top: n.top.concat(e2.top).sort((a, b) => b.smooth - a.smooth).slice(0, 3) }) : Object.assign(e2, { top: e2.top.concat(n.top).sort((a, b) => b.smooth - a.smooth).slice(0, 3) }); }
+      const lvl = r.conf > 0.6 ? 'высокая' : r.conf > 0.35 ? 'средняя' : 'низкая', best = r.top[0].smooth || 1;
+      out.innerHTML = '<div class="krt__res"><p class="krt__note">Надёжность результата: <b>' + lvl + '</b>. ' + (r.conf > 0.6 ? 'Первый вариант заметно сильнее остальных.' : 'Варианты близки — выберите тот, чей Асцендент больше похож на вас, или добавьте события.') + '</p>'
+        + r.top.map(c => { const s = K.signOf(c.asc); return '<div class="krt__c"><b>' + c.time + '</b><span>Асцендент ' + K.SIGNS[s] + ': люди видят в вас ' + SIGN[s].look + '.</span><button class="btn btn--astro btn--sm" type="button" data-t="' + c.time + '">Выбрать</button><i><u style="width:' + Math.round(c.smooth / best * 100) + '%"></u></i></div>'; }).join('')
+        + '<p class="krt__note">Это расчёт по классическим техникам (транзиты и солнечные дуги к углам карты), а не точное знание. Если результат не откликается — добавьте 3–5 событий с точными датами и пересчитайте.</p></div>';
+      out.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { $k('kTime').value = b.dataset.t; $k('kNoTime').checked = false; $k('kTime').disabled = false; st.set('karta_rect', JSON.stringify({ t: b.dataset.t, conf: r.conf, n: evs.length, at: Date.now() })); $k('kRect').hidden = true; $k('kTime').scrollIntoView({ block: 'center' }); });
+    } catch (x) { er.textContent = 'Не получилось рассчитать: ' + x.message; } $k('kRectGo').disabled = false; $k('kRectGo').textContent = 'Уточнить время'; }, 50);
+  };
   const tzs = (Intl.supportedValuesOf ? Intl.supportedValuesOf('timeZone') : [...new Set(cities.map(c => c[4]))]);
   $k('kTz').innerHTML = tzs.map(z => '<option>' + z + '</option>').join(''); $k('kTz').value = 'Europe/Moscow';
   const saved = st.get('karta_input'); if (st.get('karta_consent')) $k('kOk').checked = true; if (saved) { try { const v = JSON.parse(saved); $k('kName').value = v.name || ''; $k('kDate').value = v.date; $k('kTime').value = v.time || ''; $k('kNoTime').checked = !v.time; $k('kTime').disabled = !v.time; $k('kPlace').value = v.place; const gr = document.querySelector('input[name=kGender][value=' + (v.gender || 'f') + ']'); if (gr) gr.checked = true; } catch (e) {} }

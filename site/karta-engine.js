@@ -232,5 +232,58 @@ function transitsRange(ch, from, years) {
   return out.sort((a, b) => a.from - b.from);
 }
 
-G.KARTA = { dignities, dasha, lifePath, relocate, angularHits, worldLines, transitsRange, NAK, CLASSIC, obliquity,  PLANETS, SIGNS, SIGNS_IN, GLYPH, ELEM, CROSS, RULER, ROMAN, ASPECTS, computeChart, transitsYear, mcLines, profection, signOf, fmtDeg, norm, localToUtc };
+
+// ---------- автоматическая ректификация ----------
+// Перебор времени рождения в окне с шагом 2 минуты. Для каждого кандидата считаются углы карты (ASC, MC, DSC, IC),
+// и проверяется, совпадают ли с ними важные события жизни по трём классическим техникам:
+// 1) транзиты медленных планет к углам; 2) солнечные дуги углов к натальным планетам; 3) солнечные дуги планет к углам.
+// Вес совпадения зависит от типа события (свадьба → DSC/Венера, карьера → MC, переезд → IC/ASC и т.д.).
+const EVT = {
+  marriage: { ang: ['DSC', 'ASC'], pl: ['venus', 'jupiter', 'moon'], w: 1.2 },
+  divorce:  { ang: ['DSC', 'ASC'], pl: ['uranus', 'saturn', 'mars', 'pluto'], w: 1.1 },
+  child:    { ang: ['IC', 'ASC', 'MC'], pl: ['jupiter', 'moon', 'venus', 'sun'], w: 1.1 },
+  career:   { ang: ['MC', 'ASC'], pl: ['sun', 'jupiter', 'saturn', 'mars'], w: 1.0 },
+  jobloss:  { ang: ['MC', 'IC'], pl: ['saturn', 'uranus', 'pluto', 'neptune'], w: 1.0 },
+  move:     { ang: ['IC', 'ASC'], pl: ['uranus', 'jupiter', 'moon', 'mercury'], w: 1.0 },
+  loss:     { ang: ['IC', 'ASC', 'MC'], pl: ['saturn', 'pluto', 'neptune', 'mars'], w: 1.2 },
+  health:   { ang: ['ASC', 'DSC'], pl: ['mars', 'saturn', 'neptune', 'pluto'], w: 1.0 },
+  love:     { ang: ['DSC', 'ASC'], pl: ['venus', 'moon', 'jupiter'], w: 0.9 },
+  money:    { ang: ['MC', 'IC'], pl: ['jupiter', 'venus', 'pluto', 'saturn'], w: 0.8 }
+};
+const RPL = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'];
+const sep = (a, b) => Math.abs(((a - b + 540) % 360) - 180);
+function rectify(inp, events, from, to, step) {
+  const X = A(), [y, mo, d] = inp.date.split('-').map(Number); step = step || 2;
+  const base = localToUtc(y, mo, d, 12, 0, inp.tz).utc, t0 = X.MakeTime(base);
+  const natal = {}; RPL.forEach(k => natal[k] = lonOf(k, t0));
+  const sunSpeed = sep(lonOf('sun', t0.AddDays(1)), natal.sun);
+  const ev = events.map(e => { const dt = new Date(e.date + 'T12:00:00Z'), te = X.MakeTime(dt), yrs = (dt - base) / (365.2425 * 864e5);
+    const tr = {}; ['jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'mars'].forEach(k => tr[k] = lonOf(k, te));
+    const arc = norm(lonOf('sun', t0.AddDays(yrs)) - natal.sun); return Object.assign({}, e, { tr, arc, spec: EVT[e.type] || EVT.career }); });
+  const out = [];
+  for (let m = from; m <= to; m += step) {
+    const hh = Math.floor(m / 60), mm = m % 60, { utc } = localToUtc(y, mo, d, hh, mm, inp.tz), t = X.MakeTime(utc), a = angles(t, inp.lat, inp.lon);
+    const A4 = { ASC: a.asc, MC: a.mc, DSC: norm(a.asc + 180), IC: norm(a.mc + 180) }, moonL = lonOf('moon', t); let score = 0; const hits = [];
+    ev.forEach(e => {
+      const want = e.spec.ang;
+      Object.keys(A4).forEach(an => { const angW = want.includes(an) ? (an === want[0] ? 1.6 : 1.1) : 0.15;
+        Object.keys(e.tr).forEach(p => { const o = sep(e.tr[p], A4[an]); const asp = [0, 90, 180].map(x => Math.abs(o - x)); const best = Math.min(asp[0], asp[1] * 1.4, asp[2]);
+          if (best < 2) { const s = (2 - best) / 2 * angW * (e.spec.pl.includes(p) ? 1.4 : 0.8) * e.spec.w; score += s; if (s > 0.9) hits.push({ ev: e, how: 'транзит', p, an }); } });
+        const dir = norm(A4[an] + e.arc);
+        RPL.forEach(p => { const nl = p === 'moon' ? moonL : natal[p]; const o1 = sep(dir, nl), o2 = sep(norm(nl + e.arc), A4[an]);
+          [o1, o2].forEach((o, j) => { const best = Math.min(o, Math.abs(o - 90) * 1.3, Math.abs(o - 180)); if (best < 1.2) { const s = (1.2 - best) / 1.2 * angW * (e.spec.pl.includes(p) ? 1.5 : 0.9) * e.spec.w * 1.2; score += s; if (s > 1) hits.push({ ev: e, how: j ? 'дирекция планеты' : 'дирекция угла', p, an }); } }); });
+      }); });
+    out.push({ m, time: String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0'), score, asc: a.asc, mc: a.mc, hits });
+  }
+  // сглаживание: истинное время даёт устойчивый пик, а не единичный выброс
+  const sm = out.map((o, i) => { let s = 0, n = 0; for (let k = -2; k <= 2; k++) { const q = out[i + k]; if (q) { s += q.score * (k ? 0.6 : 1); n += k ? 0.6 : 1; } } return Object.assign({}, o, { smooth: s / n }); });
+  const ranked = sm.slice().sort((p, q) => q.smooth - p.smooth), top = [];
+  for (const c of ranked) { if (top.every(t => Math.abs(t.m - c.m) > 24)) top.push(c); if (top.length === 3) break; }
+  const mean = sm.reduce((s, o) => s + o.smooth, 0) / sm.length, sd = Math.sqrt(sm.reduce((s, o) => s + (o.smooth - mean) ** 2, 0) / sm.length) || 1;
+  top.forEach(c => { c.z = (c.smooth - mean) / sd; });
+  const conf = top.length > 1 ? Math.max(0, Math.min(1, (top[0].z - 1) / 3 * 0.6 + (top[0].smooth - top[1].smooth) / (top[0].smooth || 1) * 2)) : 0;
+  return { top, conf, curve: sm.map(o => o.smooth), from, to, step };
+}
+
+G.KARTA = { rectify, EVT, angles,  dignities, dasha, lifePath, relocate, angularHits, worldLines, transitsRange, NAK, CLASSIC, obliquity,  PLANETS, SIGNS, SIGNS_IN, GLYPH, ELEM, CROSS, RULER, ROMAN, ASPECTS, computeChart, transitsYear, mcLines, profection, signOf, fmtDeg, norm, localToUtc };
 })(typeof window !== 'undefined' ? window : globalThis);
