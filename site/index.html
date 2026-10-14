@@ -604,6 +604,45 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 .mood10 { display: grid; gap: 8px; padding: 14px 16px; border-radius: 14px; background: rgba(255,255,255,.05); border: 1px solid rgba(246,241,232,.14); } .mood10 b { color: #fff; font-size: 15.5px; }
 .mood10 input { width: 100%; accent-color: var(--gold-l); } .mood10__s { display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; color: #b9b0a2; } .mood10__s em { font-style: normal; font-family: var(--ff); font-size: 22px; color: var(--gold-l); font-weight: 600; }
 .after__res { font-size: 17px; color: #fff; padding: 14px 16px; border-radius: 14px; background: rgba(120,210,170,.12); border: 1px solid rgba(120,210,170,.4); }
+.hacc { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px 8px 10px; border-radius: 999px; font-size: 14px; font-weight: 500; border: 1px solid currentColor; opacity: .9; } .hacc svg { width: 20px; height: 20px; } .hacc.in { background: rgba(220,189,134,.16); }
+@media (max-width: 960px) { .hacc span { display: none; } .hacc { padding: 8px; } }
+.chk { display: grid; gap: 10px; } .chk > b { color: var(--gold-l); font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; }
+.chk__note { display: grid; gap: 6px; font-size: 14px; color: #e7ddcc; } .chk__note span { color: #8f8677; } .chk__note textarea, .authf input { font: inherit; font-size: 15px; color: #f6f1e8; background: rgba(255,255,255,.06); border: 1px solid rgba(246,241,232,.2); border-radius: 12px; padding: 10px 12px; width: 100%; color-scheme: dark; }
+.authf { display: grid; gap: 12px; } .authf label { display: grid; gap: 6px; font-size: 14px; color: #e7ddcc; } .authf .check { display: flex; } .authf a { color: var(--gold-l); }
+.after__res a { color: var(--gold-l); }
+.buyo { display: grid; gap: 10px; } .buyo__i { display: flex; justify-content: space-between; align-items: center; gap: 14px; text-align: left; padding: 16px 18px; border-radius: 16px; background: rgba(255,255,255,.06); border: 1.5px solid rgba(246,241,232,.2); color: #f6f1e8; }
+.buyo__i:hover { border-color: var(--gold-l); } .buyo__i.best { border-color: var(--gold-l); background: rgba(210,168,102,.16); } .buyo__i span { display: grid; gap: 2px; } .buyo__i b { font-size: 16px; } .buyo__i small { color: #cfc6b8; font-size: 13px; } .buyo__i em { font-style: normal; font-weight: 700; color: var(--gold-l); white-space: nowrap; }
+.room .lockb { position: absolute; right: 12px; bottom: 12px; z-index: 2; display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 999px; font-size: 12.5px; font-weight: 600; color: #fff; background: rgba(14,12,20,.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(246,241,232,.25); }
+.room .lockb svg { width: 14px; height: 14px; } .room .lockb.free { background: rgba(46,160,110,.75); border-color: transparent; } .room.locked .art2 canvas { filter: saturate(.6) brightness(.8); }
+.cabhero { background: var(--pearl); position: relative; z-index: 1; } .cabhero .container { padding-block: 140px 10px; display: grid; gap: 16px; } .cabhero .display { font-size: clamp(40px, 5.4vw, 76px); color: var(--ink); }
+.cabtabs { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; } .cabtabs button { padding: 10px 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--white); font-size: 14.5px; color: var(--ink); } .cabtabs button[aria-pressed=true] { background: var(--ink); color: var(--pearl); border-color: var(--ink); }
+#cabBody { display: grid; gap: 16px; position: relative; z-index: 1; }
+.cab-card { display: grid; gap: 12px; align-content: start; padding: clamp(20px, 2.6vw, 30px); border-radius: var(--r-lg); background: var(--white); border: 1px solid var(--line); box-shadow: var(--shadow); color: var(--ink-2); min-width: 0; }
+.cab-card h2 { font-family: var(--ff-serif); font-weight: 500; font-size: clamp(28px, 3.2vw, 40px); color: var(--ink); line-height: 1.05; } .cab-card h3 { font-size: 20px; color: var(--ink); } .cab-card h4 { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); margin-top: 6px; }
+.cab-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 16px; } .cab-grid--c { grid-template-columns: repeat(2, minmax(0, 1fr)); } .cab-grid--s { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 900px) { .cab-grid, .cab-grid--c { grid-template-columns: 1fr; } .cab-grid--s { grid-template-columns: 1fr 1fr; } }
+.cab-next { background: linear-gradient(135deg, #fff9ee, #f6ead6); border-color: #e8d3a8; justify-items: start; } .cab-cta { justify-items: start; max-width: 640px; } .cab-cta ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; } .kpis--6 { grid-template-columns: repeat(6, minmax(0, 1fr)); } @media (max-width: 900px) { .kpis, .kpis--6 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.kpi { display: grid; gap: 2px; padding: 14px; border-radius: 14px; background: var(--pearl); } .kpi b { font-size: 28px; color: var(--ink); font-weight: 600; letter-spacing: -.02em; font-variant-numeric: tabular-nums; } .kpi span { font-size: 13px; color: var(--mute); line-height: 1.3; }
+.cab-chart { width: 100%; height: auto; } .cab-chart .g { stroke: var(--line); } .cab-chart text { font-size: 11px; fill: var(--mute); } .cab-chart path { fill: none; stroke-width: 2.5; } .cab-chart .b { stroke: #d99a8a; } .cab-chart path.a { stroke: #3d9b74; } .cab-chart circle.a { fill: #3d9b74; }
+.cab-leg { display: flex; gap: 18px; font-size: 13px; color: var(--mute); } .cab-leg span::before { content: ""; display: inline-block; width: 14px; height: 3px; border-radius: 2px; margin-right: 6px; vertical-align: middle; } .cab-leg .b::before { background: #d99a8a; } .cab-leg .a::before { background: #3d9b74; }
+.cab-t { width: 100%; border-collapse: collapse; font-size: 15px; } .cab-t th, .cab-t td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); } .cab-t th { font-size: 12px; color: var(--mute); text-transform: uppercase; letter-spacing: .08em; } .cab-t .up { color: #2f8a63; font-weight: 600; } .cab-t .dn { color: #b4553f; font-weight: 600; }
+.cab-log { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; font-size: 14.5px; } .cab-log li { padding-bottom: 10px; border-bottom: 1px solid var(--line); } .cab-log b { color: var(--ink); } .cab-empty, .cab-lead { color: var(--mute); }
+.cab-lock { position: relative; border-radius: var(--r-lg); overflow: hidden; } .cab-lock__in { filter: blur(6px); opacity: .55; pointer-events: none; user-select: none; display: grid; gap: 16px; }
+.cab-lock__cta { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 10px; text-align: center; padding: 20px; } .cab-lock__cta svg { width: 30px; height: 30px; color: var(--gold-d); } .cab-lock__cta b { font-size: 18px; color: var(--ink); }
+.gform { display: grid; grid-template-columns: 1fr auto auto auto; gap: 8px; } @media (max-width: 700px) { .gform { grid-template-columns: 1fr; } }
+.gform input, .gform select, .gadd input { font: inherit; font-size: 15px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--pearl); color: var(--ink); min-width: 0; }
+.goal__h { display: flex; justify-content: space-between; gap: 12px; align-items: start; } .goal__p { font-size: 28px; color: var(--gold-d); }
+.gbar { height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; } .gbar i { display: block; height: 100%; background: linear-gradient(90deg, #d2a866, var(--gold)); }
+.ms, .acts { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; } .ms label { display: flex; gap: 8px; align-items: center; } .acts span { color: var(--mute); font-size: 13px; margin-right: 6px; }
+.gadd { display: flex; gap: 8px; } .gadd input { flex: 1; } .gadd .ghost, .cab-card .ghost { color: var(--ink); border-color: var(--line); }
+.linkbtn2 { justify-self: start; color: var(--gold-d); font-weight: 600; font-size: 14px; } .gdel { color: var(--mute); font-weight: 400; }
+.course.on { border-color: var(--gold); box-shadow: 0 20px 50px -30px rgba(143,106,56,.6); } .course .btn { justify-self: start; }
+.cdays { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 5px; counter-reset: d; } .cdays li { counter-increment: d; font-size: 12px; padding: 4px 9px; border-radius: 999px; background: var(--pearl); border: 1px solid var(--line); color: var(--ink-2); }
+.cdays li::before { content: counter(d) ". "; color: var(--mute); } .cdays li.done { background: #e4f3ea; border-color: #9fd3b6; } .cdays li.now { background: var(--gold); color: #fff; border-color: var(--gold); } .cdays li.now::before { color: #fff; }
+.sp { gap: 4px; text-decoration: none; } .sp b { font-size: 16px; color: var(--ink); } .sp small { font-size: 13px; color: var(--mute); } .sp--lock { opacity: .75; background: #f3eee6; }
+.plan { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; } .plan li { padding-left: 26px; position: relative; color: var(--mute); } .plan li::before { content: "○"; position: absolute; left: 0; } .plan li.ok { color: var(--ink); } .plan li.ok::before { content: "✓"; color: #2f8a63; font-weight: 700; }
+.cab-row { display: flex; flex-wrap: wrap; gap: 10px; } .cab-test { background: #f7f1e6; border-style: dashed; }
 .safe__exit { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start; padding: 16px 18px; border-radius: 16px; background: rgba(226,173,85,.14); border: 1.5px solid var(--gold-l); }
 .safe__exit svg { width: 30px; height: 30px; color: var(--gold-l); } .safe__exit div { display: grid; gap: 4px; } .safe__exit > div > b { font-size: 17px; color: #fff; } .safe__exit span { font-size: 14.5px; line-height: 1.5; color: #e7ddcc; }
 .safe__act { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; margin-top: 4px; }
@@ -679,6 +718,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     <a class="logo" href="#top" aria-label="Дорога к себе — на главную"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="17" stroke="#dcbd86" stroke-width="1"/><path d="M20 5l3.2 11.8L35 20l-11.8 3.2L20 35l-3.2-11.8L5 20l11.8-3.2z" stroke="#dcbd86" stroke-width="1.1" stroke-linejoin="round"/><circle cx="20" cy="20" r="3" fill="#dcbd86"/></svg>ДОРОГА К СЕБЕ</a>
     <nav class="nav" aria-label="Главное меню"><a href="#prostranstva" data-r="prostranstva">Пространства</a><a href="#karta" data-r="karta">Карта жизни</a><a href="#how">Как проходит сеанс</a><a href="#benefits">Что вы получите</a><a href="#zhurnal" data-r="zhurnal">Журнал</a></nav>
     <div class="hright">
+      <a class="hacc" id="hAcc" href="#kabinet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.5 19.5c1.3-3.4 4.2-5 7.5-5s6.2 1.6 7.5 5"/></svg><span>Войти</span></a>
       <a class="btn btn--gold btn--sm" href="#prostranstva">Выбрать практику <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
       <button class="burger" id="burger" type="button" aria-label="Меню"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h14M3 14h14"/></svg></button>
     </div>
@@ -883,6 +923,12 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     <label class="check" id="kPayOkL"><input type="checkbox" id="kPayOk"> <span>Прошу открыть доступ сразу. Понимаю, что отчёт носит информационно-развлекательный характер, не является прогнозом событий и не гарантирует результат; услуга считается оказанной после формирования отчёта. С <a href="#d-terms">офертой</a> и <a href="#d-refund">условиями возврата</a> согласен(а).</span></label>
     <div class="safe__act"><button class="ghost" id="kPayClose" type="button">Закрыть</button><button class="btn btn--gold" id="kPayDemo" type="button">Открыть в тестовом режиме</button></div>
   </div></div>
+</main>
+
+<main id="cabinet" hidden>
+  <section class="cabhero"><div class="container"><span class="eyebrow">Личный кабинет</span><h1 class="display" id="cabHi">Ваш <em>путь</em></h1><p class="lead" id="cabSub"></p>
+    <nav class="cabtabs" id="cabTabs"><button data-t="today" aria-pressed="true">Сегодня</button><button data-t="diary">Дневник</button><button data-t="goals">Цели</button><button data-t="courses">Курсы</button><button data-t="spaces">Пространства</button><button data-t="map">Карта жизни</button><button data-t="plan">Доступ</button></nav></div></section>
+  <section class="section" style="padding-top:28px"><div class="container" id="cabBody"></div></section>
 </main>
 
 <main id="docs" hidden>
@@ -1107,15 +1153,34 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     </ul>
     <p class="small">Практики помогают расслабиться и лучше понимать себя. Они не заменяют врача, психотерапевта или лечение. Если вам плохо прямо сейчас — позвоните в экстренную службу (112).</p>
     <label class="check"><input type="checkbox" id="safeOk"> Я прочитал(а) и подтверждаю, что практика мне подходит. Ответственность за своё состояние беру на себя.</label>
-    <div class="mood10" id="mBefore"><b id="mBeforeQ"></b><input type="range" id="mBeforeV" min="0" max="10" value="5" aria-labelledby="mBeforeQ"><div class="mood10__s"><span id="mBeforeLo"></span><em id="mBeforeN">5</em><span id="mBeforeHi"></span></div></div>
+    <div class="chk" id="mBefore"><b>Дневник · перед практикой</b><div id="mBeforeQs"></div></div>
     <label class="check"><input type="checkbox" id="safeSoft"> Спокойный экран: приглушить изображение (только звук и голос)</label>
     <div class="safe__act"><button class="ghost" id="safeNo" type="button">Не сейчас</button><button class="btn btn--gold" id="safeGo" type="button" disabled>Начать сеанс</button></div>
   </div>
 </div>
 
 <div class="safe" id="after" hidden role="dialog" aria-modal="true" aria-labelledby="afterT"><div class="safe__box">
-  <span class="eyebrow">Практика завершена</span><h2 id="afterT">Как вы теперь?</h2>
-  <div class="mood10"><b id="mAfterQ"></b><input type="range" id="mAfterV" min="0" max="10" value="5" aria-labelledby="mAfterQ"><div class="mood10__s"><span id="mAfterLo"></span><em id="mAfterN">5</em><span id="mAfterHi"></span></div></div>
+  <span class="eyebrow">Практика завершена · дневник</span><h2 id="afterT">Как вы теперь?</h2><p class="small" style="color:#cfc6b8">Ответьте честно — так вы увидите, что вам действительно помогает.</p>
+  <div class="chk" id="mAfterQs"></div>
+  <label class="chk__note">Что заметили? <span>необязательно</span><textarea id="afterNote" rows="2" maxlength="400" placeholder="Например: стало теплее в груди, мысли тише"></textarea></label>
+  <p class="after__res" id="afterRes" hidden></p>
+  <div class="safe__act"><button class="ghost" id="afterSkip" type="button">Пропустить</button><button class="btn btn--gold" id="afterOk" type="button">Сохранить в дневник</button></div>
+</div></div>
+
+<div class="safe" id="auth" hidden role="dialog" aria-modal="true" aria-labelledby="authT"><div class="safe__box">
+  <span class="eyebrow">Бесплатная регистрация</span><h2 id="authT">Ваш личный кабинет</h2>
+  <p style="color:#cfc6b8">Дневник практик, ваши цели, карта жизни и курсы — в одном месте. Первая практика и профиль карты — бесплатно.</p>
+  <form id="authForm" class="authf" novalidate><label>Имя<input id="authName" type="text" autocomplete="given-name" maxlength="40" required></label><label>E-mail<input id="authMail" type="email" autocomplete="email" required></label>
+  <label class="check"><input type="checkbox" id="authOk"> <span>Принимаю <a href="#d-terms">условия</a> и <a href="#d-privacy">политику данных</a></span></label><p class="kform__err" id="authErr"></p>
+  <div class="safe__act"><button class="ghost" id="authNo" type="button">Позже</button><button class="btn btn--gold" type="submit">Создать кабинет</button></div></form>
+  <p class="small" style="color:#8f8677">Тестовый режим: данные хранятся только в этом браузере. При запуске — вход по ссылке на почту, Google или Apple.</p>
+</div></div>
+
+<div class="safe" id="buy" hidden role="dialog" aria-modal="true" aria-labelledby="buyT"><div class="safe__box">
+  <span class="eyebrow">Открыть доступ</span><h2 id="buyT"></h2><div id="buyOpts" class="buyo"></div>
+  <p class="small" style="color:#8f8677">Тестовый режим: оплата подключается к запуску, сейчас доступ открывается без списания.</p>
+  <div class="safe__act"><button class="ghost" id="buyNo" type="button">Закрыть</button></div>
+</div></div>
   <p class="after__res" id="afterRes" hidden></p>
   <div class="safe__act"><button class="btn btn--gold" id="afterOk" type="button">Сохранить результат</button></div>
 </div></div>
@@ -2315,7 +2380,7 @@ function showRoom(id) {
   $('rSteps').innerHTML = r.phases.map(p => '<li style="color:' + rgba(CH[p.tone].c, 1) + '"><i></i><div><span class="eyes">' + EYES[eyesOf(p)][1] + EYES[eyesOf(p)][0] + '</span><b>' + p.name + (p.beat ? '<em class="hz">' + (p.beat >= 8 ? 'α ' : 'θ ') + p.beat + ' Гц</em>' : '') + '</b><small>' + p.text + '</small></div><span class="d">' + fmt(p.dur) + '</span></li>').join('');
   const prev = ROOMS[(idx + ROOMS.length - 1) % ROOMS.length], next = ROOMS[(idx + 1) % ROOMS.length];
   $('rNav').innerHTML = '<a href="#room-' + prev.id + '"><span class="eyebrow">← Предыдущее пространство</span><b>' + prev.name + '</b></a><a href="#room-' + next.id + '"><span class="eyebrow">Следующее пространство →</span><b>' + next.name + '</b></a>';
-  levelUI(r);
+  levelUI(r); roomLock(r);
   document.title = r.name + ' · Дорога к себе';
   scrollTo(0, 0);
 }
@@ -2334,10 +2399,10 @@ const onScrollUI = () => { const y = scrollY, onHome = curPage === 'home', mob =
 addEventListener('scroll', onScrollUI, { passive: true }); addEventListener('resize', onScrollUI);
 $('toTop').onclick = () => scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
 let navDepth = 0; addEventListener('hashchange', () => navDepth++);
-const BACK_TO = { roomPage: '#prostranstva', article: '#zhurnal', catalog: '#top', journal: '#top', karta: '#top', docs: '#top' };
+const BACK_TO = { cabinet: '#top', roomPage: '#prostranstva', article: '#zhurnal', catalog: '#top', journal: '#top', karta: '#top', docs: '#top' };
 $('backBtn').onclick = () => { if (navDepth > 0 && history.length > 1) { navDepth -= 2; history.back(); } else location.hash = BACK_TO[curPage] || '#top'; };
 let curPage = 'home';
-function show(page) { curPage = page; setTimeout(onScrollUI, 0); $('backBtn').hidden = page === 'home'; $('backBtn').classList.toggle('light', ['catalog', 'journal', 'article', 'docs'].includes(page)); ['home', 'catalog', 'roomPage', 'journal', 'article', 'karta', 'docs'].forEach(id => $(id).hidden = id !== page); setTimeout(solidHeader, 0); document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('on', (a.dataset.r === 'prostranstva' && (page === 'catalog' || page === 'roomPage')) || (a.dataset.r === 'zhurnal' && (page === 'journal' || page === 'article')) || (a.dataset.r === 'karta' && page === 'karta'))); $('mnav').hidden = true; }
+function show(page) { curPage = page; setTimeout(onScrollUI, 0); $('backBtn').hidden = page === 'home'; $('backBtn').classList.toggle('light', ['catalog', 'journal', 'article', 'docs', 'cabinet'].includes(page)); ['home', 'catalog', 'roomPage', 'journal', 'article', 'karta', 'docs', 'cabinet'].forEach(id => $(id).hidden = id !== page); setTimeout(solidHeader, 0); document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('on', (a.dataset.r === 'prostranstva' && (page === 'catalog' || page === 'roomPage')) || (a.dataset.r === 'zhurnal' && (page === 'journal' || page === 'article')) || (a.dataset.r === 'karta' && page === 'karta'))); $('mnav').hidden = true; }
 function showHome(anchor) {
   show('home');
   if (anchor) { const el = $(anchor); if (el) setTimeout(() => el.scrollIntoView(), 0); } else scrollTo(0, 0);
@@ -2391,6 +2456,7 @@ function route() {
   const h = location.hash.slice(1);
   if (h === 'prostranstva') { show('catalog'); scrollTo(0, 0); }
   else if (h === 'zhurnal') { show('journal'); scrollTo(0, 0); }
+  else if (h === 'kabinet') { show('cabinet'); scrollTo(0, 0); renderCabinet(); }
   else if (h === 'karta') { show('karta'); scrollTo(0, 0); loadKarta(); }
   else if (h === 'dokumenty' || h.startsWith('d-')) { show('docs'); const el = h.startsWith('d-') && $(h); setTimeout(() => el ? scrollTo(0, el.getBoundingClientRect().top + scrollY - 100) : scrollTo(0, 0), 0); }
   else if (h.startsWith('j-')) showArticle(h.slice(2));
@@ -2401,9 +2467,8 @@ function route() {
 addEventListener('hashchange', route);
 $('burger').onclick = () => { $('mnav').hidden = !$('mnav').hidden; };
 $('mnav').addEventListener('click', e => { if (e.target.closest('a')) $('mnav').hidden = true; });
-const solidHeader = () => $('nav').classList.toggle('solid', scrollY > 40 || !$('catalog').hidden || !$('journal').hidden || !$('article').hidden || !$('docs').hidden);
+const solidHeader = () => $('nav').classList.toggle('solid', scrollY > 40 || !$('catalog').hidden || !$('journal').hidden || !$('article').hidden || !$('docs').hidden || !$('cabinet').hidden);
 addEventListener('scroll', solidHeader, { passive: true }); solidHeader();
-$('rStart').onclick = () => openPlayer(curRoom);
 
 // ======================= audio =======================
 let breathLP, breathGain, actx = null, melBus, curRoot = 174.61, nextNote = 0, deg = 2, master, duck, beatGain, noiseGain, padBus, oscL, oscR, voiceBus, padVoices = [];
@@ -2583,32 +2648,171 @@ async function play() {
 function stop(done) {
   if (!P.running) return; P.running = false; P.paused = false; sayTok++; fly(null); vis(null); if (synth) synth.cancel(); levels(done ? 5 : 0.6);
   if (P.elapsed > 240) markPractice();
-  if (done && P.room && TARGET[P.room.id] && P.before != null) setTimeout(() => afterCheck(P.room), 2500);
+  sessionEnded(done);
   if (done) { bell(3, 220); $('pPhase').textContent = 'Сессия завершена'; $('pInstr').textContent = 'Посидите минуту с закрытыми глазами. Заметьте, что изменилось. Каждая практика — ещё один шаг.'; }
   else { $('pPhase').textContent = P.room ? P.room.name : ''; $('pInstr').textContent = 'Можно начать снова, когда будете готовы.'; }
   $('pIco').innerHTML = '<path d="M8 5.5v13l11-6.5z"/>'; $('pProg').style.width = '0'; P.idx = -1; $('pEyes').innerHTML = ''; $('pIntent').classList.remove('on');
   try { P.wake && P.wake.release(); } catch (e) {} P.wake = null; poke();
 }
 window.__skipSession = () => { P.elapsed += 1e5; };
-function afterCheck(r) {
-  const tg = TARGET[r.id], b = P.before; $('mAfterQ').textContent = tg.m[0]; $('mAfterLo').textContent = '0 — ' + tg.m[1]; $('mAfterHi').textContent = '10 — ' + tg.m[2];
-  $('mAfterV').value = b; $('mAfterN').textContent = b; $('afterRes').hidden = true; $('after').hidden = false; $('afterOk').textContent = 'Сохранить результат';
-  $('mAfterV').oninput = () => $('mAfterN').textContent = $('mAfterV').value;
+// ======================= account, access, diary, goals, courses (test mode: stored in this browser) =======================
+const J = (k, d) => { try { const v = JSON.parse(store.get(k)); return v == null ? d : v; } catch (e) { return d; } };
+const SJ = (k, v) => store.set(k, JSON.stringify(v));
+const ACC = () => J('acct', null);
+const ENT = () => J('ent', { rooms: [], courses: [], sub: false });
+const FREE_ROOMS = ['cleanse'];
+const PRICE_ROOM = 290, PRICE_SUB = 490, PRICE_SUB_Y = 2990, PRICE_COURSE = 990;
+const canPlay = r => FREE_ROOMS.includes(r.id) || ENT().sub || ENT().rooms.includes(r.id) || ENT().courses.some(c => (COURSES.find(x => x.id === c) || { days: [] }).days.includes(r.id));
+// universal diary questions + the space's own metric
+const QBASE = { mood: ['Настроение', 'плохое', 'отличное', 1], anx: ['Тревога / напряжение', 'спокойно', 'очень сильно', -1], energy: ['Энергия в теле', 'нет сил', 'много сил', 1] };
+const qsFor = r => { const tg = TARGET[r.id], out = [['own', tg.m[0], tg.m[1], tg.m[2], tg.m[3], tg.m[4]]];
+  Object.entries(QBASE).forEach(([k, q]) => { if (!(k === 'anx' && tg.m[3] < 0 && /тревог|напряж/.test(tg.m[4])) && !(k === 'energy' && /энерги/.test(tg.m[4]))) out.push([k, q[0], q[1], q[2], q[3], q[0].toLowerCase()]); }); return out; };
+const slidersHTML = (qs, vals, pre) => qs.map(([k, q, lo, hi]) => '<div class="mood10"><b>' + q + '</b><input type="range" min="0" max="10" value="' + (vals && vals[k] != null ? vals[k] : 5) + '" data-k="' + k + '" aria-label="' + q + '"><div class="mood10__s"><span>0 — ' + lo + '</span><em>' + (vals && vals[k] != null ? vals[k] : 5) + '</em><span>10 — ' + hi + '</span></div></div>').join('');
+const bindSliders = el => el.querySelectorAll('input[type=range]').forEach(i => i.oninput = () => i.closest('.mood10').querySelector('em').textContent = i.value);
+const readSliders = (el, r) => { const o = {}; el.querySelectorAll('input[type=range]').forEach(i => o[i.dataset.k] = +i.value); const m = r && TARGET[r.id].m[4]; if (m && /тревог|напряж/.test(m)) o.anx = o.own; if (m && /энерги/.test(m)) o.energy = o.own; return o; };
+const SESS = () => J('diary', []);
+function saveSession(rec) { const l = SESS(); l.push(rec); SJ('diary', l.slice(-500)); const res = J('res-' + rec.room, []); if (rec.after) { res.push({ t: rec.t, b: rec.before.own, a: rec.after.own }); SJ('res-' + rec.room, res.slice(-60)); } }
+
+function afterCheck(r, rec) {
+  const qs = qsFor(r), el = $('mAfterQs'); el.innerHTML = slidersHTML(qs, rec.before); bindSliders(el); $('afterNote').value = ''; $('afterRes').hidden = true; $('after').hidden = false; $('afterOk').textContent = 'Сохранить в дневник'; $('afterSkip').hidden = false;
+  $('afterSkip').onclick = () => { saveSession(rec); $('after').hidden = true; };
   $('afterOk').onclick = () => { if (!$('afterRes').hidden) { $('after').hidden = true; return; }
-    const a = +$('mAfterV').value, d = (a - b) * tg.m[3], list = results(r.id); list.push({ t: Date.now(), b, a, lvl: LEVEL() }); store.set('res-' + r.id, JSON.stringify(list.slice(-60)));
-    const all = list.reduce((s, x) => s + (x.a - x.b) * tg.m[3], 0) / list.length;
-    $('afterRes').textContent = (d > 0 ? 'Стало лучше: ' + tg.m[4] + ' ' + b + ' → ' + a + '.' : d === 0 ? 'Без изменений: ' + b + ' → ' + a + '. Так бывает — эффект копится от практики к практике.' : 'Сегодня не помогло: ' + b + ' → ' + a + '. Попробуйте версию «Новичок» или другое пространство; если вам плохо — сделайте паузу.')
-      + (list.length > 1 ? ' В среднем за ' + list.length + ' сеансов: ' + (all > 0 ? '+' : '') + all.toFixed(1) + ' балла.' : '');
-    $('afterRes').hidden = false; $('afterOk').textContent = 'Готово'; };
+    rec.after = readSliders(el, r); rec.note = $('afterNote').value.trim(); saveSession(rec);
+    const lines = qs.map(([k, q, , , dir]) => { const d = (rec.after[k] - rec.before[k]) * dir; return (d > 0 ? '▲ ' : d < 0 ? '▼ ' : '• ') + q.replace(/\?$/, '') + ': ' + rec.before[k] + ' → ' + rec.after[k]; });
+    const own = (rec.after.own - rec.before.own) * qs[0][4];
+    $('afterRes').innerHTML = '<b>' + (own > 0 ? 'Стало лучше.' : own === 0 ? 'Без изменений — эффект копится от практики к практике.' : 'Сегодня не помогло. Попробуйте версию «Новичок» или другое пространство; если вам плохо — сделайте паузу.') + '</b><br>' + lines.join('<br>') + '<br><a href="#kabinet">Открыть дневник →</a>';
+    $('afterRes').hidden = false; $('afterSkip').hidden = true; $('afterOk').textContent = 'Готово'; };
 }
 function safety(go) {
   const box = $('safe'), ok = $('safeOk'), soft = $('safeSoft');
   ok.checked = +store.get('safeOk') > Date.now() - 864e5 * 30; soft.checked = store.get('soft') === '1'; $('safeGo').disabled = !ok.checked;
-  const tg = P.room && TARGET[P.room.id]; $('mBefore').hidden = !tg; if (tg) { $('mBeforeQ').textContent = 'Перед началом: ' + tg.m[0].toLowerCase(); $('mBeforeLo').textContent = '0 — ' + tg.m[1]; $('mBeforeHi').textContent = '10 — ' + tg.m[2]; $('mBeforeV').value = 5; $('mBeforeN').textContent = 5; $('mBeforeV').oninput = () => $('mBeforeN').textContent = $('mBeforeV').value; }
+  const r = P.room, qs = r && TARGET[r.id] ? qsFor(r) : null; $('mBefore').hidden = !qs; if (qs) { $('mBeforeQs').innerHTML = slidersHTML(qs); bindSliders($('mBeforeQs')); }
   box.hidden = false; ok.onchange = () => { $('safeGo').disabled = !ok.checked; };
   $('safeNo').onclick = () => { box.hidden = true; };
-  $('safeGo').onclick = () => { store.set('safeOk', Date.now()); store.set('soft', soft.checked ? '1' : '0'); $('player').classList.toggle('soft', soft.checked); box.hidden = true; P.before = tg ? +$('mBeforeV').value : null; go(); };
+  $('safeGo').onclick = () => { store.set('safeOk', Date.now()); store.set('soft', soft.checked ? '1' : '0'); $('player').classList.toggle('soft', soft.checked); box.hidden = true;
+    P.rec = qs ? { t: Date.now(), room: r.id, lvl: LEVEL(), planned: sum(P.phases), before: readSliders($('mBeforeQs'), r), course: store.get('activeCourse') || null } : null; P.before = qs ? P.rec.before.own : null; go(); };
 }
+function sessionEnded(done) { const rec = P.rec; P.rec = null; if (!rec) return; rec.elapsed = Math.round(Math.min(P.elapsed, rec.planned)); rec.completed = !!done;
+  if (done) setTimeout(() => afterCheck(P.room, rec), 2200); else if (rec.elapsed > 30) saveSession(rec); }
+
+// ---------- courses ----------
+const COURSES = [
+  { id: 'reset7', name: 'Перезагрузка за 7 дней', for: 'Устали, всё навалилось, нужно восстановиться', days: ['cleanse', 'breathe', 'energy', 'silence', 'cleanse', 'selflove', 'purpose'], why: 'Сначала очищение и дыхание снимают напряжение, затем возвращаем силы, тишину и тепло к себе, а в конце — ясность, куда двигаться дальше.' },
+  { id: 'calm14', name: 'Спокойствие за 14 дней', for: 'Тревога, мысли по кругу, плохо спится', days: ['cleanse', 'breathe', 'silence', 'breathe', 'release', 'silence', 'cleanse', 'breathe', 'selflove', 'silence', 'release', 'breathe', 'silence', 'purpose'], why: 'Дыхание и тишина чередуются каждый день: так навык успокаиваться закрепляется. Отпускание и тепло к себе убирают источник напряжения.' },
+  { id: 'habit21', name: 'Свобода от привычки · 21 день', for: 'Курение, алкоголь, сладкое — хочу перестать', days: ['cleanse', 'habits', 'breathe', 'habits', 'energy', 'habits', 'selflove', 'habits', 'breathe', 'habits', 'release', 'habits', 'energy', 'habits', 'silence', 'habits', 'selflove', 'habits', 'blinders', 'habits', 'purpose'], why: 'Практика «Привычки» через день тренирует пережить волну тяги, а между ними — опора: дыхание, энергия, тепло к себе. При физической зависимости — вместе с врачом.' },
+  { id: 'money10', name: 'Деньги и возможности · 10 дней', for: 'Застой, страх просить, хочу больше', days: ['cleanse', 'blinders', 'abundance', 'energy', 'luck', 'blinders', 'event', 'abundance', 'purpose', 'luck'], why: 'Сначала снимаем шоры и чужие правила, затем тренируем внимание к возможностям и смелость сделать шаг.' },
+  { id: 'love10', name: 'Тепло и отношения · 10 дней', for: 'Обиды, одиночество, сложно с близкими', days: ['cleanse', 'selflove', 'release', 'selflove', 'relations', 'breathe', 'release', 'relations', 'selflove', 'relations'], why: 'Отношения с другими начинаются с отношения к себе: сначала тепло к себе и отпускание обид, потом — близость.' }
+];
+const courseProgress = c => { const done = SESS().filter(x => x.course === c.id && x.completed).length; return Math.min(done, c.days.length); };
+
+// ---------- auth / buy ----------
+function openAuth(then) { $('auth').hidden = false; $('authErr').textContent = ''; $('authNo').onclick = () => $('auth').hidden = true;
+  $('authForm').onsubmit = e => { e.preventDefault(); const n = $('authName').value.trim(), m = $('authMail').value.trim();
+    if (!n) return $('authErr').textContent = 'Как к вам обращаться?'; if (!/^\S+@\S+\.\S+$/.test(m)) return $('authErr').textContent = 'Проверьте e-mail.'; if (!$('authOk').checked) return $('authErr').textContent = 'Подтвердите согласие с условиями.';
+    SJ('acct', { name: n, mail: m, since: Date.now() }); $('auth').hidden = true; accUI(); if (then) then(); }; }
+function openBuy(title, opts) { $('buyT').textContent = title; $('buy').hidden = false; $('buyNo').onclick = () => $('buy').hidden = true;
+  $('buyOpts').innerHTML = opts.map((o, i) => '<button type="button" class="buyo__i' + (o.best ? ' best' : '') + '" data-i="' + i + '"><span><b>' + o.t + '</b><small>' + o.d + '</small></span><em>' + o.p + '</em></button>').join('');
+  $('buyOpts').querySelectorAll('button').forEach(b => b.onclick = () => { if (!ACC()) { $('buy').hidden = true; return openAuth(() => openBuy(title, opts)); } opts[+b.dataset.i].go(); $('buy').hidden = true; accUI(); refreshLocks(); }); }
+const grant = f => { const e = ENT(); f(e); SJ('ent', e); };
+const buyRoom = r => openBuy('Пространство «' + r.name + '»', [
+  { t: 'Только это пространство', d: 'Навсегда, все уровни', p: PRICE_ROOM + ' ₽', go: () => grant(e => e.rooms.push(r.id)) },
+  { t: 'Подписка на всё', d: 'Все 17 пространств, курсы, полный дневник', p: PRICE_SUB + ' ₽/мес', best: true, go: () => grant(e => e.sub = true) },
+  { t: 'Подписка на год', d: 'То же, выгоднее на 49%', p: PRICE_SUB_Y.toLocaleString('ru') + ' ₽/год', go: () => grant(e => e.sub = true) }]);
+function accUI() { const a = ACC(); $('hAcc').querySelector('span').textContent = a ? a.name : 'Войти'; $('hAcc').classList.toggle('in', !!a); }
+$('hAcc').onclick = e => { if (!ACC()) { e.preventDefault(); openAuth(() => { location.hash = '#kabinet'; }); } };
+function refreshLocks() { document.querySelectorAll('#roomGrid .room, #featGrid .room').forEach(a => { const r = ROOMS.find(x => x.id === a.dataset.id); if (!r) return; const lk = !canPlay(r); a.classList.toggle('locked', lk);
+  let b = a.querySelector('.lockb'); if (!b) { b = document.createElement('span'); b.className = 'lockb'; a.querySelector('.art2').appendChild(b); }
+  b.innerHTML = lk ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg>' + PRICE_ROOM + ' ₽' : FREE_ROOMS.includes(r.id) ? 'Бесплатно' : 'Открыто'; b.classList.toggle('free', !lk); });
+  if (curPage === 'roomPage' && curRoom) roomLock(curRoom); }
+function roomLock(r) { const lk = !canPlay(r) && !r.pro; const st = $('rStart');
+  st.innerHTML = lk ? '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg> Открыть за ' + PRICE_ROOM + ' ₽ или по подписке' : 'Начать сеанс <svg class="ico" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3v10l8-5z"/></svg>';
+  st.dataset.locked = lk ? '1' : ''; }
+$('rStart').onclick = () => { if ($('rStart').dataset.locked) return buyRoom(curRoom); openPlayer(curRoom); };
+
+// ---------- cabinet ----------
+let cabTab = 'today';
+const dkey = t => { const d = new Date(t); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); };
+function stats() { const L = SESS(), days = [...new Set(L.map(x => dkey(x.t)))], comp = L.filter(x => x.completed), mins = L.reduce((a, x) => a + (x.elapsed || 0), 0) / 60;
+  let streak = 0; const d = new Date(); const set = new Set(days); if (!set.has(dkey(d))) d.setDate(d.getDate() - 1); while (set.has(dkey(d))) { streak++; d.setDate(d.getDate() - 1); }
+  const withA = L.filter(x => x.after), delta = k => { const l = withA.filter(x => x.after[k] != null && x.before[k] != null); return l.length ? l.reduce((a, x) => a + (x.after[k] - x.before[k]), 0) / l.length : null; };
+  const first = L.length ? L[0].t : Date.now(), weeks = Math.max(1, (Date.now() - first) / 6048e5);
+  return { L, n: L.length, days: days.length, streak, comp: L.length ? Math.round(comp.length / L.length * 100) : 0, avgMin: L.length ? mins / L.length : 0, total: mins, perWeek: L.length / weeks, mood: delta('mood'), anx: delta('anx'), energy: delta('energy') }; }
+const fmtD = v => v == null ? '—' : (v > 0 ? '+' : '') + v.toFixed(1);
+function chartSVG(L) { const pts = L.filter(x => x.after && x.before.anx != null).slice(-20); if (pts.length < 2) return '<p class="cab-empty">График появится после двух практик с оценкой до и после.</p>';
+  const W = 640, H = 200, px = i => 30 + i * (W - 50) / (pts.length - 1), py = v => 16 + (10 - v) * (H - 40) / 10;
+  const line = k => pts.map((x, i) => (i ? 'L' : 'M') + px(i).toFixed(1) + ' ' + py(x[k].anx).toFixed(1)).join(' ');
+  return '<svg class="cab-chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Тревога до и после практик">' + [0, 5, 10].map(v => '<line x1="30" x2="' + (W - 20) + '" y1="' + py(v) + '" y2="' + py(v) + '" class="g"/><text x="6" y="' + (py(v) + 4) + '">' + v + '</text>').join('')
+    + '<path d="' + line('before') + '" class="b"/><path d="' + line('after') + '" class="a"/>' + pts.map((x, i) => '<circle cx="' + px(i) + '" cy="' + py(x.after.anx) + '" r="3.5" class="a"/>').join('') + '</svg><div class="cab-leg"><span class="b">до практики</span><span class="a">после практики</span></div>'; }
+function renderCabinet() {
+  const a = ACC(); if (!a) { $('cabHi').innerHTML = 'Ваш <em>путь</em>'; $('cabSub').textContent = 'Создайте бесплатный кабинет: дневник практик, цели, курсы и карта жизни в одном месте.'; $('cabTabs').hidden = true;
+    $('cabBody').innerHTML = '<div class="cab-card cab-cta"><h2>Регистрация бесплатна</h2><ul><li>Практика «Очищение» — без ограничений</li><li>Дневник: оценка до и после каждой практики</li><li>Цели и шаги к ним</li><li>Профиль карты жизни</li></ul><button class="btn btn--gold" id="cabReg" type="button">Создать кабинет ' + ARROW + '</button></div>'; $('cabReg').onclick = () => openAuth(renderCabinet); return; }
+  $('cabTabs').hidden = false; $('cabHi').innerHTML = 'Здравствуйте, <em>' + a.name.replace(/[<>&]/g, '') + '</em>'; const S = stats(), E = ENT();
+  $('cabSub').textContent = S.n ? S.n + ' практик · ' + S.days + ' дн. · серия ' + S.streak + ' дн.' : 'Начните с первой практики — дневник заполнится сам.';
+  [...$('cabTabs').children].forEach(b => b.setAttribute('aria-pressed', b.dataset.t === cabTab));
+  const fullDiary = E.sub, lockBlk = (title, html) => fullDiary ? html : '<div class="cab-lock"><div class="cab-lock__in" aria-hidden="true">' + html + '</div><div class="cab-lock__cta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg><b>' + title + '</b><button class="btn btn--gold btn--sm" type="button" data-sub>Подписка ' + PRICE_SUB + ' ₽/мес</button></div></div>';
+  const kpi = (v, l) => '<div class="kpi"><b>' + v + '</b><span>' + l + '</span></div>';
+  const ac = store.get('activeCourse'), course = COURSES.find(c => c.id === ac);
+  let h = '';
+  if (cabTab === 'today') {
+    const next = course ? course.days[courseProgress(course)] : null, rec = next ? ROOMS.find(r => r.id === next) : ROOMS.find(r => r.id === 'cleanse');
+    h += '<div class="cab-grid"><div class="cab-card cab-next"><span class="eyebrow">' + (course ? 'Курс «' + course.name + '» · день ' + (courseProgress(course) + 1) + ' из ' + course.days.length : 'Практика на сегодня') + '</span><h2>' + rec.name + '</h2><p>' + rec.tag + '</p><a class="btn btn--gold" href="#room-' + rec.id + '">Начать ' + ARROW + '</a></div>'
+      + '<div class="cab-card"><span class="eyebrow">Ваш прогресс</span><div class="kpis">' + kpi(S.n, 'практик') + kpi(S.streak, 'дней подряд') + kpi(Math.round(S.total), 'минут всего') + kpi(fmtD(S.anx), 'тревога в среднем за сеанс') + '</div></div></div>';
+    const G = J('goals', []); h += '<div class="cab-card"><span class="eyebrow">Главная цель</span>' + (G[0] ? '<h3>' + G[0].t.replace(/[<>&]/g, '') + '</h3><div class="gbar"><i style="width:' + (G[0].ms.length ? G[0].ms.filter(m => m.d).length / G[0].ms.length * 100 : 0) + '%"></i></div><button class="linkbtn2" data-tab="goals">Открыть цели →</button>' : '<p>Запишите, к чему вы идёте — так практики будут работать на конкретный результат.</p><button class="btn btn--line btn--sm" data-tab="goals">Поставить цель</button>') + '</div>';
+  }
+  if (cabTab === 'diary') {
+    h += '<div class="cab-card"><span class="eyebrow">Статистика</span><div class="kpis kpis--6">' + kpi(S.n, 'практик') + kpi(S.days, 'дней с практикой') + kpi(S.streak, 'серия, дней') + kpi(S.perWeek.toFixed(1), 'практик в неделю') + kpi(S.avgMin.toFixed(1), 'минут в среднем') + kpi(S.comp + '%', 'досидели до конца') + '</div></div>';
+    h += lockBlk('Полная аналитика: как вы меняетесь', '<div class="cab-card"><span class="eyebrow">Как меняется ваше состояние</span><div class="kpis">' + kpi(fmtD(S.anx), 'тревога за сеанс') + kpi(fmtD(S.mood), 'настроение за сеанс') + kpi(fmtD(S.energy), 'энергия за сеанс') + '</div>' + chartSVG(S.L) + '</div>'
+      + '<div class="cab-card"><span class="eyebrow">Что помогает именно вам</span>' + (() => { const by = {}; S.L.filter(x => x.after).forEach(x => { const tg = TARGET[x.room]; (by[x.room] = by[x.room] || []).push((x.after.own - x.before.own) * tg.m[3]); }); const rows = Object.entries(by).map(([id, v]) => [id, v.reduce((a, b) => a + b, 0) / v.length, v.length]).sort((a, b) => b[1] - a[1]);
+        return rows.length ? '<table class="cab-t"><tr><th>Пространство</th><th>Сеансов</th><th>Эффект</th></tr>' + rows.map(([id, v, n]) => '<tr><td>' + ROOMS.find(r => r.id === id).name + '</td><td>' + n + '</td><td class="' + (v > 0 ? 'up' : 'dn') + '">' + fmtD(v) + '</td></tr>').join('') + '</table>' : '<p class="cab-empty">Здесь появится рейтинг пространств по вашему результату.</p>'; })() + '</div>');
+    h += '<div class="cab-card"><span class="eyebrow">Записи</span>' + (S.L.length ? '<ul class="cab-log">' + S.L.slice(-12).reverse().map(x => { const r = ROOMS.find(q => q.id === x.room) || { name: x.room }, d = new Date(x.t); return '<li><b>' + d.toLocaleDateString('ru') + ' · ' + r.name + '</b> · ' + Math.round((x.elapsed || 0) / 60) + ' мин' + (x.completed ? '' : ' · прервано') + (x.after ? ' · ' + TARGET[x.room].m[4] + ' ' + x.before.own + ' → ' + x.after.own : '') + (x.note ? '<br><i>«' + x.note.replace(/[<>&]/g, '') + '»</i>' : '') + '</li>'; }).join('') + '</ul>' : '<p class="cab-empty">Пока пусто. После каждой практики здесь появится запись: что было до, что стало после.</p>') + '</div>';
+  }
+  if (cabTab === 'goals') {
+    const G = J('goals', []);
+    h += '<div class="cab-card"><span class="eyebrow">Новая цель</span><form class="gform" id="gForm"><input id="gT" maxlength="120" placeholder="Например: спокойно спать без мыслей по кругу" required><select id="gS"><option>Спокойствие</option><option>Здоровье и тело</option><option>Деньги и дело</option><option>Отношения</option><option>Привычка</option><option>Предназначение</option></select><input id="gD" type="date"><button class="btn btn--gold btn--sm">Добавить</button></form></div>';
+    h += G.map((g, gi) => { const done = g.ms.filter(m => m.d).length, pct = g.ms.length ? Math.round(done / g.ms.length * 100) : 0;
+      return '<div class="cab-card goal"><div class="goal__h"><div><span class="eyebrow">' + g.s + (g.d ? ' · до ' + new Date(g.d).toLocaleDateString('ru') : '') + '</span><h3>' + g.t.replace(/[<>&]/g, '') + '</h3></div><b class="goal__p">' + pct + '%</b></div><div class="gbar"><i style="width:' + pct + '%"></i></div>'
+        + '<h4>Этапы</h4><ul class="ms">' + g.ms.map((m, mi) => '<li><label><input type="checkbox" data-g="' + gi + '" data-m="' + mi + '"' + (m.d ? ' checked' : '') + '> ' + m.t.replace(/[<>&]/g, '') + '</label></li>').join('') + '</ul><form class="gadd" data-g="' + gi + '" data-kind="ms"><input maxlength="100" placeholder="Новый этап"><button class="ghost">+ Этап</button></form>'
+        + '<h4>Что я сделал(а)</h4><ul class="acts">' + g.acts.slice(-6).reverse().map(x => '<li><span>' + new Date(x.t).toLocaleDateString('ru') + '</span> ' + x.x.replace(/[<>&]/g, '') + '</li>').join('') + '</ul><form class="gadd" data-g="' + gi + '" data-kind="act"><input maxlength="140" placeholder="Сегодня я…"><button class="ghost">Записать</button></form>'
+        + '<button class="linkbtn2 gdel" data-g="' + gi + '">Удалить цель</button></div>'; }).join('');
+    if (!G.length) h += '<p class="cab-empty">Цель + этапы + ежедневные шаги. Практики дают состояние, шаги дают результат.</p>';
+  }
+  if (cabTab === 'courses') {
+    h += '<p class="cab-lead">Курс — это пространства в продуманном порядке: сначала очищение и опора, затем работа над вашей задачей. Одна практика в день.</p><div class="cab-grid cab-grid--c">' + COURSES.map(c => { const own = E.sub || E.courses.includes(c.id), pr = courseProgress(c), act = ac === c.id;
+      return '<div class="cab-card course' + (act ? ' on' : '') + '"><span class="eyebrow">' + c.days.length + ' дней · ' + c.for + '</span><h3>' + c.name + '</h3><p>' + c.why + '</p><ol class="cdays">' + c.days.map((d, i) => '<li class="' + (i < pr ? 'done' : i === pr && act ? 'now' : '') + '" title="День ' + (i + 1) + '">' + (ROOMS.find(r => r.id === d) || {}).name + '</li>').join('') + '</ol>'
+        + (own ? (act ? '<a class="btn btn--gold btn--sm" href="#room-' + c.days[pr] + '">День ' + (pr + 1) + ': начать</a>' : '<button class="btn btn--gold btn--sm" data-course="' + c.id + '">Начать курс</button>') : '<button class="btn btn--line btn--sm" data-buyc="' + c.id + '"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg> ' + PRICE_COURSE + ' ₽ или по подписке</button>') + '</div>'; }).join('') + '</div>';
+  }
+  if (cabTab === 'spaces') {
+    h += '<div class="cab-grid cab-grid--s">' + ROOMS.filter(r => !r.pro || isPro()).map(r => { const ok = canPlay(r), res = results(r.id);
+      return '<a class="cab-card sp' + (ok ? '' : ' sp--lock') + '" href="#room-' + r.id + '"><span class="eyebrow">' + (ok ? (FREE_ROOMS.includes(r.id) ? 'Бесплатно' : 'Открыто') : '🔒 ' + PRICE_ROOM + ' ₽') + '</span><b>' + r.name + '</b><small>' + (res.length ? res.length + ' сеанс. · ' + TARGET[r.id].m[4] : r.tag) + '</small></a>'; }).join('') + '</div>';
+  }
+  if (cabTab === 'map') {
+    const inp = J('karta_input', null);
+    h += inp ? '<div class="cab-card"><span class="eyebrow">Ваша карта жизни</span><h3>' + (inp.name ? inp.name.replace(/[<>&]/g, '') + ' · ' : '') + inp.date.split('-').reverse().join('.') + (inp.time ? ', ' + inp.time : '') + ' · ' + inp.place.replace(/[<>&]/g, '') + '</h3><p>Бесплатная карта строится один раз для вас. Исправить данные можно один раз в течение 7 дней. Карта для близкого человека — отдельно.</p><div class="cab-row"><a class="btn btn--astro" href="#karta">Открыть карту ' + ARROW + '</a><button class="btn btn--line btn--sm" data-buymap>Карта для близкого · 990 ₽</button></div></div>'
+      : '<div class="cab-card"><span class="eyebrow">Карта жизни</span><h3>Карта ещё не построена</h3><p>Профиль, тема года и практики для вас — бесплатно.</p><a class="btn btn--astro" href="#karta">Построить карту ' + ARROW + '</a></div>';
+  }
+  if (cabTab === 'plan') {
+    h += '<div class="cab-card"><span class="eyebrow">Ваш доступ</span><ul class="plan"><li class="ok">Очищение · профиль карты · дневник (записи и базовая статистика)</li><li class="' + (E.sub ? 'ok' : '') + '">Подписка: все пространства, курсы, полная аналитика дневника</li><li class="' + (E.rooms.length ? 'ok' : '') + '">Куплено отдельно: ' + (E.rooms.length ? E.rooms.map(id => ROOMS.find(r => r.id === id).name).join(', ') : 'нет') + '</li><li class="' + (has('full') ? 'ok' : '') + '">Полная карта жизни</li></ul>'
+      + (E.sub ? '<button class="ghost" data-unsub>Отменить подписку</button>' : '<button class="btn btn--gold" data-sub>Подписка ' + PRICE_SUB + ' ₽/мес</button>') + '</div>'
+      + '<div class="cab-card cab-test"><span class="eyebrow">Тестовый режим · посмотреть как пользователь</span><div class="cab-row"><button class="btn btn--line btn--sm" data-demo="free">Бесплатный пользователь</button><button class="btn btn--line btn--sm" data-demo="all">Всё оплачено</button><button class="ghost" data-demo="out">Выйти из кабинета</button></div></div>';
+  }
+  $('cabBody').innerHTML = h;
+  const B = $('cabBody');
+  B.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { cabTab = b.dataset.tab; renderCabinet(); });
+  B.querySelectorAll('[data-sub]').forEach(b => b.onclick = () => openBuy('Подписка на всё', [{ t: 'Месяц', d: 'Все пространства, курсы, полная аналитика', p: PRICE_SUB + ' ₽/мес', best: true, go: () => grant(e => e.sub = true) }, { t: 'Год', d: 'Выгоднее на 49%', p: PRICE_SUB_Y.toLocaleString('ru') + ' ₽/год', go: () => grant(e => e.sub = true) }]));
+  B.querySelectorAll('[data-buyc]').forEach(b => b.onclick = () => { const c = COURSES.find(x => x.id === b.dataset.buyc); openBuy('Курс «' + c.name + '»', [{ t: 'Только этот курс', d: c.days.length + ' дней, навсегда', p: PRICE_COURSE + ' ₽', go: () => grant(e => e.courses.push(c.id)) }, { t: 'Подписка на всё', d: 'Все курсы и пространства', p: PRICE_SUB + ' ₽/мес', best: true, go: () => grant(e => e.sub = true) }]); });
+  B.querySelectorAll('[data-course]').forEach(b => b.onclick = () => { store.set('activeCourse', b.dataset.course); renderCabinet(); });
+  B.querySelectorAll('[data-buymap]').forEach(b => b.onclick = () => openBuy('Карта для близкого человека', [{ t: 'Базовая карта', d: 'Профиль, тема года, практики', p: '990 ₽', go: () => store.set('karta_extra', '1') }, { t: 'Полная карта', d: 'Все разделы и прогноз', p: '1 990 ₽', best: true, go: () => store.set('karta_extra', '1') }]));
+  B.querySelectorAll('[data-unsub]').forEach(b => b.onclick = () => { grant(e => e.sub = false); renderCabinet(); refreshLocks(); });
+  B.querySelectorAll('[data-demo]').forEach(b => b.onclick = () => { const m = b.dataset.demo;
+    if (m === 'free') { SJ('ent', { rooms: [], courses: [], sub: false }); store.set('karta_unlock', ''); } if (m === 'all') { SJ('ent', { rooms: [], courses: COURSES.map(c => c.id), sub: true }); store.set('karta_unlock', ',all'); } if (m === 'out') { store.set('acct', 'null'); accUI(); }
+    renderCabinet(); refreshLocks(); });
+  const gf = $('gForm'); if (gf) gf.onsubmit = e => { e.preventDefault(); const G = J('goals', []); G.unshift({ t: $('gT').value.trim(), s: $('gS').value, d: $('gD').value || null, ms: [], acts: [], t0: Date.now() }); if (G[0].t) SJ('goals', G); renderCabinet(); };
+  B.querySelectorAll('.gadd').forEach(f => f.onsubmit = e => { e.preventDefault(); const v = f.querySelector('input').value.trim(); if (!v) return; const G = J('goals', []), g = G[+f.dataset.g]; if (f.dataset.kind === 'ms') g.ms.push({ t: v, d: false }); else g.acts.push({ t: Date.now(), x: v }); SJ('goals', G); renderCabinet(); });
+  B.querySelectorAll('.ms input').forEach(c => c.onchange = () => { const G = J('goals', []); G[+c.dataset.g].ms[+c.dataset.m].d = c.checked; SJ('goals', G); renderCabinet(); });
+  B.querySelectorAll('.gdel').forEach(b => b.onclick = () => { const G = J('goals', []); G.splice(+b.dataset.g, 1); SJ('goals', G); renderCabinet(); });
+}
+$('cabTabs').addEventListener('click', e => { const b = e.target.closest('button[data-t]'); if (!b) return; cabTab = b.dataset.t; renderCabinet(); });
+const has = k => { const u = store.get('karta_unlock') || ''; return u.includes('all') || u.includes(k); };
 $('pPlay').onclick = () => P.running ? play() : safety(play); $('pStop').onclick = () => stop(); $('pClose').onclick = closePlayer;
 $('pSet').onclick = () => $('drawer').classList.add('open'); $('dClose').onclick = () => $('drawer').classList.remove('open');
 $('pFs').onclick = () => { try { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(() => {}); } catch (e) {} };
@@ -2647,6 +2851,6 @@ function frame(now) {
   }
   requestAnimationFrame(frame);
 }
-route(); requestAnimationFrame(frame);
+accUI(); refreshLocks(); route(); requestAnimationFrame(frame);
 })();
 </script>

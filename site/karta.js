@@ -436,6 +436,14 @@ function initForm() {
       if (!c) return err.textContent = 'Город не найден. Выберите из списка или введите координаты вручную.'; [lat, lon, tz] = [c[2], c[3], c[4]]; }
     if (isNaN(lat) || isNaN(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180) return err.textContent = 'Проверьте координаты.';
     const gEl = document.querySelector('input[name=kGender]:checked'); if (!gEl) return err.textContent = 'Выберите оформление карты: женское или мужское.';
+    const acct = (() => { try { return JSON.parse(st.get('acct')); } catch (e) { return null; } })(), prev = (() => { try { return JSON.parse(st.get('karta_input')); } catch (e) { return null; } })();
+    if (acct && prev && (prev.date !== date || (prev.time || '') !== time || prev.place !== (place || prev.place))) {
+      const edits = +(st.get('karta_edits') || 0), fresh = acct && Date.now() - (+st.get('karta_t0') || Date.now()) < 7 * 864e5;
+      if (st.get('karta_extra') === '1') st.set('karta_extra', '0');
+      else if (edits < 1 && fresh) st.set('karta_edits', edits + 1);
+      else return err.innerHTML = 'Бесплатная карта уже построена для ' + (prev.name || 'вас') + ' (' + prev.date.split('-').reverse().join('.') + '). Исправить данные можно один раз в первые 7 дней. Карта для близкого человека — <a href="#kabinet" style="color:#dcbd86">в кабинете</a>.';
+    }
+    if (!st.get('karta_t0')) st.set('karta_t0', Date.now());
     const inp = { gender: gEl.value, name: $k('kName').value.trim(), date, time, place: place || (lat.toFixed(2) + ', ' + lon.toFixed(2)), lat, lon, tz };
     st.set('karta_input', JSON.stringify(inp)); st.set('karta_consent', JSON.stringify({ v: '2026-10-14', at: new Date().toISOString() }));
     const btn = $k('kGo'); btn.disabled = true; btn.textContent = 'Считаем положение планет…';
