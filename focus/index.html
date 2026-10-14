@@ -2,175 +2,189 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&family=Golos+Text:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Golos+Text:wght@400;500&display=swap">
 <style>
-/* Layout: one dim "practice room" — the stage (canvas) is the room, controls sit beside it and fade while a session runs. Deliberately single dark theme: practice happens in low light. */
+/* Layout: the whole first screen is a lamp-lit room (canvas). Text and controls float over it in gold hairlines; settings live in a drawer. Single dark world by design — practice happens in low light. */
 :root {
-  --night: #11111f;      /* room */
-  --dusk: #1a1a2e;       /* panels */
-  --line: #2c2b45;       /* hairlines */
-  --ghee: #e9a94f;       /* lamp light, the one accent */
-  --ash: #b9b6cf;        /* body text */
-  --mist: #7d7a99;       /* secondary text */
-  --warn: #e07a6a;
-  --f-display: "Forum", "Times New Roman", serif;
+  --room: #0c0a12;        /* deep aubergine-black */
+  --veil: rgba(20,16,28,.78);
+  --hair: rgba(214,178,118,.22);
+  --gold: #d9b273;        /* gold leaf */
+  --gold-hi: #f4dcaa;
+  --ivory: #efe6d6;
+  --smoke: #9a93a8;
+  --ember: #e0866d;
+  --f-display: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
   --f-body: "Golos Text", system-ui, -apple-system, "Segoe UI", sans-serif;
   color-scheme: dark;
 }
-html, body { height: 100%; }
 [hidden] { display: none !important; }
-body {
-  background: var(--night); color: var(--ash); font-family: var(--f-body); font-size: 15px; line-height: 1.55;
-  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-block: 20px 40px;
-}
-.wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 20px; }
-header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
-h1 { font-family: var(--f-display); font-weight: 400; font-size: 2.6rem; letter-spacing: .04em; margin: 0; color: #f3e6cf; }
-header p { margin: 0; color: var(--mist); max-width: 60ch; }
-h2 { font-family: var(--f-display); font-weight: 400; font-size: 1.35rem; margin: 0 0 10px; color: #f3e6cf; letter-spacing: .02em; text-wrap: balance; }
+html, body { height: 100%; }
+body { background: var(--room); color: var(--smoke); font-family: var(--f-body); font-size: 15px; line-height: 1.6; margin: 0; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
 
-.main { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 20px; align-items: start; }
-@media (max-width: 860px) { .main { grid-template-columns: minmax(0, 1fr); } }
-
-.stage { position: relative; background: #0b0b16; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; width: 100%; }
-.view { position: relative; aspect-ratio: 4 / 3; max-width: 100%; max-height: 64vh; width: 100%; }
+/* ---------- stage */
+.stage { position: relative; height: 100%; min-height: 560px; overflow: hidden; background: var(--room); }
 .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.stage:fullscreen { border-radius: 0; }
-.stage:fullscreen .view { flex: 1; aspect-ratio: auto; max-height: none; }
-.hud { padding: 4px 20px 14px; display: grid; gap: 8px; transition: opacity 1.2s; }
-.hud .phase { font-family: var(--f-display); font-size: 1.25rem; color: #f3e6cf; letter-spacing: .03em; }
-.hud .instr { color: var(--ash); max-width: 62ch; font-size: .95rem; min-height: 3em; }
-.bar { height: 3px; background: var(--line); border-radius: 2px; overflow: hidden; }
-.bar i { display: block; height: 100%; width: 0; background: var(--ghee); opacity: .7; }
-.hud .meta { display: flex; justify-content: space-between; color: var(--mist); font-size: .8rem; font-variant-numeric: tabular-nums; letter-spacing: .04em; }
-.stage.quiet .hud { opacity: .25; }
-.stage.quiet:hover .hud { opacity: 1; }
-.fsbtn { position: absolute; top: 12px; right: 12px; }
+.ui { position: absolute; inset: 0; display: grid; grid-template-rows: auto 1fr auto; transition: opacity 1.4s ease;
+  padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); padding-block: 18px 22px; }
+.stage.idle-ui .ui { opacity: .12; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.brand { display: flex; align-items: baseline; gap: 14px; }
+.brand b { font-family: var(--f-display); font-weight: 300; font-size: 1.9rem; letter-spacing: .32em; color: var(--ivory); text-transform: uppercase; }
+.brand span { font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--smoke); }
+@media (max-width: 520px) { .brand span { display: none; } }
+.icon { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--hair); display: grid; place-items: center; color: var(--gold); background: rgba(12,10,18,.35); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: border-color .3s, background .3s; }
+.icon:hover { border-color: var(--gold); background: rgba(217,178,115,.08); }
+.icon svg { width: 18px; height: 18px; }
+.tools { display: flex; gap: 10px; }
 
-.panel { background: var(--dusk); border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: grid; gap: 18px; transition: opacity .8s; }
-body.running .panel { opacity: .45; }
-body.running .panel:hover, body.running .panel:focus-within { opacity: 1; }
-.group { display: grid; gap: 8px; }
-.label { font-size: .72rem; text-transform: uppercase; letter-spacing: .12em; color: var(--mist); }
-.seg { display: flex; flex-wrap: wrap; gap: 6px; }
-.seg button { flex: 1 1 auto; }
-button { font: inherit; font-size: .9rem; color: var(--ash); background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; cursor: pointer; }
-button:hover { border-color: var(--mist); }
-button[aria-pressed="true"] { border-color: var(--ghee); color: #f3e6cf; background: rgba(233,169,79,.1); }
-button.primary { background: var(--ghee); color: #1b1408; border-color: var(--ghee); font-weight: 600; }
-button.primary:hover { filter: brightness(1.08); }
-button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--ghee); outline-offset: 2px; }
-.row { display: flex; flex-wrap: wrap; gap: 8px; }
-.row button { flex: 1 1 auto; }
-select { font: inherit; font-size: .9rem; width: 100%; background: var(--night); color: var(--ash); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; }
-.check { display: flex; gap: 10px; align-items: flex-start; font-size: .9rem; cursor: pointer; }
-.check input { accent-color: var(--ghee); margin-top: 4px; }
-input[type=range] { width: 100%; accent-color: var(--ghee); }
-.vol { display: flex; justify-content: space-between; font-size: .8rem; color: var(--mist); font-variant-numeric: tabular-nums; }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.grid2 > div { display: grid; gap: 4px; min-width: 0; }
-.small { font-size: .8rem; color: var(--mist); }
+.bottom { display: grid; justify-items: center; gap: 14px; text-align: center; }
+.eyebrow { font-size: .68rem; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); opacity: .85; font-variant-numeric: tabular-nums; }
+.phase { font-family: var(--f-display); font-style: italic; font-weight: 300; font-size: clamp(1.9rem, 4.2vw, 2.8rem); color: var(--ivory); line-height: 1.1; margin: 0; text-wrap: balance; }
+.instr { max-width: 46ch; color: #c9c0b4; font-size: .98rem; min-height: 3.2em; margin: 0; text-wrap: pretty; }
+.track { width: min(420px, 80vw); height: 1px; background: var(--hair); position: relative; }
+.track i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: linear-gradient(90deg, transparent, var(--gold-hi)); }
+.controls { display: flex; align-items: center; gap: 22px; margin-top: 4px; }
+.play { width: 74px; height: 74px; border-radius: 50%; display: grid; place-items: center; color: #1a130a;
+  background: radial-gradient(circle at 35% 30%, #fbe9c4, #d9b273 55%, #a77d3f); box-shadow: 0 0 0 1px rgba(244,220,170,.5), 0 0 40px rgba(217,178,115,.35); transition: transform .3s, box-shadow .3s; }
+.play:hover { transform: scale(1.04); box-shadow: 0 0 0 1px rgba(244,220,170,.7), 0 0 60px rgba(217,178,115,.5); }
+.play svg { width: 24px; height: 24px; }
+.time { font-size: .78rem; letter-spacing: .12em; color: var(--smoke); font-variant-numeric: tabular-nums; }
 
-ol.plan { margin: 0; padding: 0; list-style: none; display: grid; gap: 2px; counter-reset: p; }
-ol.plan li { display: grid; grid-template-columns: 1.6em 1fr auto; gap: 8px; padding: 5px 6px; border-radius: 6px; font-size: .88rem; counter-increment: p; }
-ol.plan li::before { content: counter(p); color: var(--mist); font-variant-numeric: tabular-nums; }
-ol.plan li span:last-child { color: var(--mist); font-variant-numeric: tabular-nums; }
-ol.plan li.now { background: rgba(233,169,79,.1); color: #f3e6cf; }
-ol.plan li.done { opacity: .45; }
+/* ---------- drawer */
+.drawer { position: fixed; z-index: 5; top: 0; right: 0; bottom: 0; width: min(380px, 100%); background: var(--veil); backdrop-filter: blur(22px) saturate(1.2); -webkit-backdrop-filter: blur(22px) saturate(1.2);
+  border-left: 1px solid var(--hair); transform: translateX(102%); transition: transform .6s cubic-bezier(.2,.7,.2,1); overflow-y: auto;
+  padding: calc(22px + env(safe-area-inset-top, 0px)) max(22px, env(safe-area-inset-right, 0px)) calc(28px + env(safe-area-inset-bottom, 0px)) 22px; display: grid; gap: 26px; align-content: start; }
+.drawer.open { transform: none; }
+.dhead { display: flex; justify-content: space-between; align-items: center; }
+.dhead h2 { font-family: var(--f-display); font-weight: 300; font-size: 1.7rem; color: var(--ivory); margin: 0; letter-spacing: .04em; }
+.sect { display: grid; gap: 10px; }
+.label { font-size: .66rem; letter-spacing: .26em; text-transform: uppercase; color: var(--gold); }
+.seg { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--hair); border-radius: 999px; padding: 3px; }
+.seg button { padding: 8px 10px; border-radius: 999px; font-size: .88rem; color: var(--smoke); transition: background .3s, color .3s; }
+.seg button[aria-pressed="true"] { background: rgba(217,178,115,.16); color: var(--gold-hi); }
+ol.plan { list-style: none; margin: 0; padding: 0; display: grid; counter-reset: p; }
+ol.plan li { counter-increment: p; display: grid; grid-template-columns: 2em 1fr auto; gap: 8px; padding: 9px 0; border-bottom: 1px solid rgba(214,178,118,.1); font-size: .9rem; color: #c9c0b4; }
+ol.plan li::before { content: counter(p, upper-roman); font-family: var(--f-display); color: var(--gold); opacity: .7; }
+ol.plan li span:last-child { color: var(--smoke); font-variant-numeric: tabular-nums; }
+ol.plan li.now { color: var(--gold-hi); }
+ol.plan li.done { opacity: .4; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.grid2 > label { display: grid; gap: 6px; min-width: 0; font-size: .8rem; }
+select { font: inherit; font-size: .88rem; width: 100%; background: rgba(12,10,18,.6); color: var(--ivory); border: 1px solid var(--hair); border-radius: 10px; padding: 9px 10px; }
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: .9rem; color: #c9c0b4; cursor: pointer; }
+.check input { accent-color: var(--gold); margin-top: 5px; }
+input[type=range] { width: 100%; accent-color: var(--gold); }
+.row { display: flex; justify-content: space-between; font-size: .78rem; font-variant-numeric: tabular-nums; }
+.ghost { border: 1px solid var(--hair); border-radius: 999px; padding: 9px 16px; font-size: .88rem; color: var(--gold-hi); transition: border-color .3s, background .3s; }
+.ghost:hover { border-color: var(--gold); background: rgba(217,178,115,.08); }
+.note { font-size: .8rem; color: var(--smoke); margin: 0; }
 
-.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+/* ---------- below the fold */
+.notes { padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); padding-block: 64px 80px;
+  max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 48px; }
 .notes section { min-width: 0; }
-.notes ul { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; max-width: 65ch; }
-.notes .warn li::marker { color: var(--warn); }
-.notes a { color: var(--ghee); }
-@media (prefers-reduced-motion: reduce) { .hud, .panel { transition: none; } }
+.notes h2 { font-family: var(--f-display); font-weight: 300; font-size: 1.9rem; color: var(--ivory); margin: 0 0 16px; letter-spacing: .02em; }
+.notes ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; max-width: 62ch; }
+.notes li { padding-left: 22px; position: relative; color: #c9c0b4; }
+.notes li::before { content: ""; position: absolute; left: 2px; top: .75em; width: 6px; height: 6px; border-radius: 50%; border: 1px solid var(--gold); }
+.notes .warn li::before { border-color: var(--ember); }
+.notes b { color: var(--ivory); font-weight: 500; }
+@media (prefers-reduced-motion: reduce) { .ui, .drawer, .play { transition: none; } }
 </style>
 
-<div class="wrap">
-  <header>
-    <h1>Аджна</h1>
-    <p>Сессия фокуса: дыхание по кругу, тратака на пламя, бинауральный фон. Наденьте наушники и приглушите свет.</p>
-  </header>
-
-  <div class="main">
-    <div class="stage" id="stage">
-      <div class="view"><canvas id="cv"></canvas>
-      <button class="fsbtn" id="fs" type="button" aria-label="Во весь экран">⛶</button></div>
-      <div class="hud">
-        <div class="phase" id="phaseName">Готово к началу</div>
-        <div class="instr" id="instr">Нажмите «Начать». Звук включится плавно. Громкость — тихая, на грани слышимости.</div>
-        <div class="bar"><i id="prog"></i></div>
-        <div class="meta"><span id="tPhase">—</span><span id="tTotal">14:30</span></div>
+<div class="stage" id="stage">
+  <canvas id="cv"></canvas>
+  <div class="ui">
+    <div class="top">
+      <div class="brand"><b>Аджна</b><span>сессия фокуса</span></div>
+      <div class="tools">
+        <button class="icon" id="fs" type="button" aria-label="Во весь экран"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+        <button class="icon" id="openSet" type="button" aria-label="Настройки"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
       </div>
     </div>
-
-    <aside class="panel">
-      <div class="group">
-        <span class="label">Режим</span>
-        <div class="seg" role="group" aria-label="Режим">
-          <button type="button" id="mProg" aria-pressed="true">Программа 14½ мин</button>
-          <button type="button" id="mFree" aria-pressed="false">Свободно</button>
-        </div>
+    <div></div>
+    <div class="bottom">
+      <div class="eyebrow" id="eyebrow">Программа · 14 мин 30 с</div>
+      <h1 class="phase" id="phaseName">Тихий огонь</h1>
+      <p class="instr" id="instr">Наденьте наушники, приглушите свет и сядьте ровно. Голос и звук начнутся мягко.</p>
+      <div class="track"><i id="prog"></i></div>
+      <div class="controls">
+        <button class="icon" id="stop" type="button" aria-label="Остановить"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="7" y="7" width="10" height="10" rx="1.5"/></svg></button>
+        <button class="play" id="start" type="button" aria-label="Начать"><svg id="playIco" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></button>
+        <span class="time" id="tTotal">14:30</span>
       </div>
+    </div>
+  </div>
+</div>
 
-      <div class="group" id="planBox">
-        <span class="label">Этапы</span>
-        <ol class="plan" id="plan"></ol>
-      </div>
+<aside class="drawer" id="drawer" aria-label="Настройки">
+  <div class="dhead"><h2>Настройки</h2>
+    <button class="icon" id="closeSet" type="button" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
 
-      <div class="group" id="freeBox" hidden>
-        <div class="grid2">
-          <div><span class="label">Образ</span>
-            <select id="fVisual"><option value="breath">Круг дыхания</option><option value="flame">Пламя</option><option value="mandala">Мандала</option></select></div>
-          <div><span class="label">Дыхание</span>
-            <select id="fBreath"><option value="resonance">5,5 / мин</option><option value="calm">4 – 6</option><option value="box">Квадрат 4·4·4·4</option><option value="none">Свободное</option></select></div>
-          <div><span class="label">Ритм</span>
-            <select id="fBeat"><option value="10">α 10 Гц, фокус</option><option value="6">θ 6 Гц, глубина</option><option value="0">Без ритма</option></select></div>
-          <div><span class="label">Время</span>
-            <select id="fDur"><option value="300">5 мин</option><option value="600" selected>10 мин</option><option value="900">15 мин</option><option value="1200">20 мин</option></select></div>
-        </div>
-      </div>
-
-      <div class="group">
-        <span class="label">Звук</span>
-        <input type="range" id="vol" min="0" max="100" value="30" aria-label="Громкость">
-        <div class="vol"><span>Громкость</span><span id="volV">30%</span></div>
-        <label class="check"><input type="checkbox" id="noise" checked> Розовый шум под ритмом (маскирует гул)</label>
-        <label class="check"><input type="checkbox" id="vInstr" checked> Голос: инструкции этапов</label>
-        <label class="check"><input type="checkbox" id="vBreath"> Голос: «вдох / выдох»</label>
-      </div>
-
-      <div class="row">
-        <button type="button" class="primary" id="start">Начать</button>
-        <button type="button" id="stop">Стоп</button>
-      </div>
-      <p class="small" id="voiceNote">Бинауральный эффект работает только в стереонаушниках.</p>
-    </aside>
+  <div class="sect">
+    <span class="label">Режим</span>
+    <div class="seg" role="group" aria-label="Режим">
+      <button type="button" id="mProg" aria-pressed="true">Программа</button>
+      <button type="button" id="mFree" aria-pressed="false">Свободно</button>
+    </div>
   </div>
 
-  <div class="notes">
-    <section>
-      <h2>Как это устроено</h2>
-      <ul>
-        <li><b>Дыхание 5,5 в минуту</b> — резонансная частота сердечного ритма. В исследованиях с биофидбеком: снижение стресса и тревоги, g = 0,83.</li>
-        <li><b>Тратака</b> — взгляд на пламя, затем образ с закрытыми глазами. Небольшие исследования: рост внимания и рабочей памяти за 26 дней.</li>
-        <li><b>Бинауральный ритм</b>: в левое ухо 200 Гц, в правое 210 Гц (или 206) — мозг слышит разницу 10 (6) Гц. Мета-анализ: средний эффект на внимание и тревогу, g = 0,45.</li>
-        <li>Движение на экране медленное, без вспышек и мерцания.</li>
-      </ul>
-    </section>
-    <section class="warn">
-      <h2>Безопасность</h2>
-      <ul>
-        <li>Не использовать при эпилепсии, после травм головы без согласования с врачом, при психозах.</li>
-        <li>Не слушать за рулём и при работе, требующей внимания.</li>
-        <li>Громкость — тихая. Если гудит в ушах или болит голова, уменьшите или выключите ритм.</li>
-        <li>Тратака: не смотреть через силу, при глаукоме и болезнях глаз пропустить этап.</li>
-        <li>Головокружение при дыхании — дышите свободно. Тревога, ощущение нереальности — остановитесь, откройте глаза, пройдитесь.</li>
-        <li>После сессии посидите минуту, прежде чем вставать.</li>
-      </ul>
-    </section>
+  <div class="sect" id="planBox">
+    <span class="label">Этапы</span>
+    <ol class="plan" id="plan"></ol>
   </div>
+
+  <div class="sect" id="freeBox" hidden>
+    <div class="grid2">
+      <label>Образ<select id="fVisual"><option value="breath">Сфера дыхания</option><option value="flame">Пламя</option><option value="mandala">Мандала</option></select></label>
+      <label>Дыхание<select id="fBreath"><option value="resonance">5,5 в минуту</option><option value="calm">Вдох 4, выдох 6</option><option value="box">Квадрат 4·4·4·4</option><option value="none">Свободное</option></select></label>
+      <label>Ритм<select id="fBeat"><option value="10">α 10 Гц · фокус</option><option value="6">θ 6 Гц · глубина</option><option value="0">Без ритма</option></select></label>
+      <label>Время<select id="fDur"><option value="300">5 минут</option><option value="600" selected>10 минут</option><option value="900">15 минут</option><option value="1200">20 минут</option></select></label>
+    </div>
+  </div>
+
+  <div class="sect">
+    <span class="label">Голос</span>
+    <select id="voiceSel" aria-label="Голос"></select>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="ghost" id="testVoice" type="button">Послушать</button></div>
+    <label class="check"><input type="checkbox" id="vInstr" checked> Голос ведёт по этапам</label>
+    <label class="check"><input type="checkbox" id="vBreath"> Подсказывать «вдох» и «выдох»</label>
+    <p class="note" id="voiceNote"></p>
+  </div>
+
+  <div class="sect">
+    <span class="label">Звук</span>
+    <input type="range" id="vol" min="0" max="100" value="30" aria-label="Громкость">
+    <div class="row"><span>Громкость</span><span id="volV">30%</span></div>
+    <label class="check"><input type="checkbox" id="noise" checked> Мягкий шум под ритмом</label>
+    <p class="note">Бинауральный ритм слышен только в стереонаушниках. Громкость — на грани слышимости.</p>
+  </div>
+</aside>
+
+<div class="notes">
+  <section>
+    <h2>Что здесь работает</h2>
+    <ul>
+      <li><b>Дыхание 5,5 раз в минуту</b> — резонансный темп сердечного ритма. В исследованиях с биофидбеком стресс и тревога снижаются заметно (g = 0,83).</li>
+      <li><b>Тратака</b>: взгляд на пламя, затем образ с закрытыми глазами. Небольшие исследования показывают рост внимания и рабочей памяти за 26 дней.</li>
+      <li><b>Бинауральный ритм</b>: левое ухо 200 Гц, правое 210 или 206 Гц, мозг слышит разницу 10 или 6 Гц. Мета-анализ: средний эффект на внимание и тревогу (g = 0,45).</li>
+      <li>Всё движение на экране медленное. Вспышек и мерцания нет.</li>
+    </ul>
+  </section>
+  <section class="warn">
+    <h2>Безопасность</h2>
+    <ul>
+      <li>Не практиковать при эпилепсии, психозах, после травм головы без согласования с врачом.</li>
+      <li>Не слушать за рулём и во время работы, требующей внимания.</li>
+      <li>Гудит в ушах или болит голова — убавьте громкость или выключите ритм.</li>
+      <li>Тратака: смотреть без усилия. При глаукоме и болезнях глаз этап пропустить.</li>
+      <li>Кружится голова — дышите свободно. Тревога или чувство нереальности — откройте глаза, пройдитесь.</li>
+      <li>После сессии посидите минуту, прежде чем вставать.</li>
+    </ul>
+  </section>
 </div>
 
 <script>
@@ -179,215 +193,264 @@ const $ = id => document.getElementById(id);
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const BREATH = {
-  resonance: { p: [5.45, 0, 5.45, 0], name: '5,5 вдохов в минуту' },
-  calm:      { p: [4, 0, 6, 0],       name: 'вдох 4, выдох 6' },
-  box:       { p: [4, 4, 4, 4],       name: 'квадрат 4·4·4·4' }
+  resonance: { p: [5.45, 0, 5.45, 0], name: 'пять с половиной вдохов в минуту' },
+  calm:      { p: [4, 0, 6, 0],       name: 'вдох на четыре, выдох на шесть' },
+  box:       { p: [4, 4, 4, 4],       name: 'квадрат: вдох, пауза, выдох, пауза' }
 };
 
+// Phrases are short and written for the ear: one thought per sentence, commas where a person would breathe.
 const PROGRAM = [
-  { name: 'Настройка', dur: 60, visual: 'breath', breath: 'calm', beat: 10, cue: true,
-    text: 'Сядьте ровно, плечи опущены. Дышите носом вместе с кругом: круг растёт — вдох, сжимается — выдох. Выдох длиннее вдоха.',
-    say: 'Сядьте удобно. Дышите вместе с кругом. Выдох длиннее вдоха.' },
-  { name: 'Резонансное дыхание', dur: 240, visual: 'breath', breath: 'resonance', beat: 10, cue: true,
-    text: 'Вдох 5,5 секунды, выдох 5,5 секунды. Мягко, животом, без усилия. Если не хватает воздуха — дышите свободно.',
-    say: 'Теперь медленнее. Вдох и выдох одинаковые. Мягко, животом.' },
-  { name: 'Тратака', dur: 180, visual: 'flame', breath: null, beat: 10, cue: false,
-    text: 'Смотрите на самую яркую точку пламени. Моргайте реже, но без напряжения. Слёзы — нормально, моргните и продолжайте.',
-    say: 'Смотрите в центр пламени. Моргайте реже, без напряжения.' },
-  { name: 'Внутренний образ', dur: 90, visual: 'dark', breath: null, beat: 6, cue: false,
-    text: 'Закройте глаза. Удерживайте послеобраз пламени в точке между бровей. Когда он растает, просто смотрите в темноту.',
-    say: 'Закройте глаза. Удерживайте образ пламени между бровей.' },
-  { name: 'Тишина', dur: 240, visual: 'mandala', breath: 'resonance', beat: 6, cue: false,
-    text: 'Глаза закрыты или мягко на мандале. Дыхание свободное. Мысли приходят и уходят, вы их не удерживаете. Колокол отметит конец.',
-    say: 'Отпустите дыхание. Просто наблюдайте.' },
-  { name: 'Возвращение', dur: 60, visual: 'breath', breath: 'calm', beat: 10, cue: true,
-    text: 'Откройте глаза. Глубокий вдох. Пошевелите пальцами, потянитесь. Посидите минуту, прежде чем вставать.',
-    say: 'Откройте глаза. Глубокий вдох. Медленно возвращайтесь.' }
+  { key: 'p1', name: 'Прибытие', dur: 60, visual: 'breath', breath: 'calm', beat: 10, cue: true,
+    text: 'Сядьте ровно, плечи мягкие. Дышите носом вместе со сферой: растёт — вдох, тает — выдох.',
+    say: ['Устройтесь поудобнее.', 'Плечи мягкие, лицо спокойное.', 'Дышите вместе со сферой. Выдох чуть длиннее вдоха.'] },
+  { key: 'p2', name: 'Резонанс', dur: 240, visual: 'breath', breath: 'resonance', beat: 10, cue: true,
+    text: 'Вдох пять с половиной секунд, выдох столько же. Животом, без усилия. Не хватает воздуха — дышите свободно.',
+    say: ['Теперь ещё медленнее.', 'Вдох и выдох одинаковые, мягкие.', 'Дышите животом, без усилия.'] },
+  { key: 'p3', name: 'Тратака', dur: 180, visual: 'flame', breath: null, beat: 10, cue: false,
+    text: 'Смотрите в самую яркую точку пламени. Моргайте реже, но не через силу. Слёзы — это нормально.',
+    say: ['Посмотрите на пламя.', 'Найдите в нём самую яркую точку, и оставайтесь с ней.', 'Моргайте реже. Без напряжения.'] },
+  { key: 'p4', name: 'Внутренний свет', dur: 90, visual: 'dark', breath: null, beat: 6, cue: false,
+    text: 'Закройте глаза. Удерживайте образ пламени между бровей. Когда он растает, просто смотрите в темноту.',
+    say: ['Теперь закройте глаза.', 'Пламя осталось внутри. Между бровей.', 'Просто смотрите на него.'] },
+  { key: 'p5', name: 'Тишина', dur: 240, visual: 'mandala', breath: 'resonance', beat: 6, cue: false,
+    text: 'Глаза закрыты или мягко на мандале. Мысли приходят и уходят, вы их не держите. Колокол отметит конец.',
+    say: ['Отпустите дыхание.', 'Ничего не нужно делать.', 'Просто будьте здесь.'] },
+  { key: 'p6', name: 'Возвращение', dur: 60, visual: 'breath', breath: 'calm', beat: 10, cue: true,
+    text: 'Глубокий вдох. Пошевелите пальцами, потянитесь. Посидите минуту, прежде чем вставать.',
+    say: ['Сделайте глубокий вдох.', 'Пошевелите пальцами.', 'И когда будете готовы, откройте глаза.'] }
 ];
 
 const fmt = s => { s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
-const totalProg = PROGRAM.reduce((a, p) => a + p.dur, 0);
+const sum = ph => ph.reduce((a, p) => a + p.dur, 0);
 
-// ---------- plan list
 const planEl = $('plan');
-PROGRAM.forEach(p => {
-  const li = document.createElement('li');
-  li.innerHTML = '<span>' + p.name + '</span><span>' + fmt(p.dur) + '</span>';
-  planEl.appendChild(li);
-});
-$('tTotal').textContent = fmt(totalProg);
+PROGRAM.forEach(p => { const li = document.createElement('li'); li.innerHTML = '<span>' + p.name + '</span><span>' + fmt(p.dur) + '</span>'; planEl.appendChild(li); });
 
-// ---------- state
-let mode = 'prog';
-let running = false, paused = false;
-let elapsed = 0, lastT = 0;
-let phases = PROGRAM;
-let phaseIdx = -1, phaseStart = 0;
-let lastBreathLabel = '';
-let wakeLock = null;
+let mode = 'prog', running = false, paused = false, elapsed = 0, lastT = 0;
+let phases = PROGRAM, phaseIdx = -1, phaseStart = 0, lastBreathLabel = '', wakeLock = null, preview = 'flame';
 
 function freePhases() {
   const b = $('fBreath').value;
-  return [{
-    name: 'Свободная практика', dur: +$('fDur').value, visual: $('fVisual').value,
+  return [{ key: 'free', name: 'Свободная практика', dur: +$('fDur').value, visual: $('fVisual').value,
     breath: b === 'none' ? null : b, beat: +$('fBeat').value, cue: b !== 'none',
-    text: b === 'none' ? 'Дыхание свободное. Взгляд мягкий, внимание в одной точке.' : 'Дышите по ритму: ' + BREATH[b].name + '.',
-    say: ''
-  }];
+    text: b === 'none' ? 'Дыхание свободное. Взгляд мягкий, внимание в одной точке.' : 'Дышите в ритме: ' + BREATH[b].name + '.',
+    say: ['Начинаем.', 'Внимание мягко в одной точке.'] }];
 }
-
+function idleText() {
+  const tot = sum(phases);
+  $('eyebrow').textContent = (mode === 'prog' ? 'Программа · ' : 'Свободно · ') + Math.floor(tot / 60) + ' мин' + (tot % 60 ? ' ' + tot % 60 + ' с' : '');
+  $('tTotal').textContent = fmt(tot);
+}
 function setMode(m) {
   if (running) stopSession();
   mode = m;
-  $('mProg').setAttribute('aria-pressed', m === 'prog');
-  $('mFree').setAttribute('aria-pressed', m === 'free');
-  $('planBox').hidden = m !== 'prog';
-  $('freeBox').hidden = m !== 'free';
+  $('mProg').setAttribute('aria-pressed', m === 'prog'); $('mFree').setAttribute('aria-pressed', m === 'free');
+  $('planBox').hidden = m !== 'prog'; $('freeBox').hidden = m !== 'free';
   phases = m === 'prog' ? PROGRAM : freePhases();
-  $('tTotal').textContent = fmt(phases.reduce((a, p) => a + p.dur, 0));
   preview = m === 'prog' ? 'flame' : $('fVisual').value;
+  idleText();
 }
 $('mProg').onclick = () => setMode('prog');
 $('mFree').onclick = () => setMode('free');
 ['fVisual', 'fBreath', 'fBeat', 'fDur'].forEach(id => $(id).onchange = () => {
   if (mode !== 'free') return;
-  const wasRunning = running && !paused;
-  phases = freePhases();
-  $('tTotal').textContent = fmt(phases[0].dur);
-  preview = $('fVisual').value;
-  if (running) { const ph = phases[0]; applyAudio(ph); }
-  if (!wasRunning) draw(performance.now() / 1000);
+  phases = freePhases(); preview = $('fVisual').value;
+  if (running) applyAudio(phases[0]); else idleText();
 });
 
+// drawer
+$('openSet').onclick = () => { $('drawer').classList.add('open'); $('closeSet').focus(); };
+$('closeSet').onclick = () => $('drawer').classList.remove('open');
+document.addEventListener('keydown', e => { if (e.key === 'Escape') $('drawer').classList.remove('open'); });
+
 // ---------- audio
-let ctx = null, master, oscL, oscR, noiseGain, merger;
+let ctx = null, master, merger, noiseGain, oscL, oscR, voiceBus, duck;
 const CARRIER = 200;
 const volGain = () => Math.pow(+$('vol').value / 100, 2) * 0.35;
 
 function pinkBuffer(ac) {
-  const len = ac.sampleRate * 4, buf = ac.createBuffer(2, len, ac.sampleRate);
+  const len = ac.sampleRate * 6, buf = ac.createBuffer(2, len, ac.sampleRate);
   for (let ch = 0; ch < 2; ch++) {
-    const d = buf.getChannelData(ch);
-    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+    const d = buf.getChannelData(ch); let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
     for (let i = 0; i < len; i++) {
       const w = Math.random() * 2 - 1;
-      b0 = 0.99886 * b0 + w * 0.0555179; b1 = 0.99332 * b1 + w * 0.0750759;
-      b2 = 0.96900 * b2 + w * 0.1538520; b3 = 0.86650 * b3 + w * 0.3104856;
-      b4 = 0.55000 * b4 + w * 0.5329522; b5 = -0.7616 * b5 - w * 0.0168980;
+      b0 = 0.99886 * b0 + w * 0.0555179; b1 = 0.99332 * b1 + w * 0.0750759; b2 = 0.969 * b2 + w * 0.153852;
+      b3 = 0.8665 * b3 + w * 0.3104856; b4 = 0.55 * b4 + w * 0.5329522; b5 = -0.7616 * b5 - w * 0.016898;
       d[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362) * 0.11; b6 = w * 0.115926;
     }
   }
   return buf;
 }
-
+function reverbIR(ac) {
+  const len = ac.sampleRate * 2.6, buf = ac.createBuffer(2, len, ac.sampleRate);
+  for (let ch = 0; ch < 2; ch++) { const d = buf.getChannelData(ch); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3.2) * 0.6; }
+  return buf;
+}
 function initAudio() {
   if (ctx) return;
-  const AC = window.AudioContext || window.webkitAudioContext;
-  if (!AC) return;
+  const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
   ctx = new AC();
   master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
-  merger = ctx.createChannelMerger(2); merger.connect(master);
+  duck = ctx.createGain(); duck.gain.value = 1; duck.connect(master);
+  merger = ctx.createChannelMerger(2); merger.connect(duck);
   const gL = ctx.createGain(), gR = ctx.createGain(); gL.gain.value = gR.gain.value = 0.5;
-  oscL = ctx.createOscillator(); oscR = ctx.createOscillator();
-  oscL.type = oscR.type = 'sine';
+  oscL = ctx.createOscillator(); oscR = ctx.createOscillator(); oscL.type = oscR.type = 'sine';
   oscL.frequency.value = CARRIER; oscR.frequency.value = CARRIER + 10;
-  oscL.connect(gL).connect(merger, 0, 0);
-  oscR.connect(gR).connect(merger, 0, 1);
-  oscL.start(); oscR.start();
+  oscL.connect(gL).connect(merger, 0, 0); oscR.connect(gR).connect(merger, 0, 1); oscL.start(); oscR.start();
   const src = ctx.createBufferSource(); src.buffer = pinkBuffer(ctx); src.loop = true;
-  noiseGain = ctx.createGain(); noiseGain.gain.value = 0;
-  src.connect(noiseGain).connect(master); src.start();
+  const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1400;
+  noiseGain = ctx.createGain(); noiseGain.gain.value = 0; src.connect(lp).connect(noiseGain).connect(duck); src.start();
+  // recorded voice path: dry + a little room
+  voiceBus = ctx.createGain(); voiceBus.gain.value = 1;
+  const conv = ctx.createConvolver(); conv.buffer = reverbIR(ctx); const wet = ctx.createGain(); wet.gain.value = 0.18;
+  voiceBus.connect(ctx.destination); voiceBus.connect(conv).connect(wet).connect(ctx.destination);
 }
-
 let beatOn = 1;
 function applyAudio(ph) {
   if (!ctx) return;
-  const t = ctx.currentTime;
   beatOn = ph.beat > 0 ? 1 : 0;
-  if (ph.beat > 0) {
-    oscL.frequency.setTargetAtTime(CARRIER, t, 3);
-    oscR.frequency.setTargetAtTime(CARRIER + ph.beat, t, 3);
-  }
+  if (beatOn) { oscL.frequency.setTargetAtTime(CARRIER, ctx.currentTime, 3); oscR.frequency.setTargetAtTime(CARRIER + ph.beat, ctx.currentTime, 3); }
   updateLevels(4);
 }
 function updateLevels(tc) {
   if (!ctx) return;
   const t = ctx.currentTime, on = running && !paused;
   master.gain.setTargetAtTime(on ? volGain() : 0, t, tc || 0.4);
-  // beat level follows beatOn by muting the merger path via oscillator gain trick: re-route via noise level
-  noiseGain.gain.setTargetAtTime($('noise').checked ? 0.6 : 0, t, 0.5);
-  merger.disconnect();
-  if (beatOn) merger.connect(master);
+  noiseGain.gain.setTargetAtTime($('noise').checked ? 0.55 : 0, t, 0.5);
+  try { merger.disconnect(); } catch (e) {}
+  if (beatOn) merger.connect(duck);
 }
+function setDuck(on) { if (ctx) duck.gain.setTargetAtTime(on ? 0.45 : 1, ctx.currentTime, 0.6); }
 $('vol').oninput = () => { $('volV').textContent = $('vol').value + '%'; updateLevels(0.2); };
 $('noise').onchange = () => updateLevels();
 
 function bell(times) {
   if (!ctx) return;
   for (let k = 0; k < (times || 1); k++) {
-    const t0 = ctx.currentTime + k * 1.6;
-    [[528, 1], [792, 0.4], [1056, 0.2]].forEach(([f, a]) => {
-      const o = ctx.createOscillator(), g = ctx.createGain();
-      o.type = 'sine'; o.frequency.value = f;
-      g.gain.setValueAtTime(0, t0);
-      g.gain.linearRampToValueAtTime(0.18 * a * Math.max(0.3, +$('vol').value / 60), t0 + 0.02);
-      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 4);
-      o.connect(g).connect(ctx.destination); o.start(t0); o.stop(t0 + 4.1);
+    const t0 = ctx.currentTime + k * 2.2;
+    [[264, 0.6], [528, 1], [792, 0.35], [1188, 0.12]].forEach(([f, a]) => {
+      const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.value = f * (1 + (Math.random() - 0.5) * 0.002);
+      g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(0.14 * a * Math.max(0.35, +$('vol').value / 60), t0 + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 6);
+      o.connect(g); g.connect(ctx.destination); if (voiceBus) g.connect(voiceBus); o.start(t0); o.stop(t0 + 6.1);
     });
   }
 }
 
 // ---------- voice
-const synth = window.speechSynthesis;
-let ruVoice = null;
-function pickVoice() { if (!synth) return; ruVoice = synth.getVoices().find(v => /^ru/i.test(v.lang)) || null; }
-if (synth) { pickVoice(); synth.onvoiceschanged = pickVoice; } else { $('voiceNote').textContent += ' Голосовые подсказки в этом браузере недоступны, текст будет на экране.'; }
-function say(text, rate) {
-  if (!synth || !text) return;
-  try {
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'ru-RU'; if (ruVoice) u.voice = ruVoice; u.rate = rate || 0.82; u.pitch = 0.9; u.volume = 0.9;
-    synth.speak(u);
-  } catch (e) {}
+// 1) Real recordings, if present next to the page: voice/p1.mp3 … voice/p6.mp3, voice/inhale.mp3, voice/exhale.mp3
+// 2) Otherwise the best natural female Russian voice the device has.
+const recorded = {};
+async function loadRecorded() {
+  if (!ctx || loadRecorded.done) return;
+  loadRecorded.done = true;
+  // voice/manifest.json lists the recorded keys, e.g. ["p1","p2","inhale"]; without it nothing is fetched
+  let keys = [];
+  try { const r = await fetch('voice/manifest.json'); if (r.ok) keys = await r.json(); } catch (e) {}
+  await Promise.all(keys.map(async k => {
+    if (recorded[k] !== undefined) return;
+    try { const r = await fetch('voice/' + k + '.mp3'); if (!r.ok) throw 0; recorded[k] = await ctx.decodeAudioData(await r.arrayBuffer()); }
+    catch (e) { recorded[k] = null; }
+  }));
 }
+function playRecorded(k) {
+  const buf = recorded[k]; if (!buf || !ctx) return false;
+  const s = ctx.createBufferSource(); s.buffer = buf; const g = ctx.createGain(); g.gain.value = 0.9;
+  s.connect(g).connect(voiceBus); setDuck(true); s.onended = () => setDuck(false); s.start(); return true;
+}
+
+const synth = window.speechSynthesis;
+const FEMALE = /svetlana|dariya|darya|milena|katya|ekaterina|anna|irina|elena|alena|alyona|yuliya|julia|tatyana|natalia|google\s*рус|google ru|female|женск/i;
+const MALE = /pavel|dmitr|yuri|maxim|denis|ruslan|nikolai|aleksandr|male\b|мужск/i;
+const NATURAL = /natural|online|neural|premium|enhanced|улучш|wavenet|siri/i;
+let voices = [];
+function score(v) { let s = 0; if (NATURAL.test(v.name)) s += 4; if (FEMALE.test(v.name)) s += 3; if (MALE.test(v.name)) s -= 6; if (!v.localService) s += 1; return s; }
+function listVoices() {
+  if (!synth) return;
+  voices = synth.getVoices().filter(v => /^ru/i.test(v.lang)).sort((a, b) => score(b) - score(a));
+  const sel = $('voiceSel'), keep = sel.value;
+  sel.innerHTML = '';
+  if (!voices.length) { const o = document.createElement('option'); o.textContent = 'Русских голосов на устройстве нет'; sel.appendChild(o); sel.disabled = true; }
+  else { sel.disabled = false; voices.forEach((v, i) => { const o = document.createElement('option'); o.value = v.name; o.textContent = (i === 0 ? '★ ' : '') + v.name.replace(/Microsoft |Google /, '') ; sel.appendChild(o); }); }
+  if (keep && voices.some(v => v.name === keep)) sel.value = keep;
+  const best = voices[0];
+  $('voiceNote').textContent = !voices.length
+    ? 'Голос будет только текстом на экране. Естественные голоса есть в Microsoft Edge (Светлана, Дария) и на iPhone (Милена, улучшенная).'
+    : best && NATURAL.test(best.name) ? 'Выбран естественный нейросетевой голос этого устройства.'
+    : 'Самые живые голоса: в Microsoft Edge — «Svetlana Online (Natural)», на iPhone — «Милена (улучшенная)»: Настройки → Универсальный доступ → Устный контент → Голоса.';
+}
+if (synth) { listVoices(); synth.onvoiceschanged = listVoices; } else { $('voiceNote').textContent = 'В этом браузере нет синтеза речи. Подсказки будут текстом на экране.'; }
+const curVoice = () => voices.find(v => v.name === $('voiceSel').value) || voices[0] || null;
+
+let sayToken = 0;
+function speakLines(lines, opts) {
+  if (!synth || !lines || !lines.length) return;
+  const token = ++sayToken, v = curVoice(), nat = v && NATURAL.test(v.name);
+  synth.cancel();
+  let i = 0;
+  const next = () => {
+    if (token !== sayToken || i >= lines.length) { setDuck(false); return; }
+    const u = new SpeechSynthesisUtterance(lines[i++]);
+    u.lang = 'ru-RU'; if (v) u.voice = v;
+    u.rate = (opts && opts.rate) || (nat ? 0.86 : 0.8); u.pitch = nat ? 1 : 1.04; u.volume = 0.85;
+    u.onstart = () => setDuck(true);
+    u.onend = u.onerror = () => setTimeout(next, (opts && opts.gap) || 900);
+    synth.speak(u);
+  };
+  next();
+}
+function guide(ph) {
+  if (!$('vInstr').checked) return;
+  if (playRecorded(ph.key)) return;
+  speakLines(ph.say);
+}
+function cueBreath(label) {
+  if (!$('vBreath').checked) return;
+  const k = label === 'Вдох' ? 'inhale' : 'exhale';
+  if (playRecorded(k)) return;
+  if (synth && !synth.speaking) speakLines([label === 'Вдох' ? 'Вдох' : 'Выдох'], { rate: 0.7, gap: 0 });
+}
+$('testVoice').onclick = async () => {
+  initAudio(); if (ctx && ctx.state === 'suspended') await ctx.resume().catch(() => {});
+  await loadRecorded();
+  if (!playRecorded('p1')) speakLines(['Устройтесь поудобнее.', 'Плечи мягкие, лицо спокойное.']);
+};
+$('voiceSel').onchange = () => { if (synth) synth.cancel(); };
 
 // ---------- session
 function enterPhase(i) {
   phaseIdx = i; phaseStart = elapsed; lastBreathLabel = '';
   const ph = phases[i];
-  $('phaseName').textContent = ph.name;
-  $('instr').textContent = ph.text;
-  [...planEl.children].forEach((li, k) => { li.className = mode === 'prog' ? (k < i ? 'done' : k === i ? 'now' : '') : ''; });
+  $('phaseName').textContent = ph.name; $('instr').textContent = ph.text;
+  [...planEl.children].forEach((li, k) => li.className = mode === 'prog' ? (k < i ? 'done' : k === i ? 'now' : '') : '');
   applyAudio(ph);
   if (i > 0) bell(1);
-  if ($('vInstr').checked && ph.say) { if (synth) synth.cancel(); setTimeout(() => say(ph.say), i > 0 ? 1800 : 400); }
+  setTimeout(() => { if (running && !paused && phaseIdx === i) guide(ph); }, i > 0 ? 2600 : 900);
 }
-
+const ICON_PLAY = '<path d="M8 5.5v13l11-6.5z"/>', ICON_PAUSE = '<rect x="7" y="5.5" width="3.2" height="13" rx="1"/><rect x="13.8" y="5.5" width="3.2" height="13" rx="1"/>';
 async function startSession() {
   initAudio();
   if (ctx && ctx.state === 'suspended') await ctx.resume().catch(() => {});
   if (!running) {
+    await loadRecorded();
     phases = mode === 'prog' ? PROGRAM : freePhases();
     running = true; paused = false; elapsed = 0; lastT = performance.now();
-    document.body.classList.add('running'); $('stage').classList.add('quiet');
     enterPhase(0);
-  } else { paused = !paused; lastT = performance.now(); }
-  $('start').textContent = paused ? 'Продолжить' : 'Пауза';
+  } else { paused = !paused; lastT = performance.now(); if (paused && synth) synth.cancel(); }
+  $('playIco').innerHTML = paused ? ICON_PLAY : ICON_PAUSE; $('start').setAttribute('aria-label', paused ? 'Продолжить' : 'Пауза');
   updateLevels(paused ? 0.4 : 3);
-  if (!paused) requestWake(); else releaseWake();
-  if (paused && synth) synth.cancel();
+  paused ? releaseWake() : requestWake();
+  poke();
 }
 function stopSession(finished) {
   if (!running) return;
-  running = false; paused = false;
-  updateLevels(finished ? 4 : 0.6);
-  if (synth) synth.cancel();
-  if (finished) { bell(2); $('phaseName').textContent = 'Сессия завершена'; $('instr').textContent = 'Посидите минуту с закрытыми глазами. Отметьте, что изменилось: дыхание, тело, ум.'; }
-  else { $('phaseName').textContent = 'Остановлено'; $('instr').textContent = 'Можно начать снова, когда будете готовы.'; }
-  document.body.classList.remove('running'); $('stage').classList.remove('quiet');
-  $('start').textContent = 'Начать';
-  [...planEl.children].forEach(li => li.className = '');
-  releaseWake();
+  running = false; paused = false; sayToken++;
+  updateLevels(finished ? 4 : 0.6); if (synth) synth.cancel();
+  if (finished) { bell(3); $('phaseName').textContent = 'Сессия завершена'; $('instr').textContent = 'Посидите минуту с закрытыми глазами. Заметьте, что изменилось: дыхание, тело, ум.'; }
+  else { $('phaseName').textContent = 'Тихий огонь'; $('instr').textContent = 'Можно начать снова, когда будете готовы.'; }
+  $('playIco').innerHTML = ICON_PLAY; $('start').setAttribute('aria-label', 'Начать');
+  [...planEl.children].forEach(li => li.className = ''); $('prog').style.width = '0';
+  idleText(); releaseWake(); poke();
 }
 $('start').onclick = startSession;
 $('stop').onclick = () => stopSession(false);
@@ -395,142 +458,188 @@ $('stop').onclick = () => stopSession(false);
 async function requestWake() { try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {} }
 function releaseWake() { try { wakeLock && wakeLock.release(); } catch (e) {} wakeLock = null; }
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && running && !paused) requestWake(); });
+$('fs').onclick = () => { try { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(() => {}); } catch (e) {} };
 
-$('fs').onclick = () => {
-  const st = $('stage');
-  try { if (document.fullscreenElement) document.exitFullscreen(); else if (st.requestFullscreen) st.requestFullscreen().catch(() => {}); } catch (e) {}
-};
+// controls recede while practising
+let idleTimer = 0;
+function poke() {
+  $('stage').classList.remove('idle-ui'); clearTimeout(idleTimer);
+  if (running && !paused) idleTimer = setTimeout(() => { if (!$('drawer').classList.contains('open')) $('stage').classList.add('idle-ui'); }, 5000);
+}
+['pointermove', 'pointerdown', 'keydown'].forEach(ev => window.addEventListener(ev, poke, { passive: true }));
 
 // ---------- breath model
 const ease = x => (1 - Math.cos(Math.PI * x)) / 2;
 function breathAt(key, t) {
-  const p = BREATH[key].p, cyc = p[0] + p[1] + p[2] + p[3];
-  let x = t % cyc;
-  if (x < p[0]) return { b: ease(x / p[0]), label: 'Вдох', left: p[0] - x };
-  x -= p[0];
-  if (x < p[1]) return { b: 1, label: 'Пауза', left: p[1] - x };
-  x -= p[1];
-  if (x < p[2]) return { b: 1 - ease(x / p[2]), label: 'Выдох', left: p[2] - x };
-  x -= p[2];
+  const p = BREATH[key].p, cyc = p[0] + p[1] + p[2] + p[3]; let x = t % cyc;
+  if (x < p[0]) return { b: ease(x / p[0]), label: 'Вдох', left: p[0] - x }; x -= p[0];
+  if (x < p[1]) return { b: 1, label: 'Пауза', left: p[1] - x }; x -= p[1];
+  if (x < p[2]) return { b: 1 - ease(x / p[2]), label: 'Выдох', left: p[2] - x }; x -= p[2];
   return { b: 0, label: 'Пауза', left: p[3] - x };
 }
 
 // ---------- canvas
 const cv = $('cv'), g = cv.getContext('2d');
-let W = 0, H = 0, DPR = 1;
+let W = 0, H = 0, DPR = 1, grain = null;
+function makeGrain() {
+  const c = document.createElement('canvas'); c.width = c.height = 160; const x = c.getContext('2d'), im = x.createImageData(160, 160);
+  for (let i = 0; i < im.data.length; i += 4) { const v = Math.random() * 255; im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = 14; }
+  x.putImageData(im, 0, 0); grain = g.createPattern(c, 'repeat');
+}
 function resize() {
   const r = cv.getBoundingClientRect(); DPR = Math.min(2, window.devicePixelRatio || 1);
-  W = r.width; H = r.height; cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
-  g.setTransform(DPR, 0, 0, DPR, 0, 0);
+  W = r.width; H = r.height; cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR); g.setTransform(DPR, 0, 0, DPR, 0, 0);
+  if (!grain) makeGrain();
 }
-new ResizeObserver(() => { resize(); if (!running || paused) draw(performance.now() / 1000); }).observe(cv);
+new ResizeObserver(resize).observe(cv);
 
-const GOLD = 'rgba(233,169,79,';
-function bg() {
-  const gr = g.createRadialGradient(W / 2, H * 0.45, 0, W / 2, H * 0.45, Math.max(W, H) * 0.7);
-  gr.addColorStop(0, '#16152a'); gr.addColorStop(1, '#0b0b16');
+// dust motes in lamp light
+const motes = Array.from({ length: 70 }, () => ({ x: Math.random(), y: Math.random(), r: 0.4 + Math.random() * 1.6, s: 0.004 + Math.random() * 0.012, ph: Math.random() * 6.28, a: 0.15 + Math.random() * 0.45 }));
+const cx = () => W / 2, cy = () => H * 0.4, M = () => Math.min(W, H * 0.82);
+
+function room(t, warmth) {
+  g.globalCompositeOperation = 'source-over';
+  g.fillStyle = '#0c0a12'; g.fillRect(0, 0, W, H);
+  const gr = g.createRadialGradient(cx(), cy(), 0, cx(), cy(), Math.max(W, H) * 0.75);
+  gr.addColorStop(0, 'rgba(70,46,30,' + (0.55 * warmth) + ')'); gr.addColorStop(0.35, 'rgba(38,24,34,' + (0.5 * warmth + 0.15) + ')'); gr.addColorStop(1, 'rgba(12,10,18,0)');
   g.fillStyle = gr; g.fillRect(0, 0, W, H);
 }
-function cy() { return H * 0.48; }
-
-function drawBreath(st, t) {
-  const m = Math.min(W, H), cx = W / 2, c = cy();
-  const r0 = m * 0.1, r1 = m * 0.3, b = st ? st.b : 0.5 + 0.5 * Math.sin(t * 0.6);
-  const r = r0 + (r1 - r0) * b;
-  const halo = g.createRadialGradient(cx, c, r * 0.2, cx, c, r * 1.9);
-  halo.addColorStop(0, GOLD + (0.22 + 0.18 * b) + ')'); halo.addColorStop(1, GOLD + '0)');
-  g.fillStyle = halo; g.beginPath(); g.arc(cx, c, r * 1.9, 0, 7); g.fill();
-  g.lineWidth = 1; g.strokeStyle = 'rgba(185,182,207,.18)';
-  [r0, r1].forEach(rr => { g.beginPath(); g.arc(cx, c, rr, 0, 7); g.stroke(); });
-  g.strokeStyle = GOLD + '0.85)'; g.lineWidth = 2; g.beginPath(); g.arc(cx, c, r, 0, 7); g.stroke();
-  g.fillStyle = GOLD + '0.08)'; g.fill();
-  g.fillStyle = '#f3e6cf'; g.beginPath(); g.arc(cx, c, 2.5, 0, 7); g.fill();
-  if (st) {
-    g.textAlign = 'center'; g.fillStyle = 'rgba(243,230,207,.9)';
-    g.font = Math.round(m * 0.055) + 'px Forum, serif'; g.fillText(st.label, cx, c - r1 - m * 0.06);
-    g.font = Math.round(m * 0.032) + 'px "Golos Text", sans-serif'; g.fillStyle = 'rgba(185,182,207,.7)';
-    g.fillText(Math.ceil(st.left), cx, c + r1 + m * 0.07);
+function dust(t, k) {
+  g.globalCompositeOperation = 'lighter';
+  for (const m of motes) {
+    const y = ((m.y - t * m.s * (reduce ? 0 : 1)) % 1 + 1) % 1, x = m.x + Math.sin(t * 0.2 + m.ph) * 0.01;
+    const dx = x * W - cx(), dy = y * H - cy(), near = Math.max(0, 1 - Math.hypot(dx, dy) / (Math.max(W, H) * 0.6));
+    const a = m.a * near * k * (0.6 + 0.4 * Math.sin(t * 0.5 + m.ph));
+    if (a < 0.01) continue;
+    g.fillStyle = 'rgba(244,214,160,' + a + ')'; g.beginPath(); g.arc(x * W, y * H, m.r, 0, 6.283); g.fill();
   }
 }
+function finish() {
+  g.globalCompositeOperation = 'source-over';
+  const v = g.createRadialGradient(cx(), H * 0.45, Math.min(W, H) * 0.3, cx(), H * 0.45, Math.max(W, H) * 0.85);
+  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,.7)'); g.fillStyle = v; g.fillRect(0, 0, W, H);
+  if (grain) { g.fillStyle = grain; g.fillRect(0, 0, W, H); }
+}
+
+function drawSphere(st, t) {
+  const m = M(), x = cx(), y = cy();
+  const b = st ? st.b : 0.5 + 0.5 * Math.sin(t * 0.55);
+  const r0 = m * 0.085, r1 = m * 0.22, r = r0 + (r1 - r0) * b;
+  g.globalCompositeOperation = 'lighter';
+  let h = g.createRadialGradient(x, y, 0, x, y, r * 3.2);
+  h.addColorStop(0, 'rgba(217,178,115,' + (0.18 + 0.14 * b) + ')'); h.addColorStop(0.5, 'rgba(160,96,70,' + (0.06 + 0.05 * b) + ')'); h.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = h; g.beginPath(); g.arc(x, y, r * 3.2, 0, 6.283); g.fill();
+  const p = g.createRadialGradient(x - r * 0.3, y - r * 0.35, r * 0.05, x, y, r);
+  p.addColorStop(0, 'rgba(255,244,220,.55)'); p.addColorStop(0.45, 'rgba(232,190,120,.28)'); p.addColorStop(1, 'rgba(120,70,60,.05)');
+  g.fillStyle = p; g.beginPath(); g.arc(x, y, r, 0, 6.283); g.fill();
+  g.globalCompositeOperation = 'source-over';
+  g.lineWidth = 1; g.strokeStyle = 'rgba(214,178,118,.16)';
+  [r0, r1].forEach(rr => { g.beginPath(); g.arc(x, y, rr, 0, 6.283); g.stroke(); });
+  for (let i = 0; i < 48; i++) { // fine tick ring, like a dial
+    const a = i / 48 * 6.283, R1 = r1 + m * 0.03, R2 = R1 + (i % 4 ? m * 0.008 : m * 0.018);
+    g.strokeStyle = 'rgba(214,178,118,' + (i % 4 ? 0.18 : 0.35) + ')'; g.beginPath(); g.moveTo(x + Math.cos(a) * R1, y + Math.sin(a) * R1); g.lineTo(x + Math.cos(a) * R2, y + Math.sin(a) * R2); g.stroke();
+  }
+  const ring = g.createLinearGradient(x - r, y - r, x + r, y + r);
+  ring.addColorStop(0, 'rgba(255,236,196,.95)'); ring.addColorStop(0.5, 'rgba(217,178,115,.7)'); ring.addColorStop(1, 'rgba(255,236,196,.9)');
+  g.strokeStyle = ring; g.lineWidth = 1.6; g.beginPath(); g.arc(x, y, r, 0, 6.283); g.stroke();
+  if (st) {
+    const prog = st.label === 'Вдох' || st.label === 'Выдох' ? 1 - st.left / BREATH_CUR_P(st.label) : 1;
+    g.strokeStyle = 'rgba(244,220,170,.85)'; g.lineWidth = 2; g.beginPath(); g.arc(x, y, r1 + m * 0.03, -1.5708, -1.5708 + 6.283 * Math.max(0, Math.min(1, prog))); g.stroke();
+    g.fillStyle = 'rgba(239,230,214,.92)'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.font = 'italic 300 ' + Math.round(m * 0.06) + 'px "Cormorant Garamond", Georgia, serif'; g.fillText(st.label.toLowerCase(), x, y);
+  } else { g.fillStyle = '#f4dcaa'; g.beginPath(); g.arc(x, y, 2.4, 0, 6.283); g.fill(); }
+}
+let curBreathKey = 'calm';
+function BREATH_CUR_P(label) { const p = BREATH[curBreathKey].p; return label === 'Вдох' ? p[0] : p[2]; }
 
 function drawFlame(t) {
-  const m = Math.min(W, H), cx = W / 2, base = cy() + m * 0.16, fh = m * 0.34;
-  const k = reduce ? 0.3 : 1;
+  const m = M(), x = cx(), base = cy() + m * 0.14, fh = m * 0.3, k = reduce ? 0.3 : 1;
   const sway = k * (Math.sin(t * 0.9) * 0.5 + Math.sin(t * 1.7 + 1) * 0.3 + Math.sin(t * 0.37) * 0.2);
-  const lift = 1 + k * (0.03 * Math.sin(t * 2.1) + 0.02 * Math.sin(t * 2.9 + 2));
-  const tipX = cx + sway * fh * 0.07, tipY = base - fh * lift, w = fh * 0.2;
-  const glow = g.createRadialGradient(cx, base - fh * 0.45, 0, cx, base - fh * 0.45, m * 0.5);
-  glow.addColorStop(0, GOLD + '0.28)'); glow.addColorStop(0.4, GOLD + '0.08)'); glow.addColorStop(1, GOLD + '0)');
-  g.fillStyle = glow; g.fillRect(0, 0, W, H);
-  // candle body
-  const cw = m * 0.06, ch = m * 0.32;
-  const cg = g.createLinearGradient(cx - cw, 0, cx + cw, 0);
-  cg.addColorStop(0, '#2a2433'); cg.addColorStop(0.5, '#4a4152'); cg.addColorStop(1, '#221d2a');
-  g.fillStyle = cg; g.fillRect(cx - cw, base + m * 0.02, cw * 2, ch);
-  g.strokeStyle = '#1a1414'; g.lineWidth = 2; g.beginPath(); g.moveTo(cx, base + m * 0.025); g.lineTo(cx + sway * 2, base - fh * 0.06); g.stroke();
-  // flame
-  function shape(scale) {
-    const ww = w * scale, ty = base - (base - tipY) * scale, tx = cx + (tipX - cx) * scale;
-    g.beginPath(); g.moveTo(cx, base);
-    g.bezierCurveTo(cx - ww * 1.25, base - fh * 0.05 * scale, cx - ww * 0.9, base - fh * 0.55 * scale, tx, ty);
-    g.bezierCurveTo(cx + ww * 0.9, base - fh * 0.55 * scale, cx + ww * 1.25, base - fh * 0.05 * scale, cx, base);
-    g.closePath();
+  const lift = 1 + k * (0.035 * Math.sin(t * 2.1) + 0.02 * Math.sin(t * 2.9 + 2));
+  const tipX = x + sway * fh * 0.08, tipY = base - fh * lift, w = fh * 0.19;
+  g.globalCompositeOperation = 'lighter';
+  let gl = g.createRadialGradient(x, base - fh * 0.45, 0, x, base - fh * 0.45, m * 0.65);
+  gl.addColorStop(0, 'rgba(255,190,110,' + (0.3 + 0.02 * Math.sin(t * 1.3)) + ')'); gl.addColorStop(0.3, 'rgba(200,110,60,.1)'); gl.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = gl; g.fillRect(0, 0, W, H);
+  g.globalCompositeOperation = 'source-over';
+  // candle: wax column with soft top
+  const cw = m * 0.07, top = base + m * 0.025, ch = H - top + 10;
+  const cg = g.createLinearGradient(x - cw, 0, x + cw, 0);
+  cg.addColorStop(0, '#1d1620'); cg.addColorStop(0.35, '#4a3a3a'); cg.addColorStop(0.55, '#5e4a44'); cg.addColorStop(1, '#17121b');
+  g.fillStyle = cg; g.fillRect(x - cw, top, cw * 2, ch);
+  const lit = g.createLinearGradient(0, top, 0, top + m * 0.12); lit.addColorStop(0, 'rgba(255,190,120,.35)'); lit.addColorStop(1, 'rgba(255,190,120,0)');
+  g.fillStyle = lit; g.fillRect(x - cw, top, cw * 2, m * 0.12);
+  g.fillStyle = '#6a5248'; g.beginPath(); g.ellipse(x, top, cw, cw * 0.18, 0, 0, 6.283); g.fill();
+  g.fillStyle = 'rgba(255,200,130,.35)'; g.beginPath(); g.ellipse(x, top, cw * 0.7, cw * 0.1, 0, 0, 6.283); g.fill();
+  g.strokeStyle = '#120c0c'; g.lineWidth = 2; g.beginPath(); g.moveTo(x, top); g.quadraticCurveTo(x, base - fh * 0.02, x + sway * 2, base - fh * 0.07); g.stroke();
+  function shape(s, wob) {
+    const ww = w * s, ty = base - (base - tipY) * s, tx = x + (tipX - x) * s + wob;
+    g.beginPath(); g.moveTo(x, base);
+    g.bezierCurveTo(x - ww * 1.3, base - fh * 0.06 * s, x - ww * 0.95, base - fh * 0.55 * s, tx, ty);
+    g.bezierCurveTo(x + ww * 0.95, base - fh * 0.55 * s, x + ww * 1.3, base - fh * 0.06 * s, x, base); g.closePath();
   }
-  let fg = g.createLinearGradient(0, base, 0, tipY);
-  fg.addColorStop(0, 'rgba(255,170,70,.55)'); fg.addColorStop(0.5, 'rgba(255,150,50,.45)'); fg.addColorStop(1, 'rgba(255,110,40,0)');
-  g.fillStyle = fg; shape(1.15); g.fill();
-  fg = g.createLinearGradient(0, base, 0, tipY);
-  fg.addColorStop(0, 'rgba(255,236,190,1)'); fg.addColorStop(0.55, 'rgba(255,200,110,.95)'); fg.addColorStop(1, 'rgba(255,160,60,.2)');
-  g.fillStyle = fg; shape(0.8); g.fill();
-  g.fillStyle = 'rgba(255,252,240,.95)'; shape(0.42); g.fill();
-  g.fillStyle = 'rgba(110,140,255,.35)'; g.beginPath(); g.ellipse(cx, base - fh * 0.04, w * 0.35, fh * 0.06, 0, 0, 7); g.fill();
+  g.globalCompositeOperation = 'lighter';
+  let f = g.createLinearGradient(0, base, 0, tipY);
+  f.addColorStop(0, 'rgba(255,150,70,.35)'); f.addColorStop(0.6, 'rgba(240,110,50,.22)'); f.addColorStop(1, 'rgba(200,80,40,0)');
+  g.fillStyle = f; shape(1.25, Math.sin(t * 1.1) * 2 * k); g.fill();
+  f = g.createLinearGradient(0, base, 0, tipY);
+  f.addColorStop(0, 'rgba(255,226,170,.9)'); f.addColorStop(0.5, 'rgba(255,190,100,.75)'); f.addColorStop(1, 'rgba(255,140,60,.05)');
+  g.fillStyle = f; shape(0.9, 0); g.fill();
+  f = g.createRadialGradient(x, base - fh * 0.22, 0, x, base - fh * 0.22, fh * 0.35);
+  f.addColorStop(0, 'rgba(255,255,245,.95)'); f.addColorStop(1, 'rgba(255,240,200,0)');
+  g.fillStyle = f; shape(0.5, 0); g.fill();
+  g.fillStyle = 'rgba(90,120,255,.28)'; g.beginPath(); g.ellipse(x, base - fh * 0.03, w * 0.4, fh * 0.07, 0, 0, 6.283); g.fill();
 }
 
 function drawMandala(t, st) {
-  const m = Math.min(W, H), cx = W / 2, c = cy() + m * 0.04;
-  const b = st ? st.b : 0.5, sc = 0.9 + 0.1 * b, spin = reduce ? 0 : t * Math.PI * 2 / 240;
-  const R = m * 0.36 * sc;
-  const halo = g.createRadialGradient(cx, c, 0, cx, c, R * 1.3);
-  halo.addColorStop(0, GOLD + (0.1 + 0.08 * b) + ')'); halo.addColorStop(1, GOLD + '0)');
-  g.fillStyle = halo; g.beginPath(); g.arc(cx, c, R * 1.3, 0, 7); g.fill();
-  const layers = [[16, 1.0, 0.32, 1, 'rgba(185,182,207,.28)'], [12, 0.72, 0.3, -1, GOLD + '0.45)'], [8, 0.45, 0.32, 1, GOLD + '0.6)']];
-  layers.forEach(([n, rr, wr, dir, col]) => {
-    g.strokeStyle = col; g.lineWidth = 1.2;
+  const m = M(), x = cx(), y = cy(), b = st ? st.b : 0.5, sc = 0.93 + 0.07 * b, spin = reduce ? 0 : t * 6.283 / 300;
+  const R = m * 0.26 * sc;
+  g.globalCompositeOperation = 'lighter';
+  const h = g.createRadialGradient(x, y, 0, x, y, R * 1.8);
+  h.addColorStop(0, 'rgba(217,178,115,' + (0.12 + 0.08 * b) + ')'); h.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = h; g.beginPath(); g.arc(x, y, R * 1.8, 0, 6.283); g.fill();
+  g.lineWidth = 1;
+  // flower of life: 6 + 12 circles, counter-rotating
+  const rings = [[6, R * 0.5, R * 0.5, 1, 0.5], [12, R * 0.87, R * 0.5, -1, 0.28]];
+  rings.forEach(([n, d, rr, dir, a]) => {
     for (let i = 0; i < n; i++) {
-      const a = i / n * Math.PI * 2 + spin * dir;
-      g.save(); g.translate(cx, c); g.rotate(a);
-      g.beginPath(); g.ellipse(0, -R * rr * 0.5, R * rr * wr * 0.5, R * rr * 0.5, 0, 0, 7); g.stroke();
-      g.restore();
+      const an = i / n * 6.283 + spin * dir;
+      g.strokeStyle = 'rgba(232,196,138,' + (a * (0.8 + 0.2 * b)) + ')';
+      g.beginPath(); g.arc(x + Math.cos(an) * d, y + Math.sin(an) * d, rr, 0, 6.283); g.stroke();
     }
   });
-  g.strokeStyle = 'rgba(185,182,207,.2)'; g.beginPath(); g.arc(cx, c, R, 0, 7); g.stroke();
-  g.fillStyle = '#f3e6cf'; g.beginPath(); g.arc(cx, c, 3 + 1.5 * b, 0, 7); g.fill();
+  g.strokeStyle = 'rgba(232,196,138,.55)'; g.beginPath(); g.arc(x, y, R * 0.5, 0, 6.283); g.stroke();
+  for (let i = 0; i < 24; i++) { // outer petals
+    const an = i / 24 * 6.283 - spin * 0.5;
+    g.save(); g.translate(x, y); g.rotate(an);
+    g.strokeStyle = 'rgba(214,178,118,.22)'; g.beginPath(); g.ellipse(0, -R * 1.42, R * 0.07, R * 0.2, 0, 0, 6.283); g.stroke(); g.restore();
+  }
+  g.strokeStyle = 'rgba(214,178,118,.25)'; [1.08, 1.18, 1.65].forEach(s => { g.beginPath(); g.arc(x, y, R * s, 0, 6.283); g.stroke(); });
+  g.fillStyle = 'rgba(255,240,210,.95)'; g.beginPath(); g.arc(x, y, 2.5 + 1.5 * b, 0, 6.283); g.fill();
 }
 
-function drawDark(t, sinceStart) {
-  g.fillStyle = 'rgba(5,5,10,' + Math.min(0.9, sinceStart / 4) + ')'; g.fillRect(0, 0, W, H);
-  const cx = W / 2, c = cy(), a = 0.12 + 0.05 * Math.sin(t * 0.5);
-  g.fillStyle = GOLD + a + ')'; g.beginPath(); g.arc(cx, c, 3, 0, 7); g.fill();
+function drawDark(t, since) {
+  g.globalCompositeOperation = 'source-over';
+  g.fillStyle = 'rgba(4,3,8,' + Math.min(0.94, since / 5) + ')'; g.fillRect(0, 0, W, H);
+  g.globalCompositeOperation = 'lighter';
+  const a = 0.1 + 0.04 * Math.sin(t * 0.45), r = M() * 0.05;
+  const h = g.createRadialGradient(cx(), cy(), 0, cx(), cy(), r); h.addColorStop(0, 'rgba(244,214,160,' + a + ')'); h.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = h; g.beginPath(); g.arc(cx(), cy(), r, 0, 6.283); g.fill();
 }
 
-let preview = 'flame';
 function draw(t) {
   if (!W) return;
-  bg();
-  if (!running) {
-    if (preview === 'flame') drawFlame(t);
-    else if (preview === 'mandala') drawMandala(t, null);
-    else drawBreath(null, t);
-    return;
-  }
-  const ph = phases[phaseIdx], pt = elapsed - phaseStart;
-  const st = ph.breath ? breathAt(ph.breath, pt) : null;
-  if (ph.visual === 'flame') drawFlame(t);
-  else if (ph.visual === 'mandala') drawMandala(t, st);
-  else if (ph.visual === 'dark') drawDark(t, pt);
-  else drawBreath(st, t);
-  if (st && ph.cue && st.label !== lastBreathLabel) {
-    if ($('vBreath').checked && !paused && st.label !== 'Пауза') say(st.label, 0.75);
+  let visual = preview, st = null, pt = 0;
+  if (running) { const ph = phases[phaseIdx]; pt = elapsed - phaseStart; visual = ph.visual; if (ph.breath) { curBreathKey = ph.breath; st = breathAt(ph.breath, pt); } }
+  room(t, visual === 'flame' ? 1 : visual === 'dark' ? 0.2 : 0.7);
+  if (visual === 'flame') drawFlame(t);
+  else if (visual === 'mandala') drawMandala(t, st);
+  else if (visual === 'dark') drawDark(t, pt);
+  else drawSphere(st, t);
+  if (visual !== 'dark') dust(t, visual === 'flame' ? 1 : 0.6);
+  finish();
+  if (running && st && phases[phaseIdx].cue && st.label !== lastBreathLabel) {
+    if (!paused && st.label !== 'Пауза' && lastBreathLabel) cueBreath(st.label);
     lastBreathLabel = st.label;
   }
 }
@@ -538,23 +647,18 @@ function draw(t) {
 function tick(now) {
   if (running && !paused) {
     elapsed += Math.min(0.25, (now - lastT) / 1000);
-    const ph = phases[phaseIdx];
-    if (elapsed - phaseStart >= ph.dur) {
-      if (phaseIdx + 1 < phases.length) enterPhase(phaseIdx + 1); else stopSession(true);
-    }
+    if (elapsed - phaseStart >= phases[phaseIdx].dur) { if (phaseIdx + 1 < phases.length) enterPhase(phaseIdx + 1); else stopSession(true); }
     if (running) {
-      const cur = phases[phaseIdx], left = cur.dur - (elapsed - phaseStart);
-      const tot = phases.reduce((a, p) => a + p.dur, 0);
-      $('tPhase').textContent = cur.name + ' · ' + fmt(left);
-      $('tTotal').textContent = 'осталось ' + fmt(tot - elapsed);
+      const cur = phases[phaseIdx], tot = sum(phases);
+      $('eyebrow').textContent = (mode === 'prog' ? 'Этап ' + (phaseIdx + 1) + ' из ' + phases.length : 'Свободно') + ' · ' + fmt(cur.dur - (elapsed - phaseStart));
+      $('tTotal').textContent = fmt(tot - elapsed);
       $('prog').style.width = (elapsed / tot * 100).toFixed(2) + '%';
     }
   }
   lastT = now;
-  if (running || !reduce) draw(now / 1000);
+  draw(now / 1000);
   requestAnimationFrame(tick);
 }
-resize(); draw(0);
-requestAnimationFrame(tick);
+resize(); idleText(); requestAnimationFrame(tick);
 })();
 </script>

@@ -83,3 +83,9 @@
 - Stargate / remote viewing: https://en.wikipedia.org/wiki/Remote_viewing , https://irp.fas.org/program/collect/stargate.htm
 - Мета-анализ бинауральных ритмов: https://pubmed.ncbi.nlm.nih.gov/30073406/
 - Шишковидная железа и ДМТ: https://www.healthline.com/health/pineal-gland-dmt
+
+## Страница «Аджна» (`focus/index.html`)
+
+Голос: страница выбирает лучший женский русский голос устройства (приоритет нейросетевым: Edge — Svetlana/Dariya Online (Natural), iPhone — Милена (улучшенная)).
+
+Живой голос вместо синтеза: положить рядом папку `voice/` с файлами `p1.mp3 … p6.mp3` (фразы этапов), `inhale.mp3`, `exhale.mp3` и `manifest.json` со списком ключей, например `["p1","p2","p3","p4","p5","p6","inhale","exhale"]`. Записи играют через лёгкую реверберацию, фон приглушается под голос.
