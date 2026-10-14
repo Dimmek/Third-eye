@@ -312,6 +312,85 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 .ptime { font-size: 14px; letter-spacing: .12em; font-variant-numeric: tabular-nums; min-width: 3.4em; }
 .pintent { position: absolute; z-index: 2; left: 0; right: 0; top: calc(84px + env(safe-area-inset-top, 0px)); text-align: center; font-family: var(--ff-serif); font-style: italic; font-size: clamp(22px, 2.6vw, 30px); color: var(--gold-l); opacity: 0; transition: opacity 3s ease; pointer-events: none; padding-inline: 20px; text-shadow: 0 0 24px rgba(0,0,0,.8); }
 .pintent.on { opacity: .8; }
+/* --- карта жизни --- */
+.kteaser { background: radial-gradient(800px 500px at 85% 40%, rgba(120,80,180,.35), transparent 60%), radial-gradient(600px 400px at 10% 100%, rgba(176,132,74,.18), transparent 60%), var(--night); color: var(--on-dark); position: relative; z-index: 1; }
+.kteaser .container { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(30px, 5vw, 80px); align-items: center; }
+.kteaser__txt { display: grid; gap: 20px; justify-items: start; }
+.kteaser__txt p { color: #cfc6b8; font-size: 18px; max-width: 54ch; }
+.kteaser__txt ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; color: #e7ddcc; }
+.kteaser__txt li::before { content: "✦"; color: var(--gold-l); margin-right: 10px; }
+.kteaser__art { margin: 0; display: grid; gap: 12px; } .kteaser__art canvas { width: 100%; aspect-ratio: 1; display: block; } .kteaser__art figcaption { text-align: center; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: #a89f90; }
+@media (max-width: 860px) { .kteaser .container { grid-template-columns: 1fr; } .kteaser__art { max-width: 420px; margin: 0 auto; width: 100%; } }
+.khero, .khead { background: radial-gradient(900px 600px at 80% 20%, rgba(120,80,180,.32), transparent 60%), radial-gradient(700px 500px at 0% 100%, rgba(176,132,74,.16), transparent 60%), var(--night); color: var(--on-dark); position: relative; z-index: 1; }
+.khero .container { padding-block: 150px 90px; display: grid; grid-template-columns: 1fr minmax(0, 470px); gap: clamp(30px, 5vw, 80px); align-items: start; }
+.khero__txt { display: grid; gap: 22px; align-content: start; }
+.khero__txt .display { font-size: clamp(42px, 5.6vw, 80px); }
+.khero__txt p { color: #cfc6b8; font-size: 18px; max-width: 50ch; }
+.khero__pts { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; color: #cfc6b8; }
+.khero__pts b { color: var(--gold-l); font-weight: 600; }
+.kform { display: grid; gap: 16px; padding: clamp(20px, 3vw, 32px); border-radius: 24px; background: rgba(20,17,26,.72); border: 1px solid rgba(220,189,134,.25); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+.kform label { display: grid; gap: 7px; font-size: 14px; color: #e7ddcc; font-weight: 500; }
+.kform label span { color: #8f8677; font-weight: 400; }
+.kform input, .kform select { font: inherit; font-size: 16px; color: #f6f1e8; background: rgba(255,255,255,.06); border: 1px solid rgba(246,241,232,.18); border-radius: 12px; padding: 12px 14px; min-width: 0; width: 100%; color-scheme: dark; }
+.kform input:focus, .kform select:focus { outline: none; border-color: var(--gold-l); background: rgba(255,255,255,.09); }
+.kform input:disabled { opacity: .4; }
+.kform .check { display: flex; align-items: center; gap: 10px; font-weight: 400; color: #d6d1c8; }
+.kform .check input { width: auto; }
+.kform__row { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: end; }
+.kform__hint { font-size: 13px; color: #8f8677; margin-top: -6px; }
+.kform__manual { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; } .kform__manual .wide { grid-column: 1 / -1; }
+.kform__err { color: #f0a090; font-size: 14px; min-height: 1em; }
+.linkbtn { justify-self: start; font-size: 13.5px; color: var(--gold-l); text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 860px) { .khero .container { grid-template-columns: 1fr; padding-block: 150px 60px; } .kform__row { grid-template-columns: 1fr; } }
+.khead { display: grid; grid-template-columns: 1fr minmax(0, 520px); gap: clamp(24px, 4vw, 64px); align-items: center; padding: 140px max(var(--gut), clamp(16px, 4vw, 40px), calc((100% - var(--container)) / 2 + 40px)) 70px; }
+.khead__txt { display: grid; gap: 18px; align-content: center; min-width: 0; }
+.khead .display { font-size: clamp(36px, 4.6vw, 64px); }
+.khead__meta { color: #a89f90; font-size: 15px; }
+.kbig { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.kbig > div { display: grid; gap: 4px; padding: 14px; border-radius: 16px; background: rgba(255,255,255,.05); border: 1px solid rgba(220,189,134,.2); min-width: 0; }
+.kbig small { font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold-l); }
+.kbig b { font-size: 18px; color: #f6f1e8; font-weight: 600; } .kbig span { font-size: 13px; color: #a89f90; }
+.kact { display: flex; flex-wrap: wrap; gap: 10px; } .kact .ghost { color: #f6f1e8; }
+.kwheel canvas { width: 100%; aspect-ratio: 1; display: block; }
+@media (max-width: 900px) { .khead { grid-template-columns: 1fr; padding-top: 150px; } .kwheel { max-width: 460px; width: 100%; margin: 0 auto; } }
+@media (max-width: 520px) { .kbig { gap: 6px; } .kbig > div { padding: 10px; } .kbig b { font-size: 14.5px; } .kbig small { font-size: 9.5px; letter-spacing: .06em; } .kbig span { font-size: 11.5px; } }
+.kwarn { max-width: var(--container); margin: 26px auto 0; padding: 16px 20px; border-radius: 16px; background: #fbf3e2; border: 1px solid #e8d3a8; font-size: 15px; width: calc(100% - 32px); }
+.ksec { max-width: var(--container); margin: 0 auto; padding: clamp(50px, 6vw, 80px) max(var(--gut), clamp(16px, 4vw, 40px)) 0; display: grid; gap: 22px; position: relative; z-index: 1; }
+.ksec__head { display: grid; gap: 10px; } .ksec__head h2 { font-family: var(--ff-serif); font-weight: 500; font-size: clamp(32px, 4vw, 48px); line-height: 1.05; color: var(--ink); }
+.ksec__intro { color: var(--mute); max-width: 62ch; }
+.kgrid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; } .kgrid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 900px) { .kgrid2, .kgrid3 { grid-template-columns: 1fr; } }
+.kcard { display: grid; gap: 10px; align-content: start; padding: 22px 24px; border-radius: var(--r); background: var(--white); border: 1px solid var(--line); box-shadow: var(--shadow); min-width: 0; color: var(--ink-2); }
+.kcard small { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold-d); font-weight: 600; }
+.kcard h3 { font-size: 22px; color: var(--ink); letter-spacing: -.01em; }
+.kcard b { color: var(--ink); }
+.krec { transition: transform .3s, box-shadow .3s; } .krec:hover { transform: translateY(-3px); } .krec__go { color: var(--gold-d); font-weight: 600; font-size: 14px; }
+.ktr { margin: 0; padding-left: 18px; display: grid; gap: 12px; font-size: 15px; line-height: 1.5; }
+.kdate { font-size: 13px; color: var(--mute); white-space: nowrap; }
+.kbars { display: grid; gap: 8px; } .kbars div { display: grid; grid-template-columns: 110px 1fr 24px; gap: 10px; align-items: center; font-size: 14px; }
+.kbars i { height: 6px; border-radius: 3px; background: var(--line); position: relative; overflow: hidden; } .kbars i::after { content: ""; position: absolute; inset: 0; width: var(--w); background: linear-gradient(90deg, #d2a866, var(--gold)); border-radius: 3px; }
+.kbars b { text-align: right; font-variant-numeric: tabular-nums; }
+.ktable { overflow-x: auto; border-radius: var(--r); border: 1px solid var(--line); background: var(--white); }
+.ktable table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 14.5px; }
+.ktable th, .ktable td { padding: 11px 14px; border-bottom: 1px solid var(--line); text-align: left; }
+.ktable th { font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); font-weight: 600; background: var(--pearl); }
+.ktable tr:last-child td { border-bottom: 0; } .ktable td.num { font-variant-numeric: tabular-nums; white-space: nowrap; } .ktable em { color: #c0533f; font-style: normal; font-size: 12px; font-weight: 600; }
+.kgl { color: var(--gold-d); font-family: "Segoe UI Symbol", "Noto Sans Symbols 2", "Apple Symbols", serif; }
+.ksmall { font-size: 13.5px; color: var(--mute); max-width: 80ch; }
+.kmonths { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 16px; }
+.kmonth { padding: 20px 22px; border-radius: var(--r); background: var(--white); border: 1px solid var(--line); display: grid; gap: 10px; align-content: start; } .kmonth h3 { font-size: 18px; color: var(--ink); }
+.kroute { margin: 0; padding-left: 22px; display: grid; gap: 12px; font-size: 15.5px; } .kroute a { color: var(--gold-d); }
+.klock { position: relative; border-radius: var(--r); border: 1px solid var(--line); background: var(--white); overflow: hidden; min-height: 250px; display: grid; }
+.klock__fog { padding: 24px; display: grid; gap: 12px; align-content: start; } .klock__fog p { color: var(--ink-2); font-size: 16px; }
+.klock__fog i { display: block; height: 12px; border-radius: 6px; background: linear-gradient(90deg, #ece4d6, #f4eee4); filter: blur(1.5px); }
+.klock__cta { position: absolute; inset: 0; display: grid; place-content: end center; padding-bottom: 26px !important; justify-items: center; gap: 12px; text-align: center; padding: 20px; background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(250,247,241,.82) 45%, rgba(250,247,241,.96) 100%); }
+.klock__cta svg { width: 28px; height: 28px; color: var(--gold-d); } .klock__cta b { color: var(--ink); font-size: 17px; }
+.koffer { padding-bottom: clamp(60px, 7vw, 100px); }
+.kprice { display: flex; flex-direction: column; align-items: flex-start; } .kprice p { flex: 1; } .kprice__n { font-family: var(--ff-serif); font-size: 40px; font-weight: 500; line-height: 1; color: var(--ink); }
+.kprice--best { border-color: var(--gold); box-shadow: 0 30px 60px -30px rgba(143,106,56,.45); }
+.krect { grid-template-columns: 1fr auto; align-items: center; gap: 20px; } @media (max-width: 700px) { .krect { grid-template-columns: 1fr; justify-items: start; } }
+.warpv { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; mix-blend-mode: screen; opacity: 0; transition: opacity .9s ease; }
+.warpv.on { opacity: 1; } .warpv.off { opacity: 0; transition-duration: 1.6s; }
 .safe { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 16px; background: rgba(2,1,6,.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); color: var(--on-dark); }
 .safe[hidden] { display: none; }
 .safe__box { width: min(560px, 100%); max-height: calc(100dvh - 32px); overflow: auto; display: grid; gap: 14px; padding: clamp(20px, 4vw, 34px); border-radius: 22px; background: rgba(16,13,22,.94); border: 1px solid rgba(210,168,102,.28); box-shadow: 0 40px 120px -30px rgba(0,0,0,.9); }
@@ -382,14 +461,14 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
 <header class="header" id="nav">
   <div class="container">
     <a class="logo" href="#top" aria-label="Дорога к себе — на главную"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="17" stroke="#dcbd86" stroke-width="1"/><path d="M20 5l3.2 11.8L35 20l-11.8 3.2L20 35l-3.2-11.8L5 20l11.8-3.2z" stroke="#dcbd86" stroke-width="1.1" stroke-linejoin="round"/><circle cx="20" cy="20" r="3" fill="#dcbd86"/></svg>ДОРОГА К СЕБЕ</a>
-    <nav class="nav" aria-label="Главное меню"><a href="#prostranstva" data-r="prostranstva">Пространства</a><a href="#zhurnal" data-r="zhurnal">Журнал</a><a href="#benefits">Что вы получите</a><a href="#how">Как проходит сеанс</a></nav>
+    <nav class="nav" aria-label="Главное меню"><a href="#prostranstva" data-r="prostranstva">Пространства</a><a href="#karta" data-r="karta">Карта жизни</a><a href="#how">Как проходит сеанс</a><a href="#benefits">Что вы получите</a><a href="#zhurnal" data-r="zhurnal">Журнал</a></nav>
     <div class="hright">
       <a class="btn btn--gold btn--sm" href="#prostranstva">Выбрать практику <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
       <button class="burger" id="burger" type="button" aria-label="Меню"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h14M3 14h14"/></svg></button>
     </div>
   </div>
 </header>
-<div class="mnav" id="mnav" hidden><a href="#prostranstva">Пространства</a><a href="#zhurnal">Журнал</a><a href="#benefits">Что вы получите</a><a href="#how">Как проходит сеанс</a><a href="#faq">Вопросы</a><a class="btn btn--gold" href="#prostranstva">Выбрать практику</a></div>
+<div class="mnav" id="mnav" hidden><a href="#prostranstva">Пространства</a><a href="#karta">Карта жизни</a><a href="#how">Как проходит сеанс</a><a href="#benefits">Что вы получите</a><a href="#faq">Вопросы</a><a href="#zhurnal">Журнал</a><a class="btn btn--gold" href="#prostranstva">Выбрать практику</a></div>
 
 <main id="home">
   <section class="hero dark" id="top">
@@ -449,6 +528,16 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     </div>
   </section>
 
+  <section class="section kteaser dark" id="kartaTeaser">
+    <div class="container">
+      <div class="kteaser__txt"><span class="eyebrow">Карта жизни</span><h2 class="h2">Ваш путь, <em>рассчитанный по звёздам.</em></h2>
+        <p>Дата, время и место рождения — и через минуту вы видите свою карту: сильные стороны, тему этого года, влияния планет сейчас и три практики, которые нужны именно вам.</p>
+        <ul><li>Расчёт по астрономическим эфемеридам, с точностью до минуты дуги</li><li>Профиль и тема года — бесплатно</li><li>Полная карта и прогноз на 12 месяцев — по желанию</li></ul>
+        <a class="btn btn--gold" href="#karta">Построить мою карту <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
+      <figure class="kteaser__art"><canvas id="kTeaserCv" aria-label="Небо сейчас"></canvas><figcaption>Небо над Москвой прямо сейчас</figcaption></figure>
+    </div>
+  </section>
+
   <section class="section section--alt" id="how">
     <div class="container">
       <div class="shead"><div><span class="eyebrow">Как проходит сеанс</span><h2 class="h2">Вы просто слушаете. <em>Остальное происходит само.</em></h2></div>
@@ -484,14 +573,6 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     </div>
   </section>
 
-  <section class="section" id="trust">
-    <div class="container">
-      <div class="shead"><div><span class="eyebrow">Почему этому можно доверять</span><h2 class="h2">Не из головы. <em>Из опыта и исследований.</em></h2></div>
-        <a class="btn btn--line" href="#zhurnal">Весь журнал <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
-      <div class="jgrid" id="jTeaser"></div>
-    </div>
-  </section>
-
   <section class="section" id="faq">
     <div class="container split">
       <div><span class="eyebrow">Вопросы</span><h2 class="h2">Коротко <em>о главном.</em></h2></div>
@@ -506,10 +587,50 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     </div>
   </section>
 
+  <section class="section" id="trust">
+    <div class="container">
+      <div class="shead"><div><span class="eyebrow">Почему этому можно доверять</span><h2 class="h2">Не из головы. <em>Из опыта и исследований.</em></h2></div>
+        <a class="btn btn--line" href="#zhurnal">Весь журнал <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
+      <div class="jgrid" id="jTeaser"></div>
+    </div>
+  </section>
+
   <section class="cta-band"><div class="container">
     <div><h2 class="h2">Начните с <em>очищения.</em></h2><p>Двенадцать минут, чтобы сбросить день и освободить место для нового.</p></div>
     <a class="btn btn--ink" href="#room-cleanse">Войти в пространство <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
   </div></section>
+</main>
+
+<main id="karta" hidden>
+  <section class="khero dark" id="kFormWrap">
+    <div class="container">
+      <div class="khero__txt"><span class="eyebrow">Карта жизни</span><h1 class="display">С чем вы <em>пришли</em> и куда идёте</h1>
+        <p>Сильные стороны, призвание, деньги, отношения, места и маршрут на годы вперёд — по положению планет в момент вашего рождения.</p>
+        <ul class="khero__pts"><li><b>1 минута</b> на данные</li><li><b>Бесплатно</b> профиль, тема года и практики</li><li><b>Данные остаются</b> в вашем браузере</li></ul></div>
+      <form class="kform" id="kForm" novalidate>
+        <label>Имя <span>необязательно</span><input id="kName" type="text" autocomplete="given-name" maxlength="40" placeholder="Как к вам обращаться"></label>
+        <label>Дата рождения<input id="kDate" type="date" required min="1900-01-01" max="2026-12-31"></label>
+        <div class="kform__row"><label>Время рождения<input id="kTime" type="time" step="60"></label>
+          <label class="check"><input type="checkbox" id="kNoTime"> Не знаю точного времени</label></div>
+        <p class="kform__hint">Время из свидетельства о рождении или от родителей. От него зависят Асцендент и дома: за 4 минуты Асцендент сдвигается на градус.</p>
+        <label>Место рождения<input id="kPlace" type="text" list="kCities" autocomplete="off" placeholder="Начните вводить город"></label>
+        <datalist id="kCities"></datalist>
+        <button class="linkbtn" type="button" id="kManualT">Нет моего города — ввести координаты</button>
+        <div class="kform__manual" id="kManual" hidden>
+          <label>Широта<input id="kLat" type="number" step="0.001" placeholder="55.756"></label>
+          <label>Долгота<input id="kLon" type="number" step="0.001" placeholder="37.617"></label>
+          <label class="wide">Часовой пояс<select id="kTz"></select></label>
+        </div>
+        <p class="kform__err" id="kErr" role="alert"></p>
+        <button class="btn btn--gold" id="kGo" type="submit">Построить карту</button>
+      </form>
+    </div>
+  </section>
+  <div id="kResult" hidden></div>
+  <div class="safe" id="kPay" hidden role="dialog" aria-modal="true" aria-labelledby="kPayT"><div class="safe__box">
+    <span class="eyebrow">Оплата</span><h2 id="kPayT"></h2><p id="kPayText" style="color:#d6d1c8"></p>
+    <div class="safe__act"><button class="ghost" id="kPayClose" type="button">Закрыть</button><button class="btn btn--gold" id="kPayDemo" type="button">Открыть в тестовом режиме</button></div>
+  </div></div>
 </main>
 
 <main id="journal" hidden>
@@ -1598,46 +1719,46 @@ const JOURNAL = [
 <h2>Зачем я это делаю</h2>
 <p>Я знаю, каково это — жить в шуме и не понимать, чего ты хочешь на самом деле. И знаю, что из этого есть дорога. Я собрал в «Дороге к себе» то, что прошло проверку моей жизнью и подтверждается исследованиями, чтобы каждый мог начать свой путь — с пятнадцати минут в день.</p>
 <div class="todo">Черновик по вашим словам. Проверьте цифры в квадратных скобках и детали, которые хотите оставить или убрать.</div>`, src: [] },
-  { id: 'brain', cat: 'Наука', title: 'Что медитация делает с мозгом', read: '4 минуты',
-    lead: 'Регулярная практика меняет не только настроение. Она меняет то, как работает мозг.',
+  { id: 'brain', cat: 'Наука', title: 'Что медитация делает с мозгом — и чего не делает', read: '13 минут', long: true,
+    lead: 'Снимки мозга монахов, восьминедельные курсы, сотни томограмм. Разбираемся, что нейробиология действительно увидела у медитирующих, где данные крепкие, а где красивая картинка обогнала факты.',
     body: `<p>Нейробиологи изучают медитацию уже несколько десятилетий — с помощью томографии и записи мозговых волн.</p>
 <div class="fact">После <b>восьминедельной программы осознанности</b> у участников нашли изменения плотности серого вещества в зонах, связанных с памятью, обучением и регуляцией эмоций, — по сравнению с контрольной группой.</div>
 <p>У опытных практиков, проведших в медитации тысячи часов, во время практики фиксировали высокоамплитудную синхронную гамма-активность — паттерн, связанный с собранным вниманием.</p>
 <p>Вывод простой: мозг пластичен, и спокойствие — это навык, который тренируется, как мышца. Регулярность важнее длительности.</p>`, src: ['holzel', 'lutz'] },
-  { id: 'mindfulness', cat: 'Наука', title: 'Осознанность против стресса: большой обзор', read: '4 минуты',
-    lead: 'Одна из самых изученных практик в мире — и одна из основ «Дороги к себе».',
+  { id: 'mindfulness', cat: 'Наука', title: 'Осознанность против стресса: что показали крупнейшие исследования', read: '13 минут', long: true,
+    lead: 'Осознанность — одна из самых изученных психологических практик в мире. Мы разобрали крупнейшие обзоры и рандомизированные исследования: где эффект надёжен, насколько он велик и где начинается преувеличение.',
     body: `<p>Осознанность — это умение замечать мысли и ощущения, не вовлекаясь в них. Именно этому учит пространство «Тишина ума»: вы — небо, мысли — облака.</p>
 <div class="fact">Мета-анализ в журнале JAMA Internal Medicine: <b>47 исследований, 3515 участников</b>. Программы медитации дали умеренное улучшение при тревоге, подавленности и боли.</div>
 <p>Программы снижения стресса на основе осознанности, созданные Джоном Кабат-Зинном, применяются в больницах и компаниях по всему миру. Обзоры показывают заметное снижение стресса у здоровых людей.</p>
 <p>Медитация — не замена лечению, а ежедневная гигиена ума: как чистка зубов, только для мыслей.</p>`, src: ['goyal', 'mbsr'] },
-  { id: 'sleep', cat: 'Наука', title: 'Сон без мыслей по кругу', read: '3 минуты',
-    lead: 'Каждый третий плохо спит. Чаще всего мешает не тело, а ум, который не может остановиться.',
+  { id: 'sleep', cat: 'Наука', title: 'Сон без мыслей по кругу: почему ум не даёт уснуть и что с этим делать', read: '12 минут', long: true,
+    lead: 'Чаще всего засыпать мешает не тело, а ум, который продолжает работать. Разбираем, как устроена эта ловушка, что показали клинические исследования осознанности и сна и какие простые шаги имеют реальную доказательную базу.',
     body: `<p>Мысли по кругу — главный враг засыпания. Практики осознанности учат отпускать их, а не спорить с ними.</p>
 <div class="fact">В рандомизированном исследовании с участием взрослых старшего возраста с нарушениями сна <b>программа осознанности улучшила качество сна сильнее</b>, чем занятия по гигиене сна.</div>
 <p>Йога-нидра и медленное дыхание дополнительно снижают возбуждение нервной системы — поэтому вечерние пространства начинаются с замедления дыхания и тяжести в теле.</p>`, src: ['black', 'nidra', 'goessl'] },
-  { id: 'imagery', cat: 'Наука', title: 'Почему работают образы: кокон, свет и будущее «я»', read: '4 минуты',
-    lead: 'Мозг реагирует на ярко представленный образ почти как на реальность. Этим можно пользоваться бережно.',
+  { id: 'imagery', cat: 'Наука', title: 'Почему работают образы: что мозг делает с тем, что вы представляете', read: '13 минут', long: true,
+    lead: 'Представленный лимон вызывает слюну, а представленная сцена — тревогу или покой. Разбираемся, почему воображение — это не «просто фантазия», что о нём на самом деле знает наука и где у этого инструмента честные границы.',
     body: `<p>Исследования мысленного воображения показывают: когда мы ярко представляем что-то, включаются многие из тех же областей мозга, что и при настоящем восприятии.</p>
 <p>Поэтому образ золотого кокона даёт ощущение защищённости, а свет, льющийся сверху, помогает телу расслабиться. В психотерапии давно используют образ «безопасного места» — по тому же принципу.</p>
 <div class="fact">Упражнение <b>«лучшее возможное я»</b> — представить себя в будущем, где всё сложилось, — в исследованиях повышало настроение и оптимизм. На нём построено пространство «Предназначение».</div>
 <p>Важно: образы не заменяют действий. Они дают состояние, из которого действовать легче.</p>`, src: ['pearson', 'king'] },
-  { id: 'beliefs', cat: 'Наука', title: 'Как снимаются шоры: убеждения и маленькие шаги', read: '4 минуты',
-    lead: '«Неудобно», «не получится», «это не для меня» — не факты, а привычки думать. Их можно проверить и заменить.',
+  { id: 'beliefs', cat: 'Наука', title: 'Как снимаются шоры: почему убеждения меняет опыт, а не спор с собой', read: '12 минут', long: true,
+    lead: '«Неудобно», «у меня не получится», «это не для таких, как я» — звучит как правда о мире, но чаще это привычка мышления. Разбираемся, как работают такие убеждения, что говорят о методах их изменения сотни исследований и почему маленький реальный шаг сильнее любой аффирмации.',
     body: `<p>Когнитивная терапия, созданная Аароном Беком, учит замечать автоматические мысли и проверять их на правду: это факт или привычка? откуда она? всегда ли это так?</p>
 <div class="fact">Обзор <b>269 мета-анализов</b> показал: когнитивно-поведенческий подход — один из самых надёжно подтверждённых методов работы с тревогой и стрессом.</div>
 <p>Сильнее всего убеждение меняет не спор, а опыт: маленький реальный шаг — звонок, вопрос, письмо. Поэтому пространство «Снять шоры» заканчивается выбором одного шага на завтра.</p>`, src: ['hofmann'] },
-  { id: 'gratitude', cat: 'Наука', title: 'Благодарность, удача и изобилие — без магии', read: '4 минуты',
-    lead: 'Деньги и удача не приходят сами. Но внимание и состояние меняют то, что мы замечаем и делаем.',
+  { id: 'gratitude', cat: 'Наука', title: 'Благодарность, удача и изобилие — без магии: что на самом деле показывают исследования', read: '12 минут', long: true,
+    lead: 'Деньги и удача не приходят от того, что вы правильно «настроились». Но то, куда направлено ваше внимание, действительно меняет, что вы замечаете и что делаете. Разбираемся, что известно о благодарности и «везучести», с цифрами и честными оговорками.',
     body: `<p>В классическом исследовании люди, которые каждую неделю записывали, за что благодарны, через несколько недель оценивали свою жизнь лучше и чаще занимались спортом, чем те, кто записывал неприятности.</p>
 <p>Психолог Ричард Уайзман годами изучал людей, которые считают себя везучими. Главное отличие — они чаще замечают возможности, открыты новому и легче знакомятся с людьми.</p>
 <div class="fact">Поэтому в пространствах «Изобилие» и «Удача» есть <b>благодарность, намерение и конкретный первый шаг</b>. Мы честно говорим: это работает через внимание и действия, а не через «притяжение».</div>`, src: ['emmons', 'wiseman'] },
-  { id: 'excitement', cat: 'Наука', title: 'Волнение перед важным — это энергия', read: '3 минуты',
-    lead: 'Пытаться «успокоиться» перед выступлением часто не работает. Есть способ лучше.',
+  { id: 'excitement', cat: 'Наука', title: 'Волнение перед важным — это энергия: что делать с дрожью в коленях', read: '12 минут', long: true,
+    lead: 'Перед выступлением, экзаменом или трудным разговором почти все пытаются «успокоиться» — и почти ни у кого это не получается. Разбираемся, почему, что предлагает наука вместо этого и где у популярного приёма «я взволнован» честные границы.',
     body: `<p>Волнение и радостное возбуждение для тела почти одинаковы: пульс, дыхание, энергия. Разница — в том, как мы это называем.</p>
 <div class="fact">В экспериментах фраза <b>«я взволнован — это энергия»</b> перед пением, публичной речью и задачами по математике улучшала результаты по сравнению с попыткой успокоиться.</div>
 <p>Пространство «Перед важным событием» соединяет этот приём с мысленной репетицией и главной мыслью: что бы ни случилось, с вами всё в порядке.</p>`, src: ['brooks'] },
-  { id: 'why', cat: 'Подход', title: 'Почему мы выбрали именно эти практики', read: '5 минут',
-    lead: 'Каждая практика прошла два фильтра: она работает в нашей жизни и опирается на исследования или многовековую традицию.',
+  { id: 'why', cat: 'Подход', title: 'Почему мы выбрали именно эти практики — и как мы отделяем знание от мифа', read: '12 минут', long: true,
+    lead: 'Каждая практика «Дороги к себе» прошла два фильтра: она работает в живой жизни и опирается на исследования или многовековую традицию. Рассказываем, как мы читали науку, какие цифры за этим стоят, где доказательства сильные, а где мы честно говорим «это образ, а не измеренный факт».',
     body: `<p>Мы не придумывали практики с нуля. Мы взяли то, что изучено лучше всего, и соединили с образами из йоги и медитативных традиций — потому что образы помогают погрузиться глубже.</p>
 <h2>Что подтверждено исследованиями</h2>
 <ul><li><b>Медленное дыхание</b> снижает стресс и тревогу.</li><li><b>Медитация осознанности</b> снижает стресс и помогает при тяге к сигаретам и алкоголю.</li><li><b>Йога-нидра</b> уменьшает стресс, тревогу и подавленность.</li><li><b>Сочувствие к себе, прощение, любящая доброта</b> — улучшают настроение и отношения.</li><li><b>Бинауральные ритмы</b> — умеренно помогают вниманию и снижают тревогу.</li></ul>
@@ -1646,31 +1767,31 @@ const JOURNAL = [
 <h2>Чего мы не обещаем</h2>
 <p>Мгновенных чудес, исцеления болезней и денег «просто так». Практика — это шаги. Один сеанс даёт передышку, регулярные — меняют реакции, сон, отношения и решения.</p>
 <div class="fact">У каждого пространства на сайте есть метка: <b>подтверждено</b>, <b>работает через внимание</b> или <b>традиция</b> — чтобы вы всегда знали, на что опирается практика.</div>`, src: ['goessl', 'mbsr', 'nidra', 'garcia'] },
-  { id: 'breath', cat: 'Наука', title: 'Дыхание: самый быстрый путь к спокойствию', read: '4 минуты',
-    lead: 'Дыхание работает само, но им можно управлять. А через него — пульсом, напряжением и настроением.',
+  { id: 'breath', cat: 'Наука', title: 'Дыхание: единственный рычаг нервной системы, который у вас в руках', read: '12 минут', long: true,
+    lead: 'Сердце, давление, пищеварение работают без нашего участия. Дыхание тоже — но им одним можно управлять сознательно. Разбираемся, что происходит в теле на медленном выдохе, какие исследования это подтверждают и где заканчиваются доказательства.',
     body: `<p>Когда мы дышим медленно, примерно 5–6 раз в минуту, ритм сердца и дыхания входит в резонанс. Нервная система переключается с режима «бей или беги» на режим отдыха.</p>
 <div class="fact">Мета-анализ 24 исследований: тренировка медленного дыхания с обратной связью дала <b>сильное снижение стресса и тревоги</b> по сравнению с контрольными группами.</div>
 <p>В исследовании 2023 года пять минут «циклического вздоха» в день — два вдоха носом подряд и длинный выдох — улучшали настроение сильнее, чем такая же по времени медитация осознанности.</p>
 <p>Поэтому каждый сеанс «Дороги к себе» начинается с погружения через дыхание, а звук ведёт вас: волна нарастает на вдохе и стихает на выдохе.</p>`, src: ['goessl', 'balban'] },
-  { id: 'habits', cat: 'Наука', title: 'Тяга — это волна. Как осознанность помогает не сорваться', read: '5 минут',
-    lead: 'Курение, алкоголь, сладкое, телефон: тяга длится минуты. Если научиться её пережидать, она теряет власть.',
+  { id: 'habits', cat: 'Наука', title: 'Тяга — это волна. Как осознанность помогает не сорваться', read: '12 минут', long: true,
+    lead: 'Сигарета, бокал, сладкое, бесконечная лента в телефоне. Тяга кажется приказом, но устроена как волна: поднимается, достигает пика и спадает. Разбираемся, что говорят клинические исследования о «сёрфинге тяги», где у них сила и где ограничения.',
     body: `<p>Практика «сёрфинга тяги» учит не бороться с желанием и не подчиняться ему, а наблюдать, как оно поднимается, достигает пика и спадает.</p>
 <div class="fact">В рандомизированном исследовании через 17 недель не курили <b>31% участников программы осознанности против 6%</b> в стандартной программе отказа от курения.</div>
 <p>В другом исследовании с участием 286 человек программа профилактики срывов на основе осознанности через год лучше других снижала употребление алкоголя и веществ.</p>
 <blockquote>Я прошёл через это сам. Тяга не исчезает за один день — но с каждым разом она слабее, а вы сильнее.</blockquote>
 <p>При алкогольной зависимости резкий отказ бывает опасен: начинайте вместе с врачом. Практика — поддержка на этом пути.</p>`, src: ['brewer', 'bowen'] },
-  { id: 'rest', cat: 'Наука', title: 'Йога-нидра и глубокий отдых', read: '3 минуты',
-    lead: 'Осознанный сон — практика, в которой тело спит, а ум остаётся ясным.',
+  { id: 'rest', cat: 'Наука', title: 'Йога-нидра и глубокий отдых: что происходит, когда тело спит, а ум ясен', read: '12 минут', long: true,
+    lead: 'Йогу-нидру называют «осознанным сном»: вы лежите неподвижно, тело глубоко расслабляется, а внимание остаётся ясным. Разбираемся, что известно о механизме этой практики, что показали исследования — включая крупный мета-анализ 2025 года — и почему к их цифрам нужно относиться осторожно.',
     body: `<p>Йога-нидра ведёт внимание по телу, дыханию и образам. Тело глубоко расслабляется, при этом вы остаётесь в сознании.</p>
 <div class="fact">Мета-анализ 2025 года: <b>73 исследования, более 5000 участников</b>. Практика заметно снижала стресс, тревогу и подавленность. Авторы отмечают, что исследования различаются по качеству — нужны ещё более строгие.</div>
 <p>Элементы йоги-нидры есть в каждом нашем сеансе: вход, погружение и мягкое возвращение.</p>`, src: ['nidra'] },
-  { id: 'heart', cat: 'Наука', title: 'Тепло к себе и другим — тоже навык', read: '4 минуты',
-    lead: 'Сочувствие к себе, прощение и любящая доброта изучены не меньше дыхания.',
+  { id: 'heart', cat: 'Наука', title: 'Тепло к себе и другим — тоже навык. Что о нём знает наука', read: '12 минут', long: true,
+    lead: 'Сочувствие к себе, прощение и медитация любящей доброты звучат мягко, почти сентиментально. Но за ними — мета-анализы, рандомизированные испытания и честные научные споры. Разбираемся, что здесь доказано, а что пока нет.',
     body: `<p>Внутренний критик громкий. Исследования показывают: чем добрее человек к себе, тем ниже у него тревога и подавленность и тем легче ему двигаться дальше после ошибок.</p>
 <p>Программы прощения в контролируемых исследованиях уменьшали гнев и тревогу. Простить — не значит оправдать: это значит перестать носить груз.</p>
 <p>Медитация любящей доброты увеличивала позитивные эмоции и чувство связи с людьми — эффект, который участники замечали в повседневной жизни.</p>`, src: ['neff', 'wade', 'fred'] },
-  { id: 'sound', cat: 'Наука', title: 'Музыка и бинауральные ритмы: что доказано', read: '3 минуты',
-    lead: 'Когда в каждое ухо звучит своя частота, мозг слышит разницу — мягкую пульсацию.',
+  { id: 'sound', cat: 'Наука', title: 'Музыка, тишина и бинауральные ритмы: что действительно доказано', read: '12 минут', long: true,
+    lead: 'Когда в каждое ухо звучит своя частота, мозг слышит третий звук — мягкую пульсацию. Вокруг этого эффекта выросла целая индустрия обещаний. Разбираемся, что известно о бинауральных ритмах, музыке и тишине по данным мета-анализов, и почему самым сильным звуком в одном из исследований оказалась пауза.',
     body: `<p>Бинауральные ритмы — это два тона в наушниках с небольшой разницей частот. Мы используем мягкие диапазоны: альфа (8–10 Гц) для спокойного внимания и тета (6 Гц) для глубины.</p>
 <div class="fact">Мета-анализ 22 исследований: <b>умеренный эффект</b> на внимание, память, тревожность и восприятие боли. Важны длительность и время прослушивания.</div>
 <p>Мы не обещаем «перепрошивки мозга». Ритмы — один из слоёв сеанса вместе с голосом, дыханием и музыкой.</p>`, src: ['garcia'] }
@@ -1691,8 +1812,10 @@ function showArticle(id) {
   const j = JOURNAL.find(x => x.id === id); if (!j) return show('journal');
   show('article'); const i = JOURNAL.indexOf(j), nx = JOURNAL[(i + 1) % JOURNAL.length];
   const fill = (title, lead, body, src) => { $('aCat').textContent = j.cat + ' · ' + readTime(body); $('aTitle').textContent = title; $('aLead').textContent = lead; $('aBody').innerHTML = body; $('aSrc').innerHTML = src; };
-  fill(j.title, j.lead, j.body, j.src.length ? '<b style="color:var(--ink)">Источники</b>' + j.src.map(k => '<span>' + SRC[k] + '</span>').join('') : '');
-  if (j.long) loadLong(j).then(L => { if (L && location.hash === '#j-' + id) fill(L.title || j.title, L.lead || j.lead, L.body, ''); });
+  const short = () => fill(j.title, j.lead, j.body, j.src.length ? '<b style="color:var(--ink)">Источники</b>' + j.src.map(k => '<span>' + SRC[k] + '</span>').join('') : '');
+  if (!j.long) short();
+  else { fill(j.title, j.lead, '<p style="color:var(--mute)">Загружаем статью…</p>', ''); $('aCat').textContent = j.cat + ' · ' + j.read + ' чтения';
+    loadLong(j).then(L => { if (location.hash !== '#j-' + id) return; if (L) fill(L.title || j.title, L.lead || j.lead, L.body, ''); else short(); }); }
   $('aNav').innerHTML = '<a class="card" href="#zhurnal"><span class="eyebrow">← Журнал</span><b>Все статьи</b></a><a class="card" href="#j-' + nx.id + '"><span class="eyebrow">Дальше →</span><b>' + nx.title + '</b></a>';
   scrollTo(0, 0);
 }
@@ -1711,6 +1834,7 @@ if (HERO_VIDEO) { const v = $('heroVid'); v.src = HERO_VIDEO; v.hidden = false; 
 function showRoom(id) {
   const r = ROOMS.find(x => x.id === id); if (!r) return showHome();
   curRoom = r; r.enterT = performance.now() / 1000; show('roomPage');
+  document.querySelectorAll('.rhero .warpv').forEach(v => v.remove()); warp($('roomCv'), 2.6, 6.4);
   const idx = ROOMS.indexOf(r);
   $('rNum').textContent = 'Пространство ' + String(idx + 1).padStart(2, '0') + ' · ' + CATS[CAT[r.id]];
   $('rCrumb').textContent = r.name;
@@ -1735,18 +1859,46 @@ const plural = (n, a, b, c) => { const m10 = n % 10, m100 = n % 100; return m10 
 function renderStreak() { const n = streakDays(); $('streak').textContent = n ? 'Вы практикуете ' + n + ' ' + plural(n, 'день', 'дня', 'дней') + ' подряд' : 'Первая сессия — первый шаг.'; }
 renderStreak();
 let navDepth = 0; addEventListener('hashchange', () => navDepth++);
-const BACK_TO = { roomPage: '#prostranstva', article: '#zhurnal', catalog: '#top', journal: '#top' };
+const BACK_TO = { roomPage: '#prostranstva', article: '#zhurnal', catalog: '#top', journal: '#top', karta: '#top' };
 $('backBtn').onclick = () => { if (navDepth > 0 && history.length > 1) { navDepth -= 2; history.back(); } else location.hash = BACK_TO[curPage] || '#top'; };
 let curPage = 'home';
-function show(page) { curPage = page; $('backBtn').hidden = page === 'home'; ['home', 'catalog', 'roomPage', 'journal', 'article'].forEach(id => $(id).hidden = id !== page); setTimeout(solidHeader, 0); document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('on', (a.dataset.r === 'prostranstva' && (page === 'catalog' || page === 'roomPage')) || (a.dataset.r === 'zhurnal' && (page === 'journal' || page === 'article')))); $('mnav').hidden = true; }
+function show(page) { curPage = page; $('backBtn').hidden = page === 'home'; ['home', 'catalog', 'roomPage', 'journal', 'article', 'karta'].forEach(id => $(id).hidden = id !== page); setTimeout(solidHeader, 0); document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('on', (a.dataset.r === 'prostranstva' && (page === 'catalog' || page === 'roomPage')) || (a.dataset.r === 'zhurnal' && (page === 'journal' || page === 'article')) || (a.dataset.r === 'karta' && page === 'karta'))); $('mnav').hidden = true; }
 function showHome(anchor) {
   show('home');
   if (anchor) { const el = $(anchor); if (el) setTimeout(() => el.scrollIntoView(), 0); } else scrollTo(0, 0);
 }
+// hyperspace jump (the author's clip) over the canvas: entering a space and starting a session
+function warp(anchor, from, to) {
+  if (reduce || !anchor) return;
+  const v = document.createElement('video'); v.className = 'warpv'; v.muted = true; v.playsInline = true; v.setAttribute('playsinline', ''); v.preload = 'auto';
+  const h264 = v.canPlayType('video/mp4; codecs="avc1.42E01E"');
+  v.src = !h264 ? 'media/warp.webm' : innerWidth < 700 ? 'media/warp-m.mp4' : 'media/warp.mp4'; anchor.after(v);
+  const end = () => { v.classList.add('off'); setTimeout(() => v.remove(), 1700); };
+  v.addEventListener('loadedmetadata', () => { try { v.currentTime = from; } catch (e) {} v.play().then(() => v.classList.add('on')).catch(() => v.remove()); }, { once: true });
+  v.addEventListener('timeupdate', () => { if (v.currentTime >= to && !v.classList.contains('off')) end(); });
+  v.addEventListener('error', () => v.remove(), { once: true });
+  return v;
+}
+let kartaP = null;
+function loadKarta() {
+  if (kartaP) return kartaP;
+  window.SITE = { ROOMS };
+  const js = (src, alt) => new Promise((ok, no) => { const sc = document.createElement('script'); sc.src = src; sc.onload = ok; sc.onerror = () => { if (!alt) return no(); const s2 = document.createElement('script'); s2.src = alt; s2.onload = ok; s2.onerror = no; document.head.appendChild(s2); }; document.head.appendChild(sc); });
+  kartaP = js('lib/astronomy.min.js', 'https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js').then(() => js('karta-cities.js')).then(() => js('karta-engine.js')).then(() => js('karta.js')).then(() => window.KARTA_UI.initForm())
+    .catch(() => { kartaP = null; $('kErr').textContent = 'Не удалось загрузить расчёт. Проверьте соединение и обновите страницу.'; });
+  return kartaP;
+}
+(() => { const sec = $('kartaTeaser'); if (!sec || !('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver(es => { if (!es.some(e => e.isIntersecting)) return; io.disconnect();
+    loadKarta().then(() => { const n = new Date(), p = x => String(x).padStart(2, '0'), cv = $('kTeaserCv');
+      const sky = window.KARTA.computeChart({ date: n.getFullYear() + '-' + p(n.getMonth() + 1) + '-' + p(n.getDate()), time: p(n.getHours()) + ':' + p(n.getMinutes()), tz: 'Europe/Moscow', lat: 55.756, lon: 37.617 });
+      const draw = () => window.KARTA_UI.drawWheel(cv, sky); draw(); addEventListener('resize', draw); }); }, { rootMargin: '300px' });
+  io.observe(sec); })();
 function route() {
   const h = location.hash.slice(1);
   if (h === 'prostranstva') { show('catalog'); scrollTo(0, 0); }
   else if (h === 'zhurnal') { show('journal'); scrollTo(0, 0); }
+  else if (h === 'karta') { show('karta'); scrollTo(0, 0); loadKarta(); }
   else if (h.startsWith('j-')) showArticle(h.slice(2));
   else if (h.startsWith('room-')) showRoom(h.slice(5));
   else if (h && $(h) && $('home').contains($(h))) showHome(h);
@@ -1903,7 +2055,7 @@ function chakra(k) {
 }
 async function play() {
   initAudio(); if (actx && actx.state === 'suspended') await actx.resume().catch(() => {});
-  if (!P.running) { await loadRecorded(); P.running = true; P.paused = false; P.elapsed = 0; P.last = performance.now(); enter(0); }
+  if (!P.running) { await loadRecorded(); P.running = true; P.paused = false; P.elapsed = 0; P.last = performance.now(); enter(0); if (!$('player').classList.contains('soft')) warp($('pCv'), 1.8, 9.4); }
   else { P.paused = !P.paused; P.last = performance.now(); if (P.paused && synth) synth.cancel(); }
   $('pIco').innerHTML = P.paused ? '<path d="M8 5.5v13l11-6.5z"/>' : '<rect x="7" y="5.5" width="3.2" height="13" rx="1"/><rect x="13.8" y="5.5" width="3.2" height="13" rx="1"/>';
   levels(P.paused ? 0.4 : 3);
