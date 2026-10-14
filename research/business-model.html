@@ -1,0 +1,176 @@
+<title>Экономика «Дороги к себе»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter+Tight:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one column; a live calculator (inputs left, results right) followed by cost tables and the automation plan */
+:root {
+  --bg: #f7f3ec; --card: #fffdf9; --ink: #1d1a16; --ink2: #4a443b; --mute: #857c6e; --line: #e6ddcf; --gold: #a87a3f; --gold-soft: #f1e6d3;
+  --good: #2f8a63; --bad: #b4553f; --violet: #7b5cff;
+  --f-d: 'Cormorant Garamond', Georgia, serif; --f-b: 'Inter Tight', system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0d0b10; --card: #16131b; --ink: #f2ece2; --ink2: #cfc6b8; --mute: #968c7d; --line: #2c2631; --gold: #d6ad6c; --gold-soft: #2a2218; --good: #6fcf9f; --bad: #ec8a74; --violet: #a993ff; color-scheme: dark; } }
+:root[data-theme="dark"] { --bg: #0d0b10; --card: #16131b; --ink: #f2ece2; --ink2: #cfc6b8; --mute: #968c7d; --line: #2c2631; --gold: #d6ad6c; --gold-soft: #2a2218; --good: #6fcf9f; --bad: #ec8a74; --violet: #a993ff; color-scheme: dark; }
+body { background: var(--bg); color: var(--ink2); font: 16px/1.6 var(--f-b); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); font-variant-numeric: lining-nums; }
+.w { max-width: 1080px; margin: 0 auto; padding-block: 44px 90px; display: grid; gap: 44px; }
+.eb { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+h1 { font: 600 clamp(38px, 6vw, 58px)/1.02 var(--f-d); color: var(--ink); margin: 6px 0 0; text-wrap: balance; }
+h2 { font: 600 clamp(26px, 3.6vw, 36px)/1.1 var(--f-d); color: var(--ink); margin: 0; text-wrap: balance; }
+h3 { margin: 0; color: var(--ink); font-size: 17px; }
+p { margin: 0; max-width: 72ch; } b { color: var(--ink); }
+section { display: grid; gap: 16px; }
+.lead { font-size: 18px; color: var(--ink); max-width: 66ch; margin-top: 12px; }
+.calc { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 18px; align-items: start; }
+@media (max-width: 860px) { .calc { grid-template-columns: 1fr; } }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; display: grid; gap: 14px; min-width: 0; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; justify-self: start; }
+.seg button { font: 600 14px var(--f-b); padding: 7px 16px; border-radius: 999px; border: 0; background: transparent; color: var(--ink2); cursor: pointer; }
+.seg button[aria-pressed=true] { background: var(--ink); color: var(--bg); }
+.in { display: grid; gap: 4px; } .in label { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; color: var(--ink); } .in label output { font-weight: 600; color: var(--gold); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.in small { font-size: 12.5px; color: var(--mute); } .in input { width: 100%; accent-color: var(--gold); }
+.grp { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); margin-top: 6px; border-top: 1px solid var(--line); padding-top: 12px; }
+.kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; } @media (max-width: 560px) { .kpis { grid-template-columns: 1fr 1fr; } }
+.kpi { background: var(--bg); border-radius: 12px; padding: 12px 14px; display: grid; gap: 2px; } .kpi b { font-size: 24px; letter-spacing: -.01em; font-variant-numeric: tabular-nums; } .kpi span { font-size: 12.5px; color: var(--mute); line-height: 1.3; }
+.kpi.good b { color: var(--good); } .kpi.bad b { color: var(--bad); }
+.verdict { padding: 14px 16px; border-radius: 12px; border-left: 3px solid var(--gold); background: var(--gold-soft); color: var(--ink); }
+.chart { width: 100%; height: auto; display: block; } .chart text { font: 11px var(--f-b); fill: var(--mute); } .chart .g { stroke: var(--line); } .chart .z { stroke: var(--mute); stroke-dasharray: 3 3; }
+.chart .rev { fill: none; stroke: var(--gold); stroke-width: 2.5; } .chart .cost { fill: none; stroke: var(--bad); stroke-width: 2; } .chart .cum { fill: none; stroke: var(--violet); stroke-width: 2.5; }
+.leg { display: flex; flex-wrap: wrap; gap: 16px; font-size: 13px; color: var(--mute); } .leg span::before { content: ""; display: inline-block; width: 14px; height: 3px; border-radius: 2px; margin-right: 6px; vertical-align: middle; } .leg .r::before { background: var(--gold); } .leg .c::before { background: var(--bad); } .leg .p::before { background: var(--violet); }
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--card); }
+table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 14.5px; } th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; } th { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); background: var(--gold-soft); } tr:last-child td { border-bottom: 0; } td.n { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.agents { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } @media (max-width: 760px) { .agents { grid-template-columns: 1fr; } }
+.agents .card p { font-size: 14.5px; } .tag { justify-self: start; font-size: 12px; padding: 2px 9px; border-radius: 99px; border: 1px solid var(--line); color: var(--mute); } .tag.on { color: var(--good); border-color: currentColor; }
+.note { font-size: 13.5px; color: var(--mute); }
+</style>
+
+<div class="w">
+<header><span class="eb">Бизнес-модель · калькулятор</span><h1>Где мы окупаемся</h1>
+<p class="lead">Сколько стоит привлечь клиента, сколько он приносит, сколько стоит сервис и в какой месяц мы выходим в плюс. Двигайте ползунки — всё пересчитывается сразу. Стартовые значения — осторожные, из исследования рынка.</p></header>
+
+<section>
+<div class="calc">
+  <div class="card" id="inputs">
+    <div class="seg" role="group" aria-label="Рынок"><button type="button" data-m="ru" aria-pressed="true">Россия, ₽</button><button type="button" data-m="us">США/Европа, $</button></div>
+  </div>
+  <div class="card">
+    <div class="kpis" id="kpis"></div>
+    <p class="verdict" id="verdict"></p>
+    <svg class="chart" id="chart" viewBox="0 0 640 260" role="img" aria-label="Выручка, расходы и накопленная прибыль по месяцам"></svg>
+    <div class="leg"><span class="r">выручка в месяц</span><span class="c">расходы в месяц (реклама + сервис)</span><span class="p">накопленная прибыль</span></div>
+  </div>
+</div>
+<p class="note">Модель: каждый месяц приходят новые регистрации; часть становится платящими; платящие уходят с заданным оттоком; годовые платят сразу за 12 месяцев (выручка засчитывается равномерно). Плюс разовые покупки: полная карта и курсы. Комиссия платёжной системы вычитается из выручки.</p>
+</section>
+
+<section>
+<span class="eb">Юнит-экономика</span><h2>Сколько стоит клиент и сколько он приносит</h2>
+<div class="tbl"><table id="unit"></table></div>
+<p>Правило здорового бизнеса: <b>клиент за свою «жизнь» должен принести минимум в 3 раза больше, чем стоило его привлечь</b> (LTV/CAC ≥ 3), а стоимость привлечения должна возвращаться за 6–12 месяцев. Если меньше — реклама работает в минус, и рост только увеличивает убыток.</p>
+</section>
+
+<section>
+<span class="eb">Расходы</span><h2>Сколько стоит держать сервис</h2>
+<div class="tbl"><table>
+<tr><th>Статья</th><th>В месяц</th><th>Комментарий</th></tr>
+<tr><td>Хостинг сайта и видео (Cloudflare)</td><td class="n">0–2 000 ₽</td><td>Видео и голос раздаются через CDN; трафик видео почти бесплатный</td></tr>
+<tr><td>База, вход, хранение (Supabase)</td><td class="n">~2 500 ₽</td><td>Тариф Pro ($25) выдерживает десятки тысяч пользователей</td></tr>
+<tr><td>Письма (вход, чеки, напоминания)</td><td class="n">~2 000 ₽</td><td>Resend / Postmark</td></tr>
+<tr><td>ИИ-агенты (поддержка, отчёты, контент)</td><td class="n">3 000–10 000 ₽</td><td>Claude API; один ответ поддержки — около 1 ₽</td></tr>
+<tr><td>Голоса (ElevenLabs)</td><td class="n">~2 000–9 000 ₽</td><td>Нужен в основном на этапе записи новых практик</td></tr>
+<tr><td>Мониторинг ошибок и доступности</td><td class="n">0–2 500 ₽</td><td>Sentry, UptimeRobot; уведомления в Telegram</td></tr>
+<tr><td>Бухгалтер и налоговая отчётность</td><td class="n">10 000–20 000 ₽</td><td>Аутсорс; УСН 6% в РФ</td></tr>
+<tr><td>Компания и страховка (UK Ltd)</td><td class="n">~8 000 ₽</td><td>Регистрация, бухгалтер в UK, страховка ответственности (в год ~$1–2 тыс.)</td></tr>
+<tr><td><b>Итого постоянные</b></td><td class="n"><b>≈ 30 000–60 000 ₽</b></td><td>В калькуляторе по умолчанию 50 000 ₽</td></tr>
+</table></div>
+<div class="tbl"><table>
+<tr><th>Разовые затраты на запуск</th><th>Сумма</th><th>Комментарий</th></tr>
+<tr><td>Юрист: оферта, политика, проверка по странам</td><td class="n">150 000–300 000 ₽</td><td>Один раз, затем точечные правки</td></tr>
+<tr><td>Голоса для 17 практик × 2 голоса × 2–3 языка</td><td class="n">20 000–60 000 ₽</td><td>ElevenLabs; живой диктор — дороже</td></tr>
+<tr><td>Видео для практик (Higgsfield / Kling)</td><td class="n">10 000–40 000 ₽</td><td>Кредиты генерации</td></tr>
+<tr><td>Сервер, оплата, кабинет (разработка)</td><td class="n">0 ₽ внешних</td><td>Делаем сами; оплачиваются только сервисы</td></tr>
+<tr><td>Тест на «своём круге» и первый пилот рекламы</td><td class="n">30 000–60 000 ₽</td><td>По плану из «Видения»</td></tr>
+<tr><td><b>Итого до запуска</b></td><td class="n"><b>≈ 250 000–500 000 ₽</b></td><td></td></tr>
+</table></div>
+</section>
+
+<section>
+<span class="eb">Автоматизация</span><h2>Чтобы сервис работал без вас каждый день</h2>
+<p>Ручной работы почти не остаётся: расчёты делает код, рутину — ИИ-агенты с чёткими правилами. За вами — решения, деньги и исключения.</p>
+<div class="agents">
+  <div class="card"><span class="tag on">Уже сделано</span><h3>Карта жизни и уточнение времени</h3><p>Карта, прогноз, города и уточнение времени рождения считаются кодом в браузере за секунду. Ни астролога, ни ИИ, ни затрат на каждый расчёт.</p></div>
+  <div class="card"><span class="tag on">Уже сделано</span><h3>Дневник и подбор практик</h3><p>Оценка до и после, статистика, рекомендации практик по карте и курсы — автоматически для каждого пользователя.</p></div>
+  <div class="card"><span class="tag">Следующий этап</span><h3>Служба заботы (агент поддержки)</h3><p>Отвечает в чате на сайте, в Telegram и по почте 24/7 на русском, английском и испанском. Знает документы, FAQ, ваш доступ и историю. Сам делает возврат по правилам оферты, продлевает доступ, отправляет ссылку для смены пароля. Сложные случаи и любые жалобы на самочувствие — сразу вам с готовым кратким описанием.</p></div>
+  <div class="card"><span class="tag">Следующий этап</span><h3>Агент удержания</h3><p>Видит, кто перестал практиковать, и пишет мягкое персональное напоминание: «вы прошли 4 дня курса, завтра — Тишина ума». Напоминает о конце подписки заранее, как требует закон.</p></div>
+  <div class="card"><span class="tag">Следующий этап</span><h3>Агент контента</h3><p>Готовит сценарии новых практик и статей журнала по нашим правилам и источникам, озвучивает через ElevenLabs. Вы только утверждаете.</p></div>
+  <div class="card"><span class="tag">Следующий этап</span><h3>Агент маркетинга</h3><p>Делает варианты постов и рекламных креативов, следит за ценой регистрации и оплаты по каналам, отключает то, что работает в минус. Без медицинских обещаний — проверка по списку запрещённых формулировок.</p></div>
+  <div class="card"><span class="tag">Следующий этап</span><h3>Агент аналитики</h3><p>Раз в неделю присылает в Telegram отчёт: регистрации, оплаты, отток, выручка, LTV/CAC, какие практики лучше всего снижают тревогу по дневникам.</p></div>
+  <div class="card"><span class="tag">Следующий этап</span><h3>Сторож сервиса</h3><p>Следит за ошибками и доступностью сайта, оплатой и почтой. При сбое — сообщение вам за минуту и откат на прошлую версию.</p></div>
+</div>
+</section>
+<p class="note">Цифры рынка: research/international.md и research/market.md. Расходы — текущие публичные тарифы сервисов, округлены; курс ≈ 100 ₽/$. Калькулятор — модель для решений, а не прогноз: проверяем её на тесте и подставляем реальные цифры.</p>
+</div>
+
+<script>
+const M = {
+  ru: { cur: '₽', k: 1, fields: [
+    ['g', 'Трафик'], ['reg', 'Новых регистраций в месяц', 100, 5000, 50, 800, ''], ['cpr', 'Цена одной регистрации (реклама)', 0, 300, 5, 60, 'Органика ≈ 0; таргет в РФ 30–120 ₽'],
+    ['g', 'Оплаты'], ['conv', 'Регистрация → оплата, %', 1, 12, 0.5, 4, 'Медиана freemium 2%, с картой жизни цель 4–5%'], ['ann', 'Доля годовых подписок, %', 0, 80, 5, 30, ''],
+    ['pm', 'Цена месяца', 199, 990, 10, 490, ''], ['py', 'Цена года', 990, 5990, 100, 2990, ''], ['churn', 'Отток месячных подписок в месяц, %', 3, 30, 1, 12, 'Типично 8–15%'], ['renew', 'Продлевают год, %', 10, 70, 5, 30, ''],
+    ['g', 'Разовые покупки'], ['mapAtt', 'Покупают полную карту, % от регистраций', 0, 15, 0.5, 3, ''], ['mapP', 'Цена полной карты', 490, 3990, 100, 1990, ''], ['crsAtt', 'Покупают курс, % от регистраций', 0, 10, 0.5, 1.5, ''], ['crsP', 'Цена курса', 490, 2990, 100, 990, ''],
+    ['g', 'Расходы'], ['fee', 'Комиссия оплаты и налог, %', 3, 25, 1, 10, 'ЮKassa ~3,5% + УСН 6%'], ['fixed', 'Постоянные расходы в месяц', 10000, 200000, 5000, 50000, '']] },
+  us: { cur: '$', k: 1, fields: [
+    ['g', 'Трафик'], ['reg', 'Новых регистраций в месяц', 100, 10000, 100, 1500, ''], ['cpr', 'Цена одной регистрации (реклама)', 0, 6, 0.1, 1.5, 'Органика ≈ 0; Meta/TikTok $1–4'],
+    ['g', 'Оплаты'], ['conv', 'Регистрация → оплата, %', 1, 12, 0.5, 4, ''], ['ann', 'Доля годовых подписок, %', 0, 80, 5, 40, ''],
+    ['pm', 'Цена месяца', 4.99, 24.99, 1, 12.99, ''], ['py', 'Цена года', 29.99, 119.99, 5, 59.99, ''], ['churn', 'Отток месячных подписок в месяц, %', 3, 30, 1, 12, ''], ['renew', 'Продлевают год, %', 10, 70, 5, 30, 'RevenueCat: ~30% в Health & Fitness'],
+    ['g', 'Разовые покупки'], ['mapAtt', 'Покупают полную карту, % от регистраций', 0, 15, 0.5, 3, ''], ['mapP', 'Цена полной карты', 9, 49, 1, 24, ''], ['crsAtt', 'Покупают курс, % от регистраций', 0, 10, 0.5, 1.5, ''], ['crsP', 'Цена курса', 5, 39, 1, 14.99, ''],
+    ['g', 'Расходы'], ['fee', 'Комиссия оплаты и налоги, %', 5, 30, 1, 15, 'Paddle ~5% + НДС в цене (UK/EU)'], ['fixed', 'Постоянные расходы в месяц', 200, 5000, 100, 600, '']] }
+};
+let mk = 'ru', V = {};
+const $ = id => document.getElementById(id), fmt = (v, c) => (Math.abs(v) >= 100 ? Math.round(v).toLocaleString('ru') : (+v.toFixed(2)).toLocaleString('ru')) + ' ' + c;
+function buildInputs() {
+  const box = $('inputs'); box.querySelectorAll('.in, .grp').forEach(e => e.remove()); V = {};
+  M[mk].fields.forEach(f => { if (f[0] === 'g') { const g = document.createElement('div'); g.className = 'grp'; g.textContent = f[1]; box.appendChild(g); return; }
+    const [k, l, mn, mx, st, def, hint] = f; V[k] = def; const d = document.createElement('div'); d.className = 'in';
+    d.innerHTML = '<label for="i_' + k + '">' + l + '<output id="o_' + k + '"></output></label><input type="range" id="i_' + k + '" min="' + mn + '" max="' + mx + '" step="' + st + '" value="' + def + '">' + (hint ? '<small>' + hint + '</small>' : '');
+    box.appendChild(d); const i = d.querySelector('input'); i.oninput = () => { V[k] = +i.value; calc(); }; });
+  calc();
+}
+function calc() {
+  const c = M[mk].cur; M[mk].fields.forEach(f => { if (f[0] !== 'g') $('o_' + f[0]).textContent = /%/.test(f[1]) ? V[f[0]] + '%' : (['reg'].includes(f[0]) ? V[f[0]] : fmt(V[f[0]], c)); });
+  const net = 1 - V.fee / 100, months = 36, payNew = V.reg * V.conv / 100, annNew = payNew * V.ann / 100, monNew = payNew - annNew;
+  let monAct = 0; const annCohorts = []; let cum = 0, be = null; const rev = [], cost = [], cumA = [], act = [];
+  for (let m = 0; m < months; m++) {
+    monAct = monAct * (1 - V.churn / 100) + monNew; annCohorts.push({ start: m, n: annNew });
+    let annRev = 0, annAct = 0; annCohorts.forEach(co => { const age = m - co.start, yr = Math.floor(age / 12); const alive = co.n * Math.pow(V.renew / 100, yr); annAct += alive; annRev += alive * V.py / 12; });
+    const r = (monAct * V.pm + annRev + V.reg * (V.mapAtt / 100 * V.mapP + V.crsAtt / 100 * V.crsP)) * net, k = V.reg * V.cpr + V.fixed;
+    cum += r - k; rev.push(r); cost.push(k); cumA.push(cum); act.push(monAct + annAct); if (be === null && r >= k) be = m + 1;
+  }
+  const lifeM = 1 / (V.churn / 100), ltvMon = V.pm * lifeM * net, ltvAnn = V.py * (1 / (1 - V.renew / 100)) * net, extra = (V.mapAtt * V.mapP + V.crsAtt * V.crsP) / Math.max(0.1, V.conv) * net;
+  const ltv = (ltvMon * (1 - V.ann / 100) + ltvAnn * V.ann / 100) + extra, cac = V.cpr / (V.conv / 100), ratio = cac > 0 ? ltv / cac : Infinity;
+  const arppu = (V.pm * (1 - V.ann / 100) + V.py / 12 * V.ann / 100) * net, payback = cac > 0 ? cac / arppu : 0;
+  const k = (v, l, cls) => '<div class="kpi ' + (cls || '') + '"><b>' + v + '</b><span>' + l + '</span></div>';
+  $('kpis').innerHTML = k(Math.round(act[11]).toLocaleString('ru'), 'платящих через 12 мес') + k(fmt(rev[11], c), 'выручка в месяц через год') + k(be ? be + '-й мес' : 'не окупается', 'выход в плюс за месяц', be ? 'good' : 'bad')
+    + k(fmt(cac, c), 'стоимость платящего клиента (CAC)') + k(fmt(ltv, c), 'клиент приносит за всё время (LTV)') + k(isFinite(ratio) ? ratio.toFixed(1) + '×' : '∞', 'LTV / CAC, цель ≥ 3', ratio >= 3 ? 'good' : ratio < 1.5 ? 'bad' : '');
+  const minCum = Math.min(...cumA);
+  $('verdict').innerHTML = (ratio >= 3 ? '<b>Здоровая модель.</b> Каждый вложенный в рекламу рубль возвращается ' + ratio.toFixed(1) + ' раза. ' : ratio >= 1.5 ? '<b>На грани.</b> Реклама окупается, но медленно: поднимайте конверсию в оплату или снижайте цену регистрации. ' : '<b>Реклама в минус.</b> Пока конверсия и цена регистрации такие, растить рекламу нельзя — сначала органика и улучшение воронки. ')
+    + 'Клиент окупает своё привлечение примерно за ' + (cac > 0 ? payback.toFixed(1) + ' мес.' : 'сразу (органика).') + ' Максимальная «яма» до выхода в плюс: ' + fmt(-Math.min(0, minCum), c) + '.' + (be ? ' Через 3 года накоплено: ' + fmt(cumA[35], c) + '.' : '');
+  $('unit').innerHTML = '<tr><th>Показатель</th><th>Значение</th><th>Как считается</th></tr>'
+    + '<tr><td>Платящий в месяц (средний чек)</td><td class="n">' + fmt(arppu, c) + '</td><td>месячные и годовые подписки с учётом доли, минус комиссия</td></tr>'
+    + '<tr><td>Сколько месяцев остаётся месячный подписчик</td><td class="n">' + lifeM.toFixed(1) + '</td><td>1 / отток</td></tr>'
+    + '<tr><td>LTV месячного</td><td class="n">' + fmt(ltvMon, c) + '</td><td>цена × срок жизни × (1 − комиссия)</td></tr>'
+    + '<tr><td>LTV годового</td><td class="n">' + fmt(ltvAnn, c) + '</td><td>цена года × 1 / (1 − доля продлений)</td></tr>'
+    + '<tr><td>Разовые покупки на одного платящего</td><td class="n">' + fmt(extra, c) + '</td><td>полная карта и курсы</td></tr>'
+    + '<tr><td>Стоимость привлечения платящего (CAC)</td><td class="n">' + fmt(cac, c) + '</td><td>цена регистрации / конверсия в оплату</td></tr>'
+    + '<tr><td>Максимум, который можно платить за регистрацию</td><td class="n">' + fmt(ltv / 3 * V.conv / 100, c) + '</td><td>LTV / 3 × конверсия — при этой цене LTV/CAC = 3</td></tr>'
+    + '<tr><td>Платящих, чтобы покрыть постоянные расходы</td><td class="n">' + Math.ceil(V.fixed / arppu).toLocaleString('ru') + '</td><td>постоянные расходы / средний чек</td></tr>';
+  draw(rev, cost, cumA, c);
+}
+function draw(rev, cost, cum, c) {
+  const W = 640, H = 260, L = 60, R = 30, T = 14, B = 30, n = rev.length, mx = Math.max(...rev, ...cost, ...cum, 1), mn = Math.min(0, ...cum);
+  const x = i => L + i * (W - L - R) / (n - 1), y = v => T + (mx - v) * (H - T - B) / (mx - mn || 1), path = a => a.map((v, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1)).join(' ');
+  const ticks = [mn, (mn + mx) / 2, mx].map(v => '<line class="g" x1="' + L + '" x2="' + (W - R) + '" y1="' + y(v) + '" y2="' + y(v) + '"/><text x="4" y="' + (y(v) + 4) + '">' + (Math.abs(v) >= 1e6 ? (v / 1e6).toFixed(1) + ' млн' : Math.abs(v) >= 1e3 ? Math.round(v / 1e3) + ' тыс' : Math.round(v)) + '</text>').join('');
+  const xt = [1, 6, 12, 18, 24, 30, 36].map(m => '<text x="' + x(m - 1) + '" y="' + (H - 8) + '" text-anchor="middle">' + m + ' мес</text>').join('');
+  $('chart').innerHTML = ticks + '<line class="z" x1="' + L + '" x2="' + (W - R) + '" y1="' + y(0) + '" y2="' + y(0) + '"/>' + xt + '<path class="cost" d="' + path(cost) + '"/><path class="rev" d="' + path(rev) + '"/><path class="cum" d="' + path(cum) + '"/>';
+}
+document.querySelectorAll('.seg button').forEach(b => b.onclick = () => { mk = b.dataset.m; document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b)); buildInputs(); });
+buildInputs();
+</script>
