@@ -40,11 +40,89 @@ table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 14.
 .agents { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } @media (max-width: 760px) { .agents { grid-template-columns: 1fr; } }
 .agents .card p { font-size: 14.5px; } .tag { justify-self: start; font-size: 12px; padding: 2px 9px; border-radius: 99px; border: 1px solid var(--line); color: var(--mute); } .tag.on { color: var(--good); border-color: currentColor; }
 .note { font-size: 13.5px; color: var(--mute); }
+.goal { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 18px; align-items: start; } @media (max-width: 860px) { .goal { grid-template-columns: 1fr; } }
+.seg.wrap { flex-wrap: wrap; border-radius: 16px; } .seg.wrap button { padding: 6px 12px; font-size: 13px; }
+tr.sel td { background: var(--gold-soft); } td.ok { color: var(--good); font-weight: 600; } td.no { color: var(--bad); font-weight: 600; }
+.cols3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; } @media (max-width: 860px) { .cols3 { grid-template-columns: 1fr; } }
+.cols3 .card p, .cols3 .card li { font-size: 14.5px; } .cols3 ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
 </style>
 
 <div class="w">
 <header><span class="eb">Бизнес-модель · калькулятор</span><h1>Где мы окупаемся</h1>
 <p class="lead">Сколько стоит привлечь клиента, сколько он приносит, сколько стоит сервис и в какой месяц мы выходим в плюс. Двигайте ползунки — всё пересчитывается сразу. Стартовые значения — осторожные, из исследования рынка.</p></header>
+
+<section id="goal">
+<span class="eb">Цель · $10 000 в месяц</span><h2>Какие цифры нужны, чтобы зарабатывать $10 000 в месяц</h2>
+<p>Расчёт идёт от цели назад: сколько нужно платящих, сколько из них приходит новых каждый месяц, сколько регистраций это требует и сколько стоит реклама. <b>$10 000 здесь — это прибыль после рекламы, комиссий, налога с продаж (VAT) и расходов на сервис</b>, но до налога на прибыль компании (в UK 19–25%: «на руки» ≈ $7 500–8 100).</p>
+<div class="goal">
+  <div class="card" id="gIn"></div>
+  <div class="card">
+    <div class="seg wrap" id="gReg" role="group" aria-label="Регион"></div>
+    <div class="kpis" id="gK"></div>
+    <p class="verdict" id="gV"></p>
+  </div>
+</div>
+<div class="tbl"><table id="gT"></table></div>
+<p class="note">Как считается: нужно платящих = (цель + постоянные расходы) ÷ (чистый доход с платящего в месяц − ежемесячный отток × доля рекламных клиентов × цена привлечения). Цена привлечения = цена регистрации ÷ конверсия в оплату. Отток смешанный: месячные подписчики уходят с заданной долей в месяц, годовые — при непродлении. Разовые покупки (карта, курсы) — +12% к выручке подписок. Комиссия Paddle 5% + $0,50 за платёж, в РФ — ЮKassa 3,5% + УСН 6%. Цены регистрации — ориентиры для веб-воронки с бесплатной картой (Meta/TikTok, 2025–26), проверяются на пилоте.</p>
+</section>
+
+<section>
+<span class="eb">Цена подписки</span><h2>Сколько стоит подписка и почему</h2>
+<div class="tbl"><table>
+<tr><th>Регион</th><th>Месяц</th><th>Год</th><th>Полная карта</th><th>Логика</th></tr>
+<tr><td>США, Канада</td><td class="n">$12,99</td><td class="n">$59,99</td><td class="n">$24</td><td>Ниже Calm ($14,99 / $69,99), на уровне Headspace по месяцу; год дешевле обоих на $10</td></tr>
+<tr><td>Великобритания</td><td class="n">£9,99</td><td class="n">£49,99</td><td class="n">£19</td><td>VAT включён; психологически «меньше £10»</td></tr>
+<tr><td>Европа: DE, FR, NL, Скандинавия, CH</td><td class="n">€11,99</td><td class="n">€54,99</td><td class="n">€22</td><td>VAT включён, уровень Headspace в евро</td></tr>
+<tr><td>Европа: юг и восток (ES, PT, IT, PL, Балтия, Кипр)</td><td class="n">€7,99</td><td class="n">€39,99</td><td class="n">€14</td><td>Цена по покупательной способности; сюда же русскоязычные в ЕС</td></tr>
+<tr><td>Латинская Америка</td><td class="n">$4,99</td><td class="n">$24,99</td><td class="n">$9</td><td>Как у Insight Timer/Spotify в регионе; Paddle сам считает местный налог</td></tr>
+<tr><td>Россия и СНГ</td><td class="n">490 ₽</td><td class="n">2 990 ₽</td><td class="n">1 990 ₽</td><td>Нужны ЮKassa и юрлицо в РФ (ИП/ООО) — деньги из РФ за рубеж не уходят</td></tr>
+</table></div>
+<p><b>Главный продукт — годовая подписка.</b> На вебе месячные подписчики уходят быстрее: к 8-му месяцу остаётся ~20% (в приложениях ~30%). Годовая фиксирует деньги сразу и окупает рекламу в первый день. Поэтому на странице оплаты год стоит первым, с пометкой «выгоднее на 60%», а месяц — вторым. Без пробных «$1 → $45»: честная цена — наше отличие от Nebula, на которую подала в суд FTC.</p>
+</section>
+
+<section>
+<span class="eb">Конкуренты</span><h2>Кто похож на нас, где мы сильнее и где слабее</h2>
+<div class="tbl"><table>
+<tr><th>Сервис</th><th>Цена мес / год</th><th>Что продаёт</th><th>Сильнее нас</th><th>Слабее нас</th></tr>
+<tr><td><b>Calm</b></td><td class="n">$14,99 / $69,99</td><td>Сон, истории, медитации</td><td>Бренд, огромная библиотека, приложение в сторах</td><td>Генералист, выручка падает (≈ −24% в 2025). Ничего личного: одинаков для всех</td></tr>
+<tr><td><b>Headspace</b></td><td class="n">$12,99 / $69,99</td><td>Обучение медитации, B2B</td><td>Научная репутация, корпоративные клиенты</td><td>Нет духовного языка, нет карты, нет «зачем лично вам»</td></tr>
+<tr><td><b>Insight Timer</b></td><td class="n">$9,99 / $59,99</td><td>Сотни тысяч бесплатных медитаций</td><td>Бесплатно почти всё, сообщество учителей</td><td>Хаос выбора, нет пути, программы и дневника результата</td></tr>
+<tr><td><b>Balance</b></td><td class="n">— / €33–45</td><td>Персональный план медитаций</td><td>Дешёвый год, персонализация по анкете</td><td>Светский, без визуала и без карты</td></tr>
+<tr><td><b>Co–Star</b></td><td class="n">$8,99 / —</td><td>Гороскоп, отчёты $9–12</td><td>Вирусность среди 18–30, соцсеть</td><td>Только текст. Нет действия: «а что мне с этим делать?»</td></tr>
+<tr><td><b>The Pattern</b></td><td class="n">до $83,99 / год</td><td>Психологическая астрология</td><td>Глубокие тексты, отношения</td><td>Нет практик, нет прогресса</td></tr>
+<tr><td><b>Sanctuary</b></td><td class="n">$14,99 / —</td><td>Чат с астрологом</td><td>Живой человек</td><td>Дорого, зависит от людей, не масштабируется</td></tr>
+<tr><td><b>Nebula</b></td><td class="n">«$5» → $45 / 30 дней</td><td>Чтения, эксперты</td><td>Мощные веб-воронки, ~$50 млн в год</td><td>Иск FTC (2026) за скрытые списания — недоверие к нише</td></tr>
+<tr class="sel"><td><b>Мы</b></td><td class="n">$12,99 / $59,99</td><td>Карта жизни → личная практика → дневник результата</td><td colspan="2">Слабее: нет бренда, мало контента, нет приложения в сторах, нет отзывов. Сильнее: единственные, кто соединяет карту и практику; кинематографичный визуал; звук под задачу; измеримый результат «до/после»; нативный русский и испанский; честная цена и отмена в один клик</td></tr>
+</table></div>
+</section>
+
+<section>
+<span class="eb">Стратегия</span><h2>Как конкурировать не в лоб</h2>
+<div class="cols3">
+  <div class="card"><h3>1. Не «ещё один Calm»</h3><p>Мы не продаём «медитации». Мы продаём <b>ответ на вопрос «что со мной происходит и что делать»</b>: карта показывает период, практика под него, дневник показывает результат. У Calm и Co–Star по половине этой цепочки.</p></div>
+  <div class="card"><h3>2. Бесплатная карта как вход</h3><p>Карта бесплатна и считается мгновенно — это лучший «магнит»: люди делятся ею и приводят друзей. Платная часть карты и практики — по подписке. Так работает Nebula, только у нас честно и без людей-экспертов.</p></div>
+  <div class="card"><h3>3. Языки, где нет лидера</h3><p>Русскоязычные по всему миру (~30 млн за пределами РФ, платят в евро и долларах) и испаноязычные (США + LatAm). Calm и Headspace их почти не обслуживают; конкуренция за рекламу там дешевле.</p></div>
+  <div class="card"><h3>4. Контент, который приводит сам</h3><p>Статьи журнала (SEO), короткие видео с визуалом практик (TikTok, Reels, Shorts), страницы «карта для вашей даты рождения». Это бесплатный трафик, который копится: цель — 30–50% новых клиентов без рекламы к концу первого года.</p></div>
+  <div class="card"><h3>5. Веб, а не магазин приложений</h3><p>Оплата на сайте оставляет нам ~92–95% денег вместо 70–85% в App Store и не зависит от ревью Apple, которое отклоняет астро-приложения. Приложение — позже, как обёртка.</p></div>
+  <div class="card"><h3>6. Доверие как продукт</h3><p>Прозрачная цена, напоминание до продления, отмена в один клик, безопасность практик. В нише, где Nebula под судом, это реальная причина выбрать нас — пишем это прямо в рекламе.</p></div>
+</div>
+</section>
+
+<section>
+<span class="eb">Пассивный доход</span><h2>Как сделать, чтобы бизнес работал без вас</h2>
+<div class="tbl"><table>
+<tr><th>Что</th><th>Кто делает</th><th>Ваше время</th></tr>
+<tr><td>Расчёт карты, прогноза, городов, уточнения времени</td><td>Код в браузере, мгновенно</td><td class="n">0</td></tr>
+<tr><td>Оплаты, чеки, налоги с продаж в 100+ странах, возвраты</td><td>Paddle (продавец за нас) + агент поддержки по правилам оферты</td><td class="n">0</td></tr>
+<tr><td>Поддержка 24/7 на 3 языках</td><td>Агент поддержки; вам — только жалобы на самочувствие и споры</td><td class="n">~1 ч/нед</td></tr>
+<tr><td>Напоминания, удержание, письма о продлении</td><td>Агент удержания</td><td class="n">0</td></tr>
+<tr><td>Реклама: креативы, ставки, отключение убыточного</td><td>Агент маркетинга по правилам: «цена оплаты выше X — стоп»</td><td class="n">~1 ч/нед</td></tr>
+<tr><td>Статьи, посты, новые практики</td><td>Агент контента + ElevenLabs; вы утверждаете</td><td class="n">~2 ч/нед</td></tr>
+<tr><td>Отчёт: выручка, отток, LTV/CAC, лучшие практики</td><td>Агент аналитики в Telegram, раз в неделю</td><td class="n">~30 мин/нед</td></tr>
+<tr><td><b>Итого</b></td><td></td><td class="n"><b>≈ 4–5 ч в неделю</b></td></tr>
+</table></div>
+<p><b>Честно о «пассивном»:</b> пассивным доход становится, когда база годовых подписчиков и бесплатный трафик уже набраны. Первые 12–18 месяцев — это вложение: реклама тратится раньше, чем возвращается. Калькулятор выше показывает, сколько денег нужно на этот разгон и когда выходим на цель.</p>
+</section>
 
 <section>
 <div class="calc">
@@ -173,4 +251,88 @@ function draw(rev, cost, cum, c) {
 }
 document.querySelectorAll('.seg button').forEach(b => b.onclick = () => { mk = b.dataset.m; document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b)); buildInputs(); });
 buildInputs();
+</script>
+<script>
+/* Reverse calculator: from target monthly profit back to payers, registrations and ad budget per region */
+(() => {
+const R = [
+  { id: 'us', n: 'США и Канада', pm: 12.99, py: 59.99, vat: 0, cpr: 2.5, cv: 1, pay: 'pd' },
+  { id: 'uk', n: 'Великобритания', pm: 13.2, py: 66, vat: .2, cpr: 2.2, cv: 1, pay: 'pd' },
+  { id: 'eu', n: 'Европа: DE, FR, NL, север', pm: 12.95, py: 59.4, vat: .2, cpr: 1.8, cv: 1, pay: 'pd' },
+  { id: 'eu2', n: 'Европа: юг и восток', pm: 8.63, py: 43.2, vat: .21, cpr: 1, cv: 1, pay: 'pd' },
+  { id: 'la', n: 'Латинская Америка', pm: 4.99, py: 24.99, vat: .1, cpr: .4, cv: .75, pay: 'pd' },
+  { id: 'ru', n: 'Россия и СНГ', pm: 4.9, py: 29.9, vat: 0, cpr: .6, cv: 1, pay: 'yk' }
+];
+const MIX = { us: .25, uk: .1, eu: .2, eu2: .15, la: .15, ru: .15 };
+const IN = [
+  ['T', 'Цель: прибыль в месяц', 3000, 30000, 500, 10000, v => '$' + v.toLocaleString('ru'), ''],
+  ['cv', 'Регистрация → оплата', 1, 8, .5, 4, v => v + '%', 'Средний freemium ~2%; с бесплатной картой и курсами цель 4–5%'],
+  ['a', 'Доля годовых подписок', 0, 90, 5, 60, v => v + '%', 'Год показываем первым на странице оплаты'],
+  ['cm', 'Отток месячных подписчиков', 5, 25, 1, 12, v => v + '% в мес.', ''],
+  ['rn', 'Продление годовой', 10, 60, 5, 30, v => v + '%', 'Среднее по рынку ~30%'],
+  ['org', 'Клиенты без рекламы', 0, 80, 5, 30, v => v + '%', 'Журнал, соцсети, «поделиться картой», сарафан'],
+  ['k', 'Цена регистрации', 50, 200, 10, 100, v => v + '% от ориентира', '100% = ориентиры из таблицы ниже'],
+  ['F', 'Постоянные расходы', 300, 3000, 100, 700, v => '$' + v.toLocaleString('ru') + '/мес', 'Сервисы, бухгалтер, юрлицо, ИИ-агенты']
+];
+const st = {}; let reg = 'mix';
+const box = document.getElementById('gIn');
+box.innerHTML = IN.map(([id, l, mn, mx, sp, v, f, h]) => { st[id] = v; return `<div class="in"><label for="g_${id}">${l}<output id="go_${id}">${f(v)}</output></label><input type="range" id="g_${id}" min="${mn}" max="${mx}" step="${sp}" value="${v}">${h ? `<small>${h}</small>` : ''}</div>`; }).join('');
+IN.forEach(([id, , , , , , f]) => { const e = document.getElementById('g_' + id); e.oninput = () => { st[id] = +e.value; document.getElementById('go_' + id).textContent = f(+e.value); calc(); }; });
+const seg = document.getElementById('gReg');
+seg.innerHTML = [['mix', 'Весь мир']].concat(R.map(r => [r.id, r.n])).map(([id, n]) => `<button type="button" data-r="${id}" aria-pressed="${id === reg}">${n}</button>`).join('');
+seg.onclick = e => { const b = e.target.closest('button'); if (!b) return; reg = b.dataset.r; seg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); calc(); };
+const $ = v => '$' + Math.round(v).toLocaleString('ru'), N = v => Math.round(v).toLocaleString('ru');
+function unit(r) {
+  const a = st.a / 100, c = (1 - a) * st.cm / 100 + a * (1 - st.rn / 100) / 12;
+  const subs = (1 - a) * r.pm + a * r.py / 12, gross = subs * 1.12;
+  let net = gross / (1 + r.vat);
+  net -= r.pay === 'yk' ? net * .095 : net * .05 + (1 - a) * .5 + a * .5 / 12 + .12 * subs * .3 / 12;
+  net *= .98;
+  const cac = r.cpr * st.k / 100 / (st.cv / 100 * r.cv);
+  return { c, gross, net, cac, cv: st.cv / 100 * r.cv };
+}
+function solve(u, T, F) {
+  const paid = 1 - st.org / 100, m = u.net - u.c * paid * u.cac;
+  if (m <= 0) return null;
+  const P = (T + F) / m, np = u.c * P, ads = np * paid * u.cac, regs = np / u.cv;
+  let n = 0, cum = 0, low = 0, hit = 0;
+  for (let t = 1; t <= 60; t++) { n = n * (1 - u.c) + np; const pr = n * u.net - F - ads; cum += pr; low = Math.min(low, cum); if (!hit && pr >= T * .8) hit = t; }
+  return { P, np, ads, regs, rev: P * u.gross, ltv: u.net / u.c, cac: u.cac, low, hit, m };
+}
+function mixUnit() {
+  const us = R.map(r => [unit(r), MIX[r.id]]), w = (k) => us.reduce((s, [u, x]) => s + u[k] * x, 0);
+  return { c: w('c'), gross: w('gross'), net: w('net'), cac: w('cac'), cv: w('cv') };
+}
+function calc() {
+  const rows = R.map(r => [r, solve(unit(r), st.T, st.F)]);
+  const um = mixUnit(), mx = solve(um, st.T, st.F);
+  const cur = reg === 'mix' ? mx : rows.find(([r]) => r.id === reg)[1];
+  const K = document.getElementById('gK'), V = document.getElementById('gV');
+  if (!cur) { K.innerHTML = ''; V.textContent = 'При этих настройках реклама в регионе не окупается: клиент приносит меньше, чем стоит его привлечь. Поднимите конверсию, долю годовых или долю клиентов без рекламы.'; }
+  else {
+    const ratio = cur.ltv / cur.cac;
+    K.innerHTML = [
+      [N(cur.P), 'платящих подписчиков нужно'],
+      [N(cur.np), 'новых платящих в месяц'],
+      [N(cur.regs), 'регистраций в месяц (≈ ' + N(cur.regs * 3.5) + ' посетителей)'],
+      [$(cur.ads), 'реклама в месяц', 'bad'],
+      [$(cur.rev), 'выручка в месяц (с налогами)'],
+      [ratio.toFixed(1) + '×', 'LTV / CAC (норма ≥ 3)', ratio >= 3 ? 'good' : ratio < 2 ? 'bad' : ''],
+      [cur.hit ? cur.hit + ' мес.' : '> 5 лет', 'до 80% цели при ровном бюджете'],
+      [$(-cur.low), 'нужно вложить до выхода в плюс', 'bad'],
+      [$(cur.ltv), 'приносит один клиент за всё время']
+    ].map(([b, s, c]) => `<div class="kpi ${c || ''}"><b>${b}</b><span>${s}</span></div>`).join('');
+    V.innerHTML = `Чтобы зарабатывать <b>${$(st.T)}</b> в месяц, нужно держать <b>${N(cur.P)}</b> платящих. Каждый месяц часть уходит, поэтому нужно <b>${N(cur.np)}</b> новых оплат: из них ${st.org}% придут сами, остальные — через рекламу за <b>${$(cur.ads)}</b> в месяц. Без вложений на старте не обойтись: до выхода в плюс уйдёт около <b>${$(-cur.low)}</b>; быстрее — если в первые месяцы тратить больше и растить бесплатный трафик.` + (ratio < 3 ? ' <b>Внимание:</b> платная реклама здесь окупается с малым запасом (LTV/CAC ' + ratio.toFixed(1) + '× при норме 3×). Масштабировать рекламу можно только вместе с бесплатным трафиком, долей годовых и конверсией 5%+.' : '');
+  }
+  const T = document.getElementById('gT');
+  T.innerHTML = '<tr><th>Регион</th><th>Цена регистрации</th><th>Чистыми с платящего / мес</th><th>Цена клиента</th><th>Платящих</th><th>Регистраций / мес</th><th>Реклама / мес</th><th>Выручка / мес</th><th>LTV/CAC</th><th>Вложить на старте</th></tr>'
+    + rows.concat([[{ id: 'mix', n: 'Весь мир (смесь)', cpr: R.reduce((s, r) => s + r.cpr * MIX[r.id], 0) }, mx, um]]).map(([r, x, u]) => {
+      u = u || unit(r); const cl = r.id === reg ? ' class="sel"' : '';
+      if (!x) return `<tr${cl}><td>${r.n}</td><td class="n">$${(r.cpr * st.k / 100).toFixed(2)}</td><td class="n">$${u.net.toFixed(2)}</td><td class="n">${$(u.cac)}</td><td class="no" colspan="6">не окупается при этих настройках</td></tr>`;
+      const q = x.ltv / x.cac;
+      return `<tr${cl}><td>${r.n}</td><td class="n">$${(r.cpr * st.k / 100).toFixed(2)}</td><td class="n">$${u.net.toFixed(2)}</td><td class="n">${$(x.cac)}</td><td class="n">${N(x.P)}</td><td class="n">${N(x.regs)}</td><td class="n">${$(x.ads)}</td><td class="n">${$(x.rev)}</td><td class="n ${q >= 3 ? 'ok' : q < 2 ? 'no' : ''}">${q.toFixed(1)}×</td><td class="n">${$(-x.low)}</td></tr>`;
+    }).join('');
+}
+calc();
+})();
 </script>
