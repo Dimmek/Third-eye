@@ -307,6 +307,18 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 .ptime { font-size: 14px; letter-spacing: .12em; font-variant-numeric: tabular-nums; min-width: 3.4em; }
 .pintent { position: absolute; z-index: 2; left: 0; right: 0; top: calc(84px + env(safe-area-inset-top, 0px)); text-align: center; font-family: var(--ff-serif); font-style: italic; font-size: clamp(22px, 2.6vw, 30px); color: var(--gold-l); opacity: 0; transition: opacity 3s ease; pointer-events: none; padding-inline: 20px; text-shadow: 0 0 24px rgba(0,0,0,.8); }
 .pintent.on { opacity: .8; }
+.safe { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 16px; background: rgba(2,1,6,.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); color: var(--on-dark); }
+.safe[hidden] { display: none; }
+.safe__box { width: min(560px, 100%); max-height: calc(100dvh - 32px); overflow: auto; display: grid; gap: 14px; padding: clamp(20px, 4vw, 34px); border-radius: 22px; background: rgba(16,13,22,.94); border: 1px solid rgba(210,168,102,.28); box-shadow: 0 40px 120px -30px rgba(0,0,0,.9); }
+.safe__box h2 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(26px, 5vw, 34px); line-height: 1.05; margin: 0; }
+.safe__box ul { margin: 0; padding-left: 18px; display: grid; gap: 8px; font-size: 14.5px; line-height: 1.45; color: #d6d1c8; }
+.safe__box b { color: #f3e3c4; font-weight: 600; }
+.safe__act { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; margin-top: 4px; }
+.safe__act .btn[disabled] { opacity: .45; pointer-events: none; }
+.player.soft canvas { opacity: .14; transition: opacity 1.2s; }
+.seg { display: inline-flex; border: 1px solid rgba(246,241,232,.22); border-radius: 999px; padding: 3px; justify-self: start; }
+.seg button { padding: 8px 16px; border-radius: 999px; font-size: 14px; color: #d6d1c8; }
+.seg button.on { background: linear-gradient(135deg, #d2a866, var(--gold)); color: #fff; }
 .drawer { position: fixed; z-index: 50; top: 0; right: 0; bottom: 0; width: min(400px, 100%); background: rgba(14,12,20,.92); color: var(--on-dark); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-left: 1px solid rgba(246,241,232,.1);
   transform: translateX(102%); transition: transform .6s var(--ease); overflow-y: auto; padding: calc(24px + env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px)) 30px 24px; display: grid; gap: 28px; align-content: start; }
 .drawer.open { transform: none; }
@@ -583,9 +595,28 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
   </div>
 </div>
 
+<div class="safe" id="safe" hidden role="dialog" aria-modal="true" aria-labelledby="safeT">
+  <div class="safe__box">
+    <span class="eyebrow">Перед началом</span>
+    <h2 id="safeT">Короткая проверка безопасности</h2>
+    <ul>
+      <li><b>Не за рулём</b> и не во время работы с техникой. Только сидя или лёжа.</li>
+      <li><b>Эпилепсия или судороги, светочувствительность:</b> включите «Спокойный экран» ниже или слушайте с закрытыми глазами. Ритмичный звук и движущееся изображение могут быть нежелательны.</li>
+      <li><b>Беременность, болезни сердца и сосудов, кардиостимулятор, глаукома:</b> дышите спокойно, без задержек и форсирования.</li>
+      <li><b>Психиатрический диагноз, ПТСР, тяжёлая депрессия:</b> посоветуйтесь с врачом. Если станет хуже — остановите практику.</li>
+      <li>Головокружение, тревога, неприятные ощущения — откройте глаза, дышите обычно, сделайте паузу.</li>
+    </ul>
+    <p class="small">Практики помогают расслабиться и лучше понимать себя. Они не заменяют врача, психотерапевта или лечение. Если вам плохо прямо сейчас — позвоните в экстренную службу (112).</p>
+    <label class="check"><input type="checkbox" id="safeOk"> Я прочитал(а) и подтверждаю, что практика мне подходит. Ответственность за своё состояние беру на себя.</label>
+    <label class="check"><input type="checkbox" id="safeSoft"> Спокойный экран: приглушить изображение (только звук и голос)</label>
+    <div class="safe__act"><button class="ghost" id="safeNo" type="button">Не сейчас</button><button class="btn btn--gold" id="safeGo" type="button" disabled>Начать сеанс</button></div>
+  </div>
+</div>
+
 <aside class="drawer" id="drawer" aria-label="Звук и голос">
   <div class="dhead"><h2>Звук и голос</h2><button class="icon" id="dClose" type="button" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-  <div class="sect"><span class="eyebrow">Женский голос</span>
+  <div class="sect"><span class="eyebrow">Голос</span>
+    <div class="seg" id="vGender" role="radiogroup" aria-label="Голос"><button type="button" data-g="f" class="on">Женский</button><button type="button" data-g="m">Мужской</button></div>
     <select id="voiceSel" aria-label="Голос"></select>
     <button class="ghost" id="testVoice" type="button">Послушать</button>
     <label class="check"><input type="checkbox" id="vInstr" checked> Голос ведёт по сеансу</label>
@@ -620,9 +651,9 @@ const CH = [
   { n: 'Сахасрара',    where: 'макушка',                bija: 'тишина', c: [199,125,255], petals: 1000, tone: 246.94, say: ['Сахасрара.', 'Макушка.', 'Фиолетовый, почти белый свет. Тишина.'] }
 ];
 
-const COCOON = { key: 'cocoon', name: 'Вход', dur: 100, visual: 'cocoon', breath: 'calm', beat: 8, tone: 3,
-  text: 'Золотой кокон на два метра вокруг вас. На вдохе свет собирается в сердце, на выдохе уходит в кокон. Он становится плотным и защищает со всех сторон.',
-  say: ['Устройтесь удобно. Спина ровная, плечи мягкие.', 'Представьте вокруг себя кокон золотого света.', 'Примерно два метра во все стороны от вас.', 'На вдохе набирайте свет в сердце.', 'На выдохе отправляйте его из сердца в кокон.', 'С каждым выдохом он плотнее и ярче.', 'Он защищает вас со всех сторон. Сверху, снизу, спереди и сзади.', 'Всё лишнее может выйти наружу. Внутрь проходит только свет.'] };
+const COCOON = { key: 'cocoon', name: 'Вход', dur: 150, visual: 'cocoon', breath: 'calm', beat: 8, tone: 3,
+  text: 'Закройте глаза. Вы сидите в позе лотоса, тело светится изнутри. Вокруг — золотая аура на два метра. Сквозь вас проходит световой канал: от земли через позвоночник к небу. На выдохе свет из сердца уходит в кокон.',
+  say: ['Устройтесь удобно. Спина ровная, плечи мягкие.', 'Закройте глаза.', 'Сделайте медленный вдох. И длинный выдох.', 'Представьте себя со стороны. Вы сидите спокойно, ровно, как в позе лотоса.', 'Ваше тело начинает светиться изнутри. Мягким, тёплым светом.', 'Вокруг вас появляется золотая аура. Примерно два метра во все стороны.', 'Она тихо вибрирует. Живая, тёплая, плотная.', 'Теперь представьте световой канал.', 'Он идёт из глубины земли, через основание позвоночника, вдоль всей спины, через макушку — высоко вверх, к небу.', 'По каналу загораются точки света. Одна над другой. От красной внизу до фиолетовой над головой.', 'На вдохе набирайте свет в сердце.', 'На выдохе отправляйте его из сердца в кокон.', 'С каждым выдохом кокон плотнее и ярче.', 'Он защищает вас со всех сторон. Сверху, снизу, спереди и сзади.', 'Всё лишнее может выйти наружу. Внутрь проходит только свет.', 'Вы в безопасности. Можно идти дальше.'] };
 const BREATHE = { key: 'breath', name: 'Погружение', dur: 120, visual: 'breath', breath: 'resonance', beat: 10, tone: 3, cue: true,
   text: 'Вдох пять с половиной секунд, выдох столько же. Животом, мягко, без усилия.',
   say: ['Теперь дышите вместе со сферой.', 'Вдох и выдох одинаковые, мягкие.', 'Кокон остаётся вокруг вас.'] };
@@ -706,13 +737,14 @@ const ROOMS = [
       R(216, 'Семь чакр', 'chakras', 'Внимание поднимается от основания позвоночника к макушке. Полминуты на каждую.', ['Теперь пройдём по чакрам.', 'Снизу вверх.'], { key: 'chakras' }),
       R(90, 'Единство', 'flight', 'Все семь чакр светятся вместе. Побудьте в этом целом.', ['Все семь центров светятся вместе.', 'Побудьте в этом целом.'], { beat: 6 })
     ] },
-  { id: 'blinders', name: 'Снять шоры', ci: 5, wide: true, tag: 'Увидеть больше возможностей, чем позволяет старая призма.', ev: ['t-a', 'Работа с убеждениями'],
-    whyT: 'Мир шире, чем нас учили', why: 'С детства нам надевают шоры: «так не принято», «это не для нас», «неудобно попросить». Мы смотрим на мир через узкую щель и принимаем её за весь мир. Здесь вы находите одно своё ограничивающее убеждение, проверяете его на правду, примеряете новое и делаете один маленький смелый шаг. Шоры снимаются постепенно: каждый шаг открывает ещё немного.',
+  { id: 'blinders', name: 'Снять шоры', ci: 5, wide: true, tag: 'Снять чужие правила и старые запреты. Увидеть свои возможности.', ev: ['t-a', 'Работа с убеждениями'],
+    whyT: 'Мир шире, чем нас учили', why: 'С детства нам надевают шоры: «так не принято», «это не для нас», «неудобно попросить». Потом добавляются чужие стандарты: как «правильно» жить, любить, зарабатывать, каким «должен» быть нормальный человек. Их приносят родители, соцсети, эксперты и даже специалисты, которые лучше вас «знают», что с вами не так. Мы смотрим на мир через узкую щель и принимаем её за весь мир. Здесь вы находите одно своё ограничивающее убеждение, проверяете его на правду, примеряете новое и делаете один маленький смелый шаг. Шоры снимаются постепенно: каждый шаг открывает ещё немного.',
     note: '<b>Основа:</b> когнитивная терапия (А. Бек): найти убеждение и проверить его на факты. Поведенческие эксперименты: маленький реальный шаг меняет убеждение сильнее, чем рассуждения.',
     main: [
       R(90, 'Узкая щель', 'shutters', 'Какая мысль вас останавливает: «неудобно», «не получится», «не для меня»?', ['Вспомните, что вы давно хотите сделать, но откладываете.', 'Позвонить. Попросить. Начать.', 'Какая мысль вас останавливает?', 'Неудобно? Не получится? Не для меня?'], { beat: 10, open: [0.06, 0.1] }),
-      R(150, 'Проверка', 'shutters', 'Это факт или привычка так думать? Откуда эта мысль? Всегда ли она правда?', ['Посмотрите на эту мысль со стороны.', 'Это факт? Или просто привычка так думать?', 'Откуда она? Кто вам так говорил?', 'Всегда ли это правда?'], { beat: 8, open: [0.1, 0.22] }),
-      R(150, 'Шире', 'shutters', 'Шоры раздвигаются. Видно больше: людей, путей, возможностей.', ['Представьте, что шоры по бокам медленно раздвигаются.', 'Становится видно больше.', 'Люди, которые готовы помочь.', 'Пути, которых вы раньше не замечали.', 'Мир шире, чем вам казалось.'], { beat: 6, open: [0.22, 0.95] }),
+      R(150, 'Проверка', 'shutters', 'Это факт или привычка так думать? Откуда эта мысль? Всегда ли она правда?', ['Посмотрите на эту мысль со стороны.', 'Это факт? Или просто привычка так думать?', 'Откуда она? Кто вам так говорил?', 'Всегда ли это правда?'], { beat: 8, open: [0.1, 0.18] }),
+      R(150, 'Чужие стандарты', 'shutters', 'Чья это норма? Ваша — или её принесли родители, соцсети, эксперты? Вы вправе её не брать.', ['Теперь вспомните правила, которые вам дали другие.', 'Каким нужно быть. Как правильно жить. Что с вами «не так».', 'Их говорили родители, учителя, соцсети. Иногда — специалисты, которые лучше вас знали, как вам быть.', 'Спросите себя: это моё? Или чужое?', 'Если чужое — мысленно положите его на землю.', 'Можно с благодарностью. Но оставить там.', 'Вы сами решаете, что для вас норма.'], { beat: 8, open: [0.18, 0.26] }),
+      R(150, 'Шире', 'shutters', 'Шоры раздвигаются. Видно больше: людей, путей, возможностей.', ['Представьте, что шоры по бокам медленно раздвигаются.', 'Становится видно больше.', 'Люди, которые готовы помочь.', 'Пути, которых вы раньше не замечали.', 'Мир шире, чем вам казалось.'], { beat: 6, open: [0.26, 0.95] }),
       R(120, 'Новая мысль', 'purpose', 'Найдите мысль чуть смелее старой. Не идеальную — просто смелее.', ['Найдите новую мысль. Чуть смелее старой.', 'Например: я имею право спросить.', 'Или: попробовать — это уже шаг.', 'Повторите её про себя несколько раз.'], { beat: 6 }),
       R(90, 'Один шаг', 'purpose', 'Один маленький шаг сегодня или завтра: звонок, письмо, вопрос.', ['Выберите один маленький шаг.', 'Сегодня или завтра.', 'Один звонок. Одно письмо. Один вопрос.', 'Шаг за шагом мир становится шире.'], { beat: 10 })
     ] },
@@ -1769,13 +1801,15 @@ function bell(n, f0) { // a soft swelling chime: no strike, slow attack, long fa
       gg.gain.setValueAtTime(0, t0); gg.gain.linearRampToValueAtTime(v * a, t0 + 1.6); gg.gain.exponentialRampToValueAtTime(0.0001, t0 + 9); o.connect(gg).connect(lp); o.start(t0); o.stop(t0 + 9.2); }); }
 }
 
-// ======================= voice (female only) =======================
+// ======================= voice (female / male) =======================
+let VGENDER = store.get('vgender') || 'f';
 const VOICE_RECORDED = false;   // true once voice/manifest.json and the mp3 files are published with the page
 const recorded = {};
 async function loadRecorded() {
-  if (!actx || loadRecorded.done || !VOICE_RECORDED) return; loadRecorded.done = true;
-  let keys = []; try { const r = await fetch('voice/manifest.json'); if (r.ok) keys = await r.json(); } catch (e) {}
-  await Promise.all(keys.map(async k => { try { const r = await fetch('voice/' + k + '.mp3'); if (r.ok) recorded[k] = await actx.decodeAudioData(await r.arrayBuffer()); } catch (e) {} }));
+  if (!actx || !VOICE_RECORDED || loadRecorded.done === VGENDER) return; loadRecorded.done = VGENDER;
+  const g = VGENDER; Object.keys(recorded).forEach(k => delete recorded[k]);
+  let keys = []; try { const r = await fetch('voice/' + g + '/manifest.json'); if (r.ok) keys = await r.json(); } catch (e) {}
+  await Promise.all(keys.map(async k => { try { const r = await fetch('voice/' + g + '/' + k + '.mp3'); if (r.ok && VGENDER === g) recorded[k] = await actx.decodeAudioData(await r.arrayBuffer()); } catch (e) {} }));
 }
 function playRec(k) { const b = recorded[k]; if (!b || !actx) return false; const s = actx.createBufferSource(); s.buffer = b; s.connect(voiceBus); setDuck(true); s.onended = () => setDuck(false); s.start(); return true; }
 const synth = window.speechSynthesis;
@@ -1785,14 +1819,16 @@ const NATURAL = /natural|online|neural|premium|enhanced|улучш|wavenet/i;
 let voices = [];
 function listVoices() {
   if (!synth) return;
-  const sc = v => (NATURAL.test(v.name) ? 4 : 0) + (FEMALE.test(v.name) ? 3 : 0) + (v.localService ? 0 : 1);
-  voices = synth.getVoices().filter(v => /^ru/i.test(v.lang) && !MALE.test(v.name)).sort((a, b) => sc(b) - sc(a));
+  const m = VGENDER === 'm', want = m ? MALE : FEMALE, avoid = m ? FEMALE : MALE;
+  const sc = v => (NATURAL.test(v.name) ? 4 : 0) + (want.test(v.name) ? 3 : 0) + (v.localService ? 0 : 1);
+  voices = synth.getVoices().filter(v => /^ru/i.test(v.lang) && !avoid.test(v.name)).sort((a, b) => sc(b) - sc(a));
+  if (m) voices = voices.filter(v => MALE.test(v.name)).concat(voices.filter(v => !MALE.test(v.name)));
   const sel = $('voiceSel'), keep = sel.value; sel.innerHTML = '';
-  if (!voices.length) { sel.innerHTML = '<option>Женского русского голоса нет</option>'; sel.disabled = true; }
+  if (!voices.length) { sel.innerHTML = '<option>' + (VGENDER === 'm' ? 'Мужского' : 'Женского') + ' русского голоса нет</option>'; sel.disabled = true; }
   else { sel.disabled = false; voices.forEach((v, i) => { const o = document.createElement('option'); o.value = v.name; o.textContent = (i ? '' : '★ ') + v.name.replace(/^(Microsoft|Google) /, ''); sel.appendChild(o); }); }
   if (keep && voices.some(v => v.name === keep)) sel.value = keep;
-  $('voiceNote').textContent = !voices.length ? 'На этом устройстве нет женского русского голоса — подсказки идут текстом. Откройте сайт в Microsoft Edge: там есть Svetlana (Natural).'
-    : NATURAL.test(voices[0].name) ? 'Включён естественный нейросетевой женский голос.' : 'Самый живой голос — в Microsoft Edge: «Svetlana Online (Natural)». На iPhone скачайте «Милена (улучшенная)».';
+  $('voiceNote').textContent = !voices.length ? 'На этом устройстве нет ' + (m ? 'мужского' : 'женского') + ' русского голоса — подсказки идут текстом. В Microsoft Edge есть ' + (m ? 'Dmitry' : 'Svetlana') + ' (Natural).'
+    : NATURAL.test(voices[0].name) ? 'Включён естественный нейросетевой голос.' : 'Самый живой голос — в Microsoft Edge: «' + (m ? 'Dmitry' : 'Svetlana') + ' Online (Natural)».' + (m ? '' : ' На iPhone скачайте «Милена (улучшенная)».');
 }
 if (synth) { listVoices(); synth.onvoiceschanged = listVoices; } else $('voiceNote').textContent = 'В этом браузере нет синтеза речи. Подсказки будут текстом.';
 const curVoice = () => voices.find(v => v.name === $('voiceSel').value) || voices[0] || null;
@@ -1807,7 +1843,9 @@ function speak(lines, o) {
 }
 const guide = (key, lines) => { if ($('vInstr').checked && !playRec(key)) speak(lines); };
 $('testVoice').onclick = async () => { initAudio(); if (actx && actx.state === 'suspended') await actx.resume().catch(() => {}); await loadRecorded();
-  if (!playRec('cocoon')) { if (!curVoice()) { $('voiceNote').textContent = 'Женского голоса на этом устройстве нет. Откройте сайт в Microsoft Edge.'; return; } speak(['Устройтесь удобно.', 'Представьте вокруг себя кокон золотого света.']); } };
+  if (!playRec('cocoon')) { if (!curVoice()) { $('voiceNote').textContent = 'Такого голоса на этом устройстве нет. Откройте сайт в Microsoft Edge.'; return; } speak(['Закройте глаза.', 'Вокруг вас золотая аура. Тёплая и спокойная.']); } };
+document.querySelectorAll('#vGender button').forEach(b => { b.classList.toggle('on', b.dataset.g === VGENDER);
+  b.onclick = () => { VGENDER = b.dataset.g; store.set('vgender', VGENDER); document.querySelectorAll('#vGender button').forEach(x => x.classList.toggle('on', x === b)); if (synth) { synth.cancel(); listVoices(); } loadRecorded(); }; });
 $('voiceSel').onchange = () => synth && synth.cancel();
 
 // ======================= player =======================
@@ -1853,10 +1891,17 @@ function stop(done) {
   $('pIco').innerHTML = '<path d="M8 5.5v13l11-6.5z"/>'; $('pProg').style.width = '0'; P.idx = -1; $('pEyes').innerHTML = ''; $('pIntent').classList.remove('on');
   try { P.wake && P.wake.release(); } catch (e) {} P.wake = null; poke();
 }
-$('pPlay').onclick = play; $('pStop').onclick = () => stop(); $('pClose').onclick = closePlayer;
+function safety(go) {
+  const box = $('safe'), ok = $('safeOk'), soft = $('safeSoft');
+  ok.checked = +store.get('safeOk') > Date.now() - 864e5 * 30; soft.checked = store.get('soft') === '1'; $('safeGo').disabled = !ok.checked;
+  box.hidden = false; ok.onchange = () => { $('safeGo').disabled = !ok.checked; };
+  $('safeNo').onclick = () => { box.hidden = true; };
+  $('safeGo').onclick = () => { store.set('safeOk', Date.now()); store.set('soft', soft.checked ? '1' : '0'); $('player').classList.toggle('soft', soft.checked); box.hidden = true; go(); };
+}
+$('pPlay').onclick = () => P.running ? play() : safety(play); $('pStop').onclick = () => stop(); $('pClose').onclick = closePlayer;
 $('pSet').onclick = () => $('drawer').classList.add('open'); $('dClose').onclick = () => $('drawer').classList.remove('open');
 $('pFs').onclick = () => { try { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(() => {}); } catch (e) {} };
-addEventListener('keydown', e => { if (e.key === 'Escape') { if ($('drawer').classList.contains('open')) $('drawer').classList.remove('open'); else if (!$('player').hidden) closePlayer(); } });
+addEventListener('keydown', e => { if (e.key === 'Escape' && !$('safe').hidden) { $('safe').hidden = true; return; } if (e.key === 'Escape') { if ($('drawer').classList.contains('open')) $('drawer').classList.remove('open'); else if (!$('player').hidden) closePlayer(); } });
 let idleT = 0;
 function poke() { $('player').classList.remove('calm'); clearTimeout(idleT); if (P.running && !P.paused) idleT = setTimeout(() => { if (!$('drawer').classList.contains('open')) $('player').classList.add('calm'); }, 5000); }
 ['pointermove', 'pointerdown', 'keydown'].forEach(e => addEventListener(e, poke, { passive: true }));

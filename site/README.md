@@ -2,7 +2,7 @@
 
 `index.html` — весь сайт: главная, 17 кабинетов (в т.ч. `#room-blinders`, `#room-breathe`, `#room-event`, `#room-release`, `#room-selflove`, `#room-relations`, `#room-food`, `#room-habits`, `#room-cleanse`, `#room-energy`, `#room-health`, `#room-abundance`, `#room-luck`, `#room-purpose`, `#room-silence`, `#room-ajna`, `#room-chakras`), плеер.
 
-Каждая сессия: **Кокон (1:40) → Дыхание (2:00) → практика кабинета → Возвращение (1:00)**.
+Каждая сессия: **окно безопасности → Кокон (2:30, голосом: «Закройте глаза. Представьте…») → Дыхание (2:00) → практика → Возвращение (1:00)**.
 
 ## Видео на заставке: женщина в красном
 
@@ -21,13 +21,15 @@
 
 Если это реальный человек или похожесть на реального человека — нужно его согласие.
 
-## Живой женский голос
+## Живой голос (женский / мужской)
 
-Тексты всех фрагментов: `voice/script.md` (ключ = имя файла).
+Тексты всех фрагментов: `voice/script.md` (ключ = имя файла). Пользователь выбирает голос в настройках плеера.
 
-1. Сгенерировать каждый фрагмент → `voice/<ключ>.mp3`.
-2. Положить `voice/manifest.json` со списком ключей, например `["cocoon","breath","return","cleanse-1",…,"inhale","exhale"]`.
-3. В коде `VOICE_RECORDED = true`.
+Автоматически через ElevenLabs:
+1. В настройках окружения: Network access → разрешить `api.elevenlabs.io`; переменные `ELEVENLABS_API_KEY`, `ELEVEN_VOICE_F`, `ELEVEN_VOICE_M`.
+2. `python3 voice/gen_elevenlabs.py --list` → выбрать voice_id.
+3. `python3 voice/gen_elevenlabs.py f` и `python3 voice/gen_elevenlabs.py m` → `voice/f/*.mp3`, `voice/m/*.mp3` + `manifest.json`.
+4. В коде `VOICE_RECORDED = true`.
 
 Где взять голос, который не звучит как синтез:
 
