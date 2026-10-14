@@ -4,93 +4,101 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Golos+Text:wght@400;500&display=swap">
 <style>
-/* Layout: the whole first screen is a lamp-lit room (canvas). Text and controls float over it in gold hairlines; settings live in a drawer. Single dark world by design — practice happens in low light. */
+/* Layout: the first screen is a night sky with the chakra axis and the third eye at its centre (canvas). Text floats over it; settings live in a drawer. Single dark world by design. */
 :root {
-  --room: #0c0a12;        /* deep aubergine-black */
-  --veil: rgba(20,16,28,.78);
-  --hair: rgba(214,178,118,.22);
-  --gold: #d9b273;        /* gold leaf */
-  --gold-hi: #f4dcaa;
-  --ivory: #efe6d6;
-  --smoke: #9a93a8;
-  --ember: #e0866d;
+  --sky: #0a0718;          /* deep indigo night */
+  --veil: rgba(16,11,34,.8);
+  --hair: rgba(196,170,255,.2);
+  --ajna: #8f7cff;         /* indigo of the sixth chakra, the accent */
+  --gold: #f2cf86;
+  --ivory: #f1eaf8;
+  --haze: #a49cc0;
+  --c1: #e5383b; --c2: #f77f00; --c3: #fcbf49; --c4: #2ec27e; --c5: #3a86ff; --c6: #6a4cff; --c7: #c77dff;
+  --rainbow: linear-gradient(90deg, var(--c1), var(--c2), var(--c3), var(--c4), var(--c5), var(--c6), var(--c7));
   --f-display: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
   --f-body: "Golos Text", system-ui, -apple-system, "Segoe UI", sans-serif;
   color-scheme: dark;
 }
 [hidden] { display: none !important; }
 html, body { height: 100%; }
-body { background: var(--room); color: var(--smoke); font-family: var(--f-body); font-size: 15px; line-height: 1.6; margin: 0; }
+body { background: var(--sky); color: var(--haze); font-family: var(--f-body); font-size: 15px; line-height: 1.6; margin: 0; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
-:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
+:focus-visible { outline: 1px solid var(--ajna); outline-offset: 3px; }
 
-/* ---------- stage */
-.stage { position: relative; height: 100%; min-height: 560px; overflow: hidden; background: var(--room); }
+.stage { position: relative; height: 100%; min-height: 600px; overflow: hidden; background: var(--sky); }
 .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .ui { position: absolute; inset: 0; display: grid; grid-template-rows: auto 1fr auto; transition: opacity 1.4s ease;
   padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); padding-block: 18px 22px; }
-.stage.idle-ui .ui { opacity: .12; }
+.stage.idle-ui .ui { opacity: .1; }
 .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.brand { display: flex; align-items: baseline; gap: 14px; }
+.brand { display: flex; align-items: center; gap: 14px; }
 .brand b { font-family: var(--f-display); font-weight: 300; font-size: 1.9rem; letter-spacing: .32em; color: var(--ivory); text-transform: uppercase; }
-.brand span { font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--smoke); }
-@media (max-width: 520px) { .brand span { display: none; } }
-.icon { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--hair); display: grid; place-items: center; color: var(--gold); background: rgba(12,10,18,.35); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: border-color .3s, background .3s; }
-.icon:hover { border-color: var(--gold); background: rgba(217,178,115,.08); }
+.dots { display: flex; gap: 5px; }
+.dots i { width: 7px; height: 7px; border-radius: 50%; box-shadow: 0 0 8px currentColor; background: currentColor; }
+@media (max-width: 520px) { .dots { display: none; } }
+.icon { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--hair); display: grid; place-items: center; color: var(--ivory); background: rgba(10,7,24,.35); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: border-color .3s, background .3s; }
+.icon:hover { border-color: var(--ajna); background: rgba(143,124,255,.12); }
 .icon svg { width: 18px; height: 18px; }
 .tools { display: flex; gap: 10px; }
 
-.bottom { display: grid; justify-items: center; gap: 14px; text-align: center; }
-.eyebrow { font-size: .68rem; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); opacity: .85; font-variant-numeric: tabular-nums; }
-.phase { font-family: var(--f-display); font-style: italic; font-weight: 300; font-size: clamp(1.9rem, 4.2vw, 2.8rem); color: var(--ivory); line-height: 1.1; margin: 0; text-wrap: balance; }
-.instr { max-width: 46ch; color: #c9c0b4; font-size: .98rem; min-height: 3.2em; margin: 0; text-wrap: pretty; }
-.track { width: min(420px, 80vw); height: 1px; background: var(--hair); position: relative; }
-.track i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: linear-gradient(90deg, transparent, var(--gold-hi)); }
+.bottom { display: grid; justify-items: center; gap: 12px; text-align: center; }
+.eyebrow { font-size: .68rem; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); font-variant-numeric: tabular-nums; }
+.phase { font-family: var(--f-display); font-style: italic; font-weight: 300; font-size: clamp(1.9rem, 4.2vw, 2.9rem); color: var(--ivory); line-height: 1.1; margin: 0; text-wrap: balance; text-shadow: 0 0 30px rgba(143,124,255,.5); }
+.instr { max-width: 46ch; color: #d6cde6; font-size: .98rem; min-height: 3.2em; margin: 0; text-wrap: pretty; text-shadow: 0 1px 12px rgba(10,7,24,.9); }
+.track { width: min(440px, 80vw); height: 2px; background: rgba(196,170,255,.14); position: relative; border-radius: 2px; overflow: hidden; }
+.track i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--rainbow); background-size: min(440px, 80vw) 100%; }
 .controls { display: flex; align-items: center; gap: 22px; margin-top: 4px; }
-.play { width: 74px; height: 74px; border-radius: 50%; display: grid; place-items: center; color: #1a130a;
-  background: radial-gradient(circle at 35% 30%, #fbe9c4, #d9b273 55%, #a77d3f); box-shadow: 0 0 0 1px rgba(244,220,170,.5), 0 0 40px rgba(217,178,115,.35); transition: transform .3s, box-shadow .3s; }
-.play:hover { transform: scale(1.04); box-shadow: 0 0 0 1px rgba(244,220,170,.7), 0 0 60px rgba(217,178,115,.5); }
+.play { width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center; color: #fff; position: relative;
+  background: radial-gradient(circle at 35% 30%, #c9b8ff, #6a4cff 55%, #3a1d9e); box-shadow: 0 0 0 1px rgba(201,184,255,.6), 0 0 44px rgba(106,76,255,.6); transition: transform .3s, box-shadow .3s; }
+.play::before { content: ""; position: absolute; inset: -5px; border-radius: 50%; padding: 1.5px; background: conic-gradient(var(--c1), var(--c2), var(--c3), var(--c4), var(--c5), var(--c6), var(--c7), var(--c1));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: .85; }
+.play:hover { transform: scale(1.04); box-shadow: 0 0 0 1px rgba(201,184,255,.8), 0 0 70px rgba(106,76,255,.75); }
 .play svg { width: 24px; height: 24px; }
-.time { font-size: .78rem; letter-spacing: .12em; color: var(--smoke); font-variant-numeric: tabular-nums; }
+.time { font-size: .78rem; letter-spacing: .12em; color: var(--haze); font-variant-numeric: tabular-nums; min-width: 3.2em; }
 
-/* ---------- drawer */
-.drawer { position: fixed; z-index: 5; top: 0; right: 0; bottom: 0; width: min(380px, 100%); background: var(--veil); backdrop-filter: blur(22px) saturate(1.2); -webkit-backdrop-filter: blur(22px) saturate(1.2);
+.drawer { position: fixed; z-index: 5; top: 0; right: 0; bottom: 0; width: min(390px, 100%); background: var(--veil); backdrop-filter: blur(22px) saturate(1.3); -webkit-backdrop-filter: blur(22px) saturate(1.3);
   border-left: 1px solid var(--hair); transform: translateX(102%); transition: transform .6s cubic-bezier(.2,.7,.2,1); overflow-y: auto;
   padding: calc(22px + env(safe-area-inset-top, 0px)) max(22px, env(safe-area-inset-right, 0px)) calc(28px + env(safe-area-inset-bottom, 0px)) 22px; display: grid; gap: 26px; align-content: start; }
 .drawer.open { transform: none; }
 .dhead { display: flex; justify-content: space-between; align-items: center; }
-.dhead h2 { font-family: var(--f-display); font-weight: 300; font-size: 1.7rem; color: var(--ivory); margin: 0; letter-spacing: .04em; }
+.dhead h2 { font-family: var(--f-display); font-weight: 300; font-size: 1.7rem; color: var(--ivory); margin: 0; }
 .sect { display: grid; gap: 10px; }
 .label { font-size: .66rem; letter-spacing: .26em; text-transform: uppercase; color: var(--gold); }
 .seg { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--hair); border-radius: 999px; padding: 3px; }
-.seg button { padding: 8px 10px; border-radius: 999px; font-size: .88rem; color: var(--smoke); transition: background .3s, color .3s; }
-.seg button[aria-pressed="true"] { background: rgba(217,178,115,.16); color: var(--gold-hi); }
-ol.plan { list-style: none; margin: 0; padding: 0; display: grid; counter-reset: p; }
-ol.plan li { counter-increment: p; display: grid; grid-template-columns: 2em 1fr auto; gap: 8px; padding: 9px 0; border-bottom: 1px solid rgba(214,178,118,.1); font-size: .9rem; color: #c9c0b4; }
-ol.plan li::before { content: counter(p, upper-roman); font-family: var(--f-display); color: var(--gold); opacity: .7; }
-ol.plan li span:last-child { color: var(--smoke); font-variant-numeric: tabular-nums; }
-ol.plan li.now { color: var(--gold-hi); }
+.seg button { padding: 8px 10px; border-radius: 999px; font-size: .88rem; color: var(--haze); transition: background .3s, color .3s; }
+.seg button[aria-pressed="true"] { background: rgba(143,124,255,.22); color: var(--ivory); }
+ol.plan { list-style: none; margin: 0; padding: 0; display: grid; }
+ol.plan li { display: grid; grid-template-columns: 14px 1fr auto; gap: 12px; align-items: center; padding: 9px 0; border-bottom: 1px solid rgba(196,170,255,.1); font-size: .9rem; color: #d6cde6; }
+ol.plan li i { width: 9px; height: 9px; border-radius: 50%; background: currentColor; box-shadow: 0 0 8px currentColor; }
+ol.plan li span:last-child { color: var(--haze); font-variant-numeric: tabular-nums; }
+ol.plan li.now span:first-of-type { color: var(--ivory); }
 ol.plan li.done { opacity: .4; }
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .grid2 > label { display: grid; gap: 6px; min-width: 0; font-size: .8rem; }
-select { font: inherit; font-size: .88rem; width: 100%; background: rgba(12,10,18,.6); color: var(--ivory); border: 1px solid var(--hair); border-radius: 10px; padding: 9px 10px; }
-.check { display: flex; gap: 10px; align-items: flex-start; font-size: .9rem; color: #c9c0b4; cursor: pointer; }
-.check input { accent-color: var(--gold); margin-top: 5px; }
-input[type=range] { width: 100%; accent-color: var(--gold); }
+select { font: inherit; font-size: .88rem; width: 100%; background: rgba(10,7,24,.6); color: var(--ivory); border: 1px solid var(--hair); border-radius: 10px; padding: 9px 10px; }
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: .9rem; color: #d6cde6; cursor: pointer; }
+.check input { accent-color: var(--ajna); margin-top: 5px; }
+input[type=range] { width: 100%; accent-color: var(--ajna); }
 .row { display: flex; justify-content: space-between; font-size: .78rem; font-variant-numeric: tabular-nums; }
-.ghost { border: 1px solid var(--hair); border-radius: 999px; padding: 9px 16px; font-size: .88rem; color: var(--gold-hi); transition: border-color .3s, background .3s; }
-.ghost:hover { border-color: var(--gold); background: rgba(217,178,115,.08); }
-.note { font-size: .8rem; color: var(--smoke); margin: 0; }
+.ghost { border: 1px solid var(--hair); border-radius: 999px; padding: 9px 16px; font-size: .88rem; color: var(--ivory); transition: border-color .3s, background .3s; }
+.ghost:hover { border-color: var(--ajna); background: rgba(143,124,255,.12); }
+.note { font-size: .8rem; color: var(--haze); margin: 0; }
 
-/* ---------- below the fold */
-.notes { padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); padding-block: 64px 80px;
-  max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 48px; }
+.chakras { padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); padding-block: 72px 24px; max-width: 1180px; margin: 0 auto; }
+.chakras h2, .notes h2 { font-family: var(--f-display); font-weight: 300; font-size: 2rem; color: var(--ivory); margin: 0 0 20px; }
+.ch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+.ch { border: 1px solid rgba(196,170,255,.12); border-radius: 16px; padding: 16px; display: grid; gap: 4px; background: radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--c) 22%, transparent), transparent 70%); min-width: 0; }
+.ch .glyph { width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle, #fff 0 8%, var(--c) 30%, transparent 72%); box-shadow: 0 0 22px var(--c); margin-bottom: 8px; }
+.ch b { font-family: var(--f-display); font-weight: 400; font-size: 1.25rem; color: var(--ivory); }
+.ch span { font-size: .82rem; }
+.ch em { font-style: normal; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--c); filter: brightness(1.3); }
+.notes { padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); padding-block: 48px 80px;
+  max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 48px; }
 .notes section { min-width: 0; }
-.notes h2 { font-family: var(--f-display); font-weight: 300; font-size: 1.9rem; color: var(--ivory); margin: 0 0 16px; letter-spacing: .02em; }
 .notes ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; max-width: 62ch; }
-.notes li { padding-left: 22px; position: relative; color: #c9c0b4; }
-.notes li::before { content: ""; position: absolute; left: 2px; top: .75em; width: 6px; height: 6px; border-radius: 50%; border: 1px solid var(--gold); }
-.notes .warn li::before { border-color: var(--ember); }
+.notes li { padding-left: 22px; position: relative; color: #d6cde6; }
+.notes li::before { content: ""; position: absolute; left: 2px; top: .7em; width: 7px; height: 7px; border-radius: 50%; background: var(--ajna); box-shadow: 0 0 8px var(--ajna); }
+.notes .warn li::before { background: var(--c1); box-shadow: 0 0 8px var(--c1); }
 .notes b { color: var(--ivory); font-weight: 500; }
 @media (prefers-reduced-motion: reduce) { .ui, .drawer, .play { transition: none; } }
 </style>
@@ -99,7 +107,7 @@ input[type=range] { width: 100%; accent-color: var(--gold); }
   <canvas id="cv"></canvas>
   <div class="ui">
     <div class="top">
-      <div class="brand"><b>Аджна</b><span>сессия фокуса</span></div>
+      <div class="brand"><b>Аджна</b><span class="dots" aria-hidden="true"><i style="color:var(--c1)"></i><i style="color:var(--c2)"></i><i style="color:var(--c3)"></i><i style="color:var(--c4)"></i><i style="color:var(--c5)"></i><i style="color:var(--c6)"></i><i style="color:var(--c7)"></i></span></div>
       <div class="tools">
         <button class="icon" id="fs" type="button" aria-label="Во весь экран"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
         <button class="icon" id="openSet" type="button" aria-label="Настройки"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
@@ -107,14 +115,14 @@ input[type=range] { width: 100%; accent-color: var(--gold); }
     </div>
     <div></div>
     <div class="bottom">
-      <div class="eyebrow" id="eyebrow">Программа · 14 мин 30 с</div>
-      <h1 class="phase" id="phaseName">Тихий огонь</h1>
-      <p class="instr" id="instr">Наденьте наушники, приглушите свет и сядьте ровно. Голос и звук начнутся мягко.</p>
+      <div class="eyebrow" id="eyebrow">Программа · 17 мин 30 с</div>
+      <h1 class="phase" id="phaseName">Третий глаз</h1>
+      <p class="instr" id="instr">Наденьте наушники и сядьте ровно. Путь: кокон света, дыхание, семь чакр, взгляд в третий глаз, тишина.</p>
       <div class="track"><i id="prog"></i></div>
       <div class="controls">
         <button class="icon" id="stop" type="button" aria-label="Остановить"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="7" y="7" width="10" height="10" rx="1.5"/></svg></button>
         <button class="play" id="start" type="button" aria-label="Начать"><svg id="playIco" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></button>
-        <span class="time" id="tTotal">14:30</span>
+        <span class="time" id="tTotal">17:30</span>
       </div>
     </div>
   </div>
@@ -123,7 +131,6 @@ input[type=range] { width: 100%; accent-color: var(--gold); }
 <aside class="drawer" id="drawer" aria-label="Настройки">
   <div class="dhead"><h2>Настройки</h2>
     <button class="icon" id="closeSet" type="button" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-
   <div class="sect">
     <span class="label">Режим</span>
     <div class="seg" role="group" aria-label="Режим">
@@ -131,47 +138,48 @@ input[type=range] { width: 100%; accent-color: var(--gold); }
       <button type="button" id="mFree" aria-pressed="false">Свободно</button>
     </div>
   </div>
-
-  <div class="sect" id="planBox">
-    <span class="label">Этапы</span>
-    <ol class="plan" id="plan"></ol>
-  </div>
-
+  <div class="sect" id="planBox"><span class="label">Путь</span><ol class="plan" id="plan"></ol></div>
   <div class="sect" id="freeBox" hidden>
     <div class="grid2">
-      <label>Образ<select id="fVisual"><option value="breath">Сфера дыхания</option><option value="flame">Пламя</option><option value="mandala">Мандала</option></select></label>
+      <label>Образ<select id="fVisual"><option value="eye">Третий глаз</option><option value="chakras">Чакры</option><option value="cocoon">Кокон света</option><option value="breath">Сфера дыхания</option><option value="mandala">Мандала</option></select></label>
       <label>Дыхание<select id="fBreath"><option value="resonance">5,5 в минуту</option><option value="calm">Вдох 4, выдох 6</option><option value="box">Квадрат 4·4·4·4</option><option value="none">Свободное</option></select></label>
-      <label>Ритм<select id="fBeat"><option value="10">α 10 Гц · фокус</option><option value="6">θ 6 Гц · глубина</option><option value="0">Без ритма</option></select></label>
+      <label>Ритм<select id="fBeat"><option value="10">α 10 Гц · фокус</option><option value="8">α 8 Гц · покой</option><option value="6">θ 6 Гц · глубина</option><option value="0">Без ритма</option></select></label>
       <label>Время<select id="fDur"><option value="300">5 минут</option><option value="600" selected>10 минут</option><option value="900">15 минут</option><option value="1200">20 минут</option></select></label>
     </div>
   </div>
-
   <div class="sect">
-    <span class="label">Голос</span>
+    <span class="label">Женский голос</span>
     <select id="voiceSel" aria-label="Голос"></select>
-    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="ghost" id="testVoice" type="button">Послушать</button></div>
-    <label class="check"><input type="checkbox" id="vInstr" checked> Голос ведёт по этапам</label>
+    <div><button class="ghost" id="testVoice" type="button">Послушать</button></div>
+    <label class="check"><input type="checkbox" id="vInstr" checked> Голос ведёт по пути</label>
     <label class="check"><input type="checkbox" id="vBreath"> Подсказывать «вдох» и «выдох»</label>
     <p class="note" id="voiceNote"></p>
   </div>
-
   <div class="sect">
     <span class="label">Звук</span>
     <input type="range" id="vol" min="0" max="100" value="30" aria-label="Громкость">
     <div class="row"><span>Громкость</span><span id="volV">30%</span></div>
-    <label class="check"><input type="checkbox" id="noise" checked> Мягкий шум под ритмом</label>
+    <label class="check"><input type="checkbox" id="music" checked> Тихая музыка (меняется по чакрам)</label>
+    <label class="check"><input type="checkbox" id="beat" checked> Бинауральный ритм</label>
+    <label class="check"><input type="checkbox" id="noise"> Мягкий шум</label>
     <p class="note">Бинауральный ритм слышен только в стереонаушниках. Громкость — на грани слышимости.</p>
   </div>
 </aside>
+
+<div class="chakras">
+  <h2>Семь чакр</h2>
+  <div class="ch-grid" id="chGrid"></div>
+</div>
 
 <div class="notes">
   <section>
     <h2>Что здесь работает</h2>
     <ul>
-      <li><b>Дыхание 5,5 раз в минуту</b> — резонансный темп сердечного ритма. В исследованиях с биофидбеком стресс и тревога снижаются заметно (g = 0,83).</li>
-      <li><b>Тратака</b>: взгляд на пламя, затем образ с закрытыми глазами. Небольшие исследования показывают рост внимания и рабочей памяти за 26 дней.</li>
-      <li><b>Бинауральный ритм</b>: левое ухо 200 Гц, правое 210 или 206 Гц, мозг слышит разницу 10 или 6 Гц. Мета-анализ: средний эффект на внимание и тревогу (g = 0,45).</li>
-      <li>Всё движение на экране медленное. Вспышек и мерцания нет.</li>
+      <li><b>Дыхание 5,5 раз в минуту</b> — резонансный темп сердечного ритма. Стресс и тревога снижаются заметно (мета-анализ, g = 0,83).</li>
+      <li><b>Взгляд в одну точку</b> (тратака на зрачок третьего глаза): небольшие исследования показывают рост внимания и памяти.</li>
+      <li><b>Бинауральный ритм</b>: левое ухо 200 Гц, правое на 6–10 Гц выше. Средний эффект на внимание и тревогу (g = 0,45).</li>
+      <li><b>Кокон света</b> включается первым шагом и держится на экране всю сессию. Это визуализация безопасного пространства. Её подтверждённое действие психологическое: чувство защищённости, глубокое расслабление. Действие на тонком плане наукой не измерено.</li>
+      <li>Движение на экране медленное. Вспышек и мерцания нет.</li>
     </ul>
   </section>
   <section class="warn">
@@ -180,7 +188,6 @@ input[type=range] { width: 100%; accent-color: var(--gold); }
       <li>Не практиковать при эпилепсии, психозах, после травм головы без согласования с врачом.</li>
       <li>Не слушать за рулём и во время работы, требующей внимания.</li>
       <li>Гудит в ушах или болит голова — убавьте громкость или выключите ритм.</li>
-      <li>Тратака: смотреть без усилия. При глаукоме и болезнях глаз этап пропустить.</li>
       <li>Кружится голова — дышите свободно. Тревога или чувство нереальности — откройте глаза, пройдитесь.</li>
       <li>После сессии посидите минуту, прежде чем вставать.</li>
     </ul>
@@ -192,46 +199,68 @@ input[type=range] { width: 100%; accent-color: var(--gold); }
 const $ = id => document.getElementById(id);
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+const CH = [
+  { n: 'Муладхара', where: 'основание позвоночника', bija: 'ЛАМ', c: [229,56,59],  petals: 4,  tone: 130.81, sense: 'опора',     say: ['Муладхара.', 'Основание позвоночника.', 'Тёплый красный свет. Вы на земле, вы в безопасности.'] },
+  { n: 'Свадхистхана', where: 'низ живота',          bija: 'ВАМ', c: [247,127,0],  petals: 6,  tone: 146.83, sense: 'поток',     say: ['Свадхистхана.', 'Низ живота.', 'Оранжевый свет. Мягкий, текучий, как вода.'] },
+  { n: 'Манипура',    where: 'солнечное сплетение',  bija: 'РАМ', c: [252,191,73], petals: 10, tone: 164.81, sense: 'сила',      say: ['Манипура.', 'Солнечное сплетение.', 'Золотое солнце. Ваша сила и воля.'] },
+  { n: 'Анахата',     where: 'центр груди',          bija: 'ЯМ',  c: [46,194,126], petals: 12, tone: 174.61, sense: 'любовь',    say: ['Анахата.', 'Центр груди.', 'Зелёный свет. Сердце раскрывается.'] },
+  { n: 'Вишуддха',    where: 'горло',                bija: 'ХАМ', c: [58,134,255], petals: 16, tone: 196.00, sense: 'голос',     say: ['Вишуддха.', 'Горло.', 'Голубой свет. Ясность и правда.'] },
+  { n: 'Аджна',       where: 'между бровей',         bija: 'ОМ',  c: [106,76,255], petals: 2,  tone: 220.00, sense: 'видение',   say: ['Аджна.', 'Точка между бровей.', 'Глубокий синий свет. Третий глаз.'] },
+  { n: 'Сахасрара',   where: 'макушка',              bija: 'тишина', c: [199,125,255], petals: 1000, tone: 246.94, sense: 'единство', say: ['Сахасрара.', 'Макушка.', 'Фиолетовый, почти белый свет. Тишина.'] }
+];
+const rgba = (c, a) => 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')';
+
 const BREATH = {
   resonance: { p: [5.45, 0, 5.45, 0], name: 'пять с половиной вдохов в минуту' },
   calm:      { p: [4, 0, 6, 0],       name: 'вдох на четыре, выдох на шесть' },
   box:       { p: [4, 4, 4, 4],       name: 'квадрат: вдох, пауза, выдох, пауза' }
 };
 
-// Phrases are short and written for the ear: one thought per sentence, commas where a person would breathe.
 const PROGRAM = [
-  { key: 'p1', name: 'Прибытие', dur: 60, visual: 'breath', breath: 'calm', beat: 10, cue: true,
+  { key: 'p0', name: 'Кокон света', dur: 90, visual: 'cocoon', breath: 'calm', beat: 8, cue: false, dot: 2,
+    text: 'Кокон включается первым и остаётся до конца сессии. Представьте вокруг себя яйцо золотого света: лишнее выходит наружу, внутрь проходит только свет.',
+    say: ['Устройтесь поудобнее.', 'Представьте вокруг себя кокон золотого света.', 'Он плотный, тёплый, и он ваш.', 'С каждым выдохом всё лишнее выходит наружу.', 'Внутрь проходит только свет.'] },
+  { key: 'p1', name: 'Прибытие', dur: 60, visual: 'breath', breath: 'calm', beat: 10, cue: true, dot: 0,
     text: 'Сядьте ровно, плечи мягкие. Дышите носом вместе со сферой: растёт — вдох, тает — выдох.',
-    say: ['Устройтесь поудобнее.', 'Плечи мягкие, лицо спокойное.', 'Дышите вместе со сферой. Выдох чуть длиннее вдоха.'] },
-  { key: 'p2', name: 'Резонанс', dur: 240, visual: 'breath', breath: 'resonance', beat: 10, cue: true,
-    text: 'Вдох пять с половиной секунд, выдох столько же. Животом, без усилия. Не хватает воздуха — дышите свободно.',
+    say: ['Теперь дышите вместе со сферой.', 'Выдох чуть длиннее вдоха.'] },
+  { key: 'p2', name: 'Резонанс', dur: 180, visual: 'breath', breath: 'resonance', beat: 10, cue: true, dot: 1,
+    text: 'Вдох пять с половиной секунд, выдох столько же. Животом, без усилия.',
     say: ['Теперь ещё медленнее.', 'Вдох и выдох одинаковые, мягкие.', 'Дышите животом, без усилия.'] },
-  { key: 'p3', name: 'Тратака', dur: 180, visual: 'flame', breath: null, beat: 10, cue: false,
-    text: 'Смотрите в самую яркую точку пламени. Моргайте реже, но не через силу. Слёзы — это нормально.',
-    say: ['Посмотрите на пламя.', 'Найдите в нём самую яркую точку, и оставайтесь с ней.', 'Моргайте реже. Без напряжения.'] },
-  { key: 'p4', name: 'Внутренний свет', dur: 90, visual: 'dark', breath: null, beat: 6, cue: false,
-    text: 'Закройте глаза. Удерживайте образ пламени между бровей. Когда он растает, просто смотрите в темноту.',
-    say: ['Теперь закройте глаза.', 'Пламя осталось внутри. Между бровей.', 'Просто смотрите на него.'] },
-  { key: 'p5', name: 'Тишина', dur: 240, visual: 'mandala', breath: 'resonance', beat: 6, cue: false,
-    text: 'Глаза закрыты или мягко на мандале. Мысли приходят и уходят, вы их не держите. Колокол отметит конец.',
+  { key: 'p4', name: 'Семь чакр', dur: 216, visual: 'chakras', breath: 'resonance', beat: 8, cue: false, dot: 3,
+    text: 'Внимание поднимается от основания позвоночника к макушке. Полминуты на каждую чакру.',
+    say: ['Теперь пройдём по чакрам.', 'Снизу вверх.'] },
+  { key: 'p5', name: 'Третий глаз', dur: 180, visual: 'eye', breath: null, beat: 10, cue: false, dot: 5,
+    text: 'Смотрите в золотую точку в центре зрачка. Моргайте реже, но не через силу.',
+    say: ['Посмотрите в центр третьего глаза.', 'Там золотая точка. Оставайтесь с ней.', 'Моргайте реже. Без напряжения.'] },
+  { key: 'p6', name: 'Внутренний свет', dur: 90, visual: 'dark', breath: null, beat: 6, cue: false, dot: 5,
+    text: 'Закройте глаза. Удерживайте образ между бровей. Когда он растает, просто смотрите в темноту.',
+    say: ['Теперь закройте глаза.', 'Образ остался внутри. Между бровей.', 'Просто смотрите на него.'] },
+  { key: 'p7', name: 'Тишина', dur: 180, visual: 'mandala', breath: 'resonance', beat: 6, cue: false, dot: 6,
+    text: 'Глаза закрыты или мягко на мандале. Мысли приходят и уходят. Колокол отметит конец.',
     say: ['Отпустите дыхание.', 'Ничего не нужно делать.', 'Просто будьте здесь.'] },
-  { key: 'p6', name: 'Возвращение', dur: 60, visual: 'breath', breath: 'calm', beat: 10, cue: true,
-    text: 'Глубокий вдох. Пошевелите пальцами, потянитесь. Посидите минуту, прежде чем вставать.',
-    say: ['Сделайте глубокий вдох.', 'Пошевелите пальцами.', 'И когда будете готовы, откройте глаза.'] }
+  { key: 'p8', name: 'Возвращение', dur: 60, visual: 'breath', breath: 'calm', beat: 10, cue: true, dot: 3,
+    text: 'Глубокий вдох. Пошевелите пальцами, потянитесь. Кокон остаётся с вами.',
+    say: ['Сделайте глубокий вдох.', 'Пошевелите пальцами.', 'Кокон остаётся с вами.', 'Когда будете готовы, откройте глаза.'] }
 ];
+const CH_STEP = 30;
 
 const fmt = s => { s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
 const sum = ph => ph.reduce((a, p) => a + p.dur, 0);
 
 const planEl = $('plan');
-PROGRAM.forEach(p => { const li = document.createElement('li'); li.innerHTML = '<span>' + p.name + '</span><span>' + fmt(p.dur) + '</span>'; planEl.appendChild(li); });
+PROGRAM.forEach(p => { const li = document.createElement('li'); li.style.color = rgba(CH[p.dot].c, 1); li.innerHTML = '<i></i><span>' + p.name + '</span><span>' + fmt(p.dur) + '</span>'; planEl.appendChild(li); });
+CH.forEach(c => {
+  const d = document.createElement('div'); d.className = 'ch'; d.style.setProperty('--c', rgba(c.c, 1));
+  d.innerHTML = '<div class="glyph"></div><b>' + c.n + '</b><span>' + c.where[0].toUpperCase() + c.where.slice(1) + '</span><em>' + c.bija + ' · ' + (c.petals === 1000 ? 'тысяча' : c.petals) + ' лепестков</em>';
+  $('chGrid').appendChild(d);
+});
 
 let mode = 'prog', running = false, paused = false, elapsed = 0, lastT = 0;
-let phases = PROGRAM, phaseIdx = -1, phaseStart = 0, lastBreathLabel = '', wakeLock = null, preview = 'flame';
+let phases = PROGRAM, phaseIdx = -1, phaseStart = 0, lastBreathLabel = '', wakeLock = null, preview = 'eye', chIdx = -1;
 
 function freePhases() {
   const b = $('fBreath').value;
-  return [{ key: 'free', name: 'Свободная практика', dur: +$('fDur').value, visual: $('fVisual').value,
+  return [Object.assign({}, PROGRAM[0], { dur: 45 }), { key: 'free', name: 'Свободная практика', dur: +$('fDur').value, visual: $('fVisual').value, dot: 5,
     breath: b === 'none' ? null : b, beat: +$('fBeat').value, cue: b !== 'none',
     text: b === 'none' ? 'Дыхание свободное. Взгляд мягкий, внимание в одной точке.' : 'Дышите в ритме: ' + BREATH[b].name + '.',
     say: ['Начинаем.', 'Внимание мягко в одной точке.'] }];
@@ -247,7 +276,7 @@ function setMode(m) {
   $('mProg').setAttribute('aria-pressed', m === 'prog'); $('mFree').setAttribute('aria-pressed', m === 'free');
   $('planBox').hidden = m !== 'prog'; $('freeBox').hidden = m !== 'free';
   phases = m === 'prog' ? PROGRAM : freePhases();
-  preview = m === 'prog' ? 'flame' : $('fVisual').value;
+  preview = m === 'prog' ? 'eye' : $('fVisual').value;
   idleText();
 }
 $('mProg').onclick = () => setMode('prog');
@@ -257,14 +286,12 @@ $('mFree').onclick = () => setMode('free');
   phases = freePhases(); preview = $('fVisual').value;
   if (running) applyAudio(phases[0]); else idleText();
 });
-
-// drawer
 $('openSet').onclick = () => { $('drawer').classList.add('open'); $('closeSet').focus(); };
 $('closeSet').onclick = () => $('drawer').classList.remove('open');
 document.addEventListener('keydown', e => { if (e.key === 'Escape') $('drawer').classList.remove('open'); });
 
 // ---------- audio
-let ctx = null, master, merger, noiseGain, oscL, oscR, voiceBus, duck;
+let ctx = null, master, merger, beatGain, noiseGain, oscL, oscR, voiceBus, duck, padBus, padVoices = [];
 const CARRIER = 200;
 const volGain = () => Math.pow(+$('vol').value / 100, 2) * 0.35;
 
@@ -281,9 +308,9 @@ function pinkBuffer(ac) {
   }
   return buf;
 }
-function reverbIR(ac) {
-  const len = ac.sampleRate * 2.6, buf = ac.createBuffer(2, len, ac.sampleRate);
-  for (let ch = 0; ch < 2; ch++) { const d = buf.getChannelData(ch); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3.2) * 0.6; }
+function reverbIR(ac, secs) {
+  const len = ac.sampleRate * secs, buf = ac.createBuffer(2, len, ac.sampleRate);
+  for (let ch = 0; ch < 2; ch++) { const d = buf.getChannelData(ch); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3) * 0.6; }
   return buf;
 }
 function initAudio() {
@@ -292,140 +319,159 @@ function initAudio() {
   ctx = new AC();
   master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
   duck = ctx.createGain(); duck.gain.value = 1; duck.connect(master);
-  merger = ctx.createChannelMerger(2); merger.connect(duck);
+  // binaural
+  merger = ctx.createChannelMerger(2); beatGain = ctx.createGain(); beatGain.gain.value = 1; merger.connect(beatGain).connect(duck);
   const gL = ctx.createGain(), gR = ctx.createGain(); gL.gain.value = gR.gain.value = 0.5;
   oscL = ctx.createOscillator(); oscR = ctx.createOscillator(); oscL.type = oscR.type = 'sine';
   oscL.frequency.value = CARRIER; oscR.frequency.value = CARRIER + 10;
   oscL.connect(gL).connect(merger, 0, 0); oscR.connect(gR).connect(merger, 0, 1); oscL.start(); oscR.start();
+  // noise
   const src = ctx.createBufferSource(); src.buffer = pinkBuffer(ctx); src.loop = true;
   const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1400;
   noiseGain = ctx.createGain(); noiseGain.gain.value = 0; src.connect(lp).connect(noiseGain).connect(duck); src.start();
-  // recorded voice path: dry + a little room
+  // ambient pad: soft triangle chord, low-passed, through a long hall
+  padBus = ctx.createGain(); padBus.gain.value = 0;
+  const pf = ctx.createBiquadFilter(); pf.type = 'lowpass'; pf.frequency.value = 900; pf.Q.value = 0.3;
+  const hall = ctx.createConvolver(); hall.buffer = reverbIR(ctx, 5); const hw = ctx.createGain(); hw.gain.value = 0.55;
+  padBus.connect(pf); pf.connect(duck); pf.connect(hall).connect(hw).connect(duck);
+  const lfo = ctx.createOscillator(), lfoG = ctx.createGain(); lfo.frequency.value = 0.05; lfoG.gain.value = 220; lfo.connect(lfoG).connect(pf.frequency); lfo.start();
+  [1, 1.5, 2, 3].forEach((mult, i) => {
+    [-1, 1].forEach(det => {
+      const o = ctx.createOscillator(), og = ctx.createGain(), pan = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
+      o.type = i === 0 ? 'sine' : 'triangle'; o.detune.value = det * 6; og.gain.value = [0.16, 0.08, 0.06, 0.025][i];
+      o.frequency.value = 110 * mult; o.connect(og);
+      if (pan) { pan.pan.value = det * 0.5; og.connect(pan).connect(padBus); } else og.connect(padBus);
+      o.start(); padVoices.push({ o, mult });
+    });
+  });
+  // voice bus with a little room
   voiceBus = ctx.createGain(); voiceBus.gain.value = 1;
-  const conv = ctx.createConvolver(); conv.buffer = reverbIR(ctx); const wet = ctx.createGain(); wet.gain.value = 0.18;
+  const conv = ctx.createConvolver(); conv.buffer = reverbIR(ctx, 2.4); const wet = ctx.createGain(); wet.gain.value = 0.18;
   voiceBus.connect(ctx.destination); voiceBus.connect(conv).connect(wet).connect(ctx.destination);
 }
+function padRoot(f) { if (!ctx) return; padVoices.forEach(v => v.o.frequency.setTargetAtTime(f * v.mult / 2, ctx.currentTime, 2.5)); }
 let beatOn = 1;
 function applyAudio(ph) {
   if (!ctx) return;
   beatOn = ph.beat > 0 ? 1 : 0;
   if (beatOn) { oscL.frequency.setTargetAtTime(CARRIER, ctx.currentTime, 3); oscR.frequency.setTargetAtTime(CARRIER + ph.beat, ctx.currentTime, 3); }
+  padRoot(CH[ph.dot].tone);
   updateLevels(4);
 }
 function updateLevels(tc) {
   if (!ctx) return;
   const t = ctx.currentTime, on = running && !paused;
   master.gain.setTargetAtTime(on ? volGain() : 0, t, tc || 0.4);
-  noiseGain.gain.setTargetAtTime($('noise').checked ? 0.55 : 0, t, 0.5);
-  try { merger.disconnect(); } catch (e) {}
-  if (beatOn) merger.connect(duck);
+  beatGain.gain.setTargetAtTime(beatOn && $('beat').checked ? 1 : 0, t, 0.6);
+  noiseGain.gain.setTargetAtTime($('noise').checked ? 0.5 : 0, t, 0.5);
+  padBus.gain.setTargetAtTime($('music').checked ? 0.55 : 0, t, 1.5);
 }
 function setDuck(on) { if (ctx) duck.gain.setTargetAtTime(on ? 0.45 : 1, ctx.currentTime, 0.6); }
 $('vol').oninput = () => { $('volV').textContent = $('vol').value + '%'; updateLevels(0.2); };
-$('noise').onchange = () => updateLevels();
+['noise', 'music', 'beat'].forEach(id => $(id).onchange = () => updateLevels());
 
-function bell(times) {
+function bell(times, f0) {
   if (!ctx) return;
   for (let k = 0; k < (times || 1); k++) {
-    const t0 = ctx.currentTime + k * 2.2;
-    [[264, 0.6], [528, 1], [792, 0.35], [1188, 0.12]].forEach(([f, a]) => {
-      const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.value = f * (1 + (Math.random() - 0.5) * 0.002);
-      g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(0.14 * a * Math.max(0.35, +$('vol').value / 60), t0 + 0.015);
+    const t0 = ctx.currentTime + k * 2.2, base = f0 || 264;
+    [[1, 0.6], [2, 1], [3, 0.35], [4.5, 0.12]].forEach(([m, a]) => {
+      const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.value = base * m * (1 + (Math.random() - 0.5) * 0.002);
+      g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(0.13 * a * Math.max(0.35, +$('vol').value / 60), t0 + 0.015);
       g.gain.exponentialRampToValueAtTime(0.0001, t0 + 6);
-      o.connect(g); g.connect(ctx.destination); if (voiceBus) g.connect(voiceBus); o.start(t0); o.stop(t0 + 6.1);
+      o.connect(g); g.connect(voiceBus); o.start(t0); o.stop(t0 + 6.1);
     });
   }
 }
 
-// ---------- voice
-// 1) Real recordings, if present next to the page: voice/p1.mp3 … voice/p6.mp3, voice/inhale.mp3, voice/exhale.mp3
-// 2) Otherwise the best natural female Russian voice the device has.
+// ---------- voice: always female
+// Real recordings win if present: voice/manifest.json lists keys (p1…p8, c1…c7, inhale, exhale), each voice/<key>.mp3
 const recorded = {};
 async function loadRecorded() {
-  if (!ctx || loadRecorded.done) return;
-  loadRecorded.done = true;
-  // voice/manifest.json lists the recorded keys, e.g. ["p1","p2","inhale"]; without it nothing is fetched
+  if (!ctx || loadRecorded.done) return; loadRecorded.done = true;
   let keys = [];
   try { const r = await fetch('voice/manifest.json'); if (r.ok) keys = await r.json(); } catch (e) {}
   await Promise.all(keys.map(async k => {
-    if (recorded[k] !== undefined) return;
-    try { const r = await fetch('voice/' + k + '.mp3'); if (!r.ok) throw 0; recorded[k] = await ctx.decodeAudioData(await r.arrayBuffer()); }
-    catch (e) { recorded[k] = null; }
+    try { const r = await fetch('voice/' + k + '.mp3'); if (!r.ok) throw 0; recorded[k] = await ctx.decodeAudioData(await r.arrayBuffer()); } catch (e) {}
   }));
 }
 function playRecorded(k) {
   const buf = recorded[k]; if (!buf || !ctx) return false;
-  const s = ctx.createBufferSource(); s.buffer = buf; const g = ctx.createGain(); g.gain.value = 0.9;
-  s.connect(g).connect(voiceBus); setDuck(true); s.onended = () => setDuck(false); s.start(); return true;
+  const s = ctx.createBufferSource(); s.buffer = buf; s.connect(voiceBus); setDuck(true); s.onended = () => setDuck(false); s.start(); return true;
 }
 
 const synth = window.speechSynthesis;
 const FEMALE = /svetlana|dariya|darya|milena|katya|ekaterina|anna|irina|elena|alena|alyona|yuliya|julia|tatyana|natalia|google\s*рус|google ru|female|женск/i;
-const MALE = /pavel|dmitr|yuri|maxim|denis|ruslan|nikolai|aleksandr|male\b|мужск/i;
-const NATURAL = /natural|online|neural|premium|enhanced|улучш|wavenet|siri/i;
+const MALE = /pavel|dmitr|yuri|maxim|denis|ruslan|nikolai|aleksandr|artem|male\b|мужск/i;
+const NATURAL = /natural|online|neural|premium|enhanced|улучш|wavenet/i;
 let voices = [];
-function score(v) { let s = 0; if (NATURAL.test(v.name)) s += 4; if (FEMALE.test(v.name)) s += 3; if (MALE.test(v.name)) s -= 6; if (!v.localService) s += 1; return s; }
+function score(v) { let s = 0; if (NATURAL.test(v.name)) s += 4; if (FEMALE.test(v.name)) s += 3; if (!v.localService) s += 1; return s; }
 function listVoices() {
   if (!synth) return;
-  voices = synth.getVoices().filter(v => /^ru/i.test(v.lang)).sort((a, b) => score(b) - score(a));
-  const sel = $('voiceSel'), keep = sel.value;
-  sel.innerHTML = '';
-  if (!voices.length) { const o = document.createElement('option'); o.textContent = 'Русских голосов на устройстве нет'; sel.appendChild(o); sel.disabled = true; }
-  else { sel.disabled = false; voices.forEach((v, i) => { const o = document.createElement('option'); o.value = v.name; o.textContent = (i === 0 ? '★ ' : '') + v.name.replace(/Microsoft |Google /, '') ; sel.appendChild(o); }); }
+  voices = synth.getVoices().filter(v => /^ru/i.test(v.lang) && !MALE.test(v.name)).sort((a, b) => score(b) - score(a));
+  const sel = $('voiceSel'), keep = sel.value; sel.innerHTML = '';
+  if (!voices.length) { const o = document.createElement('option'); o.textContent = 'Женского русского голоса нет'; sel.appendChild(o); sel.disabled = true; }
+  else { sel.disabled = false; voices.forEach((v, i) => { const o = document.createElement('option'); o.value = v.name; o.textContent = (i === 0 ? '★ ' : '') + v.name.replace(/^(Microsoft|Google) /, ''); sel.appendChild(o); }); }
   if (keep && voices.some(v => v.name === keep)) sel.value = keep;
   const best = voices[0];
   $('voiceNote').textContent = !voices.length
-    ? 'Голос будет только текстом на экране. Естественные голоса есть в Microsoft Edge (Светлана, Дария) и на iPhone (Милена, улучшенная).'
-    : best && NATURAL.test(best.name) ? 'Выбран естественный нейросетевой голос этого устройства.'
-    : 'Самые живые голоса: в Microsoft Edge — «Svetlana Online (Natural)», на iPhone — «Милена (улучшенная)»: Настройки → Универсальный доступ → Устный контент → Голоса.';
+    ? 'На этом устройстве нет женского русского голоса, поэтому подсказки идут текстом. Откройте страницу в Microsoft Edge — там есть Svetlana и Dariya (Natural).'
+    : best && NATURAL.test(best.name) ? 'Включён естественный нейросетевой женский голос.'
+    : 'Самый живой женский голос — в Microsoft Edge: «Svetlana Online (Natural)». На iPhone скачайте «Милена (улучшенная)» в настройках голосов.';
 }
-if (synth) { listVoices(); synth.onvoiceschanged = listVoices; } else { $('voiceNote').textContent = 'В этом браузере нет синтеза речи. Подсказки будут текстом на экране.'; }
+if (synth) { listVoices(); synth.onvoiceschanged = listVoices; } else { $('voiceNote').textContent = 'В этом браузере нет синтеза речи. Подсказки будут текстом. Лучше открыть страницу в Microsoft Edge.'; }
 const curVoice = () => voices.find(v => v.name === $('voiceSel').value) || voices[0] || null;
 
 let sayToken = 0;
 function speakLines(lines, opts) {
-  if (!synth || !lines || !lines.length) return;
-  const token = ++sayToken, v = curVoice(), nat = v && NATURAL.test(v.name);
+  const v = curVoice();
+  if (!synth || !v || !lines || !lines.length) return;   // never fall back to a male or unknown default voice
+  const token = ++sayToken, nat = NATURAL.test(v.name);
   synth.cancel();
   let i = 0;
   const next = () => {
     if (token !== sayToken || i >= lines.length) { setDuck(false); return; }
     const u = new SpeechSynthesisUtterance(lines[i++]);
-    u.lang = 'ru-RU'; if (v) u.voice = v;
-    u.rate = (opts && opts.rate) || (nat ? 0.86 : 0.8); u.pitch = nat ? 1 : 1.04; u.volume = 0.85;
+    u.lang = v.lang || 'ru-RU'; u.voice = v;
+    u.rate = (opts && opts.rate) || (nat ? 0.86 : 0.8); u.pitch = nat ? 1 : 1.05; u.volume = 0.85;
     u.onstart = () => setDuck(true);
     u.onend = u.onerror = () => setTimeout(next, (opts && opts.gap) || 900);
     synth.speak(u);
   };
   next();
 }
-function guide(ph) {
-  if (!$('vInstr').checked) return;
-  if (playRecorded(ph.key)) return;
-  speakLines(ph.say);
-}
+function guide(key, lines) { if (!$('vInstr').checked) return; if (playRecorded(key)) return; speakLines(lines); }
 function cueBreath(label) {
   if (!$('vBreath').checked) return;
-  const k = label === 'Вдох' ? 'inhale' : 'exhale';
-  if (playRecorded(k)) return;
-  if (synth && !synth.speaking) speakLines([label === 'Вдох' ? 'Вдох' : 'Выдох'], { rate: 0.7, gap: 0 });
+  if (playRecorded(label === 'Вдох' ? 'inhale' : 'exhale')) return;
+  if (synth && !synth.speaking) speakLines([label], { rate: 0.7, gap: 0 });
 }
 $('testVoice').onclick = async () => {
   initAudio(); if (ctx && ctx.state === 'suspended') await ctx.resume().catch(() => {});
   await loadRecorded();
-  if (!playRecorded('p1')) speakLines(['Устройтесь поудобнее.', 'Плечи мягкие, лицо спокойное.']);
+  if (!playRecorded('p1')) {
+    if (!curVoice()) { $('voiceNote').textContent = 'Женского голоса на этом устройстве нет. Откройте страницу в Microsoft Edge.'; return; }
+    speakLines(['Устройтесь поудобнее.', 'Плечи мягкие, лицо спокойное.']);
+  }
 };
 $('voiceSel').onchange = () => { if (synth) synth.cancel(); };
 
 // ---------- session
 function enterPhase(i) {
-  phaseIdx = i; phaseStart = elapsed; lastBreathLabel = '';
+  phaseIdx = i; phaseStart = elapsed; lastBreathLabel = ''; chIdx = -1;
   const ph = phases[i];
   $('phaseName').textContent = ph.name; $('instr').textContent = ph.text;
   [...planEl.children].forEach((li, k) => li.className = mode === 'prog' ? (k < i ? 'done' : k === i ? 'now' : '') : '');
   applyAudio(ph);
-  if (i > 0) bell(1);
-  setTimeout(() => { if (running && !paused && phaseIdx === i) guide(ph); }, i > 0 ? 2600 : 900);
+  if (i > 0) bell(1, CH[ph.dot].tone);
+  setTimeout(() => { if (running && !paused && phaseIdx === i) guide(ph.key, ph.say); }, i > 0 ? 2600 : 900);
+}
+function chakraStep(k) {
+  chIdx = k; const c = CH[k];
+  $('phaseName').textContent = c.n; $('instr').textContent = c.where[0].toUpperCase() + c.where.slice(1) + '. ' + c.sense[0].toUpperCase() + c.sense.slice(1) + '. Мысленно звучит «' + c.bija + '».';
+  $('eyebrow').style.color = rgba(c.c, 1);
+  padRoot(c.tone); bell(1, c.tone);
+  const delay = k === 0 ? 6000 : 1800;
+  setTimeout(() => { if (running && !paused && chIdx === k) guide('c' + (k + 1), c.say); }, delay);
 }
 const ICON_PLAY = '<path d="M8 5.5v13l11-6.5z"/>', ICON_PAUSE = '<rect x="7" y="5.5" width="3.2" height="13" rx="1"/><rect x="13.8" y="5.5" width="3.2" height="13" rx="1"/>';
 async function startSession() {
@@ -445,10 +491,10 @@ async function startSession() {
 function stopSession(finished) {
   if (!running) return;
   running = false; paused = false; sayToken++;
-  updateLevels(finished ? 4 : 0.6); if (synth) synth.cancel();
-  if (finished) { bell(3); $('phaseName').textContent = 'Сессия завершена'; $('instr').textContent = 'Посидите минуту с закрытыми глазами. Заметьте, что изменилось: дыхание, тело, ум.'; }
-  else { $('phaseName').textContent = 'Тихий огонь'; $('instr').textContent = 'Можно начать снова, когда будете готовы.'; }
-  $('playIco').innerHTML = ICON_PLAY; $('start').setAttribute('aria-label', 'Начать');
+  updateLevels(finished ? 5 : 0.6); if (synth) synth.cancel();
+  if (finished) { bell(3, 220); $('phaseName').textContent = 'Сессия завершена'; $('instr').textContent = 'Посидите минуту с закрытыми глазами. Заметьте, что изменилось: дыхание, тело, ум.'; }
+  else { $('phaseName').textContent = 'Третий глаз'; $('instr').textContent = 'Можно начать снова, когда будете готовы.'; }
+  $('playIco').innerHTML = ICON_PLAY; $('start').setAttribute('aria-label', 'Начать'); $('eyebrow').style.color = '';
   [...planEl.children].forEach(li => li.className = ''); $('prog').style.width = '0';
   idleText(); releaseWake(); poke();
 }
@@ -460,7 +506,6 @@ function releaseWake() { try { wakeLock && wakeLock.release(); } catch (e) {} wa
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && running && !paused) requestWake(); });
 $('fs').onclick = () => { try { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(() => {}); } catch (e) {} };
 
-// controls recede while practising
 let idleTimer = 0;
 function poke() {
   $('stage').classList.remove('idle-ui'); clearTimeout(idleTimer);
@@ -472,173 +517,226 @@ function poke() {
 const ease = x => (1 - Math.cos(Math.PI * x)) / 2;
 function breathAt(key, t) {
   const p = BREATH[key].p, cyc = p[0] + p[1] + p[2] + p[3]; let x = t % cyc;
-  if (x < p[0]) return { b: ease(x / p[0]), label: 'Вдох', left: p[0] - x }; x -= p[0];
-  if (x < p[1]) return { b: 1, label: 'Пауза', left: p[1] - x }; x -= p[1];
-  if (x < p[2]) return { b: 1 - ease(x / p[2]), label: 'Выдох', left: p[2] - x }; x -= p[2];
-  return { b: 0, label: 'Пауза', left: p[3] - x };
+  if (x < p[0]) return { b: ease(x / p[0]), label: 'Вдох', left: p[0] - x, dur: p[0] }; x -= p[0];
+  if (x < p[1]) return { b: 1, label: 'Пауза', left: p[1] - x, dur: p[1] }; x -= p[1];
+  if (x < p[2]) return { b: 1 - ease(x / p[2]), label: 'Выдох', left: p[2] - x, dur: p[2] }; x -= p[2];
+  return { b: 0, label: 'Пауза', left: p[3] - x, dur: p[3] };
 }
 
 // ---------- canvas
 const cv = $('cv'), g = cv.getContext('2d');
-let W = 0, H = 0, DPR = 1, grain = null;
-function makeGrain() {
-  const c = document.createElement('canvas'); c.width = c.height = 160; const x = c.getContext('2d'), im = x.createImageData(160, 160);
-  for (let i = 0; i < im.data.length; i += 4) { const v = Math.random() * 255; im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = 14; }
-  x.putImageData(im, 0, 0); grain = g.createPattern(c, 'repeat');
-}
+let W = 0, H = 0, DPR = 1;
 function resize() {
   const r = cv.getBoundingClientRect(); DPR = Math.min(2, window.devicePixelRatio || 1);
   W = r.width; H = r.height; cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR); g.setTransform(DPR, 0, 0, DPR, 0, 0);
-  if (!grain) makeGrain();
 }
 new ResizeObserver(resize).observe(cv);
+const TAU = Math.PI * 2;
+const stars = Array.from({ length: 160 }, () => ({ x: Math.random(), y: Math.random(), r: Math.random() * 1.2 + 0.2, ph: Math.random() * TAU, sp: 0.15 + Math.random() * 0.3 }));
+const sparks = Array.from({ length: 60 }, () => ({ a: Math.random() * TAU, d: Math.random(), s: 0.03 + Math.random() * 0.05, c: Math.floor(Math.random() * 7) }));
+const cx = () => W / 2, cy = () => H * 0.39, M = () => Math.min(W, H * 0.68);
 
-// dust motes in lamp light
-const motes = Array.from({ length: 70 }, () => ({ x: Math.random(), y: Math.random(), r: 0.4 + Math.random() * 1.6, s: 0.004 + Math.random() * 0.012, ph: Math.random() * 6.28, a: 0.15 + Math.random() * 0.45 }));
-const cx = () => W / 2, cy = () => H * 0.4, M = () => Math.min(W, H * 0.82);
-
-function room(t, warmth) {
+function sky(t, hue) {
   g.globalCompositeOperation = 'source-over';
-  g.fillStyle = '#0c0a12'; g.fillRect(0, 0, W, H);
-  const gr = g.createRadialGradient(cx(), cy(), 0, cx(), cy(), Math.max(W, H) * 0.75);
-  gr.addColorStop(0, 'rgba(70,46,30,' + (0.55 * warmth) + ')'); gr.addColorStop(0.35, 'rgba(38,24,34,' + (0.5 * warmth + 0.15) + ')'); gr.addColorStop(1, 'rgba(12,10,18,0)');
-  g.fillStyle = gr; g.fillRect(0, 0, W, H);
-}
-function dust(t, k) {
+  g.fillStyle = '#0a0718'; g.fillRect(0, 0, W, H);
   g.globalCompositeOperation = 'lighter';
-  for (const m of motes) {
-    const y = ((m.y - t * m.s * (reduce ? 0 : 1)) % 1 + 1) % 1, x = m.x + Math.sin(t * 0.2 + m.ph) * 0.01;
-    const dx = x * W - cx(), dy = y * H - cy(), near = Math.max(0, 1 - Math.hypot(dx, dy) / (Math.max(W, H) * 0.6));
-    const a = m.a * near * k * (0.6 + 0.4 * Math.sin(t * 0.5 + m.ph));
-    if (a < 0.01) continue;
-    g.fillStyle = 'rgba(244,214,160,' + a + ')'; g.beginPath(); g.arc(x * W, y * H, m.r, 0, 6.283); g.fill();
+  const drift = reduce ? 0 : t * 0.02;
+  const neb = [[0.25 + Math.sin(drift) * 0.05, 0.3, [106, 76, 255], 0.22], [0.78, 0.25 + Math.cos(drift) * 0.05, [199, 125, 255], 0.16], [0.6, 0.75, [58, 134, 255], 0.12], [0.2, 0.8, [229, 56, 59], 0.07]];
+  neb.forEach(([x, y, c, a]) => { const r = Math.max(W, H) * 0.55, gr = g.createRadialGradient(x * W, y * H, 0, x * W, y * H, r); gr.addColorStop(0, rgba(c, a)); gr.addColorStop(1, rgba(c, 0)); g.fillStyle = gr; g.fillRect(0, 0, W, H); });
+  const core = g.createRadialGradient(cx(), cy(), 0, cx(), cy(), M() * 0.7); core.addColorStop(0, rgba(hue, 0.25)); core.addColorStop(1, rgba(hue, 0)); g.fillStyle = core; g.fillRect(0, 0, W, H);
+  for (const s of stars) { const a = 0.25 + 0.35 * (0.5 + 0.5 * Math.sin(t * s.sp + s.ph)); g.fillStyle = 'rgba(235,228,255,' + a + ')'; g.fillRect(s.x * W, s.y * H, s.r, s.r); }
+}
+function vignette() {
+  g.globalCompositeOperation = 'source-over';
+  const v = g.createRadialGradient(cx(), H * 0.45, Math.min(W, H) * 0.35, cx(), H * 0.45, Math.max(W, H) * 0.85);
+  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(4,2,12,.75)'); g.fillStyle = v; g.fillRect(0, 0, W, H);
+}
+
+// lotus glyph: petals around a glowing disc, true petal count (1000 drawn as two dense rings)
+function lotus(x, y, r, c, petals, glow, rot) {
+  g.globalCompositeOperation = 'lighter';
+  const h = g.createRadialGradient(x, y, 0, x, y, r * (2.4 + glow * 1.6)); h.addColorStop(0, rgba(c, 0.35 + glow * 0.4)); h.addColorStop(1, rgba(c, 0));
+  g.fillStyle = h; g.beginPath(); g.arc(x, y, r * (2.4 + glow * 1.6), 0, TAU); g.fill();
+  const layers = petals === 1000 ? [[36, 1.0], [24, 0.7]] : petals === 2 ? [[2, 1.25]] : [[petals, 1.0]];
+  layers.forEach(([n, s], li) => {
+    for (let i = 0; i < n; i++) {
+      const a = i / n * TAU + (rot || 0) + li * 0.1 + (petals === 2 ? 0 : -Math.PI / 2);
+      g.save(); g.translate(x, y); g.rotate(a);
+      const pl = r * s * (petals === 2 ? 1.5 : 1.15), pw = petals === 2 ? r * 0.55 : Math.min(r * 0.42, r * 2.6 / Math.sqrt(n));
+      const pg = g.createLinearGradient(r * 0.5, 0, r * 0.5 + pl, 0); pg.addColorStop(0, rgba(c, 0.55 + glow * 0.3)); pg.addColorStop(1, rgba(c, 0.05));
+      g.fillStyle = pg; g.beginPath(); g.moveTo(r * 0.55, 0); g.quadraticCurveTo(r * 0.55 + pl * 0.5, -pw, r * 0.55 + pl, 0); g.quadraticCurveTo(r * 0.55 + pl * 0.5, pw, r * 0.55, 0); g.fill();
+      g.restore();
+    }
+  });
+  const d = g.createRadialGradient(x, y, 0, x, y, r * 0.7); d.addColorStop(0, 'rgba(255,255,255,' + (0.5 + glow * 0.5) + ')'); d.addColorStop(0.35, rgba(c, 0.9)); d.addColorStop(1, rgba(c, 0.15));
+  g.fillStyle = d; g.beginPath(); g.arc(x, y, r * 0.62, 0, TAU); g.fill();
+  g.globalCompositeOperation = 'source-over';
+  g.strokeStyle = rgba(c, 0.8); g.lineWidth = 1; g.beginPath(); g.arc(x, y, r * 0.62, 0, TAU); g.stroke();
+}
+function axisPoints(top, bottom) { return CH.map((c, i) => ({ c, y: bottom - (bottom - top) * i / 6 })); }
+
+function drawChakras(t, st, active, scale) {
+  const m = M(), x = cx(), top = cy() - m * 0.36 * scale, bottom = cy() + m * 0.33 * scale, b = st ? st.b : 0.5;
+  const pts = axisPoints(top, bottom);
+  g.globalCompositeOperation = 'lighter';
+  const ax = g.createLinearGradient(0, bottom, 0, top); CH.forEach((c, i) => ax.addColorStop(i / 6, rgba(c.c, 0.55)));
+  g.strokeStyle = ax; g.lineWidth = 2; g.beginPath(); g.moveTo(x, bottom + m * 0.04); g.lineTo(x, top - m * 0.04); g.stroke();
+  // ida & pingala: two serpent channels crossing at each chakra
+  [1, -1].forEach(s => {
+    g.strokeStyle = 'rgba(220,210,255,.18)'; g.lineWidth = 1; g.beginPath();
+    for (let k = 0; k <= 120; k++) { const yy = bottom - (bottom - top) * k / 120; const xx = x + s * Math.sin(k / 120 * 6 * Math.PI) * m * 0.06; k ? g.lineTo(xx, yy) : g.moveTo(xx, yy); }
+    g.stroke();
+  });
+  pts.forEach((p, i) => {
+    const on = active === i ? 1 : active < 0 ? 0.35 + 0.15 * Math.sin(t * 0.6 + i) : 0.12;
+    const r = m * (0.026 + (active === i ? 0.022 * (0.85 + 0.15 * b) : 0)) * scale;
+    lotus(x, p.y, r, p.c.c, p.c.petals, on, reduce ? 0 : t * 0.05 * (i % 2 ? 1 : -1));
+  });
+  if (active >= 0) {
+    const p = pts[active];
+    g.globalCompositeOperation = 'source-over'; g.textAlign = 'left'; g.textBaseline = 'middle';
+    g.fillStyle = rgba(p.c.c, 0.95); g.font = 'italic 300 ' + Math.round(m * 0.05) + 'px "Cormorant Garamond", Georgia, serif';
+    g.fillText(p.c.bija, x + m * 0.11, p.y);
   }
 }
-function finish() {
+
+function drawShell(t, st, alpha) {
+  const m = M(), x = cx(), y = cy(), b = st ? st.b : 0.5, rx = m * (0.34 + 0.015 * b), ry = m * (0.4 + 0.015 * b);
+  g.globalCompositeOperation = 'lighter';
+  for (let k = 0; k < 7; k++) {
+    const wob = reduce ? 0 : Math.sin(t * 0.6 + k) * m * 0.004;
+    g.strokeStyle = k === 3 ? 'rgba(255,230,170,' + 0.55 * alpha + ')' : rgba(CH[k].c, 0.25 * alpha); g.lineWidth = k === 3 ? 1.6 : 1;
+    g.beginPath(); g.ellipse(x, y, rx + (k - 3) * m * 0.007 + wob, ry + (k - 3) * m * 0.009 - wob, 0, 0, TAU); g.stroke();
+  }
+}
+function drawCocoon(t, st) {
+  const m = M(), x = cx(), y = cy(), b = st ? st.b : 0.5;
+  const rx = m * (0.22 + 0.02 * b), ry = m * (0.33 + 0.02 * b);
+  g.globalCompositeOperation = 'lighter';
+  const fill = g.createRadialGradient(x, y, 0, x, y, ry); fill.addColorStop(0, 'rgba(255,236,190,.16)'); fill.addColorStop(0.75, 'rgba(242,207,134,.1)'); fill.addColorStop(1, 'rgba(242,207,134,0)');
+  g.fillStyle = fill; g.beginPath(); g.ellipse(x, y, rx, ry, 0, 0, TAU); g.fill();
+  for (let k = 0; k < 7; k++) { // shimmering shell made of seven chakra-coloured membranes
+    const wob = reduce ? 0 : Math.sin(t * 0.7 + k) * m * 0.004;
+    g.strokeStyle = k === 3 ? 'rgba(255,230,170,.75)' : rgba(CH[k].c, 0.32); g.lineWidth = k === 3 ? 2 : 1.2;
+    g.beginPath(); g.ellipse(x, y, rx + (k - 3) * m * 0.008 + wob, ry + (k - 3) * m * 0.01 - wob, 0, 0, TAU); g.stroke();
+  }
+  // what leaves: dim sparks drift out through the shell and fade
+  for (const s of sparks) {
+    const d = reduce ? s.d : (s.d + t * s.s * 0.15) % 1, rr = 0.2 + d * 1.1;
+    const px = x + Math.cos(s.a) * rx * rr, py = y + Math.sin(s.a) * ry * rr, a = d < 0.85 ? 0.35 * (1 - d) : 0;
+    g.fillStyle = 'rgba(160,150,190,' + a + ')'; g.beginPath(); g.arc(px, py, 1.6, 0, TAU); g.fill();
+  }
+  drawChakras(t, st, -1, 0.72);
+}
+
+function drawEye(t, st) {
+  const m = M(), x = cx(), y = cy(), b = st ? st.b : 0.5 + 0.5 * Math.sin(t * 0.5), spin = reduce ? 0 : t * 0.06;
+  const R = m * 0.17;
+  g.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < 72; i++) { // rays in chakra colours
+    const a = i / 72 * TAU + spin * 0.5, c = CH[i % 7].c, len = R * (2.2 + 0.4 * Math.sin(i * 1.7 + t * 0.4));
+    const rg = g.createLinearGradient(x + Math.cos(a) * R * 1.1, y + Math.sin(a) * R * 1.1, x + Math.cos(a) * len, y + Math.sin(a) * len);
+    rg.addColorStop(0, rgba(c, 0.35)); rg.addColorStop(1, rgba(c, 0));
+    g.strokeStyle = rg; g.lineWidth = 1.2; g.beginPath(); g.moveTo(x + Math.cos(a) * R * 1.1, y + Math.sin(a) * R * 1.1); g.lineTo(x + Math.cos(a) * len, y + Math.sin(a) * len); g.stroke();
+  }
+  CH.forEach((c, i) => { g.strokeStyle = rgba(c.c, 0.45); g.lineWidth = 1.2; g.beginPath(); g.arc(x, y, R * (1.05 + i * 0.09), 0, TAU); g.stroke(); });
+  // two Ajna petals
+  [-1, 1].forEach(s => {
+    const pg = g.createLinearGradient(x, y, x + s * R * 2.3, y); pg.addColorStop(0, 'rgba(106,76,255,.75)'); pg.addColorStop(0.6, 'rgba(143,124,255,.4)'); pg.addColorStop(1, 'rgba(199,125,255,0)');
+    g.fillStyle = pg; g.beginPath(); g.moveTo(x + s * R * 0.7, y);
+    g.bezierCurveTo(x + s * R * 1.2, y - R * 0.95, x + s * R * 2.1, y - R * 0.55, x + s * R * 2.4, y);
+    g.bezierCurveTo(x + s * R * 2.1, y + R * 0.55, x + s * R * 1.2, y + R * 0.95, x + s * R * 0.7, y); g.fill();
+  });
+  const disc = g.createRadialGradient(x, y, 0, x, y, R); disc.addColorStop(0, 'rgba(60,40,160,.5)'); disc.addColorStop(1, 'rgba(106,76,255,.25)');
+  g.fillStyle = disc; g.beginPath(); g.arc(x, y, R, 0, TAU); g.fill();
+  // almond eye
   g.globalCompositeOperation = 'source-over';
-  const v = g.createRadialGradient(cx(), H * 0.45, Math.min(W, H) * 0.3, cx(), H * 0.45, Math.max(W, H) * 0.85);
-  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,.7)'); g.fillStyle = v; g.fillRect(0, 0, W, H);
-  if (grain) { g.fillStyle = grain; g.fillRect(0, 0, W, H); }
+  const ew = R * 0.92, eh = R * 0.5;
+  g.save(); g.beginPath(); g.moveTo(x - ew, y); g.quadraticCurveTo(x, y - eh * 1.25, x + ew, y); g.quadraticCurveTo(x, y + eh * 1.25, x - ew, y); g.closePath();
+  g.fillStyle = 'rgba(14,8,40,.92)'; g.fill(); g.clip();
+  const ir = eh * (0.92 + 0.06 * b);
+  const iris = g.createRadialGradient(x, y, ir * 0.2, x, y, ir);
+  iris.addColorStop(0, '#f2cf86'); iris.addColorStop(0.3, '#c77dff'); iris.addColorStop(0.65, '#3a86ff'); iris.addColorStop(1, '#1b0f52');
+  g.fillStyle = iris; g.beginPath(); g.arc(x, y, ir, 0, TAU); g.fill();
+  g.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < 60; i++) { const a = i / 60 * TAU + spin; g.strokeStyle = rgba(CH[i % 7].c, 0.3); g.lineWidth = 1; g.beginPath(); g.moveTo(x + Math.cos(a) * ir * 0.38, y + Math.sin(a) * ir * 0.38); g.lineTo(x + Math.cos(a) * ir * 0.95, y + Math.sin(a) * ir * 0.95); g.stroke(); }
+  g.globalCompositeOperation = 'source-over';
+  g.fillStyle = '#05030f'; g.beginPath(); g.arc(x, y, ir * 0.34, 0, TAU); g.fill();
+  g.fillStyle = 'rgba(255,255,255,.75)'; g.beginPath(); g.arc(x - ir * 0.32, y - ir * 0.34, ir * 0.1, 0, TAU); g.fill();
+  g.restore();
+  g.strokeStyle = 'rgba(242,207,134,.85)'; g.lineWidth = 1.6;
+  g.beginPath(); g.moveTo(x - ew, y); g.quadraticCurveTo(x, y - eh * 1.25, x + ew, y); g.quadraticCurveTo(x, y + eh * 1.25, x - ew, y); g.stroke();
+  // golden bindu: the gaze point
+  g.globalCompositeOperation = 'lighter';
+  const bd = g.createRadialGradient(x, y, 0, x, y, R * 0.12); bd.addColorStop(0, 'rgba(255,240,200,1)'); bd.addColorStop(1, 'rgba(242,207,134,0)');
+  g.fillStyle = bd; g.beginPath(); g.arc(x, y, R * 0.12, 0, TAU); g.fill();
+  // small chakra lotuses orbiting
+  CH.forEach((c, i) => { const a = i / 7 * TAU - Math.PI / 2 + spin * 0.4; lotus(x + Math.cos(a) * R * 2.05, y + Math.sin(a) * R * 2.05, m * 0.014, c.c, Math.min(c.petals, 16), 0.3, 0); });
 }
 
 function drawSphere(st, t) {
-  const m = M(), x = cx(), y = cy();
-  const b = st ? st.b : 0.5 + 0.5 * Math.sin(t * 0.55);
+  const m = M(), x = cx(), y = cy(), b = st ? st.b : 0.5 + 0.5 * Math.sin(t * 0.55);
   const r0 = m * 0.085, r1 = m * 0.22, r = r0 + (r1 - r0) * b;
+  const k = (t * 0.03) % 7, c1 = CH[Math.floor(k)].c, c2 = CH[(Math.floor(k) + 1) % 7].c, f = k % 1;
+  const c = [0, 1, 2].map(i => Math.round(c1[i] + (c2[i] - c1[i]) * f));
   g.globalCompositeOperation = 'lighter';
-  let h = g.createRadialGradient(x, y, 0, x, y, r * 3.2);
-  h.addColorStop(0, 'rgba(217,178,115,' + (0.18 + 0.14 * b) + ')'); h.addColorStop(0.5, 'rgba(160,96,70,' + (0.06 + 0.05 * b) + ')'); h.addColorStop(1, 'rgba(0,0,0,0)');
-  g.fillStyle = h; g.beginPath(); g.arc(x, y, r * 3.2, 0, 6.283); g.fill();
+  const h = g.createRadialGradient(x, y, 0, x, y, r * 3.2); h.addColorStop(0, rgba(c, 0.3 + 0.2 * b)); h.addColorStop(1, rgba(c, 0));
+  g.fillStyle = h; g.beginPath(); g.arc(x, y, r * 3.2, 0, TAU); g.fill();
   const p = g.createRadialGradient(x - r * 0.3, y - r * 0.35, r * 0.05, x, y, r);
-  p.addColorStop(0, 'rgba(255,244,220,.55)'); p.addColorStop(0.45, 'rgba(232,190,120,.28)'); p.addColorStop(1, 'rgba(120,70,60,.05)');
-  g.fillStyle = p; g.beginPath(); g.arc(x, y, r, 0, 6.283); g.fill();
+  p.addColorStop(0, 'rgba(255,255,255,.6)'); p.addColorStop(0.45, rgba(c, 0.45)); p.addColorStop(1, rgba(c, 0.08));
+  g.fillStyle = p; g.beginPath(); g.arc(x, y, r, 0, TAU); g.fill();
   g.globalCompositeOperation = 'source-over';
-  g.lineWidth = 1; g.strokeStyle = 'rgba(214,178,118,.16)';
-  [r0, r1].forEach(rr => { g.beginPath(); g.arc(x, y, rr, 0, 6.283); g.stroke(); });
-  for (let i = 0; i < 48; i++) { // fine tick ring, like a dial
-    const a = i / 48 * 6.283, R1 = r1 + m * 0.03, R2 = R1 + (i % 4 ? m * 0.008 : m * 0.018);
-    g.strokeStyle = 'rgba(214,178,118,' + (i % 4 ? 0.18 : 0.35) + ')'; g.beginPath(); g.moveTo(x + Math.cos(a) * R1, y + Math.sin(a) * R1); g.lineTo(x + Math.cos(a) * R2, y + Math.sin(a) * R2); g.stroke();
-  }
-  const ring = g.createLinearGradient(x - r, y - r, x + r, y + r);
-  ring.addColorStop(0, 'rgba(255,236,196,.95)'); ring.addColorStop(0.5, 'rgba(217,178,115,.7)'); ring.addColorStop(1, 'rgba(255,236,196,.9)');
-  g.strokeStyle = ring; g.lineWidth = 1.6; g.beginPath(); g.arc(x, y, r, 0, 6.283); g.stroke();
+  for (let i = 0; i < 49; i++) { const a = i / 49 * TAU - Math.PI / 2, R1 = r1 + m * 0.03, R2 = R1 + (i % 7 ? m * 0.008 : m * 0.02);
+    g.strokeStyle = rgba(CH[Math.floor(i / 7)].c, i % 7 ? 0.35 : 0.8); g.lineWidth = 1; g.beginPath(); g.moveTo(x + Math.cos(a) * R1, y + Math.sin(a) * R1); g.lineTo(x + Math.cos(a) * R2, y + Math.sin(a) * R2); g.stroke(); }
+  g.strokeStyle = 'rgba(255,255,255,.75)'; g.lineWidth = 1.5; g.beginPath(); g.arc(x, y, r, 0, TAU); g.stroke();
   if (st) {
-    const prog = st.label === 'Вдох' || st.label === 'Выдох' ? 1 - st.left / BREATH_CUR_P(st.label) : 1;
-    g.strokeStyle = 'rgba(244,220,170,.85)'; g.lineWidth = 2; g.beginPath(); g.arc(x, y, r1 + m * 0.03, -1.5708, -1.5708 + 6.283 * Math.max(0, Math.min(1, prog))); g.stroke();
-    g.fillStyle = 'rgba(239,230,214,.92)'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    const prog = st.dur ? 1 - st.left / st.dur : 1;
+    const arc = g.createConicGradient ? g.createConicGradient(-Math.PI / 2, x, y) : null;
+    if (arc) CH.forEach((cc, i) => arc.addColorStop(i / 7, rgba(cc.c, 1))), arc.addColorStop(1, rgba(CH[0].c, 1));
+    g.strokeStyle = arc || 'rgba(242,207,134,.9)'; g.lineWidth = 2.5; g.beginPath(); g.arc(x, y, r1 + m * 0.03, -Math.PI / 2, -Math.PI / 2 + TAU * Math.max(0, Math.min(1, prog))); g.stroke();
+    g.fillStyle = 'rgba(241,234,248,.95)'; g.textAlign = 'center'; g.textBaseline = 'middle';
     g.font = 'italic 300 ' + Math.round(m * 0.06) + 'px "Cormorant Garamond", Georgia, serif'; g.fillText(st.label.toLowerCase(), x, y);
-  } else { g.fillStyle = '#f4dcaa'; g.beginPath(); g.arc(x, y, 2.4, 0, 6.283); g.fill(); }
-}
-let curBreathKey = 'calm';
-function BREATH_CUR_P(label) { const p = BREATH[curBreathKey].p; return label === 'Вдох' ? p[0] : p[2]; }
-
-function drawFlame(t) {
-  const m = M(), x = cx(), base = cy() + m * 0.14, fh = m * 0.3, k = reduce ? 0.3 : 1;
-  const sway = k * (Math.sin(t * 0.9) * 0.5 + Math.sin(t * 1.7 + 1) * 0.3 + Math.sin(t * 0.37) * 0.2);
-  const lift = 1 + k * (0.035 * Math.sin(t * 2.1) + 0.02 * Math.sin(t * 2.9 + 2));
-  const tipX = x + sway * fh * 0.08, tipY = base - fh * lift, w = fh * 0.19;
-  g.globalCompositeOperation = 'lighter';
-  let gl = g.createRadialGradient(x, base - fh * 0.45, 0, x, base - fh * 0.45, m * 0.65);
-  gl.addColorStop(0, 'rgba(255,190,110,' + (0.3 + 0.02 * Math.sin(t * 1.3)) + ')'); gl.addColorStop(0.3, 'rgba(200,110,60,.1)'); gl.addColorStop(1, 'rgba(0,0,0,0)');
-  g.fillStyle = gl; g.fillRect(0, 0, W, H);
-  g.globalCompositeOperation = 'source-over';
-  // candle: wax column with soft top
-  const cw = m * 0.07, top = base + m * 0.025, ch = H - top + 10;
-  const cg = g.createLinearGradient(x - cw, 0, x + cw, 0);
-  cg.addColorStop(0, '#1d1620'); cg.addColorStop(0.35, '#4a3a3a'); cg.addColorStop(0.55, '#5e4a44'); cg.addColorStop(1, '#17121b');
-  g.fillStyle = cg; g.fillRect(x - cw, top, cw * 2, ch);
-  const lit = g.createLinearGradient(0, top, 0, top + m * 0.12); lit.addColorStop(0, 'rgba(255,190,120,.35)'); lit.addColorStop(1, 'rgba(255,190,120,0)');
-  g.fillStyle = lit; g.fillRect(x - cw, top, cw * 2, m * 0.12);
-  g.fillStyle = '#6a5248'; g.beginPath(); g.ellipse(x, top, cw, cw * 0.18, 0, 0, 6.283); g.fill();
-  g.fillStyle = 'rgba(255,200,130,.35)'; g.beginPath(); g.ellipse(x, top, cw * 0.7, cw * 0.1, 0, 0, 6.283); g.fill();
-  g.strokeStyle = '#120c0c'; g.lineWidth = 2; g.beginPath(); g.moveTo(x, top); g.quadraticCurveTo(x, base - fh * 0.02, x + sway * 2, base - fh * 0.07); g.stroke();
-  function shape(s, wob) {
-    const ww = w * s, ty = base - (base - tipY) * s, tx = x + (tipX - x) * s + wob;
-    g.beginPath(); g.moveTo(x, base);
-    g.bezierCurveTo(x - ww * 1.3, base - fh * 0.06 * s, x - ww * 0.95, base - fh * 0.55 * s, tx, ty);
-    g.bezierCurveTo(x + ww * 0.95, base - fh * 0.55 * s, x + ww * 1.3, base - fh * 0.06 * s, x, base); g.closePath();
   }
-  g.globalCompositeOperation = 'lighter';
-  let f = g.createLinearGradient(0, base, 0, tipY);
-  f.addColorStop(0, 'rgba(255,150,70,.35)'); f.addColorStop(0.6, 'rgba(240,110,50,.22)'); f.addColorStop(1, 'rgba(200,80,40,0)');
-  g.fillStyle = f; shape(1.25, Math.sin(t * 1.1) * 2 * k); g.fill();
-  f = g.createLinearGradient(0, base, 0, tipY);
-  f.addColorStop(0, 'rgba(255,226,170,.9)'); f.addColorStop(0.5, 'rgba(255,190,100,.75)'); f.addColorStop(1, 'rgba(255,140,60,.05)');
-  g.fillStyle = f; shape(0.9, 0); g.fill();
-  f = g.createRadialGradient(x, base - fh * 0.22, 0, x, base - fh * 0.22, fh * 0.35);
-  f.addColorStop(0, 'rgba(255,255,245,.95)'); f.addColorStop(1, 'rgba(255,240,200,0)');
-  g.fillStyle = f; shape(0.5, 0); g.fill();
-  g.fillStyle = 'rgba(90,120,255,.28)'; g.beginPath(); g.ellipse(x, base - fh * 0.03, w * 0.4, fh * 0.07, 0, 0, 6.283); g.fill();
 }
 
 function drawMandala(t, st) {
-  const m = M(), x = cx(), y = cy(), b = st ? st.b : 0.5, sc = 0.93 + 0.07 * b, spin = reduce ? 0 : t * 6.283 / 300;
-  const R = m * 0.26 * sc;
+  const m = M(), x = cx(), y = cy(), b = st ? st.b : 0.5, sc = 0.93 + 0.07 * b, spin = reduce ? 0 : t * TAU / 300, R = m * 0.24 * sc;
   g.globalCompositeOperation = 'lighter';
-  const h = g.createRadialGradient(x, y, 0, x, y, R * 1.8);
-  h.addColorStop(0, 'rgba(217,178,115,' + (0.12 + 0.08 * b) + ')'); h.addColorStop(1, 'rgba(0,0,0,0)');
-  g.fillStyle = h; g.beginPath(); g.arc(x, y, R * 1.8, 0, 6.283); g.fill();
-  g.lineWidth = 1;
-  // flower of life: 6 + 12 circles, counter-rotating
-  const rings = [[6, R * 0.5, R * 0.5, 1, 0.5], [12, R * 0.87, R * 0.5, -1, 0.28]];
-  rings.forEach(([n, d, rr, dir, a]) => {
-    for (let i = 0; i < n; i++) {
-      const an = i / n * 6.283 + spin * dir;
-      g.strokeStyle = 'rgba(232,196,138,' + (a * (0.8 + 0.2 * b)) + ')';
-      g.beginPath(); g.arc(x + Math.cos(an) * d, y + Math.sin(an) * d, rr, 0, 6.283); g.stroke();
-    }
-  });
-  g.strokeStyle = 'rgba(232,196,138,.55)'; g.beginPath(); g.arc(x, y, R * 0.5, 0, 6.283); g.stroke();
-  for (let i = 0; i < 24; i++) { // outer petals
-    const an = i / 24 * 6.283 - spin * 0.5;
-    g.save(); g.translate(x, y); g.rotate(an);
-    g.strokeStyle = 'rgba(214,178,118,.22)'; g.beginPath(); g.ellipse(0, -R * 1.42, R * 0.07, R * 0.2, 0, 0, 6.283); g.stroke(); g.restore();
-  }
-  g.strokeStyle = 'rgba(214,178,118,.25)'; [1.08, 1.18, 1.65].forEach(s => { g.beginPath(); g.arc(x, y, R * s, 0, 6.283); g.stroke(); });
-  g.fillStyle = 'rgba(255,240,210,.95)'; g.beginPath(); g.arc(x, y, 2.5 + 1.5 * b, 0, 6.283); g.fill();
+  const h = g.createRadialGradient(x, y, 0, x, y, R * 1.9); h.addColorStop(0, 'rgba(199,125,255,' + (0.18 + 0.1 * b) + ')'); h.addColorStop(1, 'rgba(199,125,255,0)');
+  g.fillStyle = h; g.beginPath(); g.arc(x, y, R * 1.9, 0, TAU); g.fill();
+  g.lineWidth = 1.2;
+  for (let i = 0; i < 6; i++) { const a = i / 6 * TAU + spin; g.strokeStyle = rgba(CH[i].c, 0.6); g.beginPath(); g.arc(x + Math.cos(a) * R * 0.5, y + Math.sin(a) * R * 0.5, R * 0.5, 0, TAU); g.stroke(); }
+  for (let i = 0; i < 12; i++) { const a = i / 12 * TAU - spin + Math.PI / 12; g.strokeStyle = rgba(CH[i % 7].c, 0.32); g.beginPath(); g.arc(x + Math.cos(a) * R * 0.87, y + Math.sin(a) * R * 0.87, R * 0.5, 0, TAU); g.stroke(); }
+  for (let i = 0; i < 28; i++) { const a = i / 28 * TAU - spin * 0.5; g.save(); g.translate(x, y); g.rotate(a);
+    g.fillStyle = rgba(CH[i % 7].c, 0.28); g.beginPath(); g.ellipse(0, -R * 1.5, R * 0.06, R * 0.2, 0, 0, TAU); g.fill(); g.restore(); }
+  CH.forEach((c, i) => { g.strokeStyle = rgba(c.c, 0.3); g.beginPath(); g.arc(x, y, R * (1.05 + i * 0.045), 0, TAU); g.stroke(); });
+  lotus(x, y, m * 0.03, CH[6].c, 1000, 0.6 + 0.4 * b, spin);
 }
 
 function drawDark(t, since) {
   g.globalCompositeOperation = 'source-over';
-  g.fillStyle = 'rgba(4,3,8,' + Math.min(0.94, since / 5) + ')'; g.fillRect(0, 0, W, H);
+  g.fillStyle = 'rgba(3,2,8,' + Math.min(0.94, since / 5) + ')'; g.fillRect(0, 0, W, H);
   g.globalCompositeOperation = 'lighter';
-  const a = 0.1 + 0.04 * Math.sin(t * 0.45), r = M() * 0.05;
-  const h = g.createRadialGradient(cx(), cy(), 0, cx(), cy(), r); h.addColorStop(0, 'rgba(244,214,160,' + a + ')'); h.addColorStop(1, 'rgba(0,0,0,0)');
-  g.fillStyle = h; g.beginPath(); g.arc(cx(), cy(), r, 0, 6.283); g.fill();
+  const a = 0.14 + 0.05 * Math.sin(t * 0.45), r = M() * 0.06;
+  const h = g.createRadialGradient(cx(), cy(), 0, cx(), cy(), r); h.addColorStop(0, 'rgba(143,124,255,' + a + ')'); h.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = h; g.beginPath(); g.arc(cx(), cy(), r, 0, TAU); g.fill();
 }
 
 function draw(t) {
   if (!W) return;
-  let visual = preview, st = null, pt = 0;
-  if (running) { const ph = phases[phaseIdx]; pt = elapsed - phaseStart; visual = ph.visual; if (ph.breath) { curBreathKey = ph.breath; st = breathAt(ph.breath, pt); } }
-  room(t, visual === 'flame' ? 1 : visual === 'dark' ? 0.2 : 0.7);
-  if (visual === 'flame') drawFlame(t);
+  let visual = preview, st = null, pt = 0, ph = null;
+  if (running) { ph = phases[phaseIdx]; pt = elapsed - phaseStart; visual = ph.visual; if (ph.breath) st = breathAt(ph.breath, pt); }
+  const hueIdx = visual === 'chakras' && chIdx >= 0 ? chIdx : visual === 'cocoon' ? 2 : visual === 'mandala' ? 6 : 5;
+  sky(t, CH[hueIdx].c);
+  if (visual === 'eye') drawEye(t, st);
+  else if (visual === 'chakras') drawChakras(t, st, running && ph && ph.key === 'p4' ? chIdx : (running ? -1 : Math.floor(t / 4) % 7), 1);
+  else if (visual === 'cocoon') drawCocoon(t, st);
   else if (visual === 'mandala') drawMandala(t, st);
   else if (visual === 'dark') drawDark(t, pt);
   else drawSphere(st, t);
-  if (visual !== 'dark') dust(t, visual === 'flame' ? 1 : 0.6);
-  finish();
-  if (running && st && phases[phaseIdx].cue && st.label !== lastBreathLabel) {
+  if (running && visual !== 'cocoon') drawShell(t, st, visual === 'dark' ? 0.25 : 0.6);   // the cocoon stays on for the whole session
+  vignette();
+  if (running && st && ph.cue && st.label !== lastBreathLabel) {
     if (!paused && st.label !== 'Пауза' && lastBreathLabel) cueBreath(st.label);
     lastBreathLabel = st.label;
   }
@@ -649,8 +747,9 @@ function tick(now) {
     elapsed += Math.min(0.25, (now - lastT) / 1000);
     if (elapsed - phaseStart >= phases[phaseIdx].dur) { if (phaseIdx + 1 < phases.length) enterPhase(phaseIdx + 1); else stopSession(true); }
     if (running) {
-      const cur = phases[phaseIdx], tot = sum(phases);
-      $('eyebrow').textContent = (mode === 'prog' ? 'Этап ' + (phaseIdx + 1) + ' из ' + phases.length : 'Свободно') + ' · ' + fmt(cur.dur - (elapsed - phaseStart));
+      const cur = phases[phaseIdx], tot = sum(phases), pt = elapsed - phaseStart;
+      if (cur.key === 'p4' && pt > 4) { const k = Math.min(6, Math.floor((pt - 4) / CH_STEP)); if (k !== chIdx) chakraStep(k); }
+      $('eyebrow').textContent = (mode === 'prog' ? 'Этап ' + (phaseIdx + 1) + ' из ' + phases.length : 'Свободно') + ' · ' + fmt(cur.dur - pt);
       $('tTotal').textContent = fmt(tot - elapsed);
       $('prog').style.width = (elapsed / tot * 100).toFixed(2) + '%';
     }
