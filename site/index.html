@@ -615,6 +615,9 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 .chk__note { display: grid; gap: 6px; font-size: 14px; color: #e7ddcc; } .chk__note span { color: #8f8677; } .chk__note textarea, .authf input { font: inherit; font-size: 15px; color: #f6f1e8; background: rgba(255,255,255,.06); border: 1px solid rgba(246,241,232,.2); border-radius: 12px; padding: 10px 12px; width: 100%; color-scheme: dark; }
 .authf { display: grid; gap: 12px; } .authf label { display: grid; gap: 6px; font-size: 14px; color: #e7ddcc; } .authf .check { display: flex; } .authf a { color: var(--gold-l); }
 .after__res a { color: var(--gold-l); }
+.buy__ok { font-size: 13.5px; line-height: 1.5; color: #d6d1c8; align-items: flex-start; } .buy__ok input { margin-top: 3px; flex: none; } .buy__ok a { color: var(--gold-l); }
+.km-skel i, .skelk, .skelc { display: block; height: 11px; border-radius: 6px; background: linear-gradient(90deg, var(--k-line, #e8e0d3), var(--k-panel2, #f3ede4)); }
+.km-skel { gap: 12px; min-height: 170px; } .skelk { height: 74px; border-radius: 14px; background: #efe8dc; } .skelc { height: 180px; border-radius: 14px; background: #efe8dc; } .skelc--s { height: 120px; }
 .buyo { display: grid; gap: 10px; } .buyo__i { display: flex; justify-content: space-between; align-items: center; gap: 14px; text-align: left; padding: 16px 18px; border-radius: 16px; background: rgba(255,255,255,.06); border: 1.5px solid rgba(246,241,232,.2); color: #f6f1e8; }
 .buyo__i:hover { border-color: var(--gold-l); } .buyo__i.best { border-color: var(--gold-l); background: rgba(210,168,102,.16); } .buyo__i span { display: grid; gap: 2px; } .buyo__i b { font-size: 16px; } .buyo__i small { color: #cfc6b8; font-size: 13px; } .buyo__i em { font-style: normal; font-weight: 700; color: var(--gold-l); white-space: nowrap; }
 .room .lockb { position: absolute; right: 12px; bottom: 12px; z-index: 2; display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 999px; font-size: 12.5px; font-weight: 600; color: #fff; background: rgba(14,12,20,.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(246,241,232,.25); }
@@ -1175,7 +1178,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
 <div class="safe" id="auth" hidden role="dialog" aria-modal="true" aria-labelledby="authT"><div class="safe__box">
   <span class="eyebrow">Бесплатная регистрация</span><h2 id="authT">Ваш личный кабинет</h2>
   <p style="color:#cfc6b8">Дневник практик, ваши цели, карта жизни и курсы — в одном месте. Первая практика и профиль карты — бесплатно.</p>
-  <form id="authForm" class="authf" novalidate><label>Имя<input id="authName" type="text" autocomplete="given-name" maxlength="40" required></label><label>E-mail<input id="authMail" type="email" autocomplete="email" required></label>
+  <form id="authForm" class="authf" novalidate><label>Имя<input id="authName" type="text" autocomplete="given-name" maxlength="40" required></label><label>E-mail<input id="authMail" type="email" autocomplete="email" required></label><label>Пароль <span style="color:#8f8677">не меньше 10 символов</span><input id="authPass" type="password" autocomplete="new-password" minlength="10" required></label><button type="button" class="linkbtn" id="authForgot">Забыли пароль?</button>
   <label class="check"><input type="checkbox" id="authOk"> <span>Принимаю <a href="#d-terms">условия</a> и <a href="#d-privacy">политику данных</a></span></label><p class="kform__err" id="authErr"></p>
   <div class="safe__act"><button class="ghost" id="authNo" type="button">Позже</button><button class="btn btn--gold" type="submit">Создать кабинет</button></div></form>
   <p class="small" style="color:#8f8677">Тестовый режим: данные хранятся только в этом браузере. При запуске — вход по ссылке на почту, Google или Apple.</p>
@@ -1183,6 +1186,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
 
 <div class="safe" id="buy" hidden role="dialog" aria-modal="true" aria-labelledby="buyT"><div class="safe__box">
   <span class="eyebrow">Открыть доступ</span><h2 id="buyT"></h2><div id="buyOpts" class="buyo"></div>
+  <label class="check buy__ok"><input type="checkbox" id="buyOk"> <span>Принимаю <a href="#d-terms">публичную оферту</a> и <a href="#d-refund">условия возврата</a>. Прошу открыть доступ сразу. Для подписки — согласен(на) на автоматическое продление; отменить можно в кабинете в любой момент.</span></label><p class="kform__err" id="buyErr"></p>
   <p class="small" style="color:#8f8677">Тестовый режим: оплата подключается к запуску, сейчас доступ открывается без списания.</p>
   <div class="safe__act"><button class="ghost" id="buyNo" type="button">Закрыть</button></div>
 </div></div>
@@ -2711,13 +2715,15 @@ const COURSES = [
 const courseProgress = c => { const done = SESS().filter(x => x.course === c.id && x.completed).length; return Math.min(done, c.days.length); };
 
 // ---------- auth / buy ----------
-function openAuth(then) { $('auth').hidden = false; $('authErr').textContent = ''; $('authNo').onclick = () => $('auth').hidden = true;
+function openAuth(then) { $('authForgot').onclick = () => { const m = $('authMail').value.trim(); $('authErr').style.color = '#9fe0c0'; $('authErr').textContent = /^\S+@\S+\.\S+$/.test(m) ? 'Если аккаунт с адресом ' + m + ' существует, мы отправим ссылку для смены пароля. Ссылка действует 30 минут. (Тестовый режим: письма пока не отправляются.)' : 'Введите e-mail, и мы пришлём ссылку для смены пароля.'; };
+  $('authErr').style.color = ''; $('auth').hidden = false; $('authErr').textContent = ''; $('authNo').onclick = () => $('auth').hidden = true;
   $('authForm').onsubmit = e => { e.preventDefault(); const n = $('authName').value.trim(), m = $('authMail').value.trim();
-    if (!n) return $('authErr').textContent = 'Как к вам обращаться?'; if (!/^\S+@\S+\.\S+$/.test(m)) return $('authErr').textContent = 'Проверьте e-mail.'; if (!$('authOk').checked) return $('authErr').textContent = 'Подтвердите согласие с условиями.';
-    SJ('acct', { name: n, mail: m, since: Date.now() }); $('auth').hidden = true; accUI(); if (then) then(); }; }
+    if (!n) return $('authErr').textContent = 'Как к вам обращаться?'; if (!/^\S+@\S+\.\S+$/.test(m)) return $('authErr').textContent = 'Проверьте e-mail.'; if ($('authPass').value.length < 10) return $('authErr').textContent = 'Пароль — не меньше 10 символов.'; if (!$('authOk').checked) return $('authErr').textContent = 'Подтвердите согласие с условиями.';
+    $('authPass').value = ''; SJ('acct', { name: n, mail: m, since: Date.now() }); SJ('consents', J('consents', []).concat([{ t: Date.now(), what: 'Регистрация: оферта и политика данных', v: '2026-10-14' }])); $('auth').hidden = true; accUI(); if (then) then(); }; }
 function openBuy(title, opts) { $('buyT').textContent = title; $('buy').hidden = false; $('buyNo').onclick = () => $('buy').hidden = true;
   $('buyOpts').innerHTML = opts.map((o, i) => '<button type="button" class="buyo__i' + (o.best ? ' best' : '') + '" data-i="' + i + '"><span><b>' + o.t + '</b><small>' + o.d + '</small></span><em>' + o.p + '</em></button>').join('');
-  $('buyOpts').querySelectorAll('button').forEach(b => b.onclick = () => { if (!ACC()) { $('buy').hidden = true; return openAuth(() => openBuy(title, opts)); } opts[+b.dataset.i].go(); $('buy').hidden = true; accUI(); refreshLocks(); }); }
+  $('buyOk').checked = false; $('buyErr').textContent = '';
+  $('buyOpts').querySelectorAll('button').forEach(b => b.onclick = () => { if (!$('buyOk').checked) { $('buyErr').textContent = 'Отметьте согласие с офертой, чтобы продолжить.'; return; } SJ('consents', J('consents', []).concat([{ t: Date.now(), what: title + ' / ' + opts[+b.dataset.i].t, v: '2026-10-14' }])); if (!ACC()) { $('buy').hidden = true; return openAuth(() => openBuy(title, opts)); } opts[+b.dataset.i].go(); $('buy').hidden = true; accUI(); refreshLocks(); }); }
 const grant = f => { const e = ENT(); f(e); SJ('ent', e); };
 const buyRoom = r => openBuy('Пространство «' + r.name + '»', [
   { t: 'Только это пространство', d: 'Навсегда, все уровни', p: PRICE_ROOM + ' ₽', go: () => grant(e => e.rooms.push(r.id)) },
@@ -2754,7 +2760,7 @@ function renderCabinet() {
   $('cabTabs').hidden = false; $('cabHi').innerHTML = 'Здравствуйте, <em>' + a.name.replace(/[<>&]/g, '') + '</em>'; const S = stats(), E = ENT();
   $('cabSub').textContent = S.n ? S.n + ' практик · ' + S.days + ' дн. · серия ' + S.streak + ' дн.' : 'Начните с первой практики — дневник заполнится сам.';
   [...$('cabTabs').children].forEach(b => b.setAttribute('aria-pressed', b.dataset.t === cabTab));
-  const fullDiary = E.sub, lockBlk = (title, html) => fullDiary ? html : '<div class="cab-lock"><div class="cab-lock__in" aria-hidden="true">' + html + '</div><div class="cab-lock__cta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg><b>' + title + '</b><button class="btn btn--gold btn--sm" type="button" data-sub>Подписка ' + PRICE_SUB + ' ₽/мес</button></div></div>';
+  const fullDiary = E.sub, lockBlk = (title, html) => fullDiary ? html : '<div class="cab-lock"><div class="cab-lock__in" aria-hidden="true"><div class="cab-card"><div class="kpis">' + '<div class="kpi skelk"></div>'.repeat(3) + '</div><div class="skelc"></div></div><div class="cab-card"><div class="skelc skelc--s"></div></div></div><div class="cab-lock__cta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg><b>' + title + '</b><button class="btn btn--gold btn--sm" type="button" data-sub>Подписка ' + PRICE_SUB + ' ₽/мес</button></div></div>';
   const kpi = (v, l) => '<div class="kpi"><b>' + v + '</b><span>' + l + '</span></div>';
   const ac = store.get('activeCourse'), course = COURSES.find(c => c.id === ac);
   let h = '';
