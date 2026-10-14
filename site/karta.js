@@ -35,7 +35,7 @@ const TR_A = { jupiter: ['Хорошее время просить, начина
 const LINES = { jupiter: ['Юпитер', 'рост, удача, покровительство'], venus: ['Венера', 'любовь, красота, деньги через людей'], sun: ['Солнце', 'признание и уверенность'] };
 const PNAME = Object.fromEntries(K.PLANETS.map(p => [p[0], p[1]])); PNAME.asc = 'Асцендент'; PNAME.mc = 'MC';
 const PGL = Object.fromEntries(K.PLANETS.map(p => [p[0], p[2]])); PGL.asc = 'AC'; PGL.mc = 'MC';
-const PRICE = { year: ['Прогноз на год', 990, 'По месяцам: какие периоды открывают возможности, а где нужна осторожность.'], full: ['Полная карта жизни', 1990, 'Призвание, деньги, отношения, самочувствие, где жить, маршрут на 12 лет, план практик.'], all: ['Всё вместе', 2490, 'Полная карта и прогноз на год. Выгода 490 ₽.'] };
+const PRICE = { year: ['Прогноз на год', 990, 'По месяцам: какие периоды открывают возможности, а где нужна осторожность.'], full: ['Полная карта жизни', 1990, 'Призвание, деньги, отношения, самочувствие, где жить, маршрут на 12 лет, план практик.'], all: ['Всё вместе', 2490, 'Полная карта и прогноз на год. Выгода 490 ₽. Прогноз на год также входит в годовую подписку.'] };
 const MON = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
 const MON1 = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
 const fdate = d => d.getDate() + ' ' + MON[d.getMonth()] + ' ' + d.getFullYear();
@@ -112,7 +112,7 @@ function drawWheel(cv, ch) {
 
 // ---------- разметка ----------
 // ---------- полная карта: вид ----------
-const has = k => { const u = st.get('karta_unlock') || ''; return (window.OWNER && window.OWNER()) || u.includes('all') || u.includes(k); };
+const has = k => { const u = st.get('karta_unlock') || '', e = (() => { try { return JSON.parse(st.get('ent')) || {}; } catch (x) { return {}; } })(); return (window.OWNER && window.OWNER()) || (k === 'year' && e.plan === 'year' && e.subUntil > Date.now()) || u.includes('all') || u.includes(k); };
 const RU_P = { sun: 'Солнце', moon: 'Луна', mercury: 'Меркурий', venus: 'Венера', mars: 'Марс', jupiter: 'Юпитер', saturn: 'Сатурн', uranus: 'Уран', neptune: 'Нептун', pluto: 'Плутон', node: 'Северный узел', asc: 'Асцендент', mc: 'MC', ic: 'IC', dsc: 'Десцендент', ketu: 'Кету', rahu: 'Раху', fortune: 'Колесо Фортуны' };
 const RU_PG = { sun: 'Солнца', moon: 'Луны', mercury: 'Меркурия', venus: 'Венеры', mars: 'Марса', jupiter: 'Юпитера', saturn: 'Сатурна', uranus: 'Урана', neptune: 'Нептуна', pluto: 'Плутона', ketu: 'Кету', rahu: 'Раху' };
 const GL = { sun: '☉', moon: '☽', mercury: '☿', venus: '♀', mars: '♂', jupiter: '♃', saturn: '♄', uranus: '♅', neptune: '♆', pluto: '♇', node: '☊', fortune: '⊗', asc: 'AC', mc: 'MC' };

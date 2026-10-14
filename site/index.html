@@ -87,6 +87,8 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 .totop svg { width: 22px; height: 22px; } .totop:hover { transform: translateY(-3px); } .totop:focus-visible { outline: 2px solid var(--gold-l); outline-offset: 3px; }
 .totop.hide { opacity: 0; pointer-events: none; transform: translateY(10px); }
 .mbar { display: none; }
+/* floating buttons step aside while a dialog or the player is open */
+body:has(.safe:not([hidden])) :is(.totop, .mbar, .owner-sw), body:has(#player:not([hidden])) :is(.totop, .mbar, .owner-sw) { display: none !important; }
 @media (max-width: 760px) { .mbar { position: fixed; z-index: 34; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 10px max(12px, env(safe-area-inset-left, 0px)) calc(env(safe-area-inset-bottom, 0px) + 10px); background: rgba(14,12,20,.86); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-top: 1px solid rgba(246,241,232,.12); transition: transform .35s; }
   .mbar .btn { justify-content: center; padding: 13px 10px; font-size: 15px; } .mbar .btn--line { color: #f6f1e8; border-color: rgba(246,241,232,.35); }
   .mbar.hide { transform: translateY(110%); } .mbar[hidden] { display: none; }
@@ -176,6 +178,8 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 @media (max-width: 560px) { .moods { grid-template-columns: 1fr; } }
 
 /* benefits */
+.bnums { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 22px; } .bnums > div { display: grid; gap: 4px; padding: 18px 20px; border-radius: 18px; border: 1px solid rgba(176,132,74,.3); background: rgba(255,255,255,.5); } .bnums b { font: 700 clamp(22px, 2.6vw, 28px)/1.1 var(--ff); letter-spacing: -.01em; color: var(--gold-d); } .bnums span { font-size: 14px; color: var(--mute); line-height: 1.35; }
+@media (max-width: 760px) { .bnums { grid-template-columns: 1fr 1fr; } }
 .benefits { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 .benefit { padding: 34px 32px; display: grid; gap: 12px; align-content: start; min-width: 0; }
 .benefit .glyph { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 35% 30%, #fff, #f1e3c6); border: 1px solid rgba(176,132,74,.3); color: var(--gold-d); margin-bottom: 6px; }
@@ -747,7 +751,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     <canvas id="heroNet"></canvas>
     <div class="container">
       <div class="hero__inner">
-        <span class="eyebrow dot">17 пространств медитации</span>
+        <span class="eyebrow dot">Медитации и карта жизни</span>
         <h1 class="display">Здесь шум <em>стихает.</em></h1>
         <p class="lead">Пятнадцать минут — и вы спокойнее, яснее и ближе к себе. Голос ведёт, музыка поддерживает, вам остаётся только слушать.</p>
         <div class="hoffers">
@@ -813,23 +817,24 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
 
   <section class="section section--alt" id="benefits">
     <div class="container">
-      <div class="shead"><div><span class="eyebrow">Что вы получите</span><h2 class="h2">Больше покоя. <em>Больше себя.</em></h2></div>
-        <p class="lead">Короткие практики, после которых жить становится легче. Уже с первого раза — и всё заметнее с каждым следующим.</p></div>
+      <div class="shead"><div><span class="eyebrow">Что вы получите</span><h2 class="h2">Не просто медитации. <em>Путь, где виден результат.</em></h2></div>
+        <p class="lead">Карта показывает, что с вами происходит. Практика помогает с этим работать. Дневник показывает, что изменилось. Три шага, которые обычно разбросаны по разным приложениям, — здесь в одном месте.</p></div>
+      <div class="bnums"><div><b>0 ₽</b><span>старт: «Очищение», «SOS» и базовая карта</span></div><div><b>7 мин</b><span>самая короткая практика</span></div><div><b>до / после</b><span>замер состояния в каждой практике</span></div><div><b>1 клик</b><span>отмена подписки</span></div></div>
       <div class="benefits">
-        <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 14c3-4 6-4 9 0s6 4 9 0"/><path d="M3 9c3-4 6-4 9 0s6 4 9 0" opacity=".5"/></svg></span><h3>Спокойствие за 15 минут</h3><p>Тело расслабляется, мысли замедляются. Вы выходите из сеанса тише, чем вошли.</p></div>
-        <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></span><h3>Ясная голова</h3><p>Меньше информационного шума — больше места для своих мыслей, решений и желаний.</p></div>
-        <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M13 3L5 13h6l-1 8 8-10h-6z"/></svg></span><h3>Силы и энергия</h3><p>Практики, которые наполняют, а не забирают. Особенно в дни, когда сил совсем нет.</p></div>
-        <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg></span><h3>Тепло к себе и близким</h3><p>Меньше самокритики и обид, больше понимания — к себе и к людям рядом.</p></div>
-        <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h16M14 6l6 6-6 6"/></svg></span><h3>Свобода от лишнего</h3><p>Тяга к сигаретам, сладкому, телефону слабеет. Старые установки перестают управлять вами.</p></div>
-        <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg></span><h3>Встреча с собой</h3><p>Тишина, в которой слышно главное: чего вы на самом деле хотите и куда идёте.</p></div>
+        <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8"/><path d="M12 4v16M4 12h16" opacity=".5"/><circle cx="12" cy="12" r="2"/></svg></span><h3>Практика под ваш день</h3><p>Каждый день код смотрит, что происходит в вашей карте, и подсказывает, с чем поработать: снять напряжение, набрать сил, помириться, прояснить цель. Карта и практика работают вместе.</p></div>
+        <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></span><h3>Результат видно в цифрах</h3><p>До и после каждой практики — два вопроса. Дневник показывает, как меняются тревога, энергия и настроение, сколько дней подряд вы практикуете и какие практики помогают именно вам.</p></div>
+        <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg></span><h3>Эффект за 7 минут</h3><p>Уровень «Новичок» — 7 минут, полная версия — около 15. Когда накрывает паника — «SOS» за 3 минуты, без регистрации. Перед сном — 20 минут, чтобы мягко уснуть.</p></div>
+        <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 12h2l2-6 3 12 3-9 2 5 2-2h4"/></svg></span><h3>Свой звук для каждой задачи</h3><p>У каждой практики свой ритм, дыхание и центр внимания: для сна — медленные волны, для энергии — быстрые, для сосредоточенности — ровные. Не одна мелодия на всё.</p></div>
+        <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg></span><h3>Карта жизни в подарок</h3><p>После регистрации — бесплатная карта: ваши сильные стороны, стиль решений и тема этого года. Полную карту с деньгами, отношениями и маршрутом на 12 лет можно открыть отдельно.</p></div>
+        <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span><h3>Честно и безопасно</h3><p>Методы с исследованиями, а не обещания чудес. Выйти из практики можно в любой момент. Цена видна до оплаты, напоминание до продления, отмена в один клик — без скрытых списаний.</p></div>
       </div>
-      <div class="ctarow"><p>Начните с практики, которая нужна именно сейчас — первая бесплатно.</p><div><a class="btn btn--gold" href="#room-cleanse">Начать с Очищения <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><a class="btn btn--line" href="#prostranstva">Все пространства <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div></div>
+      <div class="ctarow"><p>Начните бесплатно: первая практика и карта — в подарок после регистрации.</p><div><a class="btn btn--gold" href="#room-cleanse">Начать с Очищения <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><a class="btn btn--line" href="#karta">Построить карту <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div></div>
     </div>
   </section>
 
   <section class="section" id="featured">
     <div class="container">
-      <div class="shead"><div><span class="eyebrow">Пространства</span><h2 class="h2">Семнадцать пространств, <em>где становится легче.</em></h2></div>
+      <div class="shead"><div><span class="eyebrow">Пространства</span><h2 class="h2">Пространство под каждое состояние, <em>где становится легче.</em></h2></div>
         <a class="btn btn--line" href="#prostranstva">Все пространства <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
       <div class="rooms" id="featGrid"></div>
     </div>
@@ -1009,7 +1014,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
         <li><b>Стороны и акцепт.</b> Настоящий документ — публичная оферта (ст. 435, п. 2 ст. 437 ГК РФ). Регистрация на сайте и/или оплата означают полное принятие условий (п. 3 ст. 438 ГК РФ). Изменения публикуются не позднее чем за 10 дней; для уже оплаченного периода действуют прежние условия.</li>
         <li><b>Возраст.</b> Сервис предназначен для лиц старше 18 лет (18+).</li>
         <li><b>Предмет.</b> Исполнитель предоставляет доступ к аудиовизуальным практикам, статьям и персональным астрологическим отчётам. Это информационно-развлекательные и wellness-услуги, не медицинские и не психологические.</li>
-        <li><b>Бесплатная и платная части.</b> Бесплатно после регистрации: практика «Очищение», базовая часть Карты жизни, дневник. Без регистрации практики недоступны. Платно: подписка (месяц или год) на все пространства и курсы; отдельный курс — доступ на 30 дней; полная Карта жизни; прогноз на год; ректификация. Отдельные пространства навсегда не продаются, кроме «Аджны»: она не входит в подписку и курсы, открывается отдельной покупкой навсегда и только после 7 практик на полном уровне. Цены указываются на сайте до оплаты, в рублях — для России, с налогами — для Великобритании и ЕС.</li>
+        <li><b>Бесплатная и платная части.</b> Бесплатно после регистрации: практика «Очищение», базовая часть Карты жизни, дневник. Без регистрации практики недоступны. Платно: подписка (месяц или год) на все пространства, все курсы и «Практику дня»; годовая подписка дополнительно включает прогноз на год по Карте жизни; отдельный курс — доступ на 30 дней, его стоимость засчитывается в годовую подписку, оформленную в эти 30 дней; полная Карта жизни — разово; карта для другого человека — разово. Уточнение времени рождения (ректификация) выполняется автоматически и бесплатно. Практика «SOS: паника» доступна без регистрации. Отдельные пространства навсегда не продаются, кроме «Аджны»: она не входит в подписку и курсы, открывается отдельной покупкой навсегда и только после 7 практик на полном уровне. Цены указываются на сайте до оплаты, в рублях — для России, с налогами — для Великобритании и ЕС.</li>
         <li><b>Подписка.</b> Подписка продлевается автоматически на тот же срок по той же цене, пока вы её не отмените. Отдельное согласие на автопродление даётся при оплате. Мы напоминаем о списании заранее (для годовой подписки — за 7–30 дней). Отключить продление можно в личном кабинете в один-два клика; доступ сохраняется до конца оплаченного периода. Об изменении цены сообщаем за 30 дней.</li>
         <li><b>Персональные отчёты.</b> Отчёт формируется автоматически по данным, которые вы ввели. За точность данных рождения отвечаете вы. Пересчёт по исправленным данным в течение 30 дней — бесплатно.</li>
         <li><b>Обязанности пользователя.</b> Перед практикой ознакомиться с предупреждением о безопасности; не использовать практики за рулём, при работе с техникой и в воде; прекратить практику при ухудшении самочувствия.</li>
@@ -1261,6 +1266,26 @@ const RETURN = { key: 'return', name: 'Возвращение', dur: 60, visual:
 
 const R = (dur, name, visual, text, say, extra) => Object.assign({ dur, name, visual, text, say, breath: 'resonance', beat: 8 }, extra || {});
 const ROOMS = [
+  { id: 'sos', name: 'SOS: паника', ci: 3, fixed: true, bare: true, noAuth: true, tag: '3 минуты, когда накрывает. Без регистрации.', ev: ['t-a', 'Паника · кризисные протоколы'],
+    whyT: 'Вернуть почву под ногами', why: 'Когда накрывает паника, длинные медитации не помогают. Здесь только то, что работает быстро: двойной вдох с длинным выдохом, возвращение в настоящее через органы чувств и опора на стопы. Без вступления, сразу к делу.',
+    note: '<b>Основа:</b> заземление через пять чувств и длинный выдох — стандартные приёмы кризисной помощи. <b>Если боль в груди, трудно дышать или есть мысли навредить себе — звоните 112.</b>',
+    main: [
+      R(40, 'Стоп', 'breath', 'Вы в безопасности. Это волна, и она пройдёт. Два вдоха носом и длинный выдох ртом.', ['Вы в безопасности.', 'Это волна. Она поднимется и пройдёт.', 'Два вдоха носом подряд. И длинный выдох ртом.'], { breath: 'sigh', cue: true }),
+      R(90, 'Пять чувств', 'breath', 'Пять вещей, которые вы видите. Четыре — которые можете потрогать. Три звука. Два запаха. Один вкус.', ['Назовите про себя пять вещей, которые вы видите.', 'Четыре, которые можете потрогать.', 'Три звука вокруг.', 'Два запаха.', 'И один вкус во рту.'], { breath: 'calm' }),
+      R(50, 'Опора', 'breath', 'Надавите стопами в пол. Ладони на коленях. Вы здесь, сейчас.', ['Надавите стопами в пол.', 'Почувствуйте, как пол держит вас.', 'Ладони на коленях. Вы здесь. Сейчас.'], { breath: 'calm' }),
+      R(60, 'Длинный выдох', 'breath', 'Вдох на четыре, выдох на восемь. Волна уже спадает.', ['Вдох на четыре.', 'Выдох на восемь, медленно.', 'Волна уже спадает.', 'Если станет хуже или заболит в груди — звоните сто двенадцать.'], { breath: 'long', cue: true })
+    ] },
+  { id: 'sleep', name: 'Глубокий сон', ci: 6, fixed: true, bare: true, noReturn: true, sleep: true, tag: '20 минут перед сном. Голос затихает, вы засыпаете.', ev: ['t-a', 'Сон · исследования'],
+    whyT: 'Уснуть без усилия', why: 'Лёжа в постели, вы проходите вниманием по телу, замечаете тяжесть и тепло, считаете выдохи. Никаких внушений и «погружений» — вы в сознании, просто ум перестаёт держаться за мысли, и сон приходит сам. В конце нет «возвращения»: голос и звук плавно затихают.',
+    note: '<b>Основа:</b> йога-нидра и сканирование тела — исследования показывают улучшение качества сна и снижение тревоги. Счёт выдохов — простой способ отвлечь ум от круга мыслей. <b>При хронической бессоннице — к врачу.</b>',
+    main: [
+      R(120, 'Устроиться', 'silence', 'Лягте удобно, укройтесь. Слушать внимательно не нужно — голос просто рядом.', ['Лягте удобно и укройтесь.', 'Слушать внимательно не нужно. Голос просто рядом.', 'Если уснёте раньше конца — так и задумано.'], { breath: 'long' }),
+      R(60, 'Фраза на ночь', 'silence', 'Короткая фраза для себя: «Я отдыхаю».', ['Скажите себе короткую фразу.', 'Я отдыхаю.', 'Без усилия. Просто отметьте её.']),
+      R(360, 'Круг по телу', 'dark', 'Внимание идёт по телу: пальцы, ладони, руки, ноги, спина, лицо.', ['Внимание в правой руке.', 'Большой палец. Указательный. Средний. Безымянный. Мизинец.', 'Ладонь. Запястье. Локоть. Плечо.', 'Левая рука. Пальцы. Ладонь. Локоть. Плечо.', 'Правая нога. Пальцы. Стопа. Колено. Бедро.', 'Левая нога. Пальцы. Стопа. Колено. Бедро.', 'Спина. Живот. Грудь.', 'Шея. Лицо. Лоб. Всё тело целиком.']),
+      R(180, 'Тяжесть и тепло', 'dark', 'Тело тяжёлое, будто тонет в матрасе. Тёплое. Спокойное.', ['Почувствуйте, какое тело тяжёлое.', 'Оно лежит и ничего не держит.', 'Тепло в руках. Тепло в ногах.']),
+      R(240, 'Счёт выдохов', 'dark', 'Считайте выдохи от двадцати семи вниз. Сбились — начните снова.', ['Считайте выдохи от двадцати семи вниз.', 'Сбились — начните снова. Это нормально.', 'Если уже не хочется считать — отпустите счёт.'], { breath: 'long' }),
+      R(300, 'Тишина', 'dark', 'Звук затихает. Можно засыпать.', ['Можно засыпать.'], { breath: 'long' })
+    ] },
   { id: 'cleanse', name: 'Очищение', ci: 4, tag: 'Смыть день: чужие слова, новости, напряжение.', ev: ['t-a', 'Расслабление · подтверждено'],
     whyT: 'Сначала — освободить место', why: 'За день на нас оседает много чужого: разговоры, новости, тревоги. Поток света сверху смывает это слой за слоем: тело, затем мысли. После очищения любая другая практика идёт глубже.',
     note: '<b>Основа:</b> визуализация + резонансное дыхание. Доказанный эффект — снижение стресса и мышечного напряжения.',
@@ -1421,7 +1446,7 @@ function habitMain(k) {
     R(60, 'Якорь', 'urge', 'Когда потянет: три медленных выдоха и это чувство свободы.', ['Когда потянет, сделайте три медленных выдоха.', 'И вспомните это чувство.'], { key: key(5), beat: 10 })
   ];
 }
-const INTENT = { cleanse: 'Я отпускаю всё лишнее', energy: 'Сила возвращается ко мне', health: 'Моё тело в покое и заботе', abundance: 'Я вижу возможности и действую', luck: 'Я замечаю свои шансы', purpose: 'Я слышу себя', silence: 'Мой ум спокоен', ajna: 'Внимание в одной точке', chakras: 'Я целый', blinders: 'Мир шире, чем мне казалось', breathe: 'С каждым выдохом мне спокойнее', event: 'Внутри меня спокойствие при любом исходе', release: 'Я отпускаю то, что тяжело нести', selflove: 'Я на своей стороне', relations: 'В моём сердце есть место для тепла', food: 'Я слышу своё тело' };
+const INTENT = { cleanse: 'Я отпускаю всё лишнее', energy: 'Сила возвращается ко мне', health: 'Моё тело в покое и заботе', abundance: 'Я вижу возможности и действую', luck: 'Я замечаю свои шансы', purpose: 'Я слышу себя', silence: 'Мой ум спокоен', ajna: 'Внимание в одной точке', chakras: 'Я целый', blinders: 'Мир шире, чем мне казалось', breathe: 'С каждым выдохом мне спокойнее', event: 'Внутри меня спокойствие при любом исходе', release: 'Я отпускаю то, что тяжело нести', selflove: 'Я на своей стороне', relations: 'В моём сердце есть место для тепла', sos: 'Я в безопасности, волна пройдёт', sleep: 'Я отдыхаю', food: 'Я слышу своё тело' };
 const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
 // Owner preview before launch: everything is open; ?owner=0 or the corner switch shows the client view
 (() => { const q = new URLSearchParams(location.search).get('owner'); if (q === '0' || q === '1') store.set('owner', q); })();
@@ -1445,6 +1470,8 @@ const SOUND = {
   selflove:  { beats: [8, 8, 7], carrier: 190, breath: 'heart',     mode: 'major',     tempo: [7, 11], noise: 'pink',  goal: 'тепло к себе' },
   relations: { beats: [9, 8, 8, 7, 7], carrier: 205, breath: 'calm', mode: 'dorian',    tempo: [6, 10], noise: 'pink',  goal: 'тепло к другим' },
   food:      { beats: [8, 7, 7], carrier: 190, breath: 'calm',      mode: 'suspended', tempo: [8, 12], noise: 'pink',  goal: 'слышать тело' },
+  sos:       { beats: [10, 9, 8, 7], carrier: 175, breath: 'sigh', mode: 'suspended', tempo: [10, 14], noise: 'pink',  goal: 'остановить волну паники' },
+  sleep:     { beats: [6, 5, 4, 3, 3, 2], carrier: 140, breath: 'long', mode: 'suspended', tempo: [16, 24], noise: 'brown', goal: 'мягко уснуть' },
   ajna:      { beats: [10, 7, 6], carrier: 210, breath: 'resonance', mode: 'lydian',   tempo: [8, 13], noise: 'pink',  goal: 'внимание в одной точке' },
   chakras:   { beats: [7, 8, 9, 10, 11, 12, 6], carrier: 200, breath: 'resonance', mode: 'major', tempo: [6, 10], noise: 'pink', goal: 'целостность' },
   habits:    { beats: [10, 10, 8], carrier: 200, breath: 'calm',    mode: 'dorian',    tempo: [7, 11], noise: 'pink',  goal: 'пережить волну тяги' }
@@ -1465,6 +1492,8 @@ const TARGET = {
   selflove:  { ch: [3],       m: ['Насколько тепло вы сейчас к себе относитесь?', 'холодно', 'тепло', 1, 'тепло к себе'] },
   relations: { ch: [3, 4, 1],    m: ['Насколько вы открыты к близости?', 'закрыт(а)', 'открыт(а)', 1, 'открытость'] },
   food:      { ch: [2, 1],    m: ['Насколько сильно сейчас желание поесть «на эмоциях»?', 'нет', 'очень сильно', -1, 'тяга к еде'] },
+  sos:       { ch: [0],       m: ['Насколько сильна тревога или паника прямо сейчас?', 'спокойно', 'очень сильно', -1, 'тревога'] },
+  sleep:     { ch: [6, 0],    m: ['Насколько вы готовы ко сну?', 'мысли крутятся', 'глаза закрываются', 1, 'готовность ко сну'] },
   ajna:      { ch: [5],       m: ['Насколько вы сосредоточены?', 'рассеян(а)', 'собран(а)', 1, 'сосредоточенность'] },
   chakras:   { ch: [0, 1, 2, 3, 4, 5, 6], m: ['Насколько вы чувствуете себя цельным(ой)?', 'разобран(а)', 'цельно', 1, 'цельность'] },
   habits:    { ch: [0, 1],    m: ['Насколько сильна сейчас тяга?', 'нет', 'очень сильная', -1, 'тяга'] }
@@ -1475,9 +1504,9 @@ const BAND = h => h < 8 ? 'θ' : h < 12 ? 'α' : 'β';
 const BREATH_RU = { long: 'длинный выдох 4–8', lift: 'бодрящее 3–3', heart: 'ровное 5–5', resonance: 'резонансное 5,5–5,5', calm: 'успокаивающее 4–6', box: 'квадрат 4–4–4–4', sigh: 'двойной вдох' };
 function setPhases(r) { const sp = SOUND[r.id]; r.main.forEach((s, i) => { s.key = s.key || r.id + '-' + (i + 1); s.tone = r.ci;
     if (sp && s.beat !== 0 && !s.beatFixed) s.beat = sp.beats[Math.min(i, sp.beats.length - 1)];
-    if (sp && sp.breath && s.breath === 'resonance') s.breath = sp.breath; }); r.phases = [COCOON, BREATHE, ...r.main, RETURN]; }
+    if (sp && sp.breath && s.breath === 'resonance') s.breath = sp.breath; }); r.phases = r.bare ? [...r.main] : [COCOON, BREATHE, ...r.main].concat(r.noReturn ? [] : [RETURN]); }
 function setHabit(r, k) { r.habit = k; r.main = habitMain(k); setPhases(r); }
-const ORDER = ['cleanse', 'energy', 'health', 'blinders', 'abundance', 'luck', 'purpose', 'silence', 'breathe', 'event', 'release', 'selflove', 'relations', 'food', 'chakras', 'habits', 'ajna'];
+const ORDER = ['cleanse', 'sos', 'energy', 'health', 'blinders', 'abundance', 'luck', 'purpose', 'silence', 'sleep', 'breathe', 'event', 'release', 'selflove', 'relations', 'food', 'chakras', 'habits', 'ajna'];
 ROOMS.sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id));
 ROOMS.forEach(r => { r.color = CH[r.ci].c; if (r.id === 'habits') setHabit(r, store.get('ajna-habit') in HABITS ? store.get('ajna-habit') : 'smoke'); else setPhases(r); });
 const intentOf = r => store.get('ajna-intent-' + r.id + (r.habit ? '-' + r.habit : '')) || (r.habit ? HABITS[r.habit].intent : INTENT[r.id]);
@@ -2152,7 +2181,7 @@ const visible = el => { const r = el.getBoundingClientRect(); return r.bottom > 
 
 // ======================= pages =======================
 const CATS = { all: 'Все', state: 'Состояние', heart: 'Сердце и отношения', body: 'Тело', goals: 'Цели и перемены', mind: 'Сознание', habits: 'Привычки' };
-const CAT = { silence: 'state', breathe: 'state', event: 'state', cleanse: 'state', health: 'body', food: 'body', energy: 'body', release: 'heart', selflove: 'heart', relations: 'heart', abundance: 'goals', luck: 'goals', purpose: 'goals', blinders: 'goals', ajna: 'mind', chakras: 'mind', habits: 'habits' };
+const CAT = { sos: 'state', sleep: 'state', silence: 'state', breathe: 'state', event: 'state', cleanse: 'state', health: 'body', food: 'body', energy: 'body', release: 'heart', selflove: 'heart', relations: 'heart', abundance: 'goals', luck: 'goals', purpose: 'goals', blinders: 'goals', ajna: 'mind', chakras: 'mind', habits: 'habits' };
 const ARROW = '<svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg>';
 const roomVisual = r => ({ visual: r.main[0].visual === 'silence' && r.id === 'purpose' ? 'purpose' : r.main[0].visual, ci: r.ci, active: r.id === 'chakras' ? 5 : undefined });
 function card(r, wide) {
@@ -2631,7 +2660,7 @@ const pSurf = surface($('pCv'), { cyr: 0.4, mr: 0.68, visual: () => {
   return { flightBg: { ci: ph.tone, phase: P.elapsed * 0.009, speed: 0.009, alpha: ph.visual === 'dark' ? 0.25 : 0.75 }, visual: P.vid === ph.visual || (ph.visual === 'cocoon' && !VMAN.includes('cocoon')) ? 'none' : ph.visual, ci: ph.visual === 'chakras' && P.ch >= 0 ? P.ch : ph.tone, st: ph.breath && P.running ? breathAt(ph.breath, pt) : null, active: ph.key === 'chakras' ? P.ch : -1, since: pt, open: ph.open && P.running ? ph.open[0] + (ph.open[1] - ph.open[0]) * ease(Math.min(1, pt / ph.dur)) : undefined, shell: P.running && P.idx > 0 && ph.visual !== 'cocoon' && ph.visual !== 'shutters' };
 } });
 function phasesFor(r) {
-  if (LEVEL() !== 'new') return r.phases;
+  if (r.fixed || LEVEL() !== 'new') return r.phases;
   const main = r.main.slice(0, 3), budget = 230, tot = main.reduce((a, p) => a + p.dur, 0);
   return [Object.assign({}, COCOON, { dur: 100 }), Object.assign({}, BREATHE, { dur: 50 }), ...main.map(p => Object.assign({}, p, { dur: Math.max(50, Math.round(p.dur * budget / tot / 5) * 5) })), Object.assign({}, RETURN, { dur: 40 })];
 }
@@ -2640,6 +2669,7 @@ function levelUI(r) {
   const shortDur = (() => { const save = store.get('level'); return sum([Object.assign({}, COCOON, { dur: 100 }), Object.assign({}, BREATHE, { dur: 50 })]) + 230 + 40; })();
   const [bn, bp] = $('rLevel').children; bn.querySelector('em').textContent = mins(shortDur); bp.querySelector('em').textContent = mins(sum(full));
   bn.setAttribute('aria-checked', cur === 'new'); bp.setAttribute('aria-checked', cur === 'pro');
+  document.querySelector('.rlv').hidden = !!r.fixed;
   const locked = r.pro && !isPro(); $('rLock').hidden = !locked; $('rStart').disabled = locked; $('rStart').style.opacity = locked ? 0.45 : '';
   if (locked) $('rLock').textContent = 'Пространство для практикующих. Открывается отдельно (' + PRICE_AJNA.toLocaleString('ru') + ' ₽, навсегда, в подписку не входит), когда вы выберете полный формат и пройдёте 7 практик (сейчас: ' + Math.min(7, practiceCount()) + ' из 7).';
 }
@@ -2690,7 +2720,7 @@ const SJ = (k, v) => store.set(k, JSON.stringify(v));
 const ACC = () => J('acct', null) || (OWNER() ? { name: 'Владелец', email: 'owner@preview' } : null);
 const ENT = () => { const e = J('ent', { courses: [], subUntil: 0 }); e.sub = OWNER() || e.subUntil > Date.now(); e.courses = (e.courses || []).filter(c => c && c.until > Date.now()); return e; };
 const courseOwned = (E, id) => E.courses.some(c => c.id === id);
-const FREE_ROOMS = ['cleanse'];
+const FREE_ROOMS = ['cleanse', 'sos'];
 const PRICE_SUB = 490, PRICE_SUB_Y = 2990, PRICE_COURSE = 990, DAY_MS = 864e5;
 const PRICE_AJNA = 2990;
 const canPlay = r => r.pro ? (OWNER() || !!J('ent', {}).ajna) : FREE_ROOMS.includes(r.id) || ENT().sub || ENT().courses.some(c => (COURSES.find(x => x.id === c.id) || { days: [] }).days.includes(r.id));
@@ -2724,10 +2754,50 @@ function safety(go) {
     P.rec = qs ? { t: Date.now(), room: r.id, lvl: LEVEL(), planned: sum(P.phases), before: readSliders($('mBeforeQs'), r), course: store.get('activeCourse') || null } : null; P.before = qs ? P.rec.before.own : null; go(); };
 }
 function sessionEnded(done) { const rec = P.rec; P.rec = null; if (!rec) return; rec.elapsed = Math.round(Math.min(P.elapsed, rec.planned)); rec.completed = !!done;
+  if (P.room && P.room.sleep) { if (rec.elapsed > 30) saveSession(rec); return; } // asleep: no after-check pop-up
   if (done) setTimeout(() => afterCheck(P.room, rec), 2200); else if (rec.elapsed > 30) saveSession(rec); }
+
+// ---------- practice of the day: today's transits to the natal chart pick one space ----------
+const DAILY = {
+  mars:    { hard: ['breathe', 'больше напряжения и спешки, легко сорваться. Сначала снимите стресс — потом действуйте'], soft: ['energy', 'сил и решимости больше обычного — направьте их'], mix: ['energy', 'сил много, важно направить их в одно дело'] },
+  saturn:  { hard: ['release', 'день может казаться тяжёлым, давят обязанности. Отпустите то, что не ваше'], soft: ['purpose', 'хорошее время для долгих решений и дисциплины'], mix: ['cleanse', 'время подвести черту и освободить место новому'] },
+  jupiter: { hard: ['blinders', 'хочется взять больше, чем унесёте. Нужен трезвый и смелый взгляд'], soft: ['luck', 'открываются возможности — важно их заметить'], mix: ['abundance', 'период роста: поставьте цель и сделайте первый шаг'] },
+  venus:   { hard: ['selflove', 'чувствительность к чужим оценкам выше обычного — поддержите себя'], soft: ['relations', 'больше тепла и лёгкости в общении'], mix: ['relations', 'хороший день для близости и примирения'] },
+  mercury: { hard: ['silence', 'много мыслей и разговоров, легко запутаться'], soft: ['purpose', 'голова ясная — хорошее время понять, чего вы хотите'], mix: ['purpose', 'мысли быстрые — запишите главное'] },
+  sun:     { hard: ['health', 'сил может быть меньше обычного — дайте телу восстановиться'], soft: ['energy', 'хороший тонус и уверенность'], mix: ['energy', 'день вашей силы — проявитесь'] },
+  moon:    { hard: ['release', 'эмоции сегодня острее — отпустите лишнее'], soft: ['selflove', 'мягкий эмоциональный фон — время для тепла к себе'], mix: ['cleanse', 'начинается новый эмоциональный цикл — очиститесь'] }
+};
+const D_W = { moon: [1, 5], sun: [.9, 2], mercury: [.8, 2], venus: [.9, 2], mars: [1.2, 2], jupiter: [1.1, 1.5], saturn: [1.3, 1.5] };
+const D_RU = { sun: 'Солнце', moon: 'Луна', mercury: 'Меркурий', venus: 'Венера', mars: 'Марс', jupiter: 'Юпитер', saturn: 'Сатурн', asc: 'Асцендент' };
+const D_DAT = { sun: 'Солнцу', moon: 'Луне', mercury: 'Меркурию', venus: 'Венере', mars: 'Марсу', asc: 'Асценденту' };
+const D_ASP = { 0: 'соединение', 60: 'секстиль', 90: 'квадрат', 120: 'трин', 180: 'оппозиция' };
+function dailyPick() {
+  const inp = J('karta_input', null); if (!inp) return Promise.resolve(null);
+  const day = dkey(Date.now()), c = J('daily', null); if (c && c.day === day && c.date === inp.date && c.time === (inp.time || '')) return Promise.resolve(c);
+  return loadKarta().then(() => { const K = window.KARTA; if (!K) return null;
+    const nat = K.computeChart(inp), n = new Date(), p2 = x => String(x).padStart(2, '0');
+    const tr = K.computeChart(Object.assign({}, inp, { date: n.getFullYear() + '-' + p2(n.getMonth() + 1) + '-' + p2(n.getDate()), time: '12:00' }));
+    const targets = ['sun', 'moon', 'mercury', 'venus', 'mars'].map(k => [k, nat.pos[k].lon]).concat(nat.ang ? [['asc', nat.ang.asc]] : []);
+    let best = null;
+    Object.keys(D_W).forEach(t => targets.forEach(([nk, nl]) => { const d = Math.abs(((tr.pos[t].lon - nl + 540) % 360) - 180);
+      [0, 60, 90, 120, 180].forEach(a => { const orb = Math.abs(d - a), [w, mx] = D_W[t]; if (orb > mx) return; const sc = w * (1 - orb / mx) + (nk === 'sun' || nk === 'moon' || nk === 'asc' ? .15 : 0);
+        if (!best || sc > best.sc) best = { sc, t, nk, a, kind: a === 0 ? 'mix' : a === 90 || a === 180 ? 'hard' : 'soft' }; }); }));
+    let out;
+    if (best) { const [room, why] = DAILY[best.t][best.kind]; out = { room, why: 'Сегодня ' + D_RU[best.t] + ' — ' + D_ASP[best.a] + ' к ' + (best.nk === 'moon' || best.nk === 'venus' ? 'вашей натальной ' : 'вашему натальному ') + D_DAT[best.nk] + '. ' + why[0].toUpperCase() + why.slice(1) + '.' }; }
+    else { const el = Math.floor(((tr.pos.moon.lon % 360) + 360) % 360 / 30) % 4, m = [['energy', 'огненном'], ['health', 'земном'], ['silence', 'воздушном'], ['release', 'водном']][el];
+      out = { room: m[0], why: 'Сильных транзитов сегодня нет. Луна в ' + m[1] + ' знаке — для этого дня подходит эта практика.' }; }
+    Object.assign(out, { day, date: inp.date, time: inp.time || '' }); SJ('daily', out); return out; }).catch(() => null);
+}
+function fillDaily(el) {
+  dailyPick().then(d => { if (!el.isConnected) return;
+    if (!d) { el.innerHTML = '<span class="eyebrow">Практика дня по вашей карте</span><h2>Постройте карту</h2><p>Каждый день код смотрит, что происходит в вашей карте, и подбирает практику под этот день: напряжённый, творческий или спокойный. А пока — «Очищение».</p><div class="cab-row"><a class="btn btn--gold" href="#karta">Построить карту бесплатно ' + ARROW + '</a><a class="btn btn--line" href="#room-cleanse">Очищение</a></div>'; return; }
+    const r = ROOMS.find(x => x.id === d.room), ok = canPlay(r);
+    el.innerHTML = '<span class="eyebrow">Практика дня по вашей карте · ' + new Date().toLocaleDateString('ru', { day: 'numeric', month: 'long' }) + '</span><h2>' + r.name + '</h2><p>' + d.why + '</p><a class="btn btn--gold" href="#room-' + r.id + '">' + (ok ? 'Начать ' : 'Открыть по подписке ') + ARROW + '</a><small class="cab-empty">Не прогноз событий, а подсказка, с чем поработать сегодня. Подробнее — в разделе «Как относиться к карте».</small>'; });
+}
 
 // ---------- courses ----------
 const COURSES = [
+  { id: 'sleep14', name: 'Крепкий сон · 14 дней', for: 'Долго не могу уснуть, просыпаюсь ночью', days: ['cleanse', 'sleep', 'breathe', 'sleep', 'release', 'sleep', 'silence', 'sleep', 'selflove', 'sleep', 'breathe', 'sleep', 'release', 'sleep'], why: 'Днём — короткая практика, которая снимает напряжение, вечером в постели — «Глубокий сон». Чередование учит тело засыпать без борьбы, а дневник показывает, как меняется сон.' },
   { id: 'reset7', name: 'Перезагрузка за 7 дней', for: 'Устали, всё навалилось, нужно восстановиться', days: ['cleanse', 'breathe', 'energy', 'silence', 'cleanse', 'selflove', 'purpose'], why: 'Сначала очищение и дыхание снимают напряжение, затем возвращаем силы, тишину и тепло к себе, а в конце — ясность, куда двигаться дальше.' },
   { id: 'calm14', name: 'Спокойствие за 14 дней', for: 'Тревога, мысли по кругу, плохо спится', days: ['cleanse', 'breathe', 'silence', 'breathe', 'release', 'silence', 'cleanse', 'breathe', 'selflove', 'silence', 'release', 'breathe', 'silence', 'purpose'], why: 'Дыхание и тишина чередуются каждый день: так навык успокаиваться закрепляется. Отпускание и тепло к себе убирают источник напряжения.' },
   { id: 'habit21', name: 'Свобода от привычки · 21 день', for: 'Курение, алкоголь, сладкое — хочу перестать', days: ['cleanse', 'habits', 'breathe', 'habits', 'energy', 'habits', 'selflove', 'habits', 'breathe', 'habits', 'release', 'habits', 'energy', 'habits', 'silence', 'habits', 'selflove', 'habits', 'blinders', 'habits', 'purpose'], why: 'Практика «Привычки» через день тренирует пережить волну тяги, а между ними — опора: дыхание, энергия, тепло к себе. При физической зависимости — вместе с врачом.' },
@@ -2749,10 +2819,15 @@ function openBuy(title, opts) { $('buyT').textContent = title; $('buy').hidden =
 const grant = f => { const e = J('ent', { courses: [], subUntil: 0 }); e.courses = e.courses || []; f(e); SJ('ent', e); };
 const addSub = days => e => { e.subUntil = Math.max(Date.now(), e.subUntil || 0) + days * DAY_MS; };
 const addCourse = id => e => { e.courses = (e.courses || []).filter(c => c.id !== id && c.until > Date.now()); e.courses.push({ id, until: Date.now() + 30 * DAY_MS }); };
-const SUB_OPTS = [{ t: 'Подписка на месяц', d: 'Все пространства, все курсы, полная аналитика дневника', p: PRICE_SUB + ' ₽/мес', best: true, go: () => grant(addSub(30)) }, { t: 'Подписка на год', d: 'То же, выгоднее на 49%', p: PRICE_SUB_Y.toLocaleString('ru') + ' ₽/год', go: () => grant(addSub(365)) }];
+// Product ladder: subscription = everything except Ajna and the full map; annual adds the year forecast;
+// a standalone course is the entry product and its price is credited to an annual plan within 30 days.
+const courseCredit = () => { const E = J('ent', { courses: [] }); return (E.courses || []).some(c => c.until > Date.now() && !c.credited) ? PRICE_COURSE : 0; };
+const subOpts = () => { const cr = courseCredit();
+  return [{ t: 'Подписка на год', d: 'Все пространства и курсы, Практика дня по карте, полная аналитика + прогноз на год по вашей карте в подарок' + (cr ? ' · ' + cr + ' ₽ за курс засчитано' : ''), p: (PRICE_SUB_Y - cr).toLocaleString('ru') + ' ₽/год', best: true, go: () => grant(e => { addSub(365)(e); e.plan = 'year'; (e.courses || []).forEach(c => c.credited = true); }) },
+    { t: 'Подписка на месяц', d: 'Все пространства и курсы, Практика дня по карте, полная аналитика дневника', p: PRICE_SUB + ' ₽/мес', go: () => grant(e => { addSub(30)(e); e.plan = e.plan === 'year' && e.subUntil > Date.now() ? 'year' : 'month'; }) }]; };
 const buyAjna = () => openBuy('Аджна · отдельный доступ', [{ t: 'Аджна навсегда', d: 'Не входит в подписку и курсы. Для тех, кто прошёл 7 практик на полном уровне', p: PRICE_AJNA.toLocaleString('ru') + ' ₽', best: true, go: () => grant(e => e.ajna = true) }]);
 const buyRoom = r => { const cs = COURSES.filter(c => c.days.includes(r.id)).slice(0, 2);
-  openBuy('Пространство «' + r.name + '»', SUB_OPTS.concat(cs.map(c => ({ t: 'Курс «' + c.name + '»', d: 'Включает это пространство · доступ к курсу на 30 дней', p: PRICE_COURSE + ' ₽', go: () => grant(addCourse(c.id)) })))); };
+  openBuy('Пространство «' + r.name + '»', subOpts().concat(cs.map(c => ({ t: 'Курс «' + c.name + '»', d: 'Включает это пространство · доступ к курсу на 30 дней', p: PRICE_COURSE + ' ₽', go: () => grant(addCourse(c.id)) })))); };
 function accUI() { const a = ACC(); $('hAcc').querySelector('span').textContent = a ? a.name : 'Войти'; $('hAcc').classList.toggle('in', !!a); if (typeof curRoom !== 'undefined' && curPage === 'roomPage') roomLock(curRoom); }
 $('hAcc').onclick = e => { if (!ACC()) { e.preventDefault(); openAuth(() => { location.hash = '#kabinet'; }); } };
 function refreshLocks() { document.querySelectorAll('#roomGrid .room, #featGrid .room').forEach(a => { const r = ROOMS.find(x => x.id === a.dataset.id); if (!r) return; const lk = !canPlay(r); a.classList.toggle('locked', lk);
@@ -2760,10 +2835,10 @@ function refreshLocks() { document.querySelectorAll('#roomGrid .room, #featGrid 
   b.innerHTML = lk ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg>По подписке' : FREE_ROOMS.includes(r.id) ? 'Бесплатно' : 'Открыто'; if (lk && r.pro) b.lastChild.textContent = 'Отдельный доступ'; b.classList.toggle('free', !lk); });
   if (curPage === 'roomPage' && curRoom) roomLock(curRoom); }
 function roomLock(r) { const lk = !canPlay(r); const st = $('rStart');
-  if (!ACC() && !lk) { st.innerHTML = 'Зарегистрироваться и начать <svg class="ico" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3v10l8-5z"/></svg>'; st.dataset.locked = ''; return; }
+  if (!ACC() && !lk && !r.noAuth) { st.innerHTML = 'Зарегистрироваться и начать <svg class="ico" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3v10l8-5z"/></svg>'; st.dataset.locked = ''; return; }
   st.innerHTML = lk ? '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg> ' + (r.pro ? 'Отдельный доступ · ' + PRICE_AJNA.toLocaleString('ru') + ' ₽ навсегда' : 'Открыть по подписке · ' + PRICE_SUB + ' ₽/мес') : 'Начать сеанс <svg class="ico" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3v10l8-5z"/></svg>';
   st.dataset.locked = lk ? '1' : ''; }
-$('rStart').onclick = () => { if (!ACC()) return openAuth(() => $('rStart').click(), 'Зарегистрируйтесь бесплатно, чтобы начать практику. «Очищение» — бесплатно, а дневник сохранит ваш результат.'); if ($('rStart').dataset.locked) return curRoom.pro ? buyAjna() : buyRoom(curRoom); openPlayer(curRoom); };
+$('rStart').onclick = () => { if (!ACC() && !curRoom.noAuth) return openAuth(() => $('rStart').click(), 'Зарегистрируйтесь бесплатно, чтобы начать практику. «Очищение» — бесплатно, а дневник сохранит ваш результат.'); if ($('rStart').dataset.locked) return curRoom.pro ? buyAjna() : buyRoom(curRoom); openPlayer(curRoom); };
 
 // ---------- cabinet ----------
 let cabTab = 'today';
@@ -2791,7 +2866,8 @@ function renderCabinet() {
   let h = '';
   if (cabTab === 'today') {
     const next = course ? course.days[courseProgress(course)] : null, rec = next ? ROOMS.find(r => r.id === next) : ROOMS.find(r => r.id === 'cleanse');
-    h += '<div class="cab-grid"><div class="cab-card cab-next"><span class="eyebrow">' + (course ? 'Курс «' + course.name + '» · день ' + (courseProgress(course) + 1) + ' из ' + course.days.length : 'Практика на сегодня') + '</span><h2>' + rec.name + '</h2><p>' + rec.tag + '</p><a class="btn btn--gold" href="#room-' + rec.id + '">Начать ' + ARROW + '</a></div>'
+    h += '<div class="cab-grid">' + (course ? '<div class="cab-card cab-next"><span class="eyebrow">Курс «' + course.name + '» · день ' + (courseProgress(course) + 1) + ' из ' + course.days.length + '</span><h2>' + rec.name + '</h2><p>' + rec.tag + '</p><a class="btn btn--gold" href="#room-' + rec.id + '">Начать ' + ARROW + '</a></div>'
+      : '<div class="cab-card cab-next" id="dailyCard"><span class="eyebrow">Практика дня по вашей карте</span><h2>…</h2><p>Смотрим, что сегодня происходит в вашей карте.</p></div>')
       + '<div class="cab-card"><span class="eyebrow">Ваш прогресс</span><div class="kpis">' + kpi(S.n, 'практик') + kpi(S.streak, 'дней подряд') + kpi(Math.round(S.total), 'минут всего') + kpi(fmtD(S.anx), 'тревога в среднем за сеанс') + '</div></div></div>';
     const G = J('goals', []); h += '<div class="cab-card"><span class="eyebrow">Главная цель</span>' + (G[0] ? '<h3>' + G[0].t.replace(/[<>&]/g, '') + '</h3><div class="gbar"><i style="width:' + (G[0].ms.length ? G[0].ms.filter(m => m.d).length / G[0].ms.length * 100 : 0) + '%"></i></div><button class="linkbtn2" data-tab="goals">Открыть цели →</button>' : '<p>Запишите, к чему вы идёте — так практики будут работать на конкретный результат.</p><button class="btn btn--line btn--sm" data-tab="goals">Поставить цель</button>') + '</div>';
   }
@@ -2813,7 +2889,7 @@ function renderCabinet() {
     if (!G.length) h += '<p class="cab-empty">Цель + этапы + ежедневные шаги. Практики дают состояние, шаги дают результат.</p>';
   }
   if (cabTab === 'courses') {
-    h += '<p class="cab-lead">Курс — это пространства в продуманном порядке: сначала очищение и опора, затем работа над вашей задачей. Одна практика в день.</p><div class="cab-grid cab-grid--c">' + COURSES.map(c => { const own = E.sub || courseOwned(E, c.id), until = (E.courses.find(x => x.id === c.id) || {}).until, pr = courseProgress(c), act = ac === c.id;
+    h += '<p class="cab-lead">Курс — это пространства в продуманном порядке под одну задачу: одна практика в день, дневник показывает результат. <b>С подпиской все курсы уже открыты.</b> Без подписки любой курс можно взять отдельно на 30 дней — а если затем оформите годовую подписку, его стоимость засчитается.</p><div class="cab-grid cab-grid--c">' + COURSES.map(c => { const own = E.sub || courseOwned(E, c.id), until = (E.courses.find(x => x.id === c.id) || {}).until, pr = courseProgress(c), act = ac === c.id;
       return '<div class="cab-card course' + (act ? ' on' : '') + '"><span class="eyebrow">' + c.days.length + ' дней · ' + c.for + '</span><h3>' + c.name + '</h3><p>' + c.why + '</p><ol class="cdays">' + c.days.map((d, i) => '<li class="' + (i < pr ? 'done' : i === pr && act ? 'now' : '') + '" title="День ' + (i + 1) + '">' + (ROOMS.find(r => r.id === d) || {}).name + '</li>').join('') + '</ol>'
         + (own ? (act ? '<a class="btn btn--gold btn--sm" href="#room-' + c.days[pr] + '">День ' + (pr + 1) + ': начать</a>' : '<button class="btn btn--gold btn--sm" data-course="' + c.id + '">Начать курс</button>') : '<button class="btn btn--line btn--sm" data-buyc="' + c.id + '"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg> ' + PRICE_COURSE + ' ₽ на 30 дней или по подписке</button>') + (until && !E.sub ? '<small class="cab-empty">Доступ к курсу до ' + new Date(until).toLocaleDateString('ru') + '</small>' : '') + '</div>'; }).join('') + '</div>';
   }
@@ -2834,8 +2910,9 @@ function renderCabinet() {
   $('cabBody').innerHTML = h;
   const B = $('cabBody');
   B.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { cabTab = b.dataset.tab; renderCabinet(); });
-  B.querySelectorAll('[data-sub]').forEach(b => b.onclick = () => openBuy('Подписка на всё', SUB_OPTS));
-  B.querySelectorAll('[data-buyc]').forEach(b => b.onclick = () => { const c = COURSES.find(x => x.id === b.dataset.buyc); openBuy('Курс «' + c.name + '»', [{ t: 'Только этот курс', d: c.days.length + ' дней практики · доступ на 30 дней', p: PRICE_COURSE + ' ₽', go: () => grant(addCourse(c.id)) }].concat(SUB_OPTS)); });
+  if ($('dailyCard')) fillDaily($('dailyCard'));
+  B.querySelectorAll('[data-sub]').forEach(b => b.onclick = () => openBuy('Подписка на всё', subOpts()));
+  B.querySelectorAll('[data-buyc]').forEach(b => b.onclick = () => { const c = COURSES.find(x => x.id === b.dataset.buyc); openBuy('Курс «' + c.name + '»', [{ t: 'Только этот курс', d: c.days.length + ' дней практики · доступ на 30 дней', p: PRICE_COURSE + ' ₽', go: () => grant(addCourse(c.id)) }].concat(subOpts())); });
   B.querySelectorAll('[data-course]').forEach(b => b.onclick = () => { store.set('activeCourse', b.dataset.course); renderCabinet(); });
   B.querySelectorAll('[data-buymap]').forEach(b => b.onclick = () => openBuy('Карта для близкого человека', [{ t: 'Базовая карта', d: 'Профиль, тема года, практики', p: '990 ₽', go: () => store.set('karta_extra', '1') }, { t: 'Полная карта', d: 'Все разделы и прогноз', p: '1 990 ₽', best: true, go: () => store.set('karta_extra', '1') }]));
   B.querySelectorAll('[data-unsub]').forEach(b => b.onclick = () => { grant(e => e.subUntil = 0); renderCabinet(); refreshLocks(); });
@@ -2848,7 +2925,7 @@ function renderCabinet() {
   B.querySelectorAll('.gdel').forEach(b => b.onclick = () => { const G = J('goals', []); G.splice(+b.dataset.g, 1); SJ('goals', G); renderCabinet(); });
 }
 $('cabTabs').addEventListener('click', e => { const b = e.target.closest('button[data-t]'); if (!b) return; cabTab = b.dataset.t; renderCabinet(); });
-const has = k => { const u = store.get('karta_unlock') || ''; return OWNER() || u.includes('all') || u.includes(k); };
+const has = k => { const u = store.get('karta_unlock') || '', e = J('ent', {}); return OWNER() || (k === 'year' && e.plan === 'year' && e.subUntil > Date.now()) || u.includes('all') || u.includes(k); };
 $('pPlay').onclick = () => P.running ? play() : safety(play); $('pStop').onclick = () => stop(); $('pClose').onclick = closePlayer;
 $('pSet').onclick = () => $('drawer').classList.add('open'); $('dClose').onclick = () => $('drawer').classList.remove('open');
 $('pFs').onclick = () => { try { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(() => {}); } catch (e) {} };
