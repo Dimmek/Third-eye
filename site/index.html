@@ -74,6 +74,11 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 
 /* header: light text over the dark hero, pearl glass once scrolled */
 .header { position: fixed; z-index: 30; top: 0; left: 0; right: 0; padding-top: env(safe-area-inset-top, 0px); color: var(--on-dark); transition: background .4s, color .4s, border-color .4s; border-bottom: 1px solid transparent; }
+.back { position: fixed; z-index: 29; top: calc(env(safe-area-inset-top, 0px) + 90px); left: calc(max(0px, (100% - var(--container)) / 2) + max(env(safe-area-inset-left, 0px), clamp(16px, 4vw, 40px))); display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px 9px 11px; border-radius: 999px; font-size: 14px; font-weight: 500; color: #f6f1e8; background: rgba(14,12,20,.5); border: 1px solid rgba(246,241,232,.22); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transition: background .25s, border-color .25s, transform .25s; }
+.back svg { width: 18px; height: 18px; }
+.back:hover { background: rgba(14,12,20,.72); border-color: var(--gold-l); transform: translateX(-2px); }
+.back:focus-visible { outline: 2px solid var(--gold-l); outline-offset: 3px; }
+@media (max-width: 600px) { .back { top: calc(env(safe-area-inset-top, 0px) + 84px); padding: 8px 14px 8px 9px; } }
 .header.solid { background: rgba(247,243,236,.86); backdrop-filter: blur(18px) saturate(1.2); -webkit-backdrop-filter: blur(18px) saturate(1.2); border-color: var(--line); color: var(--ink); }
 .header .container { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 76px; }
 .logo { display: inline-flex; align-items: center; gap: 12px; font-weight: 600; font-size: 17px; letter-spacing: .2em; white-space: nowrap; }
@@ -373,6 +378,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
 </style>
 
 <canvas id="siteNet" aria-hidden="true"></canvas>
+<button class="back" id="backBtn" type="button" hidden aria-label="Назад"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg><span>Назад</span></button>
 <header class="header" id="nav">
   <div class="container">
     <a class="logo" href="#top" aria-label="Дорога к себе — на главную"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="17" stroke="#dcbd86" stroke-width="1"/><path d="M20 5l3.2 11.8L35 20l-11.8 3.2L20 35l-3.2-11.8L5 20l11.8-3.2z" stroke="#dcbd86" stroke-width="1.1" stroke-linejoin="round"/><circle cx="20" cy="20" r="3" fill="#dcbd86"/></svg>ДОРОГА К СЕБЕ</a>
@@ -1728,7 +1734,11 @@ function markPractice() { let days = []; try { days = JSON.parse(store.get('ajna
 const plural = (n, a, b, c) => { const m10 = n % 10, m100 = n % 100; return m10 === 1 && m100 !== 11 ? a : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? b : c; };
 function renderStreak() { const n = streakDays(); $('streak').textContent = n ? 'Вы практикуете ' + n + ' ' + plural(n, 'день', 'дня', 'дней') + ' подряд' : 'Первая сессия — первый шаг.'; }
 renderStreak();
-function show(page) { ['home', 'catalog', 'roomPage', 'journal', 'article'].forEach(id => $(id).hidden = id !== page); setTimeout(solidHeader, 0); document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('on', (a.dataset.r === 'prostranstva' && (page === 'catalog' || page === 'roomPage')) || (a.dataset.r === 'zhurnal' && (page === 'journal' || page === 'article')))); $('mnav').hidden = true; }
+let navDepth = 0; addEventListener('hashchange', () => navDepth++);
+const BACK_TO = { roomPage: '#prostranstva', article: '#zhurnal', catalog: '#top', journal: '#top' };
+$('backBtn').onclick = () => { if (navDepth > 0 && history.length > 1) { navDepth -= 2; history.back(); } else location.hash = BACK_TO[curPage] || '#top'; };
+let curPage = 'home';
+function show(page) { curPage = page; $('backBtn').hidden = page === 'home'; ['home', 'catalog', 'roomPage', 'journal', 'article'].forEach(id => $(id).hidden = id !== page); setTimeout(solidHeader, 0); document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('on', (a.dataset.r === 'prostranstva' && (page === 'catalog' || page === 'roomPage')) || (a.dataset.r === 'zhurnal' && (page === 'journal' || page === 'article')))); $('mnav').hidden = true; }
 function showHome(anchor) {
   show('home');
   if (anchor) { const el = $(anchor); if (el) setTimeout(() => el.scrollIntoView(), 0); } else scrollTo(0, 0);
