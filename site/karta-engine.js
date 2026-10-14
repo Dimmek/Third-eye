@@ -147,5 +147,90 @@ function profection(ch, when) {
   return { age, house, sign, ruler: sign == null ? null : RULER[sign], next };
 }
 
-G.KARTA = { PLANETS, SIGNS, SIGNS_IN, GLYPH, ELEM, CROSS, RULER, ROMAN, ASPECTS, computeChart, transitsYear, mcLines, profection, signOf, fmtDeg, norm, localToUtc };
+
+// ---------- сила планет (эссенциальные + акцидентальные достоинства по У. Лилли) ----------
+const DOM = { sun: [4], moon: [3], mercury: [2, 5], venus: [1, 6], mars: [0, 7], jupiter: [8, 11], saturn: [9, 10] };
+const EXALT = { sun: 0, moon: 1, mercury: 5, venus: 11, mars: 9, jupiter: 3, saturn: 6 };
+const TRIP = [['sun', 'jupiter'], ['venus', 'moon'], ['saturn', 'mercury'], ['mars', 'mars']]; // [день, ночь] по стихиям
+const TERMS = [[['jupiter', 6], ['venus', 12], ['mercury', 20], ['mars', 25], ['saturn', 30]], [['venus', 8], ['mercury', 14], ['jupiter', 22], ['saturn', 27], ['mars', 30]], [['mercury', 6], ['jupiter', 12], ['venus', 17], ['mars', 24], ['saturn', 30]], [['mars', 7], ['venus', 13], ['mercury', 19], ['jupiter', 26], ['saturn', 30]], [['jupiter', 6], ['venus', 11], ['saturn', 18], ['mercury', 24], ['mars', 30]], [['mercury', 7], ['venus', 17], ['jupiter', 21], ['mars', 28], ['saturn', 30]], [['saturn', 6], ['mercury', 14], ['jupiter', 21], ['venus', 28], ['mars', 30]], [['mars', 7], ['venus', 11], ['mercury', 19], ['jupiter', 24], ['saturn', 30]], [['jupiter', 12], ['venus', 17], ['mercury', 21], ['saturn', 26], ['mars', 30]], [['mercury', 7], ['jupiter', 14], ['venus', 22], ['saturn', 26], ['mars', 30]], [['mercury', 7], ['venus', 13], ['jupiter', 20], ['mars', 25], ['saturn', 30]], [['venus', 12], ['jupiter', 16], ['mercury', 19], ['mars', 28], ['saturn', 30]]];
+const FACES = ['mars', 'sun', 'venus', 'mercury', 'moon', 'saturn', 'jupiter'];
+const CLASSIC = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn'];
+function dignities(ch) {
+  const isDay = ch.known ? ch.pos.sun.house >= 7 : true, out = {};
+  CLASSIC.forEach(p => {
+    const lon = ch.pos[p].lon, s = signOf(lon), d = norm(lon) % 30, notes = []; let e = 0;
+    if (DOM[p].includes(s)) { e += 5; notes.push('в своём знаке'); }
+    if (EXALT[p] === s) { e += 4; notes.push('в экзальтации'); }
+    if (TRIP[s % 4][isDay ? 0 : 1] === p) { e += 3; notes.push('управитель триплицитета'); }
+    if (TERMS[s].find(([r, end]) => d < end)[0] === p) { e += 2; notes.push('в своих термах'); }
+    if (FACES[(s * 3 + Math.floor(d / 10)) % 7] === p) { e += 1; notes.push('в своём деканате'); }
+    const det = DOM[p].some(x => (x + 6) % 12 === s), fall = (EXALT[p] + 6) % 12 === s;
+    if (det) { e -= 5; notes.push('в изгнании'); } if (fall) { e -= 4; notes.push('в падении'); }
+    let a = 0;
+    if (ch.known) { const h = ch.pos[p].house, hv = ({ 1: 5, 10: 5, 4: 4, 7: 4, 11: 4, 2: 3, 5: 3, 9: 2, 3: 1, 6: -2, 8: -2, 12: -5 })[h] || 0; a += hv; if (hv >= 4) notes.push('в сильном ' + ROMAN[h - 1] + ' доме'); else if (hv < 0) notes.push(ROMAN[h - 1] + ' дом ослабляет'); }
+    if (p !== 'sun' && p !== 'moon') { a += ch.pos[p].retro ? -5 : 4; if (ch.pos[p].retro) notes.push('ретроградна'); }
+    const near = (q, orb) => Math.abs(((ch.pos[p].lon - ch.pos[q].lon + 540) % 360) - 180) < orb;
+    if (p !== 'jupiter' && near('jupiter', 5)) { a += 5; notes.push('рядом с Юпитером'); }
+    if (p !== 'venus' && near('venus', 5)) { a += 5; notes.push('рядом с Венерой'); }
+    if (p !== 'saturn' && near('saturn', 5)) { a -= 5; notes.push('рядом с Сатурном'); }
+    if (p !== 'mars' && near('mars', 5)) { a -= 4; notes.push('рядом с Марсом'); }
+    if (p !== 'sun' && p !== 'moon' && Math.abs(((ch.pos[p].lon - ch.pos.sun.lon + 540) % 360) - 180) < 8.5) { a -= 5; notes.push('под лучами Солнца'); }
+    out[p] = { ess: e, acc: a, total: e + a, notes, peregrine: e === 0 };
+  });
+  return out;
+}
+
+// ---------- джйотиш: вимшоттари-даша (аянамса Лахири, приближение) ----------
+const DLORD = ['ketu', 'venus', 'sun', 'moon', 'mars', 'rahu', 'jupiter', 'saturn', 'mercury'], DYEARS = { ketu: 7, venus: 20, sun: 6, moon: 10, mars: 7, rahu: 18, jupiter: 16, saturn: 19, mercury: 17 };
+const NAK = ['Ашвини', 'Бхарани', 'Криттика', 'Рохини', 'Мригашира', 'Ардра', 'Пунарвасу', 'Пушья', 'Ашлеша', 'Магха', 'Пурва-Пхалгуни', 'Уттара-Пхалгуни', 'Хаста', 'Читра', 'Свати', 'Вишакха', 'Анурадха', 'Джйештха', 'Мула', 'Пурва-Ашадха', 'Уттара-Ашадха', 'Шравана', 'Дхаништха', 'Шатабхиша', 'Пурва-Бхадрапада', 'Уттара-Бхадрапада', 'Ревати'];
+function dasha(ch) {
+  const yr = ch.utc.getUTCFullYear() + ch.utc.getUTCMonth() / 12, ayan = 23.853 + (yr - 2000) * 0.013969;
+  const sid = norm(ch.pos.moon.lon - ayan), nk = Math.floor(sid / (360 / 27)), frac = (sid % (360 / 27)) / (360 / 27);
+  const YMS = 365.2425 * 864e5; let lordI = nk % 9, t = +ch.utc - frac * DYEARS[DLORD[lordI]] * YMS; const md = [];
+  for (let k = 0; k < 10; k++) { const L = DLORD[(lordI + k) % 9], len = DYEARS[L] * YMS, st = t; t += len;
+    const subs = []; let u = st; for (let j = 0; j < 9; j++) { const S = DLORD[(lordI + k + j) % 9], l2 = len * DYEARS[S] / 120; subs.push({ lord: S, from: new Date(u), to: new Date(u + l2) }); u += l2; }
+    md.push({ lord: L, from: new Date(st), to: new Date(t), subs }); }
+  const at = d => { const m = md.find(x => x.from <= d && x.to > d); return m ? { md: m, ad: m.subs.find(x => x.from <= d && x.to > d) } : null; };
+  return { nak: NAK[nk], nakLord: DLORD[nk % 9], ayan, sidAsc: ch.ang ? norm(ch.ang.asc - ayan) : null, sidSun: norm(ch.pos.sun.lon - ayan), sidMoon: sid, md, at };
+}
+function lifePath(date) { let n = date.replace(/\D/g, '').split('').reduce((a, b) => a + +b, 0); while (n > 9 && n !== 11 && n !== 22) n = String(n).split('').reduce((a, b) => a + +b, 0); return n; }
+
+// ---------- релокация: углы карты в другом городе ----------
+function relocate(ch, lat, lon) { const a = angles(ch.t, lat, lon); return { asc: a.asc, mc: a.mc }; }
+function angularHits(ch, lat, lon, orb) {
+  const r = relocate(ch, lat, lon), hits = [];
+  ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'].forEach(p => {
+    [['ASC', r.asc], ['DSC', norm(r.asc + 180)], ['MC', r.mc], ['IC', norm(r.mc + 180)]].forEach(([n, l]) => {
+      const d = Math.abs(((ch.pos[p].lon - l + 540) % 360) - 180); if (d <= orb) hits.push({ p, angle: n, d });
+    }); });
+  return hits;
+}
+// линии для карты мира: долготы MC/IC и кривые ASC/DSC
+function worldLines(ch, keys) {
+  const X = A(), gast = X.SiderealTime(ch.t) * 15, e = obliquity(ch.t), out = {};
+  keys.forEach(k => { const l = ch.pos[k].lon, ra = norm(atan2d(sind(l) * cosd(e), cosd(l))), dec = asind(sind(e) * sind(l));
+    const w = x => ((x + 540) % 360) - 180, mc = w(ra - gast), asc = [], dsc = [];
+    for (let la = -70; la <= 75; la += 2.5) { const c = -tand(la) * tand(dec); if (Math.abs(c) > 1) continue; const H = Math.acos(c) * R2D; asc.push([la, w(ra - gast - H)]); dsc.push([la, w(ra - gast + H)]); }
+    out[k] = { mc, ic: w(mc + 180), asc, dsc }; });
+  return out;
+}
+
+// ---------- транзиты по годам (шаг 10 дней) ----------
+function transitsRange(ch, from, years) {
+  const X = A(), slow = ['jupiter', 'saturn', 'uranus', 'neptune', 'pluto'];
+  const tg = { sun: ch.pos.sun.lon, moon: ch.pos.moon.lon, venus: ch.pos.venus.lon, mars: ch.pos.mars.lon, jupiter: ch.pos.jupiter.lon, saturn: ch.pos.saturn.lon };
+  if (ch.ang) { tg.asc = ch.ang.asc; tg.mc = ch.ang.mc; tg.ic = norm(ch.ang.mc + 180); tg.dsc = norm(ch.ang.asc + 180); }
+  const start = X.MakeTime(from), out = [], open = {};
+  for (let day = 0; day <= years * 365.25; day += 6) { const t = start.AddDays(day);
+    slow.forEach(p => { const l = lonOf(p, t); Object.keys(tg).forEach(n => { if (p === n && (p === 'jupiter' || p === 'saturn') && false) return; ASPECTS.forEach(([ang, name, g, tone]) => {
+      if ((n === 'ic' || n === 'dsc') && ang !== 0) return;
+      const sep = 180 - Math.abs(((l - tg[n] + 540) % 360) - 180), orb = Math.abs(sep - ang), key = p + n + ang;
+      if (orb <= 1.5) { const o = open[key]; if (!o) open[key] = { p, n, ang, name, tone, s: day, e: day }; else o.e = day; }
+      else if (open[key] && day - open[key].e > 40) { out.push(open[key]); delete open[key]; } }); }); }); }
+  Object.values(open).forEach(o => out.push(o));
+  out.forEach(o => { o.from = new Date(+from + o.s * 864e5); o.to = new Date(+from + o.e * 864e5); });
+  return out.sort((a, b) => a.from - b.from);
+}
+
+G.KARTA = { dignities, dasha, lifePath, relocate, angularHits, worldLines, transitsRange, NAK, CLASSIC, obliquity,  PLANETS, SIGNS, SIGNS_IN, GLYPH, ELEM, CROSS, RULER, ROMAN, ASPECTS, computeChart, transitsYear, mcLines, profection, signOf, fmtDeg, norm, localToUtc };
 })(typeof window !== 'undefined' ? window : globalThis);

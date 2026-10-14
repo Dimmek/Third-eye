@@ -111,84 +111,299 @@ function drawWheel(cv, ch) {
 }
 
 // ---------- разметка ----------
-const lockBox = (kind, title, teaser) => '<div class="klock" data-kind="' + kind + '"><div class="klock__fog"><p>' + teaser + '</p><i></i><i></i><i style="width:62%"></i></div><div class="klock__cta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg><b>' + title + '</b><button class="btn btn--gold btn--sm" type="button" data-buy="' + kind + '">Открыть · ' + PRICE[kind][1].toLocaleString('ru') + ' ₽</button></div></div>';
-const sec = (n, eyebrow, title, intro, body) => '<section class="ksec"><div class="ksec__head"><span class="eyebrow">' + n + ' · ' + eyebrow + '</span><h2>' + title + '</h2>' + (intro ? '<p class="ksec__intro">' + intro + '</p>' : '') + '</div>' + body + '</section>';
+// ---------- полная карта: вид ----------
 const has = k => { const u = st.get('karta_unlock') || ''; return u.includes('all') || u.includes(k); };
+const RU_P = { sun: 'Солнце', moon: 'Луна', mercury: 'Меркурий', venus: 'Венера', mars: 'Марс', jupiter: 'Юпитер', saturn: 'Сатурн', uranus: 'Уран', neptune: 'Нептун', pluto: 'Плутон', node: 'Северный узел', asc: 'Асцендент', mc: 'MC', ic: 'IC', dsc: 'Десцендент', ketu: 'Кету', rahu: 'Раху', fortune: 'Колесо Фортуны' };
+const RU_PG = { sun: 'Солнца', moon: 'Луны', mercury: 'Меркурия', venus: 'Венеры', mars: 'Марса', jupiter: 'Юпитера', saturn: 'Сатурна', uranus: 'Урана', neptune: 'Нептуна', pluto: 'Плутона', ketu: 'Кету', rahu: 'Раху' };
+const GL = { sun: '☉', moon: '☽', mercury: '☿', venus: '♀', mars: '♂', jupiter: '♃', saturn: '♄', uranus: '♅', neptune: '♆', pluto: '♇', node: '☊', fortune: '⊗', asc: 'AC', mc: 'MC' };
+const glyph = k => '<span class="kg">' + (GL[k] || '') + (GL[k] && GL[k].length === 1 ? '︎' : '') + '</span>';
+const SIGNG = ['Овна', 'Тельца', 'Близнецов', 'Рака', 'Льва', 'Девы', 'Весов', 'Скорпиона', 'Стрельца', 'Козерога', 'Водолея', 'Рыб'];
+const ELNAME = { fire: 'Огонь', earth: 'Земля', air: 'Воздух', water: 'Вода' }, ELCLR = { fire: 'var(--k-fire)', earth: 'var(--k-earth)', air: 'var(--k-air)', water: 'var(--k-water)' };
+const LP = { 1: 'лидер и основатель: самостоятельность и первый шаг', 2: 'дипломат: партнёрство и чуткость', 3: 'творец: слово, радость, самовыражение', 4: 'строитель: система, порядок, надёжность', 5: 'искатель: свобода, перемены, опыт', 6: 'хранитель: семья, забота, ответственность', 7: 'исследователь: глубина, знание, уединение', 8: 'управленец: ресурсы, масштаб, власть', 9: 'гуманист: служение, завершение, мудрость', 11: 'вдохновитель: интуиция и миссия', 22: 'мастер-строитель: большие проекты' };
+const ZODIAC_CN = ['Крыса', 'Бык', 'Тигр', 'Кролик', 'Дракон', 'Змея', 'Лошадь', 'Коза', 'Обезьяна', 'Петух', 'Собака', 'Свинья'], EL_CN = ['Металл', 'Металл', 'Вода', 'Вода', 'Дерево', 'Дерево', 'Огонь', 'Огонь', 'Земля', 'Земля'];
+const YTITLE = ['Новый цикл', 'Ресурсы', 'Связи и знания', 'Корни и дом', 'Радость и творчество', 'Порядок и тело', 'Партнёрство', 'Глубокие перемены', 'Горизонты', 'Вершина', 'Команда и мечты', 'Тишина и итоги'];
+const YREC = ['начать новое, обновить образ, позаботиться о теле', 'навести порядок в деньгах и ценностях, создать запас', 'учиться, вести переговоры, писать, ездить', 'укрепить дом и семью, решить вопросы жилья', 'творить, любить, отдыхать, проводить время с детьми', 'настроить режим, работу и здоровье', 'выстраивать союзы и договоры, слушать партнёра', 'пересобрать ресурсы, отпустить отжившее, работать с долгами и вложениями', 'учиться, путешествовать, расширять мировоззрение', 'брать ответственность, добиваться видимого результата', 'собирать команду и сообщество, строить планы', 'завершать начатое, отдыхать, готовить следующий цикл'];
+const mo = d => MON[d.getMonth()].replace(/я$/, 'ь').replace(/та$/, 'т').replace(/ая$/, 'ай').replace(/ня$/, 'нь').replace(/ля$/, 'ль');
+const MONN = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+const span = o => { const a = o.from, b = o.to; return a.getFullYear() === b.getFullYear() ? (a.getMonth() === b.getMonth() ? MONN[a.getMonth()] + ' ' + a.getFullYear() : MONN[a.getMonth()] + '–' + MONN[b.getMonth()] + ' ' + a.getFullYear()) : MONN[a.getMonth()] + ' ' + a.getFullYear() + ' — ' + MONN[b.getMonth()] + ' ' + b.getFullYear(); };
+const bar = (lbl, v, max, cls) => '<div class="kb"><span>' + lbl + '</span><i class="' + (cls || '') + '"><b style="width:' + Math.max(4, Math.min(100, v / max * 100)) + '%"></b></i><em>' + v + '/' + max + '</em></div>';
+const KT = n => window[n] || null;
+
+function tokensOf(ch, ctx) {
+  const T = new Set(['always']), sg = k => K.SIGNS[K.signOf(ch.pos[k].lon)];
+  T.add('sun:' + sg('sun')); T.add('moon:' + sg('moon')); if (ch.ang) T.add('asc:' + K.SIGNS[K.signOf(ch.ang.asc)]);
+  const elK = Object.keys(ch.el).sort((a, b) => ch.el[b] - ch.el[a]); T.add('el:' + elK[0]); Object.keys(ch.el).forEach(e => { if (ch.el[e] <= 1) T.add('el-lack:' + e); });
+  if (ch.known) { const cnt = h => K.PLANETS.slice(0, 10).filter(p => ch.pos[p[0]].house === h).length; if (cnt(10) >= 2) T.add('house10'); if (cnt(12) >= 2) T.add('house12'); if (cnt(1) >= 1) T.add('house1');
+    const near = (k, l, o) => Math.abs(((ch.pos[k].lon - l + 540) % 360) - 180) < o;
+    if (near('jupiter', ch.ang.asc, 10) || ch.pos.jupiter.house === 1) T.add('jupiter-asc'); if (near('saturn', ch.ang.mc, 10) || ch.pos.saturn.house === 10) T.add('saturn-mc'); if (near('pluto', ch.ang.mc, 10) || ch.pos.pluto.house === 10) T.add('pluto-mc');
+    if ([1, 4, 7, 10].includes(ch.pos.neptune.house)) T.add('neptune-angular'); if ([1, 4, 7, 10].includes(ch.pos.uranus.house)) T.add('uranus-angular'); }
+  const dg = ctx.dg; if (dg.venus.ess >= 4) T.add('venus-dignified'); if (dg.mars.total >= 8 || dg.mars.ess >= 4) T.add('mars-strong'); if (dg.mercury.total >= 8 || dg.mercury.ess >= 4) T.add('mercury-strong');
+  if ([3, 7, 11].includes(K.signOf(ch.pos.moon.lon))) T.add('moon-water');
+  ch.aspects.forEach(a => { T.add('aspect-' + (a.tone === 'soft' ? 'soft' : 'hard') + ':' + a.a + '-' + a.b); T.add('aspect-' + (a.tone === 'soft' ? 'soft' : 'hard') + ':' + a.b + '-' + a.a); });
+  return T;
+}
+const matches = (when, T) => String(when || '').split('|').map(s => s.trim()).filter(Boolean).filter(t => T.has(t)).length;
+
+function aspectText(a) { const L = KT('KT_ASPECTS'); if (!L) return ''; const key = [a.a, a.b].join('-'), k2 = [a.b, a.a].join('-'), o = L[key] || L[k2]; if (!o) return ''; return o[a.ang === 0 ? 'conj' : a.tone === 'soft' ? 'soft' : 'hard'] || ''; }
+
+// 12 направлений призвания
+const DIRS = [
+  { n: 'Своё дело · основатель', d: 'Создавать и вести собственное дело, быть владельцем и стратегом.', img: 'chess', money: 5, signs: [0, 4, 7, 9], houses: [1, 10], flags: ['jupiter-asc', 'pluto-mc', 'mars-strong', 'house10'], step: 'Запустить небольшой проект параллельно с основной работой и проверить спрос на 10 клиентах.' },
+  { n: 'Инвестиции и капитал', d: 'Управление активами, сделки, работа с чужими ресурсами и рисками.', img: 'yacht', money: 5, signs: [1, 7, 9], houses: [2, 8], flags: ['pluto-mc', 'saturn-mc'], step: 'Пройти базовый курс финансового анализа и начать с малых сумм по жёстким правилам.' },
+  { n: 'Технологии, данные, ИИ', d: 'Цифровые продукты, автоматизация, алгоритмы, новые сервисы.', img: 'circuit', money: 4, signs: [2, 5, 10], houses: [11, 3], flags: ['uranus-angular', 'mercury-strong'], step: 'Освоить один ИИ-инструмент и собрать прототип, который решает реальную задачу знакомых.' },
+  { n: 'Руководство и антикризис', d: 'Управлять командами и системами, выводить из кризиса, перестраивать.', img: 'chessboard', money: 5, signs: [7, 9, 0], houses: [10, 6], flags: ['saturn-mc', 'pluto-mc', 'mars-strong'], step: 'Взять управленческую роль в растущей команде или пройти программу для руководителей.' },
+  { n: 'Международные дела', d: 'Переговоры, сделки и проекты между странами и культурами.', img: 'handshake', money: 4, signs: [8, 6, 2], houses: [9, 7], flags: ['venus-dignified'], step: 'Подтянуть язык и выйти на отраслевую выставку или сообщество за рубежом.' },
+  { n: 'Наставник, спикер, автор', d: 'Делиться опытом, учить, выступать, писать и вести людей.', img: 'speaker', money: 3, signs: [4, 8, 2], houses: [9, 3, 5], flags: ['jupiter-asc'], step: 'Вести канал или блог о своём опыте и взять первых подопечных.' },
+  { n: 'Недвижимость и пространство', d: 'Дом, объекты, девелопмент, интерьер и среда, где хорошо жить.', img: 'villa', money: 4, signs: [3, 1, 9], houses: [4, 2], flags: [], step: 'Изучить рынок одного города и войти в первую сделку вместе с опытным партнёром.' },
+  { n: 'Психология и помогающие практики', d: 'Работа с людьми и их мотивами, коучинг, поддержка, глубокие разговоры.', img: 'library', money: 3, signs: [11, 7, 3], houses: [8, 12, 6], flags: ['moon-water', 'neptune-angular'], step: 'Пройти обучение одной методике и вести первых клиентов под супервизией.' },
+  { n: 'Творчество и дизайн', d: 'Красота, стиль, визуальный язык, искусство и эстетика.', img: 'room', money: 3, signs: [6, 1, 4, 11], houses: [5], flags: ['venus-dignified', 'neptune-angular'], step: 'Собрать портфолио из 5 работ и показать его 20 людям из нужной ниши.' },
+  { n: 'Медиа, маркетинг, продажи', d: 'Слова, бренды, коммуникации, умение донести и продать идею.', img: 'london', money: 4, signs: [2, 4, 6], houses: [3, 11, 7], flags: ['mercury-strong'], step: 'Запустить одну рекламную или контентную кампанию и измерить результат в цифрах.' },
+  { n: 'Тело, спорт и здоровый образ жизни', d: 'Движение, тренировки, восстановление, забота о теле — своём и чужом.', img: 'hiker', money: 3, signs: [0, 5, 7], houses: [6, 1], flags: ['mars-strong'], step: 'Получить базовую сертификацию тренера или инструктора и вести небольшую группу.' },
+  { n: 'Финансы, аналитика, право', d: 'Точность, цифры, правила, структуры и аудит.', img: 'skyline', money: 4, signs: [5, 9, 6, 1], houses: [2, 10, 6], flags: ['mercury-strong', 'saturn-mc'], step: 'Освоить один инструмент аналитики или пройти курс по договорному праву.' }
+];
+function scoreDirs(ch, T) {
+  const pts = [['sun', 3], ['moon', 2], ['mercury', 1], ['venus', 1], ['mars', 1], ['jupiter', 1], ['saturn', 1]];
+  return DIRS.map(D => { let s = 0; const tags = [];
+    pts.forEach(([p, w]) => { const sg = K.signOf(ch.pos[p].lon); if (D.signs.includes(sg)) { s += w; if (w >= 2) tags.push(RU_P[p] + ' в знаке ' + K.SIGNS[sg]); } if (ch.known && D.houses.includes(ch.pos[p].house)) { s += w; tags.push(RU_P[p] + ' в ' + K.ROMAN[ch.pos[p].house - 1] + ' доме'); } });
+    if (ch.ang) { const m = K.signOf(ch.ang.mc), a = K.signOf(ch.ang.asc); if (D.signs.includes(m)) { s += 3; tags.push('MC в знаке ' + K.SIGNS[m]); } if (D.signs.includes(a)) { s += 2; tags.push('Асцендент в знаке ' + K.SIGNS[a]); } }
+    D.flags.forEach(f => { if (T.has(f)) { s += 3; tags.push({ 'jupiter-asc': 'Юпитер у Асцендента', 'pluto-mc': 'Плутон у вершины карты', 'saturn-mc': 'Сатурн у вершины карты', 'mars-strong': 'сильный Марс', 'mercury-strong': 'сильный Меркурий', 'venus-dignified': 'сильная Венера', 'uranus-angular': 'Уран на угле карты', 'neptune-angular': 'Нептун на угле карты', 'moon-water': 'Луна в стихии Воды', house10: 'акцент на доме карьеры' }[f]); } });
+    return Object.assign({}, D, { s, tags: [...new Set(tags)].slice(0, 3) }); }).sort((a, b) => b.s - a.s);
+}
+
+function scoreCities(ch) {
+  const W = { career: { MC: { sun: 3, jupiter: 3, venus: 2, mars: 1, uranus: 1, pluto: 1, saturn: -1, neptune: -2 }, ASC: { sun: 2, jupiter: 3, venus: 2, mars: 1, saturn: -2, neptune: -1, pluto: -1 } },
+    money: { MC: { jupiter: 3, venus: 3, sun: 1, pluto: 1, saturn: -2, neptune: -2 }, ASC: { jupiter: 3, venus: 2, saturn: -2, neptune: -2 }, IC: { jupiter: 1, venus: 1 } },
+    family: { IC: { moon: 3, venus: 3, jupiter: 2, saturn: -2, mars: -2, pluto: -2, uranus: -2 }, DSC: { venus: 3, jupiter: 2, moon: 1, saturn: -2, mars: -2, uranus: -2, pluto: -1 }, ASC: { moon: 1, venus: 1, saturn: -1 } } };
+  return (window.KARTA_WCITIES || window.KARTA_CITIES || []).map(c => { const hits = K.angularHits(ch, c[2], c[3], 5.5), sc = {};
+    ['career', 'money', 'family'].forEach(d => { let v = 0; hits.forEach(h => { const w = (W[d][h.angle] || {})[h.p] || 0; v += w * (1 - h.d / 8); }); sc[d] = Math.max(1, Math.min(5, Math.round(3 + v))); });
+    const hard = hits.filter(h => ['saturn', 'pluto', 'mars', 'neptune'].includes(h.p) && (h.angle === 'MC' || h.angle === 'ASC')).length;
+    return { c, hits, sc, total: sc.career + sc.money + sc.family, hard }; });
+}
+const CITY_IMG = { 'Лондон': 'london', 'Валенсия': 'valencia', 'Дубай': 'dubai', 'Цюрих': 'harbor' }, GEN_IMG = ['skyline', 'city', 'harbor', 'villa', 'valley'];
+const hitText = h => RU_P[h.p] + ' на ' + ({ MC: 'MC', IC: 'IC', ASC: 'Асценденте', DSC: 'Десценденте' })[h.angle] + (h.d < 1.5 ? ' (точно)' : '');
+
+function yearScores(ch, trR, ds, now) {
+  const out = [];
+  for (let i = 0; i < 13; i++) {
+    const y = now.getFullYear() + i, mid = new Date(y, 6, 1), pr = K.profection(ch, new Date(y, (new Date(ch.inp.date)).getMonth(), (new Date(ch.inp.date)).getDate() + 1));
+    const tr = trR.filter(o => o.from.getFullYear() <= y && o.to.getFullYear() >= y);
+    const dom = { career: ['mc', 'sun', 'saturn'], money: ['venus', 'jupiter'], family: ['moon', 'venus', 'ic', 'dsc'], health: ['sun', 'asc', 'moon', 'mars'] };
+    const sc = {}, agree = {};
+    Object.keys(dom).forEach(d => { let v = 0, sys = 0;
+      tr.filter(o => dom[d].includes(o.n)).forEach(o => { const good = o.tone === 'soft' || (o.ang === 0 && o.p === 'jupiter'); const w = o.p === 'jupiter' ? 1 : o.p === 'saturn' ? 1 : 0.7; v += good ? w : -w * (d === 'career' && o.p === 'saturn' && o.ang === 0 ? 0.3 : 1); });
+      if (v > 0) sys++;
+      const ph = { career: [10, 1], money: [2, 8, 11], family: [4, 5, 7], health: [1, 6] }[d]; if (ph.includes(pr.house)) { v += 1; sys++; }
+      const at = ds && ds.at(mid); if (at) { const ben = ['jupiter', 'venus', 'mercury', 'moon'].includes(at.ad.lord); if (ben) { v += 0.5; sys++; } else if (['saturn', 'rahu', 'ketu', 'mars'].includes(at.ad.lord)) v -= 0.4; }
+      sc[d] = Math.max(1, Math.min(5, Math.round(3 + v * 0.6))); agree[d] = sys; });
+    const top = tr.slice().sort((a, b) => (a.p === 'jupiter' || a.p === 'saturn' ? 0 : 1) - (b.p === 'jupiter' || b.p === 'saturn' ? 0 : 1)).slice(0, 3);
+    out.push({ y, age: y - +ch.inp.date.slice(0, 4), pr, sc, agree, top, sum: sc.career + sc.money + sc.family + sc.health });
+  }
+  return out;
+}
+const trName = o => RU_P[o.p] + ' ' + (o.ang === 0 ? 'соединяется с' : o.name + ' к') + ' ' + ({ asc: 'Асценденту', mc: 'MC', ic: 'IC', dsc: 'Десценденту' }[o.n] || RU_P[o.n].replace(/а$/, 'е').replace(/е$/, 'е')) ;
+const DAT = { sun: 'Солнцу', moon: 'Луне', mercury: 'Меркурию', venus: 'Венере', mars: 'Марсу', jupiter: 'Юпитеру', saturn: 'Сатурну', asc: 'Асценденту', mc: 'MC', ic: 'IC', dsc: 'Десценденту' };
+const INS = { sun: 'Солнцем', moon: 'Луной', mercury: 'Меркурием', venus: 'Венерой', mars: 'Марсом', jupiter: 'Юпитером', saturn: 'Сатурном', asc: 'Асцендентом', mc: 'MC', ic: 'IC', dsc: 'Десцендентом' };
+const ASPP = { 'секстиль': 'в секстиле к', 'квадрат': 'в квадрате к', 'трин': 'в трине к', 'оппозиция': 'в оппозиции к' };
+const trNice = o => o.ang === 0 ? RU_P[o.p] + (o.p === o.n ? ' возвращается на своё место' : ' соединяется с ' + (INS[o.n] || RU_P[o.n])) : RU_P[o.p] + ' ' + (ASPP[o.name] || o.name) + ' ' + (DAT[o.n] || RU_P[o.n]);
+const uniqT = arr => { const seen = new Set(); return arr.filter(o => { const k = o.p + o.n + o.ang + o.from.getFullYear(); if (seen.has(k)) return false; seen.add(k); return true; }); };
+
+// компас
+const compass = () => '<svg class="kcomp" viewBox="0 0 200 200" aria-hidden="true"><defs><radialGradient id="kcg" cx="50%" cy="45%"><stop offset="0" stop-color="rgba(255,255,255,.12)"/><stop offset="1" stop-color="rgba(0,0,0,.35)"/></radialGradient></defs>'
+  + '<circle cx="100" cy="100" r="92" fill="url(#kcg)" stroke="var(--k-acc)" stroke-width="2.5"/><circle cx="100" cy="100" r="72" fill="none" stroke="var(--k-acc)" stroke-opacity=".35"/>'
+  + Array.from({ length: 72 }, (_, i) => { const a = i * 5 * Math.PI / 180, r1 = i % 18 === 0 ? 80 : i % 2 ? 88 : 85; return '<line x1="' + (100 + 92 * Math.sin(a)).toFixed(1) + '" y1="' + (100 - 92 * Math.cos(a)).toFixed(1) + '" x2="' + (100 + r1 * Math.sin(a)).toFixed(1) + '" y2="' + (100 - r1 * Math.cos(a)).toFixed(1) + '" stroke="var(--k-acc)" stroke-opacity="' + (i % 18 === 0 ? 1 : .45) + '" stroke-width="' + (i % 18 === 0 ? 2.4 : 1) + '"/>'; }).join('')
+  + [['С', 100, 34], ['В', 166, 104], ['Ю', 100, 172], ['З', 34, 104]].map(([t, x, y]) => '<text x="' + x + '" y="' + y + '" text-anchor="middle" fill="var(--k-text)" font-size="15" font-weight="600" font-family="Inter Tight,sans-serif">' + t + '</text>').join('')
+  + '<g class="kneedle"><path d="M100 100 L110 96 L100 30 L90 96 Z" fill="var(--k-acc)"/><path d="M100 100 L110 104 L100 170 L90 104 Z" fill="var(--k-cool)" opacity=".75"/></g><circle cx="100" cy="100" r="6" fill="var(--k-text)" stroke="var(--k-acc)" stroke-width="2"/></svg>';
+
+// тело (силуэт) и зоны по знакам
+const BODYPTS = [[100, 38], [100, 70], [58, 118], [100, 102], [118, 124], [100, 158], [124, 186], [100, 214], [84, 258], [84, 300], [84, 336], [84, 372]];
+const bodySvg = zones => '<svg class="kbody" viewBox="0 0 200 390" aria-hidden="true"><g fill="none" stroke="var(--k-line2)" stroke-width="1.6"><circle cx="100" cy="38" r="24"/><path d="M100 62v14M60 84q40-14 80 0l8 102-12 4-6-80-4 74q2 24 0 40l-10 152h-18l-6-140-6 140H68L60 236q-2-16 0-40l-4-74-6 80-12-4z"/></g>'
+  + zones.map((z, i) => { const [x, y] = BODYPTS[z.sign]; return '<g><circle cx="' + x + '" cy="' + y + '" r="12" fill="var(--k-acc)" fill-opacity=".9"/><text x="' + x + '" y="' + (y + 4.5) + '" text-anchor="middle" font-size="12" font-weight="700" fill="var(--k-bg)" font-family="Inter Tight,sans-serif">' + (i + 1) + '</text></g>'; }).join('') + '</svg>';
+
+function worldDraw(cv, ch, cities) {
+  const W = window.KARTA_WORLD; if (!W || !cv.clientWidth) return; const dpr = Math.min(2, devicePixelRatio || 1), w = cv.clientWidth, h = w * 0.46;
+  cv.width = w * dpr; cv.height = h * dpr; cv.style.height = h + 'px'; const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const bin = atob(W.b), px = lo => (lo + 180) / 360 * w, py = la => (W.lat0 - la) / (W.h * W.step) * h, cs = getComputedStyle(cv);
+  const dot = cs.getPropertyValue('--k-dot').trim() || 'rgba(255,255,255,.25)'; g.fillStyle = dot;
+  for (let r = 0; r < W.h; r++) for (let c = 0; c < W.w; c++) { const i = r * W.w + c; if (bin.charCodeAt(i >> 3) & (128 >> (i & 7))) { g.beginPath(); g.arc(px(-179.25 + c * 1.5), py(W.lat0 - r * W.step), Math.max(0.8, w / 900), 0, 7); g.fill(); } }
+  const lines = K.worldLines(ch, ['jupiter', 'venus', 'sun', 'saturn', 'mars']), CLR = { jupiter: cs.getPropertyValue('--k-good'), venus: cs.getPropertyValue('--k-fam'), sun: cs.getPropertyValue('--k-acc'), saturn: cs.getPropertyValue('--k-bad'), mars: cs.getPropertyValue('--k-bad') };
+  Object.keys(lines).forEach(k => { const L = lines[k]; g.strokeStyle = CLR[k]; g.globalAlpha = k === 'saturn' || k === 'mars' ? 0.45 : 0.85; g.lineWidth = 1.4;
+    [L.mc].forEach(lo => { g.beginPath(); g.moveTo(px(lo), 0); g.lineTo(px(lo), h); g.stroke(); });
+    g.setLineDash([4, 4]); [L.asc, L.dsc].forEach(arr => { g.beginPath(); let prev = null; arr.forEach(([la, lo]) => { const x = px(lo), y = py(la); if (prev && Math.abs(prev - lo) > 90) g.moveTo(x, y); else g.lineTo(x, y); prev = lo; }); g.stroke(); }); g.setLineDash([]);
+    g.globalAlpha = 1; g.fillStyle = CLR[k]; g.font = '600 11px Inter Tight,sans-serif'; g.fillText(RU_P[k] + ' MC', px(L.mc) + 4, 14 + ['jupiter', 'venus', 'sun', 'saturn', 'mars'].indexOf(k) * 13); });
+  const placed = []; cities.forEach((x, i) => { const X = px(x.c[3]), Y = py(x.c[2]); const clash = placed.some(([a, b]) => Math.abs(a - X) < 90 && Math.abs(b - Y) < 14); placed.push([X, clash ? Y + 16 : Y]); g.beginPath(); g.arc(X, Y, 8, 0, 7); g.fillStyle = cs.getPropertyValue('--k-acc'); g.fill(); g.fillStyle = cs.getPropertyValue('--k-bg'); g.font = '700 10px Inter Tight,sans-serif'; g.textAlign = 'center'; g.fillText(String(i + 1), X, Y + 3.5); g.textAlign = 'left'; if (w > 600) { g.fillStyle = cs.getPropertyValue('--k-text'); g.font = '600 12px Inter Tight,sans-serif'; g.fillText(x.c[0], X + 11, (clash ? Y + 16 : Y) + 4); } });
+}
+
+const lockWrap = (kind, title, html) => has(kind) ? html : '<div class="klk"><div class="klk__in" aria-hidden="true">' + html + '</div><div class="klk__cta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg><b>' + title + '</b><button class="btn btn--gold btn--sm" type="button" data-buy="' + kind + '">Открыть · ' + PRICE[kind][1].toLocaleString('ru') + ' ₽</button><small>или всё вместе — ' + PRICE.all[1].toLocaleString('ru') + ' ₽</small></div></div>';
+const S = (id, n, eyebrow, title, intro, body, topo) => '<section class="km-s' + (topo ? ' topo' : '') + '" id="km-' + id + '"><div class="km-w"><span class="km-eb">' + n + ' · ' + eyebrow + '</span><h2 class="km-h">' + title + '</h2>' + (intro ? '<p class="km-lead">' + intro + '</p>' : '') + body + '</div></section>';
 
 function render(ch) {
-  const now = new Date(), tr = K.transitsYear(ch, now), prof = K.profection(ch, now), rec = recommend(ch, tr, prof);
-  const sun = K.signOf(ch.pos.sun.lon), moon = K.signOf(ch.pos.moon.lon), asc = ch.ang ? K.signOf(ch.ang.asc) : null, nm = ch.inp.name ? esc(ch.inp.name) : '';
-  const off = ch.offset / 60, offs = 'UTC' + (off >= 0 ? '+' : '') + off;
-  const [yy, mm, dd] = ch.inp.date.split('-');
+  const now = new Date(), Y = now.getFullYear(), g = ch.inp.gender === 'm' ? 'm' : 'f';
+  const tr = K.transitsYear(ch, now), prof = K.profection(ch, now), dg = K.dignities(ch), ds = K.dasha(ch), lp = K.lifePath(ch.inp.date);
+  const ctx = { dg }, T = tokensOf(ch, ctx), rec = recommend(ch, tr, prof), trR = K.transitsRange(ch, now, 12.5), years = yearScores(ch, trR, ds, now);
+  const sgn = k => K.signOf(ch.pos[k].lon), sun = sgn('sun'), moon = sgn('moon'), asc = ch.ang ? K.signOf(ch.ang.asc) : null, nm = ch.inp.name ? esc(ch.inp.name) : '';
+  const off = ch.offset / 60, offs = 'UTC' + (off >= 0 ? '+' : '') + off, [yy, mmm, dd] = ch.inp.date.split('-');
+  const dms = (v, p, n) => { const a = Math.abs(v), d = Math.floor(a), m = Math.round((a - d) * 60); return d + '°' + String(m).padStart(2, '0') + '′' + (v >= 0 ? p : n); };
+  const PT = KT('KT_PLANETS'), HP = KT('KT_HOUSE_PLANET');
   let h = '';
-  h += '<div class="khead"><div class="khead__txt"><span class="eyebrow">Ваша карта' + (nm ? ' · ' + nm : '') + '</span><h1 class="display">' + K.SIGNS[sun] + ', ' + K.SIGNS[moon] + (asc != null ? ', ' + K.SIGNS[asc] : '') + '</h1>'
-    + '<p class="khead__meta">' + dd + '.' + mm + '.' + yy + ' · ' + (ch.known ? ch.inp.time + ' (' + offs + ')' : 'время неизвестно') + ' · ' + esc(ch.inp.place) + '</p>'
-    + '<div class="kbig"><div><small>Солнце · суть</small><b>' + K.GLYPH[sun] + ' ' + K.SIGNS[sun] + '</b><span>' + K.fmtDeg(ch.pos.sun.lon) + (ch.known ? ' · ' + K.ROMAN[ch.pos.sun.house - 1] + ' дом' : '') + '</span></div>'
-    + '<div><small>Луна · душа</small><b>' + K.GLYPH[moon] + ' ' + K.SIGNS[moon] + '</b><span>' + K.fmtDeg(ch.pos.moon.lon) + (ch.known ? ' · ' + K.ROMAN[ch.pos.moon.house - 1] + ' дом' : '') + '</span></div>'
-    + '<div><small>Асцендент · образ</small><b>' + (asc != null ? K.GLYPH[asc] + ' ' + K.SIGNS[asc] : '—') + '</b><span>' + (asc != null ? K.fmtDeg(ch.ang.asc) : 'нужно время рождения') + '</span></div></div>'
-    + '<div class="kact"><button class="ghost" type="button" id="kEdit">Изменить данные</button><a class="ghost" href="#kOffer">Полная карта и прогноз</a></div></div>'
-    + '<div class="kwheel"><canvas id="kWheel" aria-label="Круг натальной карты"></canvas></div></div>';
-  h += '<div class="kread"><div class="kread__in"><h3>Как читать<br>эту карту</h3><ul><li><b>Положения планет</b> рассчитаны точно, по астрономическим эфемеридам. <b>Толкования</b> — традиция и язык для размышления, а не доказанный закон.</li><li>Карта описывает <b>темы и периоды, а не события</b>. Что произойдёт, зависит от ваших решений, других людей и обстоятельств.</li><li>Читайте каждый раздел как вопрос к себе: «Где это про меня? Где нет?» Не принимайте важных решений только по карте.</li><li>Подробно: <a href="#d-map">как относиться к карте</a> · <a href="#j-astro-science">астрология и наука</a> · <a href="#j-fate">карта — не приговор</a></li></ul></div></div>';
-  if (!ch.known) h += '<div class="kwarn"><b>Время рождения неизвестно.</b> Карта построена на 12:00: положения планет верны, а дома, Асцендент и MC не рассчитываются. Луна может отличаться на ±6°. Точное время можно восстановить ректификацией — см. ниже.</div>';
 
-  // 00 сейчас
-  const active = tr.filter(o => o.from <= now && o.to >= now), soon = tr.filter(o => o.from > now && o.from - now < 90 * 864e5);
-  const trLine = o => { const tone = o.tone === 'soft' || (o.tone === 'mix' && o.p === 'jupiter'); return '<li><b>' + PNAME[o.p] + ' ' + o.name + ' ' + (o.n === 'asc' ? 'Асцендент' : o.n === 'mc' ? 'MC' : PNAME[o.n]) + '</b> <span class="kdate">' + fdate(o.from) + ' — ' + fdate(o.to) + '</span><br>' + (tone ? 'Мягко' : 'Напряжённо') + ' включает ' + TR_P[o.p] + ' в теме ' + TR_N[o.n] + '. ' + TR_A[o.p][tone ? 0 : 1] + '</li>'; };
-  h += sec('00', 'Сейчас', 'Где вы сейчас на маршруте', null,
-    '<div class="kgrid2"><div class="kcard"><small>Тема года · до ' + fdate(prof.next) + '</small><h3>' + K.ROMAN[prof.house - 1] + ' дом' + (prof.sign != null ? ' · ' + K.SIGNS[prof.sign] : '') + '</h3><p>' + YEAR[prof.house - 1] + (prof.ruler ? ' Хозяин года — <b>' + PNAME[prof.ruler] + '</b>: следите за его темой «' + PTHEME[prof.ruler] + '».' : '') + '</p></div>'
-    + '<div class="kcard"><small>Влияния планет сейчас</small><h3>' + (active.length ? active.length + ' активн' + (active.length === 1 ? 'ое' : 'ых') : 'Спокойный период') + '</h3><ul class="ktr">' + (active.length ? active.slice(0, 3).map(trLine).join('') : '<li>Крупных транзитов к личным точкам нет: хорошее время для ровной работы и практик.</li>') + '</ul></div></div>'
-    + (soon.length ? '<div class="kcard"><small>Ближайшие 3 месяца</small><ul class="ktr">' + soon.slice(0, 3).map(trLine).join('') + '</ul></div>' : ''));
+  // HERO
+  h += '<header class="km-hero"><div class="km-hero__bg" style="background-image:url(img/karta/hero-' + g + '.webp)"></div><div class="km-w km-hero__in"><div class="km-hero__txt"><span class="km-eb">Персональный навигатор · ' + Y + '–' + (Y + 12) + (nm ? ' · ' + nm : '') + '</span>'
+    + '<h1 class="km-title">Карта<br><em>жизни</em></h1><p class="km-sub">Сильные стороны, лучшие направления, деньги, самочувствие, семья, места и маршрут на 12 лет — по положению планет в момент рождения.</p>'
+    + '<div class="km-chips"><span>' + dd + '.' + mmm + '.' + yy + ' · ' + (ch.known ? ch.inp.time + ' ' + offs : 'время неизвестно') + '</span><span>' + dms(ch.inp.lat, 'N', 'S') + ' ' + dms(ch.inp.lon, 'E', 'W') + ' · ' + esc(ch.inp.place.split(',')[0]) + '</span><span>' + K.GLYPH[sun] + ' Солнце · ' + K.GLYPH[moon] + ' Луна' + (asc != null ? ' · ' + K.GLYPH[asc] + ' Асцендент' : '') + '</span></div>'
+    + '<div class="km-act"><button class="ghost" type="button" id="kEdit">Изменить данные</button><button class="btn btn--gold" type="button" data-go="offer">Полная карта</button></div></div>' + compass() + '</div></header>';
+  h += '<nav class="km-nav" id="kmNav"><div class="km-w">' + [['now', 'Сейчас'], ['profile', 'Профиль'], ['career', 'Призвание'], ['money', 'Деньги'], ['health', 'Самочувствие'], ['family', 'Семья'], ['places', 'Где жить'], ['route', 'Маршрут'], ['charter', 'Устав']].map(([i, t]) => '<button type="button" data-go="' + i + '">' + t + '</button>').join('') + '</div></nav>';
+  h += '<div class="km-read km-w"><b>Как читать.</b> Положения планет рассчитаны точно, по эфемеридам. Толкования — традиция и язык для размышления, а не доказанный закон. Карта описывает темы и периоды, а не события; результат зависит от ваших решений и обстоятельств. <a href="#d-map">Подробно</a> · <a href="#j-fate">Карта — не приговор</a></div>';
+  if (!ch.known) h += '<div class="km-read km-w km-warn"><b>Время рождения неизвестно.</b> Карта построена на 12:00 без домов, Асцендента и MC; Луна может отличаться на ±6°. Точное время восстанавливает ректификация.</div>';
 
-  // 01 профиль
+  // 00 СЕЙЧАС
+  const at = ds.at(now), active = tr.filter(o => o.from <= now && o.to >= now), soon = tr.filter(o => o.to >= now && o.from - now < 100 * 864e5);
+  const good = soon.filter(o => o.tone === 'soft' || (o.ang === 0 && o.p === 'jupiter')), bad = soon.filter(o => !(o.tone === 'soft' || (o.ang === 0 && o.p === 'jupiter')));
+  const prNext = YEAR[prof.house % 12].split(':')[0];
+  let s0 = '<div class="km-g4">'
+    + '<div class="km-c km-c--top"><small>Период жизни · джйотиш</small><h3>' + (at ? RU_P[at.md.lord] + ' / ' + RU_P[at.ad.lord] : '—') + '</h3><p>большой период до ' + (at ? at.md.to.getFullYear() : '') + ', подпериод до ' + (at ? fdate(at.ad.to) : '') + '</p></div>'
+    + '<div class="km-c km-c--top"><small>Тема этого года</small><h3>' + K.ROMAN[prof.house - 1] + ' дом' + (prof.sign != null ? ' · ' + K.SIGNS[prof.sign] : '') + '</h3><p>' + (prof.ruler ? 'хозяин года ' + RU_P[prof.ruler] + ': ' : '') + HOUSE[prof.house - 1] + '</p></div>'
+    + '<div class="km-c km-c--top"><small>Число пути · нумерология</small><h3>' + lp + '</h3><p>' + (LP[lp] || '') + '</p></div>'
+    + '<div class="km-c km-c--top"><small>Влияния планет сейчас</small><h3>' + active.length + ' активн' + (active.length === 1 ? 'ое' : 'ых') + '</h3><p>' + (active.slice(0, 4).map(trNice).join('; ') || 'спокойный период') + '</p></div></div>';
+  s0 += '<div class="km-g2"><div class="km-c km-c--good"><h3>Что делать в ближайшие 3 месяца</h3><ul>'
+    + (good.slice(0, 3).map(o => '<li><b>' + trNice(o) + '</b> (' + span(o) + '): ' + TR_A[o.p][0] + '</li>').join('') || '')
+    + '<li>До ' + fdate(prof.next) + ' — ' + YEAR[prof.house - 1].split(':')[0].toLowerCase() + ': ' + YREC[prof.house - 1] + '. Затем начинается «' + prNext.toLowerCase() + '».</li>'
+    + (at && at.ad.to - now < 200 * 864e5 ? '<li>С ' + fdate(at.ad.to) + ' в джйотише начинается подпериод ' + RU_PG[at.md.subs[at.md.subs.indexOf(at.ad) + 1] ? at.md.subs[at.md.subs.indexOf(at.ad) + 1].lord : at.ad.lord] + ' — хорошее время подвести итоги текущего этапа.</li>' : '')
+    + '</ul></div><div class="km-c km-c--bad"><h3>На что обратить внимание</h3><ul>' + (bad.slice(0, 4).map(o => '<li><b>' + trNice(o) + '</b> (' + span(o) + '): ' + TR_A[o.p][1] + '</li>').join('') || '<li>Напряжённых транзитов к личным точкам нет — хороший момент для ровной работы.</li>') + '</ul></div></div>';
+  const rooms = rec.slice(0, 3).map(r => [window.SITE.ROOMS.find(x => x.id === r.id), r.why]).filter(x => x[0]);
+  s0 += '<h3 class="km-h3">Практики для вас сейчас</h3><div class="km-g3">' + rooms.map(([r, why]) => '<a class="km-c km-rec" href="#room-' + r.id + '"><small>' + (r.id === 'cleanse' ? 'Бесплатно' : 'Пространство') + '</small><h3>' + r.name + '</h3><p>' + (why || r.tag) + '</p><span>Открыть →</span></a>').join('') + '</div>';
+  h += S('now', '00', 'Сейчас', 'Где вы сейчас на маршруте', MON1[now.getMonth()] + ' ' + Y + '. До ' + fdate(prof.next) + ' идёт ' + YEAR[prof.house - 1].split(':')[0].toLowerCase() + ' (профекция ' + K.ROMAN[prof.house - 1] + ' дома), затем — ' + prNext.toLowerCase() + '.' + (at ? ' В джйотише — подпериод ' + RU_PG[at.ad.lord] + ' внутри большого периода ' + RU_PG[at.md.lord] + '.' : ''), s0);
+
+  // 01 ПРОФИЛЬ
+  const big = (lbl, s, sub) => '<div class="km-c km-big"><small>' + lbl + '</small><h3>' + K.SIGNS[s] + '</h3><span>' + sub + '</span></div>';
+  const ARCH = KT('KT_ARCH') || [], arch = ARCH.map(a => ({ a, m: matches(a.when, T) })).filter(x => x.m).sort((x, y) => y.m - x.m).slice(0, 3).map(x => x.a);
   const elK = Object.keys(ch.el).sort((a, b) => ch.el[b] - ch.el[a]), crK = Object.keys(ch.cr).sort((a, b) => ch.cr[b] - ch.cr[a]);
-  const big = (lbl, s, f) => '<div class="kcard"><small>' + lbl + '</small><h3>' + K.GLYPH[s] + ' ' + K.SIGNS[s] + '</h3><p>' + f(SIGN[s]) + '</p></div>';
-  let prof1 = '<div class="kgrid3">' + big('Солнце · суть', sun, x => 'Ваша сердцевина — ' + x.core + '. Ваш дар — <b>' + x.gift + '</b>.')
-    + big('Луна · душа', moon, x => 'Чтобы было спокойно, вам нужны ' + x.need + '. Зона роста — ' + x.grow + '.')
-    + (asc != null ? big('Асцендент · образ', asc, x => 'Люди видят в вас ' + x.look + '. Так вы входите в любое новое дело.') : '<div class="kcard"><small>Асцендент · образ</small><h3>Нужно время</h3><p>Асцендент меняется каждые 2 часа. Без точного времени его не определить.</p></div>') + '</div>';
-  prof1 += '<div class="kgrid2"><div class="kcard"><small>Баланс стихий</small><div class="kbars">' + ['fire', 'water', 'air', 'earth'].map(e => '<div><span>' + ELT[e][0] + '</span><i style="--w:' + (ch.el[e] / 12 * 100) + '%"></i><b>' + ch.el[e] + '</b></div>').join('') + '</div><p>Ведущая стихия — <b>' + ELT[elK[0]][0] + '</b>: ' + ELT[elK[0]][1] + '.' + (ch.el[elK[3]] <= 1 ? ' ' + LACK[elK[3]] : '') + '</p></div>'
-    + '<div class="kcard"><small>Кресты</small><div class="kbars">' + ['card', 'fix', 'mut'].map(e => '<div><span>' + CRT[e][0] + '</span><i style="--w:' + (ch.cr[e] / 12 * 100) + '%"></i><b>' + ch.cr[e] + '</b></div>').join('') + '</div><p>' + CRT[crK[0]][2] + '</p></div></div>';
-  prof1 += '<div class="ktable"><table><thead><tr><th>Планета</th><th>Знак</th><th>Градус</th>' + (ch.known ? '<th>Дом</th>' : '') + '<th>Тема</th></tr></thead><tbody>' + K.PLANETS.map(([k, n, gl]) => '<tr><td><span class="kgl">' + gl + '︎</span> ' + n + (ch.pos[k].retro ? ' <em>R</em>' : '') + '</td><td>' + sname(ch.pos[k].lon) + '</td><td class="num">' + K.fmtDeg(ch.pos[k].lon) + '</td>' + (ch.known ? '<td>' + K.ROMAN[ch.pos[k].house - 1] + ' · ' + HOUSE[ch.pos[k].house - 1] + '</td>' : '') + '<td>' + PTHEME[k] + '</td></tr>').join('')
-    + (ch.ang ? '<tr><td><b>AC</b> Асцендент</td><td>' + sname(ch.ang.asc) + '</td><td class="num">' + K.fmtDeg(ch.ang.asc) + '</td><td>—</td><td>образ, тело</td></tr><tr><td><b>MC</b> Середина неба</td><td>' + sname(ch.ang.mc) + '</td><td class="num">' + K.fmtDeg(ch.ang.mc) + '</td><td>—</td><td>призвание, вершина</td></tr>' : '') + '</tbody></table></div>';
-  if (ch.aspects.length) prof1 += '<p class="ksmall">Главные аспекты: ' + ch.aspects.slice(0, 6).map(a => PNAME[a.a] + ' ' + a.name + ' ' + PNAME[a.b] + ' (' + a.orb.toFixed(1) + '°)').join(' · ') + '. Дома: ' + (ch.system || '—') + '.</p>';
-  h += sec('01', 'Профиль', 'С чем вы пришли', 'Три ключевые точки, баланс стихий и положение планет в момент рождения.', prof1);
+  let s1 = '<div class="km-prof"><div class="km-prof__l"><div class="km-g3 km-g3--tight">' + big('Солнце · суть', sun, K.fmtDeg(ch.pos.sun.lon) + (ch.known ? ' · ' + K.ROMAN[ch.pos.sun.house - 1] + ' дом' : '')) + big('Луна · душа', moon, K.fmtDeg(ch.pos.moon.lon) + (ch.known ? ' · ' + K.ROMAN[ch.pos.moon.house - 1] + ' дом' : '')) + (asc != null ? big('Асцендент · образ', asc, K.fmtDeg(ch.ang.asc)) : '<div class="km-c km-big"><small>Асцендент</small><h3>—</h3><span>нужно время</span></div>') + '</div>'
+    + arch.map(a => '<div class="km-arch"><div class="km-arch__img" style="background-image:url(img/karta/' + a.img + '.webp)"></div><div><h3>' + esc(a.name) + '</h3><p>' + a.text + '</p></div></div>').join('') + '</div>'
+    + '<div class="km-c km-elem"><h3>Баланс стихий</h3><p class="km-muted">Распределение 10 планет' + (ch.ang ? ', Асцендента и MC' : '') + ' по стихиям и крестам.</p>'
+    + ['fire', 'water', 'air', 'earth'].map(e => '<div class="km-eb2"><span>' + ELNAME[e] + '</span><i><b style="width:' + ch.el[e] / 12 * 100 * 1.6 + '%;background:' + ELCLR[e] + '"></b></i><em>' + ch.el[e] + '</em></div>').join('')
+    + '<p><b>' + ELNAME[elK[0]] + (ch.el[elK[1]] >= ch.el[elK[0]] - 1 ? ' + ' + ELNAME[elK[1]] : '') + ':</b> ' + ELT[elK[0]][1] + '.</p>' + Object.keys(ch.el).filter(e => ch.el[e] <= 1).map(e => '<p>' + LACK[e].replace(/^([^:]+):/, '<b>$1:</b>') + '</p>').join('')
+    + '<div class="km-cross">' + crK.map(c => '<div><b>' + ch.cr[c] + '</b><span>' + CRT[c][0] + '</span><small>' + CRT[c][1] + '</small></div>').join('') + '</div><p class="km-muted">Вывод: ' + CRT[crK[0]][2] + '</p></div></div>';
+  s1 += '<div class="km-wheelrow"><div class="km-c"><h3>Круг вашей карты</h3><p class="km-muted">Положение планет в момент рождения' + (ch.known ? ', дома по ' + ch.system : '') + '. Синие линии — гармоничные аспекты, красные — напряжённые.</p><canvas id="kWheel" aria-label="Круг натальной карты"></canvas></div></div>';
+  const PL = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'node'];
+  const fortune = ch.ang ? K.norm(ch.pos.sun.house >= 7 ? ch.ang.asc + ch.pos.moon.lon - ch.pos.sun.lon : ch.ang.asc + ch.pos.sun.lon - ch.pos.moon.lon) : null;
+  const pcard = k => { const s = K.signOf(ch.pos[k].lon), hs = ch.known ? ch.pos[k].house : null, txt = k === 'node' ? (KT('KT_NODE') || [])[s] : PT && PT[k] ? PT[k][s] : null;
+    return '<div class="km-c km-pl"><div class="km-pl__h"><span class="km-pl__g">' + (GL[k] || '') + '︎</span><div><h3>' + RU_P[k] + '</h3><span class="km-mono">' + K.fmtDeg(ch.pos[k].lon) + ' ' + K.SIGNS[s] + (hs ? ' · ' + K.ROMAN[hs - 1] + ' дом' : '') + (ch.pos[k].retro ? ' · R' : '') + '</span></div></div><small>' + (PTHEME[k] || '') + '</small>'
+      + '<p>' + (txt ? txt.t : SIGN[s].core) + (hs && HP && HP[k] ? ' ' + RU_P[k] + ' в ' + K.ROMAN[hs - 1] + ' доме: ' + HP[k][hs - 1] + '.' : '') + '</p>' + (txt && txt.u ? '<p class="km-use"><b>Как использовать:</b> ' + txt.u + '</p>' : '') + '</div>'; };
+  const crew = PL.map(pcard).join('') + (fortune != null ? '<div class="km-c km-pl"><div class="km-pl__h"><span class="km-pl__g">⊗</span><div><h3>Колесо Фортуны</h3><span class="km-mono">' + K.fmtDeg(fortune) + ' ' + K.SIGNS[K.signOf(fortune)] + '</span></div></div><small>точка удачи</small><p>Удача приходит через качества знака ' + SIGNG[K.signOf(fortune)] + ': ' + SIGN[K.signOf(fortune)].gift + '.</p></div>' : '');
+  s1 += '<h3 class="km-h3">Планеты: ваш внутренний «экипаж»</h3>' + (has('full') ? '<div class="km-g3">' + crew + '</div>' : '<div class="km-g3">' + PL.slice(0, 3).map(pcard).join('') + '</div>');
+  // акценты
+  const acc = []; if (ch.known) { const byH = {}; PL.slice(0, 10).forEach(k => (byH[ch.pos[k].house] = byH[ch.pos[k].house] || []).push(k));
+    Object.keys(byH).filter(hh => byH[hh].length >= 2).sort((a, b) => byH[b].length - byH[a].length).slice(0, 4).forEach(hh => acc.push({ tag: K.ROMAN[hh - 1] + ' дом', t: HOUSE[hh - 1][0].toUpperCase() + HOUSE[hh - 1].slice(1), p: byH[hh].map(k => RU_P[k]).join(', ') + ' в ' + K.ROMAN[hh - 1] + ' доме. Эта сфера жизни — одна из главных: здесь сосредоточена ваша энергия и уроки.' })); }
+  if (acc.length < 4) acc.push({ tag: ELNAME[elK[0]], t: 'Ведущая стихия', p: ELT[elK[0]][1][0].toUpperCase() + ELT[elK[0]][1].slice(1) + '.' });
+  const dgs = K.CLASSIC.slice().sort((a, b) => dg[b].total - dg[a].total);
+  const sAcc = '<h3 class="km-h3">Акценты карты</h3><div class="km-g4">' + acc.slice(0, 4).map(a => '<div class="km-c"><span class="km-tag">' + a.tag + '</span><h3>' + a.t + '</h3><p>' + a.p + '</p></div>').join('') + '</div>';
+  const asp = ch.aspects.filter(a => a.a !== 'node' && a.b !== 'node').slice(0, 8);
+  const sAsp = '<h3 class="km-h3">Главные аспекты: как планеты разговаривают между собой</h3><div class="km-g3">' + asp.map(a => '<div class="km-c km-asp km-asp--' + (a.tone === 'hard' ? 'hard' : 'soft') + '"><span class="km-asp__g">' + (GL[a.a] || '') + ' ' + a.g + ' ' + (GL[a.b] || '') + '</span><div><h3>' + RU_P[a.a] + ' ' + a.name + ' ' + RU_P[a.b] + ' · ' + a.orb.toFixed(0) + '°</h3><p>' + (aspectText(a) || (a.tone === 'hard' ? 'Напряжение между темами «' + (PTHEME[a.a] || '') + '» и «' + (PTHEME[a.b] || '') + '»: источник роста через усилие.' : 'Темы «' + (PTHEME[a.a] || '') + '» и «' + (PTHEME[a.b] || '') + '» поддерживают друг друга.')) + '</p></div></div>').join('') + '</div>';
+  const cn = (() => { const d = new Date(ch.inp.date + 'T12:00:00'); let y = d.getFullYear(); if (d.getMonth() < 1 || (d.getMonth() === 1 && d.getDate() < 4)) y--; return EL_CN[((y - 4) % 10 + 10) % 10] + ' · ' + ZODIAC_CN[((y - 4) % 12 + 12) % 12]; })();
+  const sEast = '<div class="km-g4 km-east"><div class="km-c"><h3>Ключевые аспекты</h3><p>' + asp.slice(0, 4).map(a => RU_P[a.a] + ' ' + a.name + ' ' + RU_P[a.b] + ' (' + a.orb.toFixed(0) + '°)').join(', ') + '.</p></div>'
+    + '<div class="km-c"><h3>Джйотиш (Лахири)</h3><p>' + (ds.sidAsc != null ? 'Асцендент ' + K.fmtDeg(ds.sidAsc) + ' ' + SIGNG[K.signOf(ds.sidAsc)] + ', ' : '') + 'Солнце ' + K.fmtDeg(ds.sidSun) + ' ' + SIGNG[K.signOf(ds.sidSun)] + ', Луна ' + K.fmtDeg(ds.sidMoon) + ' ' + SIGNG[K.signOf(ds.sidMoon)] + ' (' + ds.nak + ').</p></div>'
+    + '<div class="km-c"><h3>Нумерология</h3><p>Число пути ' + lp + ': ' + (LP[lp] || '') + '.</p></div><div class="km-c"><h3>Восточный календарь</h3><p>' + cn + ' (по году рождения, граница — 4 февраля).</p></div></div>';
+  const sDig = '<h3 class="km-h3">Сильные и слабые планеты</h3><p class="km-muted">Классическая оценка силы семи планет (по таблицам Уильяма Лилли). Сильные — на что можно опираться; слабые — что стоит поддерживать.</p><div class="km-dig">' + dgs.map(k => '<div class="km-c"><div class="km-dig__r"><b>' + RU_P[k] + '</b><i><b style="width:' + Math.max(3, Math.min(100, (dg[k].total + 12) / 34 * 100)) + '%"></b></i><em>' + (dg[k].total > 0 ? '+' : '') + dg[k].total + '</em></div><p>' + (dg[k].notes.length ? dg[k].notes.join(', ') : 'без поддержки знака') + (dg[k].total >= 8 ? ' — опора карты.' : dg[k].total <= 0 ? ' — тему стоит поддерживать сознательно.' : '.') + '</p></div>').join('') + '</div>';
+  s1 += has('full') ? sAcc + sAsp + sEast + sDig : lockWrap('full', 'Ещё 9 планет, аспекты, джйотиш и сила планет', '<div class="km-g3">' + PL.slice(3, 9).map(pcard).join('') + '</div>' + sAcc);
+  h += S('profile', '01', 'Профиль', 'С чем вы пришли', 'Основа карты: три ключевые точки, сильные стороны, баланс стихий и подробный разбор каждой планеты.', s1, true);
 
-  // 02 практики
-  const rooms = rec.slice(0, 3).map(r => window.SITE.ROOMS.find(x => x.id === r.id) ? [window.SITE.ROOMS.find(x => x.id === r.id), r.why] : null).filter(Boolean);
-  h += sec('02', 'Практики для вас', 'С чего начать', 'Подобраны по вашей карте и текущему периоду. Очищение открыто бесплатно.',
-    '<div class="kgrid3">' + rooms.map(([r, why]) => '<a class="kcard krec" href="#room-' + r.id + '"><small>' + (r.id === 'cleanse' ? 'Бесплатно' : 'Пространство') + '</small><h3>' + r.name + '</h3><p>' + (why || r.tag) + '</p><span class="krec__go">Открыть →</span></a>').join('') + '</div>');
+  // 02 ПРИЗВАНИЕ
+  const dirs = scoreDirs(ch, T), mx = dirs[0].s || 1, moneyPot = (() => { let v = dg.jupiter.total / 4 + dg.venus.total / 5; if (ch.known) v += K.PLANETS.slice(0, 10).filter(p => [2, 8, 10, 11].includes(ch.pos[p[0]].house)).length * 0.8; if (T.has('jupiter-asc')) v += 2; ch.aspects.forEach(a => { const ps = [a.a, a.b]; if (ps.includes('jupiter') && (ps.includes('sun') || ps.includes('moon') || ps.includes('venus')) && a.tone === 'soft') v += 1; if ((ps.includes('saturn') || ps.includes('neptune')) && (ps.includes('venus') || ps.includes('jupiter')) && a.tone === 'hard') v -= 1; }); return Math.max(0.15, Math.min(0.95, 0.35 + v / 14)); })();
+  const d8 = dirs.slice(0, 8).map((d, i) => { const self = Math.max(2, Math.min(5, Math.round(2 + d.s / mx * 3))), money = Math.max(1, Math.min(5, Math.round(d.money - 1 + moneyPot * 2))); return '<div class="km-dir"><div class="km-dir__img" style="background-image:url(img/karta/' + d.img + '.webp)">' + (i < 3 ? '<span>ТОП-' + (i + 1) + '</span>' : '') + '</div><div class="km-dir__b"><b class="km-num">' + String(i + 1).padStart(2, '0') + '</b><h3>' + d.n + '</h3><p>' + d.d + '</p><p class="km-mono km-blue">' + (d.tags.join(' · ') || 'общий рисунок карты') + '</p>' + bar('Самореализация', self, 5, 'a') + bar('Деньги', money, 5, 'g') + '<p class="km-use"><b>Первый шаг:</b> ' + d.step + '</p></div></div>'; });
+  const mcS = ch.ang ? K.signOf(ch.ang.mc) : sun;
+  let s2 = '<div class="km-g3">' + d8.slice(0, 3).join('') + '</div>' + (has('full') ? '<div class="km-g3">' + d8.slice(3).join('') + '</div>'
+    + '<div class="km-formula"><span>★</span><div><h3>Главная формула: ' + dirs[0].n.split(' · ')[0].toLowerCase() + ' + ' + dirs[1].n.toLowerCase() + '</h3><p>' + MC[mcS] + '</p></div></div>'
+    + '<div class="km-g2"><div class="km-c km-c--good"><h3>Где вы растёте</h3><ul><li>' + SIGN[sun].gift[0].toUpperCase() + SIGN[sun].gift.slice(1) + '</li><li>там, где нужна ваша сила: ' + SIGN[mcS].core.split(':')[0] + '</li><li>среда, где ценят ' + SIGN[asc != null ? asc : moon].core.split(',')[0] + '</li><li>результат виден и измерим</li></ul></div><div class="km-c km-c--bad"><h3>Где вы гаснете</h3><ul><li>когда нет места для качества «' + SIGN[sun].gift + '»</li><li>' + SIGN[sun].grow[0].toUpperCase() + SIGN[sun].grow.slice(1) + ' — зона роста, а не повод сдаться</li><li>однообразие без смысла и перспективы</li><li>среда, где чужие правила важнее вашего голоса</li></ul></div></div>'
+    : lockWrap('full', 'Ещё 5 направлений и главная формула', '<div class="km-g3">' + d8.slice(3, 6).join('') + '</div>'));
+  h += S('career', '02', 'Призвание', 'Восемь дорог, где вы сильнее всего', 'Направления отсортированы по совпадению с картой. У каждого — шкалы самореализации и денег и первый шаг, с которого можно начать.', s2, false);
 
-  // 03 прогноз на год
-  const yearBody = () => { const by = {}; tr.forEach(o => { const k = o.peak.getFullYear() * 12 + o.peak.getMonth(); (by[k] = by[k] || []).push(o); });
-    return '<div class="kmonths">' + Object.keys(by).sort((a, b) => a - b).map(k => '<div class="kmonth"><h3>' + MON1[k % 12] + ' ' + Math.floor(k / 12) + '</h3><ul class="ktr">' + by[k].map(trLine).join('') + '</ul></div>').join('') + '</div>'; };
-  h += sec('03', 'Прогноз на год', 'Ваши 12 месяцев', tr.length + ' периодов влияния медленных планет на личные точки карты. Это темы и настроение периодов, а не события: результат зависит от ваших действий и обстоятельств.', has('year') ? yearBody() : lockBox('year', 'Прогноз по месяцам на год вперёд', (tr[0] ? MON1[tr[0].peak.getMonth()] + ': ' + PNAME[tr[0].p] + ' ' + tr[0].name + ' ' + (PNAME[tr[0].n] || 'MC') + '…' : 'Месяц за месяцем: возможности и осторожность…')));
+  // 03 ДЕНЬГИ
+  const lvl = moneyPot > 0.7 ? 'Уровень владельца и капитала' : moneyPot > 0.5 ? 'Высокий доход через дело' : 'Устойчивый доход через мастерство';
+  const h2s = ch.cusps ? K.signOf(ch.cusps[1]) : K.signOf(ch.pos.venus.lon), r2 = K.RULER[h2s], r2h = ch.known ? ch.pos[r2] && ch.pos[r2].house : null;
+  const ind = []; if (T.has('jupiter-asc')) ind.push(['Юпитер у Асцендента', 'классический знак везения и покровительства']); if (dg.venus.ess >= 4) ind.push(['Венера в силе', 'выгодные связи и партнёры']); if (dg.jupiter.ess >= 4) ind.push(['Юпитер в силе', 'щедрость и рост']); if (ch.known && [2, 8, 10, 11].includes(ch.pos.jupiter.house)) ind.push(['Юпитер в ' + K.ROMAN[ch.pos.jupiter.house - 1] + ' доме', HOUSE[ch.pos.jupiter.house - 1]]); if (r2h) ind.push(['Управитель II дома в ' + K.ROMAN[r2h - 1] + ' доме', 'деньги приходят через тему «' + HOUSE[r2h - 1] + '»']); if (fortune != null) ind.push(['Колесо Фортуны в знаке ' + K.SIGNS[K.signOf(fortune)], 'удача через «' + SIGN[K.signOf(fortune)].gift + '»']);
+  ch.aspects.filter(a => a.tone === 'soft' && ['jupiter', 'venus'].some(p => a.a === p || a.b === p)).slice(0, 2).forEach(a => ind.push([RU_P[a.a] + ' ' + a.name + ' ' + RU_P[a.b], 'поддержка денежной темы']));
+  const jy = trR.filter(o => o.p === 'jupiter' && (o.tone === 'soft' || o.ang === 0) && ['sun', 'venus', 'jupiter', 'mc'].includes(o.n)).map(o => o.from.getFullYear()), jys = [...new Set(jy)].slice(0, 5);
+  const lim = ch.aspects.filter(a => a.tone === 'hard' && ['saturn', 'neptune', 'pluto', 'mars', 'uranus'].some(p => a.a === p || a.b === p) && ['venus', 'jupiter', 'moon', 'sun', 'mars', 'mercury'].some(p => a.a === p || a.b === p)).slice(0, 6);
+  let s3 = '<div class="km-banner" style="background-image:url(img/karta/skyline.webp)"><small>Потенциал</small><h3>' + lvl + '</h3><div class="km-scale"><i style="left:' + moneyPot * 100 + '%"></i></div><div class="km-scale__l"><span>Доход специалиста</span><span>Высокий доход</span><span>Владелец капитала</span></div></div>'
+    + '<div class="km-g3"><div class="km-c"><small>Масштаб</small><h3>' + (moneyPot > 0.7 ? 'Высокий' : moneyPot > 0.5 ? 'Выше среднего' : 'Устойчивый') + '</h3><p>' + MONEY[h2s] + '</p></div><div class="km-c"><small>Источник</small><h3>' + (r2h ? HOUSE[r2h - 1][0].toUpperCase() + HOUSE[r2h - 1].slice(1) : 'Ваш навык') + '</h3><p>Управитель денежного дома — ' + RU_P[r2] + (r2h ? ', он стоит в ' + K.ROMAN[r2h - 1] + ' доме' : '') + '. Здесь ваш главный денежный канал.</p></div><div class="km-c"><small>Время</small><h3>' + (dg.saturn.total >= 4 ? 'С возрастом и волнами' : 'Волнами по циклам Юпитера') + '</h3><p>Ближайшие благоприятные годы по Юпитеру: ' + (jys.join(', ') || 'смотрите маршрут') + '.</p></div></div>'
+    + '<div class="km-g4 km-checks">' + ind.slice(0, 6).map(([a, b]) => '<div class="km-c"><span class="km-ok">✓</span><div><b>' + a + '</b><p>' + b + '</p></div></div>').join('') + '</div>'
+    + '<div class="km-chipsY">' + jys.map((y, i) => '<span class="' + (i === 1 ? 'on' : '') + '">' + y + ' · ' + ['фундамент', 'главная волна', 'рост', 'новая высота', 'урожай'][i] + '</span>').join('') + '</div>'
+    + (lim.length ? '<h3 class="km-h3">Ограничения и ключи</h3><div class="km-g3">' + lim.map(a => { const t = aspectText(a), parts = t.split(/(?<=\.)\s+/); return '<div class="km-lk"><div><small>Ограничение</small><b>' + RU_P[a.a] + ' ' + a.name + ' ' + RU_P[a.b] + '</b><p>' + (parts[0] || '') + '</p></div><div><small>Ключ</small><b>' + (TR_A[a.a] ? 'Правила и проверка' : 'Осознанность') + '</b><p>' + (parts.slice(1).join(' ') || 'Система, правила и проверка фактов.') + '</p></div></div>'; }).join('') + '</div>' : '');
+  h += S('money', '03', 'Деньги', 'Финансовый потенциал', 'Конкретную сумму не называет ни одна система. Классические признаки показывают масштаб, источник и время роста, а также что мешает и как это снять.', lockWrap('full', 'Финансовый потенциал, источники и ключи', s3), true);
 
-  // 04–09 полная карта
-  const full = has('full');
-  const mcS = ch.ang ? K.signOf(ch.ang.mc) : sun, h2 = ch.cusps ? K.signOf(ch.cusps[1]) : K.signOf(ch.pos.venus.lon), h7 = ch.cusps ? K.signOf(ch.cusps[6]) : null, h6 = ch.cusps ? K.signOf(ch.cusps[5]) : K.signOf(ch.pos.mars.lon), ven = K.signOf(ch.pos.venus.lon);
-  const in10 = ch.known ? K.PLANETS.filter(p => ch.pos[p[0]].house === 10).map(p => p[1]) : [];
-  h += sec('04', 'Призвание', 'Где вы сильнее всего', null, full ? '<div class="kcard"><small>' + (ch.ang ? 'MC в знаке ' + K.SIGNS[mcS] : 'По Солнцу в знаке ' + K.SIGNS[mcS]) + '</small><p>' + MC[mcS] + '</p>' + (in10.length ? '<p>В доме карьеры: <b>' + in10.join(', ') + '</b> — эти темы будут видны в вашей работе особенно сильно.</p>' : '') + '<p>Ваш природный дар — <b>' + SIGN[sun].gift + '</b>. Выбирайте дело, где он нужен каждый день.</p></div>' : lockBox('full', 'Призвание и лучшие направления', (ch.ang ? 'MC в знаке ' + K.SIGNS[mcS] : 'Солнце в знаке ' + K.SIGNS[mcS]) + ': ' + MC[mcS].split(':')[0] + '…'));
-  h += sec('05', 'Деньги', 'Как к вам приходят деньги', null, full ? '<div class="kcard"><small>' + (ch.cusps ? 'II дом в знаке ' + K.SIGNS[h2] : 'Венера в знаке ' + K.SIGNS[h2]) + '</small><p>' + MONEY[h2] + '</p><p>Юпитер в знаке ' + sname(ch.pos.jupiter.lon) + (ch.known ? ', ' + K.ROMAN[ch.pos.jupiter.house - 1] + ' дом (' + HOUSE[ch.pos.jupiter.house - 1] + ')' : '') + ': здесь у вас больше всего удачи и роста.</p></div>' : lockBox('full', 'Деньги: источники, риски, правила', 'Ваш денежный стиль: ' + MONEY[h2].split('.')[0].toLowerCase() + '…'));
-  h += sec('06', 'Отношения', 'Как вы любите и кого притягиваете', null, full ? '<div class="kcard"><small>Венера в знаке ' + K.SIGNS[ven] + '</small><p>' + LOVE[ven] + '</p>' + (h7 != null ? '<p>VII дом в знаке ' + K.SIGNS[h7] + ': вас притягивают люди, в которых видно ' + SIGN[h7].look.replace(/человека$/, 'человека') + '. Рядом с ними вы учитесь качеству «' + SIGN[h7].gift + '».</p>' : '') + '</div>' : lockBox('full', 'Отношения и партнёрство', 'Венера в знаке ' + K.SIGNS[ven] + ': ' + LOVE[ven].split(':')[0].toLowerCase() + '…'));
-  h += sec('07', 'Самочувствие', 'Где ваш ресурс', 'Не медицинская рекомендация: о самочувствии и режиме, а не о болезнях.', full ? '<div class="kcard"><small>' + (ch.cusps ? 'VI дом в знаке ' + K.SIGNS[h6] : 'Марс в знаке ' + K.SIGNS[h6]) + '</small><p>' + BODY[h6] + '</p><p>Марс в знаке ' + sname(ch.pos.mars.lon) + ': ваша энергия включается через ' + SIGN[K.signOf(ch.pos.mars.lon)].gift + '.</p></div>' : lockBox('full', 'Ресурс, режим и энергия', BODY[h6].split(':')[0] + '…'));
-  const lines = K.mcLines(ch), cities = window.KARTA_CITIES || [];
-  const near = lon => cities.map(cc => [cc, Math.abs(((cc[3] - lon + 540) % 360) - 180)]).filter(x => x[1] < 4).sort((a, b) => a[1] - b[1]).slice(0, 6).map(x => x[0][0] + ' (' + x[0][1] + ')');
-  h += sec('08', 'Где жить', 'Ваши линии на карте мира', 'Астрокартография: долготы, где планета в момент рождения стояла в зените.', full ? '<div class="kgrid3">' + Object.keys(LINES).map(k => { const n = near(lines[k]); return '<div class="kcard"><small>Линия ' + LINES[k][0] + ' · ' + Math.abs(lines[k]).toFixed(1) + '° ' + (lines[k] >= 0 ? 'в.д.' : 'з.д.') + '</small><h3>' + LINES[k][1] + '</h3><p>' + (n.length ? n.join(', ') : 'Крупных городов из нашей базы на линии нет — смотрите долготу.') + '</p></div>'; }).join('') + '</div>' : lockBox('full', 'Города на линиях Юпитера, Венеры и Солнца', 'Линия Юпитера проходит через ' + (near(lines.jupiter).length || 'несколько') + ' городов из нашей базы…'));
-  const route = () => { const out = []; for (let i = 0; i < 12; i++) { const d = new Date(now); d.setFullYear(now.getFullYear() + i); const p = K.profection(ch, d); out.push('<li><b>' + (d.getFullYear()) + ' · ' + p.age + ' ' + (p.age % 10 === 1 && p.age % 100 !== 11 ? 'год' : [2, 3, 4].includes(p.age % 10) && ![12, 13, 14].includes(p.age % 100) ? 'года' : 'лет') + '</b> — ' + K.ROMAN[p.house - 1] + ' дом. ' + YEAR[p.house - 1] + '</li>'); } return '<ol class="kroute">' + out.join('') + '</ol>'; };
-  h += sec('09', 'Маршрут', 'Ваши следующие 12 лет', 'Годовые темы по профекциям: каждый год жизни ведёт свой дом карты.', full ? route() : lockBox('full', 'Маршрут на 12 лет по годам', (now.getFullYear() + 1) + ': ' + YEAR[(prof.house) % 12].split(':')[0] + '…'));
-  const plan = rec.slice(0, 4).map(r => window.SITE.ROOMS.find(x => x.id === r.id)).filter(Boolean);
-  h += sec('10', 'План практик', '30 дней под вашу карту', null, full ? '<ol class="kroute">' + plan.map((r, i) => '<li><b>Неделя ' + (i + 1) + ': <a href="#room-' + r.id + '">' + r.name + '</a></b> — ' + (rec[i].why || r.tag) + ' Каждый день, 12–15 минут.</li>').join('') + '</ol>' : lockBox('full', 'Пошаговый план на 4 недели', 'Неделя 1: ' + (plan[0] ? plan[0].name : 'Очищение') + '…'));
+  // 04 САМОЧУВСТВИЕ
+  const Z = KT('KT_ZONES') || []; const zsrc = [['Солнце', sun], ['Луна', moon]].concat(asc != null ? [['Асцендент', asc]] : []).concat(ch.cusps ? [['VI дом', K.signOf(ch.cusps[5])]] : []).concat([['Марс', sgn('mars')], ['Сатурн', sgn('saturn')]]);
+  const zones = []; zsrc.forEach(([w, s]) => { const z = zones.find(x => x.sign === s); if (z) z.by.push(w); else zones.push({ sign: s, by: [w] }); });
+  const zl = zones.slice(0, 6);
+  const SPORT = { fire: ['Интенсив и азарт', 'Короткие интенсивные тренировки, игры, единоборства — выход для огня.'], earth: ['Силовые по плану', 'Тренировки по программе: техника, прогрессия, учёт.'], air: ['Ритм и лёгкость', 'Бег, танцы, велосипед, групповые занятия с общением.'], water: ['Вода и плавность', 'Плавание, йога, растяжка, долгие прогулки у воды.'] };
+  const FOOD = { fire: ['Не перегревать', 'Меньше кофеина и острого вечером, больше воды.'], earth: ['Ритм и мера', 'Есть в одно и то же время, порции по тарелке.'], air: ['Не на бегу', 'Регулярность и спокойная еда без экрана.'], water: ['Вода и лёгкость', 'Достаточно воды, лёгкий ужин, внимание к сигналам тела.'] };
+  const hy = years.map(y => '<div class="km-yb"><em>' + y.sc.health + '/5</em><i class="' + (y.sc.health >= 4 ? 'g' : y.sc.health <= 2 ? 'r' : 'b') + '" style="height:' + y.sc.health * 18 + 'px"></i><span>' + y.y + '</span></div>').join('');
+  const att = uniqT(trR.filter(o => ['saturn', 'pluto', 'neptune', 'uranus'].includes(o.p) && ['sun', 'asc', 'moon'].includes(o.n)).concat(trR.filter(o => o.p === 'jupiter' && o.ang !== 90 && o.ang !== 180 && ['sun', 'asc'].includes(o.n)))).sort((a, b) => a.from - b.from).slice(0, 8);
+  let s4 = '<div class="km-health"><div class="km-c km-bodyc">' + bodySvg(zl) + '<p class="km-muted">Номера соответствуют зонам в списке.</p></div><div class="km-zones">' + zl.map((z, i) => { const t = Z[z.sign] || {}; return '<div class="km-c km-zone"><span class="km-zone__n">' + (i + 1) + '</span><div><h3>' + (t.zone || K.SIGNS[z.sign]) + '</h3><span class="km-mono km-blue">' + z.by.join(', ') + ' · ' + K.SIGNS[z.sign] + '</span>' + (t.tips ? '<ul>' + t.tips.map(x => '<li>' + x + '</li>').join('') + '</ul>' : '') + (t.note ? '<p class="km-muted">' + t.note + '</p>' : '') + '</div></div>'; }).join('') + '</div></div>'
+    + '<h3 class="km-h3">Движение по карте</h3><div class="km-g4">' + [elK[0], elK[1], 'earth', 'water'].filter((v, i, a) => a.indexOf(v) === i).slice(0, 4).map(e => '<div class="km-c"><h3>' + SPORT[e][0] + '</h3><p>' + SPORT[e][1] + '</p><span class="km-mono km-blue">стихия ' + ELNAME[e] + '</span></div>').join('') + '</div>'
+    + '<h3 class="km-h3">Питание по карте</h3><div class="km-g4">' + Object.keys(FOOD).map(e => '<div class="km-c km-c--leftg"><h3>' + FOOD[e][0] + '</h3><p>' + FOOD[e][1] + '</p><span class="km-mono km-blue">' + (ch.el[e] >= 4 ? 'много: ' : ch.el[e] <= 1 ? 'мало: ' : '') + ELNAME[e] + '</span></div>').join('') + '</div>'
+    + '<h3 class="km-h3">Энергия по годам</h3><div class="km-c km-years">' + hy + '</div><p class="km-muted">5 — много сил, 1 — время беречь себя. Оценка по транзитам, годовым профекциям и периодам джйотиша.</p>'
+    + (att.length ? '<h3 class="km-h3">Периоды повышенного внимания</h3><div class="km-g4">' + att.map(o => { const gd = o.tone === 'soft' || (o.p === 'jupiter' && o.ang === 0); return '<div class="km-c"><h3 class="' + (gd ? 'km-g' : 'km-r') + '">' + span(o) + '</h3><p>' + trNice(o) + ': ' + TR_A[o.p][gd ? 0 : 1] + '</p></div>'; }).join('') + '</div>' : '')
+    + '<p class="km-note">Астрология не диагностирует и не предсказывает болезни. Это советы о режиме и самочувствии. При любых симптомах обращайтесь к врачу.</p>';
+  h += S('health', '04', 'Самочувствие', 'Зоны внимания и ваш режим', 'Карта подсказывает, какой ритм подходит телу и когда силы стоит беречь. Это профилактика и забота о себе, а не диагноз.', lockWrap('full', 'Зоны внимания, режим и энергия по годам', s4), false);
 
-  // предложение
-  h += '<section class="ksec koffer" id="kOffer"><div class="ksec__head"><span class="eyebrow">Открыть полностью</span><h2>Полная карта и прогноз</h2><p class="ksec__intro">Расчёт по эфемеридам на момент вашего рождения. Карта сохраняется у вас и не требует повторной оплаты.</p></div><div class="kgrid3">'
-    + ['year', 'full', 'all'].map(k => '<div class="kcard kprice' + (k === 'all' ? ' kprice--best' : '') + '"><small>' + (k === 'all' ? 'Выгоднее' : 'Разово') + '</small><h3>' + PRICE[k][0] + '</h3><p>' + PRICE[k][2] + '</p><b class="kprice__n">' + PRICE[k][1].toLocaleString('ru') + ' ₽</b><button class="btn ' + (k === 'all' ? 'btn--gold' : 'btn--line') + '" type="button" data-buy="' + k + '">' + (has(k) ? 'Открыто' : 'Открыть') + '</button></div>').join('')
-    + '</div><div class="kcard krect"><div><small>Отдельная услуга</small><h3>Ректификация времени рождения · 4 990 ₽</h3><p>Если вы не знаете точного времени или сомневаетесь в нём. Астролог сверяет 5–10 важных событий вашей жизни с картой и находит время с точностью до минут. От него зависят Асцендент, дома и все сроки прогноза.</p></div><button class="btn btn--line" type="button" data-buy="rect">Оставить заявку</button></div>'
-    + '<p class="ksmall">Астрология — инструмент самопознания и размышления. Она не предсказывает события с гарантией и не заменяет советы врача, юриста или финансового специалиста.</p></section>';
+  // 05 СЕМЬЯ
+  const ven = sgn('venus'), h7 = ch.cusps ? K.signOf(ch.cusps[6]) : null, h4 = ch.cusps ? K.signOf(ch.cusps[3]) : null;
+  const in7 = ch.known ? PL.slice(0, 10).filter(k => ch.pos[k].house === 7).map(k => RU_P[k]) : [];
+  const famHard = ch.aspects.filter(a => a.tone === 'hard' && ['mars', 'venus', 'moon', 'mercury'].some(p => a.a === p || a.b === p) && ['neptune', 'saturn', 'uranus', 'pluto'].some(p => a.a === p || a.b === p))[0];
+  const famT = uniqT(trR.filter(o => ['venus', 'moon', 'dsc', 'ic'].includes(o.n))).slice(0, 10);
+  let s5 = '<div class="km-fam"><div class="km-fam__ph"><div style="background-image:url(img/karta/family.webp)"></div><div style="background-image:url(img/karta/couple.webp)"></div><div style="background-image:url(img/karta/room.webp)"></div></div><div class="km-fam__c">'
+    + '<div class="km-c"><h3>Вы в отношениях</h3><p>' + LOVE[ven] + ' Чтобы было спокойно, вам нужны ' + SIGN[moon].need + '.</p></div>'
+    + (h7 != null ? '<div class="km-c"><h3>Партнёр в вашей карте</h3><p>Десцендент в знаке ' + K.SIGNS[h7] + ': вас притягивает ' + SIGN[h7].look + '.' + (in7.length ? ' В VII доме: ' + in7.join(', ') + ' — партнёрство один из главных уроков роста.' : '') + '</p></div>' : '')
+    + (h4 != null ? '<div class="km-c"><h3>Дом</h3><p>IC в знаке ' + K.SIGNS[h4] + ': дом для вас — это ' + SIGN[h4].need + '.</p></div>' : '')
+    + '<div class="km-c"><h3>Свобода и близость</h3><p>' + (T.has('aspect-hard:moon-uranus') || T.has('aspect-hard:venus-uranus') ? 'Даже в крепком союзе вам нужно своё дело и личное время. Договоритесь об этом заранее.' : 'Близость для вас — это ' + SIGN[moon].need.split(',')[0] + '. Говорите об этом прямо.') + '</p></div>'
+    + (famHard ? '<div class="km-rule"><b>Правило пары · ' + RU_P[famHard.a] + ' ' + famHard.name + ' ' + RU_P[famHard.b] + ':</b> ' + ((aspectText(famHard).split(/(?<=\.)\s+/)[1]) || 'говорить прямо и вслух — недосказанность превращается в обиды.') + '</div>' : '<div class="km-rule"><b>Правило пары:</b> говорить прямо и вслух — так чувства не превращаются в обиды.</div>') + '</div></div>'
+    + '<div class="km-g5">' + famT.map(o => { const gd = o.tone === 'soft' || (o.p === 'jupiter' && o.ang === 0); return '<div class="km-c"><h3 class="' + (gd ? 'km-g' : 'km-r') + '">' + span(o) + '</h3><p>' + trNice(o) + ': ' + (gd ? 'тёплый период, обновление и сближение.' : TR_A[o.p][1]) + '</p></div>'; }).join('') + '</div>';
+  h += S('family', '05', 'Семья', 'Тыл, который даёт силу', 'Как вы любите, кого притягиваете, каким должен быть дом и какие периоды важны для отношений.', lockWrap('full', 'Отношения, дом и периоды для семьи', s5), true);
 
-  $k('kResult').innerHTML = h; $k('kResult').hidden = false; $k('kFormWrap').hidden = true;
-  requestAnimationFrame(() => drawWheel($k('kWheel'), ch));
-  $k('kEdit').onclick = () => { $k('kFormWrap').hidden = false; $k('kResult').hidden = true; scrollTo(0, 0); };
-  $k('kResult').querySelectorAll('[data-buy]').forEach(b => b.onclick = () => buy(b.dataset.buy));
-  window.KARTA_LAST = ch;
+  // 06 ГДЕ ЖИТЬ
+  const cs = scoreCities(ch).filter(x => x.hits.length), best = cs.slice().sort((a, b) => b.total - a.total);
+  const usedC = new Set(), regN = {}, ok = x => x && !usedC.has(x.c[1]) && (regN[x.c[4]] || 0) < 2, take = (x, l) => { usedC.add(x.c[1]); regN[x.c[4]] = (regN[x.c[4]] || 0) + 1; return { x, l }; };
+  const picks = [];
+  [[cs.slice().sort((a, b) => b.sc.family - a.sc.family || b.total - a.total), 'Лучшее для семьи'], [cs.slice().sort((a, b) => b.sc.money - a.sc.money || b.total - a.total), 'Лучшее для денег'], [cs.slice().sort((a, b) => b.sc.career - a.sc.career || b.total - a.total), 'Лучшее для карьеры'], [cs.filter(x => x.hits.some(h => ['uranus', 'mars', 'pluto'].includes(h.p) && h.angle === 'MC')).sort((a, b) => b.sc.career - a.sc.career), 'Прорыв']]
+    .forEach(([arr, l]) => { const x = arr.find(ok); if (x) picks.push(take(x, l)); });
+  best.filter(x => x.hard === 0).forEach(x => { if (picks.length < 10 && ok(x)) picks.push(take(x, 'Хорошо')); });
+  const city = (p, i) => '<div class="km-city"><div class="km-city__img" style="background-image:url(img/karta/' + (CITY_IMG[p.x.c[0]] || GEN_IMG[i % GEN_IMG.length]) + '.webp)"><span>' + (i + 1) + '</span></div><div class="km-city__b"><small>★ ' + p.l + ' · ' + p.x.c[4] + '</small><h3>' + p.x.c[0] + '</h3><p>' + p.x.c[1] + '. ' + p.x.hits.slice(0, 3).map(hitText).join(', ') + '.</p>' + bar('Карьера', p.x.sc.career, 5, 'a') + bar('Деньги', p.x.sc.money, 5, 'g') + bar('Семья', p.x.sc.family, 5, 'p') + '</div></div>';
+  const mini = (p, i) => '<div class="km-c km-cmini"><span class="km-cmini__n">' + (i + 1) + '</span><div><h3>' + p.x.c[0] + ' <em>' + p.x.c[1] + ' · ' + p.x.c[4] + '</em></h3><p>' + p.x.hits.slice(0, 2).map(hitText).join(', ') + '</p>' + bar('Карьера', p.x.sc.career, 5, 'a') + bar('Деньги', p.x.sc.money, 5, 'g') + bar('Семья', p.x.sc.family, 5, 'p') + '</div></div>';
+  const harder = (() => { const seen = new Set(picks.map(p => p.x.c[1])); return cs.filter(x => x.hard >= 1).sort((a, b) => b.hard - a.hard || a.total - b.total).filter(x => { if (seen.has(x.c[1])) return false; seen.add(x.c[1]); return true; }).slice(0, 6); })();
+  let s6 = '<div class="km-c km-map"><canvas id="kWorld" aria-label="Карта мира с линиями планет"></canvas><p class="km-muted">Цифры — ваши ' + picks.length + ' точек силы по всему миру. Сплошные линии — планета в зените (MC), пунктир — на восходе и закате (ASC/DSC). Зелёный — Юпитер, розовый — Венера, золотой — Солнце, красный — Сатурн и Марс.</p></div>'
+    + '<div class="km-g4">' + picks.slice(0, 4).map(city).join('') + '</div>'
+    + (picks.length > 4 ? '<h3 class="km-h3">Ещё ' + (picks.length - 4) + ' точек силы</h3><div class="km-g3">' + picks.slice(4).map((p, i) => mini(p, i + 4)).join('') + '</div>' : '')
+    + '<div class="km-c km-c--bad"><h3>Будет тяжелее</h3><ul>' + harder.map(x => '<li><b>' + x.c[0] + ' (' + x.c[1] + '):</b> ' + x.hits.filter(h => ['saturn', 'pluto', 'mars', 'neptune'].includes(h.p)).slice(0, 2).map(hitText).join(', ') + '</li>').join('') + '</ul></div>';
+  h += S('places', '06', 'Где жить', 'Точки силы на карте мира', 'Астрокартография по всему миру, независимо от того, где вы живёте сейчас: в этих городах благоприятные планеты оказываются на ключевых углах вашей карты.' + (ch.known ? ' Ошибка времени рождения на 4 минуты сдвигает линии примерно на 1° (около 100 км).' : ' Без точного времени рождения линии неточны.'), lockWrap('full', 'Ваши города и линии планет', s6), false);
+
+  // 07 МАРШРУТ
+  const peak = years.slice(1).reduce((a, b) => (b.sum > a.sum ? b : a), years[1]);
+  const yb = (y, k) => bar({ career: 'Карьера', money: 'Деньги', family: 'Семья', health: 'Здоровье' }[k], y.sc[k], 5, { career: 'a', money: 'g', family: 'p', health: 'b' }[k]).replace('</em></div>', '</em><u class="' + (y.agree[k] >= 3 ? 'on' : '') + '">' + y.agree[k] + '/3</u></div>');
+  const yearCard = y => '<div class="km-yr"><span class="km-yr__dot"></span><div class="km-yr__y"><b>' + y.y + '</b><small>исполнится ' + y.age + '</small></div><div class="km-yr__t"><h3>' + YTITLE[y.pr.house - 1] + '</h3><ul>' + (y.top.map(o => '<li>' + trNice(o) + ' (' + span(o) + ')</li>').join('') || '<li>ровный год без крупных транзитов</li>') + '</ul><p class="km-use"><b>Рекомендация:</b> ' + YREC[y.pr.house - 1] + '.</p></div><div class="km-yr__b">' + ['career', 'money', 'family', 'health'].map(k => yb(y, k)).join('') + '</div></div>';
+  const yearBody = () => { const by = {}; tr.forEach(o => { const k = o.peak.getFullYear() * 12 + o.peak.getMonth(); (by[k] = by[k] || []).push(o); }); return '<div class="km-months">' + Object.keys(by).sort((a, b) => a - b).map(k => '<div class="km-c"><h3>' + MON1[k % 12] + ' ' + Math.floor(k / 12) + '</h3><ul>' + by[k].map(o => { const gd = o.tone === 'soft' || (o.ang === 0 && o.p === 'jupiter'); return '<li><b>' + trNice(o) + '</b> · ' + span(o) + '<br>' + (gd ? 'Мягко' : 'Напряжённо') + ' включает ' + TR_P[o.p] + ' в теме ' + TR_N[o.n] + '. ' + TR_A[o.p][gd ? 0 : 1] + '</li>'; }).join('') + '</ul></div>').join('') + '</div>'; };
+  let s7 = '<h3 class="km-h3">Прогноз на 12 месяцев</h3><p class="km-muted">' + tr.length + ' периодов влияния медленных планет. Это темы и настроение периодов, а не события.</p>' + lockWrap('year', 'Прогноз по месяцам на год вперёд', yearBody())
+    + '<div class="km-banner km-banner--peak" style="background-image:url(img/karta/valley.webp)"><h3>Пик маршрута: ' + peak.y + '</h3><p>' + YEAR[peak.pr.house - 1] + ' Сумма оценок по четырём сферам — самая высокая на 12 лет. Всё, что заложено до этого, даст максимальный результат.</p></div>'
+    + lockWrap('full', 'Маршрут на 12 лет по годам', '<div class="km-route">' + years.map(yearCard).join('') + '</div>');
+  h += S('route', '07', 'Маршрут', 'Год за годом', 'Каждый год оценён тремя независимыми системами: транзиты, годовые профекции и периоды джйотиша. Рядом с оценкой — сколько систем с ней согласны (например, 2/3).', s7, true);
+
+  // 08 УСТАВ
+  const RL = KT('KT_RULES') || [], rules = RL.map(r => ({ r, m: matches(r.when, T) - (String(r.when).includes('always') ? 0.5 : 0) })).filter(x => x.m > 0).sort((a, b) => b.m - a.m).slice(0, 10).map(x => x.r);
+  const s8 = '<div class="km-charter"><div class="km-g3">' + rules.map((r, i) => '<div class="km-c km-rule2"><b class="km-num">' + String(i + 1).padStart(2, '0') + '</b><div><h3>' + esc(r.title) + '</h3><p>' + esc(r.text) + '</p></div></div>').join('') + '</div></div>';
+  h += S('charter', '08', 'Рекомендации', 'Ваш устав: 10 правил', 'Выжимка всей карты: что делать, чтобы пройти маршрут с лучшим результатом.', lockWrap('full', 'Ваши 10 правил', s8), false);
+
+  // ПРЕДЛОЖЕНИЕ + футер
+  h += '<section class="km-s" id="km-offer"><div class="km-w"><span class="km-eb">Открыть полностью</span><h2 class="km-h">Полная карта и прогноз</h2><p class="km-lead">Расчёт по эфемеридам на момент вашего рождения. Карта сохраняется у вас и не требует повторной оплаты.</p><div class="km-g3">'
+    + ['year', 'full', 'all'].map(k => '<div class="km-c km-price' + (k === 'all' ? ' km-price--best' : '') + '"><small>' + (k === 'all' ? 'Выгоднее' : 'Разово') + '</small><h3>' + PRICE[k][0] + '</h3><p>' + PRICE[k][2] + '</p><b>' + PRICE[k][1].toLocaleString('ru') + ' ₽</b><button class="btn ' + (k === 'all' ? 'btn--gold' : 'ghost') + '" type="button" data-buy="' + k + '">' + (has(k) ? 'Открыто' : 'Открыть') + '</button></div>').join('')
+    + '</div><div class="km-c km-rect"><div><small>Отдельная услуга</small><h3>Ректификация времени рождения · 4 990 ₽</h3><p>Если точное время неизвестно или есть сомнения. Астролог сверяет 5–10 важных событий вашей жизни с картой и уточняет время до минут. От него зависят Асцендент, дома, города и сроки.</p></div><button class="ghost" type="button" data-buy="rect">Оставить заявку</button></div></div></section>';
+  h += '<footer class="km-foot"><div class="km-w"><p>Составлено ' + fdate(now) + ' · ' + dd + '.' + mmm + '.' + yy + ', ' + (ch.known ? ch.inp.time : 'время неизвестно') + ', ' + esc(ch.inp.place.split(',')[0]) + '.</p><p>Астрология — инструмент для размышлений, а не гарантия. Не является медицинской, психологической, финансовой или юридической консультацией. <a href="#d-map">Как относиться к карте</a> · <a href="#dokumenty">Условия</a>. Фото: Unsplash.</p></div></footer>';
+
+  const R = $k('kResult'); R.className = 'km km--' + g; R.innerHTML = h; R.hidden = false; $k('kFormWrap').hidden = true;
+  requestAnimationFrame(() => { const w = $k('kWheel'); if (w) drawWheel(w, ch); const wd = $k('kWorld'); if (wd) worldDraw(wd, ch, picks.map(p => p.x)); });
+  $k('kEdit').onclick = () => { $k('kFormWrap').hidden = false; R.hidden = true; scrollTo(0, 0); };
+  R.querySelectorAll('[data-buy]').forEach(b => b.onclick = () => buy(b.dataset.buy));
+  R.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { const el = $k('km-' + b.dataset.go); if (el) scrollTo({ top: el.getBoundingClientRect().top + scrollY - 120, behavior: 'smooth' }); });
+  window.KARTA_LAST = ch; window.KARTA_PICKS = picks.map(p => p.x);
 }
 
 function buy(kind) {
@@ -208,7 +423,7 @@ function initForm() {
   $k('kManualT').onclick = () => { $k('kManual').hidden = !$k('kManual').hidden; };
   const tzs = (Intl.supportedValuesOf ? Intl.supportedValuesOf('timeZone') : [...new Set(cities.map(c => c[4]))]);
   $k('kTz').innerHTML = tzs.map(z => '<option>' + z + '</option>').join(''); $k('kTz').value = 'Europe/Moscow';
-  const saved = st.get('karta_input'); if (st.get('karta_consent')) $k('kOk').checked = true; if (saved) { try { const v = JSON.parse(saved); $k('kName').value = v.name || ''; $k('kDate').value = v.date; $k('kTime').value = v.time || ''; $k('kNoTime').checked = !v.time; $k('kTime').disabled = !v.time; $k('kPlace').value = v.place; } catch (e) {} }
+  const saved = st.get('karta_input'); if (st.get('karta_consent')) $k('kOk').checked = true; if (saved) { try { const v = JSON.parse(saved); $k('kName').value = v.name || ''; $k('kDate').value = v.date; $k('kTime').value = v.time || ''; $k('kNoTime').checked = !v.time; $k('kTime').disabled = !v.time; $k('kPlace').value = v.place; const gr = document.querySelector('input[name=kGender][value=' + (v.gender || 'f') + ']'); if (gr) gr.checked = true; } catch (e) {} }
   $k('kForm').onsubmit = e => {
     e.preventDefault(); const err = $k('kErr'); err.textContent = '';
     const date = $k('kDate').value, time = $k('kNoTime').checked ? '' : $k('kTime').value, place = $k('kPlace').value.trim();
@@ -220,12 +435,13 @@ function initForm() {
     else { const c = cities.find(c => (c[0] + ', ' + c[1]).toLowerCase() === place.toLowerCase()) || cities.find(c => c[0].toLowerCase() === place.toLowerCase().split(',')[0].trim());
       if (!c) return err.textContent = 'Город не найден. Выберите из списка или введите координаты вручную.'; [lat, lon, tz] = [c[2], c[3], c[4]]; }
     if (isNaN(lat) || isNaN(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180) return err.textContent = 'Проверьте координаты.';
-    const inp = { name: $k('kName').value.trim(), date, time, place: place || (lat.toFixed(2) + ', ' + lon.toFixed(2)), lat, lon, tz };
+    const gEl = document.querySelector('input[name=kGender]:checked'); if (!gEl) return err.textContent = 'Выберите оформление карты: женское или мужское.';
+    const inp = { gender: gEl.value, name: $k('kName').value.trim(), date, time, place: place || (lat.toFixed(2) + ', ' + lon.toFixed(2)), lat, lon, tz };
     st.set('karta_input', JSON.stringify(inp)); st.set('karta_consent', JSON.stringify({ v: '2026-10-14', at: new Date().toISOString() }));
     const btn = $k('kGo'); btn.disabled = true; btn.textContent = 'Считаем положение планет…';
     setTimeout(() => { try { render(K.computeChart(inp)); scrollTo(0, 0); } catch (x) { err.textContent = 'Не получилось рассчитать: ' + x.message; } btn.disabled = false; btn.textContent = 'Построить карту'; }, 60);
   };
-  addEventListener('resize', () => { if (window.KARTA_LAST && !$k('kResult').hidden) drawWheel($k('kWheel'), window.KARTA_LAST); });
+  let rz = 0; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { if (window.KARTA_LAST && !$k('kResult').hidden) { const w = $k('kWheel'); if (w) drawWheel(w, window.KARTA_LAST); const wd = $k('kWorld'); if (wd) worldDraw(wd, window.KARTA_LAST, window.KARTA_PICKS || []); } }, 200); });
   if (saved && st.get('karta_auto') !== '0') { try { render(K.computeChart(JSON.parse(saved))); } catch (e) {} }
 }
 window.KARTA_UI = { initForm, render, drawWheel };
