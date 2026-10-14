@@ -1,0 +1,244 @@
+<title>Видение «Дорога к себе»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter+Tight:wght@400;500;600&display=swap">
+<style>
+/* Layout: one reading column, wide tables scroll in place; pearl & gold like the site itself */
+:root {
+  --bg: #f7f3ec; --paper: #fffdf9; --ink: #1d1a16; --ink2: #4a443b; --mute: #857c6e; --line: #e6ddcf;
+  --gold: #a87a3f; --gold-soft: #f1e6d3; --ok: #3d7a52; --warn: #a2611c;
+  --ff-d: 'Cormorant Garamond', 'Times New Roman', serif; --ff-b: 'Inter Tight', system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0d0b10; --paper: #16131b; --ink: #f2ece2; --ink2: #cfc6b8; --mute: #968c7d; --line: #2c2631; --gold: #d6ad6c; --gold-soft: #2a2218; --ok: #7fc394; --warn: #e3a35c; color-scheme: dark; } }
+:root[data-theme="dark"] { --bg: #0d0b10; --paper: #16131b; --ink: #f2ece2; --ink2: #cfc6b8; --mute: #968c7d; --line: #2c2631; --gold: #d6ad6c; --gold-soft: #2a2218; --ok: #7fc394; --warn: #e3a35c; color-scheme: dark; }
+body { background: var(--bg); color: var(--ink2); font: 16.5px/1.6 var(--ff-b); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 860px; margin: 0 auto; padding-block: 48px 96px; display: grid; gap: 56px; }
+header { display: grid; gap: 14px; }
+.eyebrow { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+h1 { font: 600 clamp(40px, 7vw, 64px)/1 var(--ff-d); color: var(--ink); margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h2 { font: 600 clamp(28px, 4.4vw, 38px)/1.1 var(--ff-d); color: var(--ink); margin: 0; text-wrap: balance; }
+h3 { font-size: 17px; color: var(--ink); margin: 0; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+section { display: grid; gap: 18px; }
+.lead { font-size: 19px; color: var(--ink); max-width: 62ch; }
+b { color: var(--ink); font-weight: 600; }
+ol, ul { margin: 0; padding-left: 22px; display: grid; gap: 8px; }
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--paper); }
+table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 14.5px; }
+th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); font-weight: 600; background: var(--gold-soft); }
+tr:last-child td { border-bottom: 0; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.free { color: var(--ok); font-weight: 600; } .paid { color: var(--gold); font-weight: 600; }
+.flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; counter-reset: s; padding: 0; list-style: none; }
+.flow li { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: grid; gap: 4px; font-size: 14.5px; min-width: 0; }
+.flow li::before { counter-increment: s; content: counter(s); font: 600 26px/1 var(--ff-d); color: var(--gold); }
+.note { border-left: 2px solid var(--gold); padding: 4px 0 4px 18px; color: var(--ink); }
+.ask { background: var(--paper); border: 1px solid var(--gold); border-radius: 16px; padding: 22px; display: grid; gap: 12px; }
+.mermaid { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 16px; overflow-x: auto; }
+.tag { display: inline-block; font-size: 12px; padding: 2px 9px; border-radius: 99px; border: 1px solid var(--line); color: var(--mute); white-space: nowrap; }
+.tag.done { color: var(--ok); border-color: currentColor; } .tag.todo { color: var(--warn); border-color: currentColor; }
+footer { font-size: 13.5px; color: var(--mute); border-top: 1px solid var(--line); padding-top: 18px; }
+a { color: var(--gold); }
+</style>
+
+<div class="wrap">
+<header>
+  <span class="eyebrow">Видение проекта · октябрь 2026</span>
+  <h1>Дорога к себе</h1>
+  <p class="lead">Сервис практик, где каждый сеанс — погружение: голос, дыхание, звук и полёт в космосе. Карта жизни говорит человеку, какие практики нужны именно ему. Начинаем с русского, затем английский и испанский.</p>
+</header>
+
+<section>
+  <span class="eyebrow">Позиционирование</span>
+  <h2>Моя карта → моя практика</h2>
+  <p>Calm и Headspace продают «сон и стресс» всем подряд и теряют выручку: у Calm она упала примерно с $300 млн до $210 млн за 2023–2025. Растут продукты с ясной идеей. Наша идея — <b>личный путь</b>: человек вводит дату рождения, видит свою карту и получает практики под неё. Ни у кого из крупных игроков нет связки «астрология + кинематографичная медитация + живой голос на русском и испанском».</p>
+  <p class="note">Тон везде один: практики помогают, но работу делает сам человек. Без обещаний чудес и лечения. Это и честно, и юридически защищает.</p>
+</section>
+
+<section>
+  <span class="eyebrow">Путь пользователя</span>
+  <h2>От первого клика до оплаты</h2>
+  <ol class="flow">
+    <li><b>Сайт или реклама</b>Видео, полёт, «Узнайте свою карту».</li>
+    <li><b>Анкета</b>Дата, время, место рождения. 1 минута.</li>
+    <li><b>Регистрация</b>Почта или Google/Apple. Бесплатно.</li>
+    <li><b>Базовая карта</b>Профиль, текущий период, 3 практики для вас.</li>
+    <li><b>Очищение</b>Первый сеанс бесплатно. Человек чувствует эффект.</li>
+    <li><b>Замки</b>Остальные практики и полная карта — покупка или подписка.</li>
+  </ol>
+  <p>Главный рычаг экономики — шаг 4. Медианная конверсия «бесплатный → платный» в приложениях около 2%, и при ней реклама в США не окупается. Персональная карта с рекомендациями должна дать 4–5%.</p>
+</section>
+
+<section>
+  <span class="eyebrow">Личный кабинет</span>
+  <h2>Что видит человек после входа</h2>
+  <div class="tbl"><table>
+    <tr><th>Раздел</th><th>Что внутри</th></tr>
+    <tr><td><b>Сегодня</b></td><td>Практика дня под текущий период карты, серия дней, намерение.</td></tr>
+    <tr><td><b>Моя карта</b></td><td>Базовая часть открыта. Полная карта: разделы под замком с кнопкой «Открыть».</td></tr>
+    <tr><td><b>Пространства</b></td><td>17 практик. Открытые светятся, закрытые с замком и ценой. Рекомендованные картой отмечены.</td></tr>
+    <tr><td><b>Мой путь</b></td><td>История сеансов, сколько минут, какие пространства. Без оценок и «диагнозов».</td></tr>
+    <tr><td><b>Настройки</b></td><td>Язык, голос (женский/мужской), «Спокойный экран», подписка и отмена в один клик, удаление аккаунта.</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <span class="eyebrow">Что бесплатно и что платно</span>
+  <h2>Цены для теста</h2>
+  <div class="tbl"><table>
+    <tr><th>Продукт</th><th>Доступ</th><th>Россия</th><th>US / UK / EU</th></tr>
+    <tr><td>Регистрация, Очищение, базовая карта</td><td class="free">Бесплатно</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td>Одна практика навсегда</td><td class="paid">Покупка</td><td class="num">290 ₽</td><td class="num">$4.99</td></tr>
+    <tr><td>Полная карта жизни (PDF + в кабинете)</td><td class="paid">Покупка</td><td class="num">1 990 ₽</td><td class="num">$24</td></tr>
+    <tr><td>Ректификация времени рождения</td><td class="paid">Услуга</td><td class="num">4 990 ₽</td><td class="num">$49</td></tr>
+    <tr><td>Подписка: все практики + новые</td><td class="paid">Месяц</td><td class="num">490 ₽</td><td class="num">$12.99</td></tr>
+    <tr><td>Подписка на год</td><td class="paid">Год</td><td class="num">2 990 ₽</td><td class="num">$59.99</td></tr>
+  </table></div>
+  <p>Подписка выгоднее покупки 3 практик: так покупка поштучно «продаёт» подписку. Для Латинской Америки цены ниже, по покупательной способности (год около $25).</p>
+</section>
+
+<section>
+  <span class="eyebrow">Карта жизни для любого посетителя</span>
+  <h2>Как карта считается автоматически</h2>
+  <p>Сейчас карты для вас и Рамины я считал вручную по анкете. Для сайта процесс разделяется на две части: <b>расчёт делает код</b>, <b>текст пишет ИИ по жёсткому шаблону</b>. Так ИИ не может «придумать» положение планет: он получает готовые факты.</p>
+  <ol>
+    <li><b>Анкета</b> — та же, что уже есть: дата, время и его точность, место, события жизни.</li>
+    <li><b>Место → координаты и часовой пояс</b> с учётом исторических переходов времени (база GeoNames + tzdb).</li>
+    <li><b>Эфемериды:</b> положения планет, дома, аспекты, текущие транзиты. Библиотека astronomy-engine (открытая лицензия MIT, точность до угловых секунд) или Swiss Ephemeris (нужна коммерческая лицензия, иначе по AGPL придётся открыть код всего сервиса).</li>
+    <li><b>Текст:</b> Claude API получает расчёт и пишет разделы в структуре вашей карты: Сейчас, Профиль, Призвание, Деньги, Здоровье, Семья, Где жить, Маршрут по годам, Рекомендации.</li>
+    <li><b>Сохранение:</b> карта считается один раз и хранится в кабинете. Повторно платить за расчёт не нужно.</li>
+  </ol>
+  <div class="tbl"><table>
+    <tr><th>Часть</th><th>Бесплатно</th><th>Полная карта</th></tr>
+    <tr><td>Профиль: Солнце, Луна, Асцендент</td><td class="free">Да</td><td>Да, подробно</td></tr>
+    <tr><td>Текущий период (большие транзиты)</td><td class="free">Кратко</td><td>По месяцам на год</td></tr>
+    <tr><td>Призвание, деньги, отношения, самочувствие</td><td>—</td><td class="paid">Да</td></tr>
+    <tr><td>Где жить (астрокартография)</td><td>—</td><td class="paid">Да</td></tr>
+    <tr><td>Маршрут по годам</td><td>—</td><td class="paid">Да</td></tr>
+    <tr><td>Практики для вас</td><td class="free">3 пространства</td><td>Полный план на 30 дней</td></tr>
+  </table></div>
+  <p class="note">Ректификацию автоматизировать надёжно нельзя: она требует сверки событий жизни с картой. Если время рождения неизвестно, карта строится без домов и Асцендента, а ректификация продаётся как отдельная услуга. Её делаете вы или я по вашей методике, с подтверждением человеком.</p>
+</section>
+
+<section>
+  <span class="eyebrow">Рекомендации</span>
+  <h2>Как карта выбирает практики</h2>
+  <p>Правила прозрачные и редактируемые: каждый фактор карты добавляет «вес» пространствам. Топ-3 по весу — рекомендации.</p>
+  <div class="tbl"><table>
+    <tr><th>Фактор карты</th><th>Тема</th><th>Пространства</th></tr>
+    <tr><td>Напряжённая Луна, 4-й дом</td><td>Эмоции, тревога, дом</td><td>Тишина, Дыхание, Любовь к себе</td></tr>
+    <tr><td>Сатурн: транзиты, сильная позиция</td><td>Ограничения, страхи, «нельзя»</td><td>Снять шоры, Перед важным событием</td></tr>
+    <tr><td>Венера, 7-й дом</td><td>Отношения, принятие</td><td>Отношения, Любовь к себе</td></tr>
+    <tr><td>Марс, 1-й дом</td><td>Сила, действие</td><td>Жизненная энергия, Перед событием</td></tr>
+    <tr><td>2-й, 8-й, 10-й дома, Юпитер</td><td>Деньги, карьера</td><td>Изобилие, Удача, Предназначение</td></tr>
+    <tr><td>6-й дом</td><td>Тело, режим</td><td>Здоровье, Пищевое поведение</td></tr>
+    <tr><td>12-й дом, Нептун</td><td>Уход от реальности, тяга</td><td>Очищение, Привычки, Отпустить</td></tr>
+    <tr><td>Узлы, МС</td><td>Путь, смысл</td><td>Предназначение, Аджна, Чакры</td></tr>
+  </table></div>
+  <p>Эту таблицу стоит доработать вместе с вами: в ней ваша методика, и это то, что конкуренты не скопируют.</p>
+</section>
+
+<section>
+  <span class="eyebrow">Архитектура</span>
+  <h2>Из чего состоит система</h2>
+<pre class="mermaid">
+flowchart LR
+  U[Браузер / телефон<br>PWA] --> CDN[Сайт на CDN<br>Cloudflare]
+  U --> AUTH[Вход<br>Supabase Auth]
+  U --> DB[(База<br>Postgres EU)]
+  U --> AUD[Голос и музыка<br>Storage + кеш]
+  U --> PAY[Оплата<br>Paddle / ЮKassa]
+  PAY -- webhook --> ENT[Права доступа]
+  ENT --> DB
+  U --> MAP[Функция «Карта»]
+  MAP --> EPH[Эфемериды]
+  MAP --> LLM[Claude API<br>текст карты]
+  MAP --> DB
+</pre>
+  <div class="tbl"><table>
+    <tr><th>Слой</th><th>Решение</th><th>Почему</th></tr>
+    <tr><td>Сайт</td><td>Текущий сайт, разбитый на модули (Vite). Визуалы и журнал грузятся по требованию.</td><td>Первый экран быстрее, меньше кода на телефоне.</td></tr>
+    <tr><td>Вход и база</td><td>Supabase в ЕС (Франкфурт): почта без пароля, Google, Apple.</td><td>Готовая авторизация, права на уровне строк, GDPR-регион.</td></tr>
+    <tr><td>Оплата за рубежом</td><td>Paddle (продавец по документам — Paddle).</td><td>Сам платит НДС и налоги во всех странах, обрабатывает возвраты. Stripe относит «гадание» к рискованным видам бизнеса.</td></tr>
+    <tr><td>Оплата в России</td><td>ЮKassa через российское ИП/ООО.</td><td>Иностранная компания подключиться не может.</td></tr>
+    <tr><td>Права доступа</td><td>Таблица «что куплено»: практика, карта, подписка и срок.</td><td>Одна проверка на всё: открыт замок или нет.</td></tr>
+    <tr><td>Голос</td><td>ElevenLabs → файлы mp3: язык × женский/мужской × 91 фрагмент.</td><td>Без синтеза в браузере, одинаково на всех телефонах.</td></tr>
+    <tr><td>Офлайн</td><td>Купленные практики кешируются в телефоне.</td><td>Сеанс не прервётся в метро или самолёте.</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <span class="eyebrow">Языки</span>
+  <h2>RU → EN → ES</h2>
+  <p>Тексты сайта, практик и журнала живут в отдельных файлах по языкам. Голос ElevenLabs один и тот же на трёх языках, поэтому ощущение бренда сохраняется. Переводы делает ИИ, финальную вычитку — носитель языка: в практиках важна интонация, не только смысл. Карта жизни пишется сразу на языке пользователя.</p>
+</section>
+
+<section>
+  <span class="eyebrow">Скорость и телефоны</span>
+  <h2>Без глюков на слабых устройствах</h2>
+  <ul>
+    <li><b>Бюджет первого экрана:</b> до 200 КБ кода и стилей, видео после постера, загрузка до 2,5 с на 4G.</li>
+    <li><b>Качество визуала подстраивается:</b> первые 2 секунды сайт измеряет плавность и выбирает уровень: полный, средний, лёгкий или статичный.</li>
+    <li><b>«Спокойный экран»</b> и системная настройка «уменьшить движение» включают статичный режим.</li>
+    <li><b>Проверка перед каждым релизом:</b> iPhone SE и 13, средний и бюджетный Android, Safari, Chrome, Яндекс Браузер.</li>
+    <li><b>Визуалы проходят тест на эпилепсию</b> (Harding / PEAT): не больше 3 вспышек в секунду.</li>
+  </ul>
+</section>
+
+<section>
+  <span class="eyebrow">Правовая защита</span>
+  <h2>Что реально нас защищает</h2>
+  <p>Сделать так, чтобы иск был невозможен, нельзя ни в одной стране: права потребителя не отменяются договором. Можно сделать так, чтобы претензий почти не было, а если будут — чтобы мы их выигрывали.</p>
+  <div class="tbl"><table>
+    <tr><th>Мера</th><th>Статус</th></tr>
+    <tr><td>Окно безопасности перед каждым сеансом, обязательное подтверждение, «Спокойный экран»</td><td><span class="tag done">Сделано</span></td></tr>
+    <tr><td>Тексты без «лечит», «исцеляет», «избавит от зависимости»</td><td><span class="tag todo">Аудит</span></td></tr>
+    <tr><td>Журнал согласий: кто, когда, какая версия документа</td><td><span class="tag todo">С кабинетом</span></td></tr>
+    <tr><td>Условия, Политика конфиденциальности, Возвраты, Отказ от ответственности, Оферта РФ</td><td><span class="tag todo">Скелеты готовы, нужен юрист</span></td></tr>
+    <tr><td>Подписка: цена крупно, напоминание, отмена в один клик, кнопка отказа в ЕС</td><td><span class="tag todo">С оплатой</span></td></tr>
+    <tr><td>Не собирать данные о здоровье, курении, алкоголе</td><td><span class="tag todo">Принцип</span></td></tr>
+    <tr><td>Пометка «голос создан ИИ» (EU AI Act, с 02.08.2026)</td><td><span class="tag todo">С голосом</span></td></tr>
+    <tr><td>Компания (UK Ltd) и страховки: профессиональная ответственность, вред здоровью, утечка данных</td><td><span class="tag todo">Ваше решение</span></td></tr>
+  </table></div>
+  <p>Подробно, со ссылками и скелетами документов: <code>research/legal.md</code> в репозитории.</p>
+</section>
+
+<section>
+  <span class="eyebrow">Клиенты и шансы</span>
+  <h2>Кто платит</h2>
+  <ul>
+    <li><b>Ядро:</b> женщины 28–45, «духовные, но не религиозные». В США таких 22% взрослых, а 4 из 10 женщин 18–49 верят в астрологию.</li>
+    <li><b>Первые деньги:</b> русскоязычные в России и за рубежом (Германия около 2,3 млн, Израиль около 1,2 млн, США около 0,9 млн). Дёшево привлечь, мало конкурентов на русском.</li>
+    <li><b>Объём:</b> США и Великобритания на английском дают 70–80% выручки категории.</li>
+    <li><b>Шанс:</b> построить прибыльный нишевый сервис реально, если воронка «карта → практика» даст конверсию 4–5%. Конкурировать с Calm лоб в лоб — нет.</li>
+  </ul>
+</section>
+
+<section>
+  <span class="eyebrow">План запуска</span>
+  <h2>Сначала маленький круг, потом рынок</h2>
+  <div class="tbl"><table>
+    <tr><th>Этап</th><th>Срок</th><th>Что делаем</th><th>Цель для перехода дальше</th></tr>
+    <tr><td><b>0. MVP</b></td><td class="num">3–4 нед</td><td>Кабинет, замки, оплата, базовая карта, голоса RU, документы.</td><td>Всё работает на 5 разных телефонах</td></tr>
+    <tr><td><b>1. Свой круг</b></td><td class="num">2–4 нед</td><td>30–50 человек: ваше окружение, сообщество, Telegram. Бесплатно, интервью после сеансов.</td><td>≥60% доходят до конца сеанса, ≥30% возвращаются за неделю</td></tr>
+    <tr><td><b>2. Платный пилот RU</b></td><td class="num">4–6 нед</td><td>300–1000 регистраций, бюджет 30–60 тыс ₽, органика + таргет.</td><td>Регистрация → оплата ≥3–5%</td></tr>
+    <tr><td><b>3. EN и ES</b></td><td class="num">6–8 нед</td><td>Переводы, голоса, лендинги. TikTok/Reels органика, тест $1,5–3 тыс.</td><td>Платящий клиент дешевле $55 в US/UK</td></tr>
+    <tr><td><b>4. Масштаб</b></td><td>дальше</td><td>Рекламу только в окупаемые сегменты, приложение для телефонов.</td><td>LTV/CAC ≥ 3</td></tr>
+  </table></div>
+</section>
+
+<section class="ask">
+  <span class="eyebrow">Нужны ваши решения</span>
+  <h2>Пять вопросов, без которых дальше нельзя</h2>
+  <ol>
+    <li><b>Компания:</b> продаём от вашей UK Ltd? Нужен ли отдельный российский контур (ИП/ООО + ЮKassa + хранение данных в РФ), или Россию обслуживаем позже?</li>
+    <li><b>ElevenLabs:</b> разрешить домен и положить ключ в настройках окружения — тогда голоса сделаю сам.</li>
+    <li><b>Название</b> бренда и домен.</li>
+    <li><b>Карта:</b> кто делает ректификацию — вы, я по вашей методике или сначала только карты без точного времени?</li>
+    <li><b>Бюджет пилота</b> на рекламу и примерную дату старта «своего круга».</li>
+  </ol>
+</section>
+
+<footer>Основано на исследованиях в репозитории: research/market.md (Россия), research/international.md (US/UK/EU/LatAm), research/legal.md (право). Цифры рынка взяты из открытых источников 2023–2026; юридические выводы требуют проверки юристом в каждой стране.</footer>
+</div>
