@@ -595,6 +595,9 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 .safe__box h2 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(26px, 5vw, 34px); line-height: 1.05; margin: 0; }
 .safe__box ul { margin: 0; padding-left: 18px; display: grid; gap: 8px; font-size: 14.5px; line-height: 1.45; color: #d6d1c8; }
 .safe__box b { color: #f3e3c4; font-weight: 600; }
+.pexit { box-shadow: 0 0 0 1.5px rgba(220,189,134,.6); }
+.safe__exit { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start; padding: 16px 18px; border-radius: 16px; background: rgba(226,173,85,.14); border: 1.5px solid var(--gold-l); }
+.safe__exit svg { width: 30px; height: 30px; color: var(--gold-l); } .safe__exit div { display: grid; gap: 4px; } .safe__exit > div > b { font-size: 17px; color: #fff; } .safe__exit span { font-size: 14.5px; line-height: 1.5; color: #e7ddcc; }
 .safe__act { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; margin-top: 4px; }
 .safe__act .btn[disabled] { opacity: .45; pointer-events: none; }
 .player.soft canvas { opacity: .14; transition: opacity 1.2s; }
@@ -1054,7 +1057,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
   <div class="pintent" id="pIntent" aria-live="off"></div>
   <div class="pui">
     <div class="ptop">
-      <button class="icon" id="pClose" type="button" aria-label="Выйти из сеанса"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <button class="icon pexit" id="pClose" type="button" aria-label="Выйти из сеанса" title="Выйти в любой момент"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       <div class="ttl" id="pTtl"></div>
       <div class="tools">
         <button class="icon" id="pFs" type="button" aria-label="Во весь экран"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
@@ -1081,13 +1084,13 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
   <div class="safe__box">
     <span class="eyebrow">Перед началом</span>
     <h2 id="safeT">Короткая проверка безопасности</h2>
+    <div class="safe__exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M9 9l6 6M15 9l-6 6"/></svg><div><b>Выйти из практики можно в любой момент.</b><span>Если стало плохо, тревожно или неприятно — нажмите <b>✕</b> в левом верхнем углу или кнопку паузы. Откройте глаза и дышите обычно. С непривычки так бывает: начните с версии «Новичок» и входите постепенно.</span></div></div>
     <ul>
       <li><b>Не за рулём</b> и не во время работы с техникой. Только сидя или лёжа.</li>
       <li><b>Эпилепсия или судороги, светочувствительность:</b> включите «Спокойный экран» ниже или слушайте с закрытыми глазами. Ритмичный звук и движущееся изображение могут быть нежелательны.</li>
       <li><b>Беременность, болезни сердца и сосудов, кардиостимулятор, глаукома:</b> дышите спокойно, без задержек и форсирования.</li>
       <li><b>Психиатрический диагноз, ПТСР, тяжёлая депрессия:</b> посоветуйтесь с врачом. Если станет хуже — остановите практику.</li>
       <li>Головокружение, тревога, неприятные ощущения — откройте глаза, дышите обычно, сделайте паузу.</li>
-      <li><b>Стало плохо — сразу остановите практику.</b> С непривычки так бывает. Начните с коротких версий для новичков и входите постепенно.</li>
     </ul>
     <p class="small">Практики помогают расслабиться и лучше понимать себя. Они не заменяют врача, психотерапевта или лечение. Если вам плохо прямо сейчас — позвоните в экстренную службу (112).</p>
     <label class="check"><input type="checkbox" id="safeOk"> Я прочитал(а) и подтверждаю, что практика мне подходит. Ответственность за своё состояние беру на себя.</label>
