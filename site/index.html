@@ -292,6 +292,10 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 .pbottom { display: grid; justify-items: center; gap: 12px; text-align: center; }
 .pbottom .eyebrow { margin: 0; }
 .pbottom .eyebrow::before { display: none; }
+.peyes { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; border: 1px solid rgba(220,189,134,.35); background: rgba(6,5,11,.45); font-size: 13px; color: var(--gold-l); }
+.peyes:empty { display: none; }
+.peyes svg, .timeline .eyes svg { width: 16px; height: 16px; }
+.timeline .eyes { display: flex; align-items: center; gap: 6px; font-size: 12px; letter-spacing: .06em; color: var(--gold-d); margin-bottom: 2px; }
 .pphase { font-family: var(--ff-serif); font-style: italic; font-weight: 400; font-size: clamp(34px, 4.6vw, 54px); line-height: 1.05; letter-spacing: -.01em; text-shadow: 0 0 30px rgba(0,0,0,.6); }
 .pinstr { max-width: 48ch; color: #ddd7cc; font-size: 17px; min-height: 3.2em; text-shadow: 0 1px 14px rgba(2,1,6,.95); }
 .track { width: min(460px, 82vw); height: 2px; background: rgba(246,241,232,.12); position: relative; border-radius: 2px; overflow: hidden; }
@@ -565,6 +569,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     </div>
     <div></div>
     <div class="pbottom">
+      <div class="peyes" id="pEyes"></div>
       <div class="eyebrow" id="pEye"></div>
       <h2 class="pphase" id="pPhase"></h2>
       <p class="pinstr" id="pInstr"></p>
@@ -796,6 +801,10 @@ ROOMS.forEach(r => { r.color = CH[r.ci].c; if (r.id === 'habits') setHabit(r, st
 const intentOf = r => store.get('ajna-intent-' + r.id + (r.habit ? '-' + r.habit : '')) || (r.habit ? HABITS[r.habit].intent : INTENT[r.id]);
 
 const BREATH = { resonance: [5.45, 0, 5.45, 0], calm: [4, 0, 6, 0], box: [4, 4, 4, 4], sigh: [3, 0, 6, 0] };
+const EYES = { open: ['Смотрите на экран', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>'],
+  closed: ['Можно закрыть глаза', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10c2.5 3 5.5 4.5 9 4.5s6.5-1.5 9-4.5M6 13.5l-1.5 2M12 15v2.5M18 13.5l1.5 2"/></svg>'],
+  any: ['Смотрите или закройте глаза', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12z" opacity=".5"/><circle cx="12" cy="12" r="3"/></svg>'] };
+const eyesOf = p => p.eyes || ({ eye: 'open', shutters: 'open', breath: 'open', dark: 'closed', flight: 'closed', urge: 'closed', release: 'closed' })[p.visual] || 'any';
 const fmt = s => { s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
 const mins = s => Math.round(s / 60) + ' мин';
 const sum = ph => ph.reduce((a, p) => a + p.dur, 0);
@@ -966,21 +975,62 @@ function shell(t, st, alpha, rx, ry) {
     g.beginPath(); g.ellipse(x, y, rx + (k - 3) * m * 0.008 + wob, ry + (k - 3) * m * 0.01 - wob, 0, 0, TAU); g.stroke();
   }
 }
-function drawCocoon(t, st) {
-  const m = M(), x = cx(), y = cy(), b = st ? st.b : 0.5, rx = m * (0.22 + 0.015 * b), ry = m * (0.33 + 0.015 * b), A = axis(0.72), hy = A.y(3);
-  g.globalCompositeOperation = 'lighter';
-  const fill = g.createRadialGradient(x, hy, 0, x, y, ry); fill.addColorStop(0, 'rgba(255,226,160,.22)'); fill.addColorStop(0.7, 'rgba(231,194,125,.1)'); fill.addColorStop(1, 'rgba(231,194,125,0)');
-  g.fillStyle = fill; g.beginPath(); g.ellipse(x, y, rx, ry, 0, 0, TAU); g.fill();
-  shell(t, st, 1, rx, ry);
-  // heart -> shell: light travels outward on the exhale
-  const exh = st ? (st.label === 'Выдох' ? 1 : 0.15) : 0.6;
-  for (const p of parts) {
-    const k = reduce ? p.d : (p.d + t * 0.12 * p.s) % 1, px = x + Math.cos(p.a) * rx * k, py = hy + (y - hy) * k + Math.sin(p.a) * ry * k;
-    g.fillStyle = 'rgba(255,230,170,' + (0.75 * (1 - k * 0.6) * exh) + ')'; g.beginPath(); g.arc(px, py, 1.5, 0, TAU); g.fill();
+let FIG = null;
+function figureSprite() { // a faceless luminous person in lotus pose, pre-rendered once
+  if (FIG) return FIG;
+  const c = document.createElement('canvas'); c.width = 400; c.height = 440; const x = c.getContext('2d'); x.scale(2, 2);
+  const body = new Path2D('M92 50C92 58 84 62 70 66C58 70 54 80 54 96C54 112 50 130 44 150C42 158 50 164 58 160C66 150 70 132 72 112C74 120 78 132 80 142L120 142C122 132 126 120 128 112C130 132 134 150 142 160C150 164 158 158 156 150C150 130 146 112 146 96C146 80 142 70 130 66C116 62 108 58 108 50Z');
+  const legs = new Path2D('M28 184C28 160 70 150 100 157C130 150 172 160 172 184C172 198 132 203 100 199C68 203 28 198 28 184Z');
+  const head = new Path2D(); head.arc(100, 31, 16.5, 0, TAU);
+  const gr = x.createRadialGradient(100, 112, 4, 100, 112, 120); gr.addColorStop(0, 'rgba(255,252,240,1)'); gr.addColorStop(0.45, 'rgba(255,224,160,.95)'); gr.addColorStop(1, 'rgba(240,170,80,.75)');
+  x.shadowColor = 'rgba(255,205,120,.95)'; x.shadowBlur = 26; x.fillStyle = gr;
+  [legs, body, head].forEach(pth => x.fill(pth));
+  x.shadowBlur = 0; x.globalCompositeOperation = 'source-atop';
+  const inner = x.createLinearGradient(0, 0, 0, 210); inner.addColorStop(0, 'rgba(255,255,255,.55)'); inner.addColorStop(0.5, 'rgba(255,255,255,0)'); inner.addColorStop(1, 'rgba(255,190,110,.25)');
+  x.fillStyle = inner; x.fillRect(0, 0, 200, 220);
+  return (FIG = c);
+}
+const AURA_P = Array.from({ length: 110 }, () => ({ a: Math.random() * TAU, r: 0.92 + Math.random() * 0.16, s: (Math.random() - 0.5) * 0.25, ph: Math.random() * TAU }));
+function auraPath(x, y, rx, ry, t, amp) {
+  g.beginPath();
+  for (let i = 0; i <= 96; i++) {
+    const a = i / 96 * TAU, n = Math.sin(a * 5 + t * 1.3) * 0.5 + Math.sin(a * 9 - t * 2.2) * 0.3 + Math.sin(a * 14 + t * 3.1) * 0.2, k = 1 + amp * n;
+    const px = x + Math.cos(a) * rx * k * (1 + 0.1 * Math.sin(a)), py = y + Math.sin(a) * ry * k; i ? g.lineTo(px, py) : g.moveTo(px, py);
   }
-  const hg = g.createRadialGradient(x, hy, 0, x, hy, m * (0.05 + 0.03 * b)); hg.addColorStop(0, 'rgba(255,240,200,.9)'); hg.addColorStop(1, 'rgba(46,194,126,0)');
-  g.fillStyle = hg; g.beginPath(); g.arc(x, hy, m * (0.05 + 0.03 * b), 0, TAU); g.fill();
-  drawChakras(t, st, -1, 0.72);
+  g.closePath();
+}
+function drawCocoon(t, st) {
+  const m = M(), x = cx(), b = st ? st.b : 0.5 + 0.5 * Math.sin(t * 0.6), tt = reduce ? 0 : t;
+  const fh = Math.min(H * 0.36, m * 0.58, W * 0.36 * 220 / 200), fw = fh * 200 / 220, seatY = H * 0.6 - fh * 0.32, top = seatY - fh, y = seatY - fh * 0.52;
+  const rx = fw * (0.78 + 0.03 * b), ry = fh * (0.82 + 0.03 * b);
+  g.globalCompositeOperation = 'lighter';
+  const fl = g.createRadialGradient(x, seatY + fh * 0.03, 0, x, seatY + fh * 0.03, fw * 1.3); fl.addColorStop(0, 'rgba(255,200,120,.35)'); fl.addColorStop(1, 'rgba(255,170,80,0)');
+  g.save(); g.translate(x, seatY + fh * 0.03); g.scale(1, 0.22); g.fillStyle = fl; g.beginPath(); g.arc(0, 0, fw * 1.3, 0, TAU); g.fill();
+  for (let i = 1; i <= 4; i++) { g.strokeStyle = 'rgba(255,214,150,' + (0.3 - i * 0.05) + ')'; g.lineWidth = 2; g.beginPath(); g.arc(0, 0, fw * (0.35 + i * 0.22) + Math.sin(tt * 0.8 + i) * 3, 0, TAU); g.stroke(); }
+  g.restore();
+  const ch = g.createLinearGradient(0, seatY, 0, 0); ch.addColorStop(0, 'rgba(255,180,100,0)'); ch.addColorStop(0.15, 'rgba(255,220,160,.55)'); ch.addColorStop(0.7, 'rgba(255,245,220,.55)'); ch.addColorStop(1, 'rgba(255,245,220,0)');
+  g.fillStyle = ch; const cw = m * (0.006 + 0.004 * b); g.fillRect(x - cw, 0, cw * 2, seatY);
+  const ch2 = g.createLinearGradient(x - m * 0.05, 0, x + m * 0.05, 0); ch2.addColorStop(0, 'rgba(255,220,160,0)'); ch2.addColorStop(0.5, 'rgba(255,220,160,.12)'); ch2.addColorStop(1, 'rgba(255,220,160,0)');
+  g.fillStyle = ch2; g.fillRect(x - m * 0.05, 0, m * 0.1, seatY);
+  for (let L = 0; L < 4; L++) {
+    const sc = 1 + L * 0.07, a = [0.2, 0.12, 0.07, 0.04][L];
+    const gr = g.createRadialGradient(x, y + ry * 0.1, ry * 0.15, x, y, ry * sc * 1.05); gr.addColorStop(0, 'rgba(255,236,190,' + a * 0.6 + ')'); gr.addColorStop(0.75, 'rgba(255,205,120,' + a + ')'); gr.addColorStop(1, 'rgba(255,180,90,0)');
+    g.fillStyle = gr; auraPath(x, y, rx * sc, ry * sc, tt * (1 + L * 0.3), 0.012 + 0.006 * L); g.fill();
+  }
+  for (let L = 0; L < 3; L++) { g.strokeStyle = 'rgba(255,' + (215 + L * 10) + ',' + (140 + L * 30) + ',' + (0.55 - L * 0.15) + ')'; g.lineWidth = 2 - L * 0.5; auraPath(x, y, rx * (1 + L * 0.025), ry * (1 + L * 0.025), tt * 1.6 + L, 0.01); g.stroke(); }
+  for (const p of AURA_P) { const a = p.a + tt * p.s, k = p.r + 0.02 * Math.sin(tt * 2 + p.ph), tw = 0.5 + 0.5 * Math.sin(tt * 3 + p.ph);
+    g.fillStyle = 'rgba(255,240,200,' + (0.25 + 0.6 * tw) + ')'; g.beginPath(); g.arc(x + Math.cos(a) * rx * k * (1 + 0.1 * Math.sin(a)), y + Math.sin(a) * ry * k, 0.8 + 1.4 * tw, 0, TAU); g.fill(); }
+  const hy = top + fh * 105 / 220, exh = st ? (st.label === 'Выдох' ? 1 : 0.15) : 0.6;
+  for (const p of parts) { const k = reduce ? p.d : (p.d + tt * 0.12 * p.s) % 1, px = x + Math.cos(p.a) * rx * k, py = hy + Math.sin(p.a) * ry * k;
+    g.fillStyle = 'rgba(255,232,180,' + (0.7 * (1 - k * 0.6) * exh) + ')'; g.beginPath(); g.arc(px, py, 1.4, 0, TAU); g.fill(); }
+  g.globalCompositeOperation = 'source-over'; g.globalAlpha = 0.92; g.drawImage(figureSprite(), x - fw / 2, top, fw, fh); g.globalAlpha = 1;
+  g.globalCompositeOperation = 'lighter';
+  const halo = g.createRadialGradient(x, top + fh * 0.14, 0, x, top + fh * 0.14, fw * 0.32); halo.addColorStop(0, 'rgba(255,240,210,.5)'); halo.addColorStop(1, 'rgba(255,220,160,0)'); g.fillStyle = halo; g.beginPath(); g.arc(x, top + fh * 0.14, fw * 0.32, 0, TAU); g.fill();
+  const CY = [186, 162, 136, 106, 62, 30, -6];
+  CH.forEach((c, i) => { const yy = top + fh * CY[i] / 220, on = 0.45 + 0.25 * Math.sin(tt * 1.2 + i), r = fw * (0.035 + (i === 3 ? 0.012 * b : 0));
+    const hgl = g.createRadialGradient(x, yy, 0, x, yy, r * 3.2); hgl.addColorStop(0, rgba(c.c, 0.85 * on + 0.15)); hgl.addColorStop(0.35, rgba(c.c, 0.35 * on)); hgl.addColorStop(1, rgba(c.c, 0)); g.fillStyle = hgl; g.beginPath(); g.arc(x, yy, r * 3.2, 0, TAU); g.fill();
+    drawYantra(g, x, yy, r * 3.4, i, false, tt * 0.1 * (i % 2 ? 1 : -1), 0.55 + 0.3 * on); });
+  g.globalCompositeOperation = 'source-over';
 }
 function drawEye(t, st) {
   const m = M(), x = cx(), y = cy(), b = st ? st.b : 0.5 + 0.5 * Math.sin(t * 0.5), spin = reduce ? 0 : t * 0.06, Rr = m * 0.17;
@@ -1193,8 +1243,55 @@ function galaxy(v) {
     x.fillStyle = 'rgba(' + Math.round(255 - 110 * near) + ',' + Math.round(220 - 40 * near) + ',' + Math.round(170 + 85 * near) + ',' + (0.5 * (1 - near * 0.6)) + ')'; x.fillRect(px, py, 1.1, 1.1); }
   return (SPR[key] = cv);
 }
+let MW = null;
+function milkyWay() { // a band of light with dust lanes and thousands of faint stars
+  if (MW) return MW;
+  const Wd = 900, Hd = 300, c = document.createElement('canvas'); c.width = Wd; c.height = Hd; const x = c.getContext('2d'), im = x.createImageData(Wd, Hd), n = vnoise(31), n2 = vnoise(57);
+  const dens = new Float32Array(Wd * Hd);
+  for (let j = 0; j < Hd; j++) for (let i = 0; i < Wd; i++) {
+    const u = i / Wd, v = j / Hd, off = 0.06 * Math.sin(u * 5.5) + 0.03 * Math.sin(u * 13), d0 = Math.exp(-Math.pow(v - 0.5 - off, 2) / (2 * 0.11 * 0.11));
+    let f = 0, a = 0.5, fr = 1; for (let o = 0; o < 4; o++) { f += a * n(u * 14 * fr, v * 5 * fr); fr *= 2; a *= 0.5; }
+    let lane = 0, a2 = 0.5, f2 = 1; for (let o = 0; o < 4; o++) { lane += a2 * n2(u * 22 * f2, v * 8 * f2); f2 *= 2; a2 *= 0.5; }
+    const dust = Math.max(0, lane - 0.48) * 2.6 * Math.exp(-Math.pow(v - 0.5 - off, 2) / (2 * 0.05 * 0.05));
+    const d = Math.max(0, d0 * (0.55 + 0.7 * f) * (0.55 + 0.45 * Math.exp(-Math.pow(u - 0.55, 2) / 0.06)) - dust); dens[i + j * Wd] = d;
+    const k = (i + j * Wd) * 4, warm = Math.exp(-Math.pow(u - 0.55, 2) / 0.03);
+    im.data[k] = 190 + 65 * warm; im.data[k + 1] = 190 + 30 * warm; im.data[k + 2] = 255 - 60 * warm; im.data[k + 3] = Math.min(255, d * 120);
+  }
+  x.putImageData(im, 0, 0);
+  for (let q = 0; q < 9000; q++) { const i = Math.floor(Math.random() * Wd), j = Math.floor(Math.random() * Hd); if (Math.random() > dens[i + j * Wd] * 1.1 + 0.04) continue;
+    x.fillStyle = 'rgba(255,' + (235 + Math.random() * 20 | 0) + ',' + (210 + Math.random() * 45 | 0) + ',' + (0.35 + Math.random() * 0.6) + ')'; x.fillRect(i, j, Math.random() < 0.08 ? 1.6 : 0.8, Math.random() < 0.08 ? 1.6 : 0.8); }
+  return (MW = c);
+}
+function planet(v) {
+  const key = 'p' + v; if (SPR[key]) return SPR[key];
+  const S = 256, R = 78, c = document.createElement('canvas'); c.width = c.height = S; const x = c.getContext('2d'), n = vnoise(200 + v * 17), cx0 = S / 2;
+  const pal = [[[214, 150, 90], [120, 70, 40], [240, 210, 160]], [[110, 120, 140], [60, 66, 80], [170, 175, 185]], [[90, 170, 190], [40, 90, 130], [200, 235, 240]]][v];
+  const ring = (front) => { x.save(); x.translate(cx0, cx0); x.rotate(-0.35); x.scale(1, 0.28);
+    for (let r = R * 1.35; r < R * 2.05; r += 2) { x.strokeStyle = 'rgba(220,210,190,' + (0.05 + 0.18 * Math.abs(Math.sin(r * 0.21))) + ')'; x.lineWidth = 2; x.beginPath(); x.arc(0, 0, r, front ? 0 : Math.PI, front ? Math.PI : TAU); x.stroke(); } x.restore(); };
+  if (v === 2) ring(false);
+  const im = x.getImageData(0, 0, S, S), Lx = -0.62, Ly = -0.38, Lz = 0.69;
+  for (let j = 0; j < S; j++) for (let i = 0; i < S; i++) {
+    const dx = (i - cx0) / R, dy = (j - cx0) / R, r2 = dx * dx + dy * dy; if (r2 > 1) continue;
+    const nz = Math.sqrt(1 - r2), lit = Math.max(0, dx * Lx + dy * Ly + nz * Lz), lat = dy, lon = Math.atan2(dx, nz);
+    let tex;
+    if (v === 0) tex = 0.5 + 0.5 * Math.sin(lat * 14 + n(lon * 2, lat * 3) * 3);
+    else if (v === 1) tex = n(lon * 4 + 9, lat * 4) * 0.7 + n(lon * 12, lat * 12) * 0.3;
+    else tex = 0.5 + 0.4 * Math.sin(lat * 7 + n(lon * 3, lat * 2) * 2);
+    const c1 = pal[0], c2 = pal[1], c3 = pal[2], mixc = (a, b, t) => a + (b - a) * t;
+    const col = [0, 1, 2].map(q => tex < 0.5 ? mixc(c2[q], c1[q], tex * 2) : mixc(c1[q], c3[q], (tex - 0.5) * 2));
+    const shade = 0.06 + 0.98 * Math.pow(lit, 0.9), rim = Math.pow(1 - nz, 3) * (0.4 + lit), k = (i + j * S) * 4;
+    im.data[k] = Math.min(255, col[0] * shade + 120 * rim); im.data[k + 1] = Math.min(255, col[1] * shade + 160 * rim); im.data[k + 2] = Math.min(255, col[2] * shade + 220 * rim); im.data[k + 3] = 255;
+  }
+  x.putImageData(im, 0, 0);
+  const atm = x.createRadialGradient(cx0, cx0, R * 0.95, cx0, cx0, R * 1.18); atm.addColorStop(0, 'rgba(150,190,255,.35)'); atm.addColorStop(1, 'rgba(150,190,255,0)');
+  x.globalCompositeOperation = 'destination-over'; x.fillStyle = atm; x.beginPath(); x.arc(cx0, cx0, R * 1.18, 0, TAU); x.fill(); x.globalCompositeOperation = 'source-over';
+  if (v === 2) ring(true);
+  return (SPR[key] = c);
+}
 const FL = {
-  stars: Array.from({ length: 560 }, (_, i) => ({ x: (Math.random() - 0.5) * 3.2, y: (Math.random() - 0.5) * 3.2, z: Math.random(), tw: 0.5 + Math.random() * 2, c: i % 11 === 0 ? [255, 210, 150] : i % 7 === 0 ? [160, 195, 255] : [248, 244, 255] })),
+  planets: [{ x: -1.25, y: 0.35, z: 0.1, v: 0 }, { x: 1.35, y: -0.45, z: 0.45, v: 2 }, { x: -1.1, y: -0.6, z: 0.8, v: 1 }],
+  yan: Array.from({ length: 5 }, (_, i) => ({ x: (i % 2 ? 1 : -1) * (0.45 + Math.random() * 0.6), y: (Math.random() - 0.5) * 1.1, z: i / 5, k: Math.floor(Math.random() * 12), r: Math.random() * TAU })),
+  stars: Array.from({ length: 560 }, () => { const q = Math.random(); return { x: (Math.random() - 0.5) * 3.2, y: (Math.random() - 0.5) * 3.2, z: Math.random(), tw: 0.5 + Math.random() * 2, br: Math.random() < 0.05, c: q < 0.15 ? [170, 200, 255] : q < 0.3 ? [255, 236, 190] : q < 0.4 ? [255, 196, 140] : [250, 248, 255] }; }),
   clouds: Array.from({ length: 10 }, (_, i) => ({ x: (Math.random() - 0.5) * 2.2, y: (Math.random() - 0.5) * 1.6, z: i / 10, s: 0.7 + Math.random() * 0.9, rot: Math.random() * TAU, p: i % 3, v: i % 2 })),
   gals: Array.from({ length: 3 }, (_, i) => ({ x: (i - 1) * 1.1 + (Math.random() - 0.5) * 0.4, y: (Math.random() - 0.5) * 1.2, z: i / 3 + 0.15, rot: Math.random() * TAU })),
   dust: Array.from({ length: 12 }, () => ({ x: (Math.random() - 0.5) * 2.6, y: (Math.random() - 0.5) * 2.6, z: Math.random() }))
@@ -1212,6 +1309,7 @@ function flightCore(t, st, o, k) { const ci = o.ci != null ? o.ci : 5, phase = r
   const x0 = W / 2, y0 = H * (o.cy != null ? o.cy : 0.48), F = Math.max(W, H) * 0.55, pals = [ci, (ci + 3) % 7, (ci + 5) % 7];
   g.globalCompositeOperation = 'lighter';
   const core = g.createRadialGradient(x0, y0, 0, x0, y0, F * 0.5); core.addColorStop(0, rgba(NEB_PAL[ci][1], 0.14 * fade)); core.addColorStop(1, rgba(NEB_PAL[ci][1], 0)); g.fillStyle = core; g.fillRect(0, 0, W, H);
+  { const mw = milkyWay(), bw = Math.max(W, H) * 1.9; g.save(); g.globalAlpha = 0.75 * fade; g.translate(x0 + Math.sin(phase * 0.5) * W * 0.03, y0); g.rotate(-0.45); g.drawImage(mw, -bw / 2, -bw / 6, bw, bw / 3); g.restore(); }
   const cl = FL.clouds.map(c => ({ c, z: 0.04 + frac(c.z - phase * 0.55) * 0.96 })).sort((a, b) => b.z - a.z);
   for (const { c, z } of cl) {
     const a = Math.min(1, (1 - z) / 0.3) * Math.min(1, (z - 0.04) / 0.22) * 0.5 * fade; if (a <= 0.01) continue;
@@ -1223,6 +1321,15 @@ function flightCore(t, st, o, k) { const ci = o.ci != null ? o.ci : 5, phase = r
     const sz = F * 0.22 / z, X = x0 + gx.x / z * F * 0.5, Y = y0 + gx.y / z * F * 0.5;
     g.save(); g.globalAlpha = a; g.translate(X, Y); g.rotate(gx.rot); g.drawImage(galaxy(FL.gals.indexOf(gx)), -sz / 2, -sz / 2, sz, sz); g.restore();
   }
+  for (const pl of FL.planets) {
+    const z = 0.06 + frac(pl.z - phase * 0.28) * 0.94, a = Math.min(1, (1 - z) / 0.2) * Math.min(1, (z - 0.06) / 0.08) * fade; if (a <= 0.01) continue;
+    const sz = F * 0.32 / z, X = x0 + pl.x / z * F * 0.5, Y = y0 + pl.y / z * F * 0.5; if (X + sz < 0 || X - sz > W || Y + sz < 0 || Y - sz > H) continue;
+    g.save(); g.globalCompositeOperation = 'source-over'; g.globalAlpha = a; g.drawImage(planet(pl.v), X - sz / 2, Y - sz / 2, sz, sz); g.restore(); g.globalCompositeOperation = 'lighter';
+  }
+  for (const yn of FL.yan) {
+    const z = 0.08 + frac(yn.z - phase * 0.45) * 0.92, a = Math.min(1, (1 - z) / 0.25) * Math.min(1, (z - 0.08) / 0.1) * 0.6 * fade; if (a <= 0.01) continue;
+    drawYantra(g, x0 + yn.x / z * F * 0.5, y0 + yn.y / z * F * 0.5, F * 0.07 / z, yn.k, false, yn.r + t * 0.05, a); g.globalCompositeOperation = 'lighter';
+  }
   const streak = Math.min(0.25, spd * 1.4), buckets = new Map(), glows = [];
   for (const s of FL.stars) {
     const z = 0.02 + frac(s.z - phase) * 0.98, X = x0 + s.x / z * F * 0.5, Y = y0 + s.y / z * F * 0.5; if (X < -30 || X > W + 30 || Y < -30 || Y > H + 30) continue;
@@ -1230,11 +1337,13 @@ function flightCore(t, st, o, k) { const ci = o.ci != null ? o.ci : 5, phase = r
     const a = Math.min(1, (1 - z) * 1.4) * Math.min(1, z / 0.05) * (0.75 + 0.25 * Math.sin(t * s.tw + s.x * 9)) * fade, w = Math.min(3.2, 0.35 / z) * k * 2;
     const key = s.c.join() + '|' + Math.min(3, Math.round(a * 3)) + '|' + Math.min(3, Math.round(w)); let b = buckets.get(key);
     if (!b) buckets.set(key, b = { c: s.c, a: Math.round(a * 3) / 3, w: Math.max(0.6, Math.round(w)), pts: [] });
-    b.pts.push(X2, Y2, X + 0.01, Y); if (w > 2.2) glows.push(X, Y, w, s.c, a);
+    b.pts.push(X2, Y2, X + 0.01, Y); if (w > 2.2 || s.br) glows.push(X, Y, Math.max(w, 1.4), s.c, a);
   }
   g.lineCap = 'round';
   for (const b of buckets.values()) { if (b.a <= 0) continue; g.strokeStyle = rgba(b.c, 0.9 * b.a); g.lineWidth = b.w; g.beginPath(); for (let q = 0; q < b.pts.length; q += 4) { g.moveTo(b.pts[q], b.pts[q + 1]); g.lineTo(b.pts[q + 2], b.pts[q + 3]); } g.stroke(); }
-  for (let q = 0; q < glows.length; q += 5) { g.fillStyle = rgba(glows[q + 3], 0.18 * glows[q + 4]); g.beginPath(); g.arc(glows[q], glows[q + 1], glows[q + 2] * 2.4, 0, TAU); g.fill(); }
+  for (let q = 0; q < glows.length; q += 5) { const X = glows[q], Y = glows[q + 1], w = glows[q + 2], c = glows[q + 3], a = glows[q + 4];
+    g.fillStyle = rgba(c, 0.2 * a); g.beginPath(); g.arc(X, Y, w * 2.4, 0, TAU); g.fill();
+    g.strokeStyle = rgba(c, 0.35 * a); g.lineWidth = Math.max(0.5, w * 0.3); g.beginPath(); g.moveTo(X - w * 7, Y); g.lineTo(X + w * 7, Y); g.moveTo(X, Y - w * 7); g.lineTo(X, Y + w * 7); g.stroke(); }
   for (const d of FL.dust) {
     const z = 0.04 + frac(d.z - phase * 1.2) * 0.5, X = x0 + d.x / z * F * 0.5, Y = y0 + d.y / z * F * 0.5, r = 0.006 * F / z, a = Math.min(1, (0.54 - z) / 0.2) * Math.min(1, (z - 0.04) / 0.05) * 0.08 * fade;
     if (a <= 0 || X < -r || X > W + r || Y < -r || Y > H + r) continue;
@@ -1551,12 +1660,12 @@ function showRoom(id) {
   $('rNum').textContent = 'Пространство ' + String(idx + 1).padStart(2, '0') + ' · ' + CATS[CAT[r.id]];
   $('rCrumb').textContent = r.name;
   $('rName').textContent = r.name; $('rTag').textContent = r.tag;
-  $('rChips').innerHTML = '<span class="chip">' + mins(sum(r.phases)) + '</span><span class="chip">' + r.ev[1] + '</span><span class="chip">Наушники</span>';
+  $('rChips').innerHTML = '<span class="chip">' + mins(sum(r.phases)) + '</span><span class="chip">' + r.ev[1] + '</span><span class="chip">Наушники</span><span class="chip">' + (r.main.some(p => eyesOf(p) === 'open') ? 'Есть шаги с открытыми глазами' : 'Можно с закрытыми глазами') + '</span>';
   $('rHabitBox').hidden = !r.habit;
   if (r.habit) $('rHabit').innerHTML = Object.entries(HABITS).map(([k, h]) => '<button type="button" data-h="' + k + '" aria-pressed="' + (k === r.habit) + '">' + h.label + '</button>').join('');
   $('rIntent').value = intentOf(r);
   $('rWhyT').textContent = r.whyT; $('rWhy').textContent = r.why; $('rNote').innerHTML = r.note;
-  $('rSteps').innerHTML = r.phases.map(p => '<li style="color:' + rgba(CH[p.tone].c, 1) + '"><i></i><div><b>' + p.name + (p.beat ? '<em class="hz">' + (p.beat >= 8 ? 'α ' : 'θ ') + p.beat + ' Гц</em>' : '') + '</b><small>' + p.text + '</small></div><span class="d">' + fmt(p.dur) + '</span></li>').join('');
+  $('rSteps').innerHTML = r.phases.map(p => '<li style="color:' + rgba(CH[p.tone].c, 1) + '"><i></i><div><span class="eyes">' + EYES[eyesOf(p)][1] + EYES[eyesOf(p)][0] + '</span><b>' + p.name + (p.beat ? '<em class="hz">' + (p.beat >= 8 ? 'α ' : 'θ ') + p.beat + ' Гц</em>' : '') + '</b><small>' + p.text + '</small></div><span class="d">' + fmt(p.dur) + '</span></li>').join('');
   const prev = ROOMS[(idx + ROOMS.length - 1) % ROOMS.length], next = ROOMS[(idx + 1) % ROOMS.length];
   $('rNav').innerHTML = '<a href="#room-' + prev.id + '"><span class="eyebrow">← Предыдущее пространство</span><b>' + prev.name + '</b></a><a href="#room-' + next.id + '"><span class="eyebrow">Следующее пространство →</span><b>' + next.name + '</b></a>';
   document.title = 'Аджна';
@@ -1718,7 +1827,7 @@ function openPlayer(r) {
 function closePlayer() { stop(); $('player').hidden = true; document.body.style.overflow = ''; $('drawer').classList.remove('open'); }
 function enter(i) {
   P.idx = i; P.start = P.elapsed; P.ch = -1; P.lastLabel = '';
-  const ph = P.phases[i]; $('pPhase').textContent = ph.name; $('pInstr').textContent = ph.text; applyAudio(ph);
+  const ph = P.phases[i]; $('pEyes').innerHTML = EYES[eyesOf(ph)][1] + EYES[eyesOf(ph)][0]; $('pPhase').textContent = ph.name; $('pInstr').textContent = ph.text; applyAudio(ph);
   if (i > 0) bell(1, CH[ph.tone].tone);
   const lines = i === 2 && P.intent ? ['Помните, зачем вы здесь.', P.intent + '.', ...ph.say] : ph.say;
   setTimeout(() => { if (P.running && !P.paused && P.idx === i) guide(ph.key, lines); }, i > 0 ? 2600 : 900);
@@ -1741,7 +1850,7 @@ function stop(done) {
   if (P.elapsed > 240) markPractice();
   if (done) { bell(3, 220); $('pPhase').textContent = 'Сессия завершена'; $('pInstr').textContent = 'Посидите минуту с закрытыми глазами. Заметьте, что изменилось. Каждая практика — ещё один шаг.'; }
   else { $('pPhase').textContent = P.room ? P.room.name : ''; $('pInstr').textContent = 'Можно начать снова, когда будете готовы.'; }
-  $('pIco').innerHTML = '<path d="M8 5.5v13l11-6.5z"/>'; $('pProg').style.width = '0'; P.idx = -1; $('pIntent').classList.remove('on');
+  $('pIco').innerHTML = '<path d="M8 5.5v13l11-6.5z"/>'; $('pProg').style.width = '0'; P.idx = -1; $('pEyes').innerHTML = ''; $('pIntent').classList.remove('on');
   try { P.wake && P.wake.release(); } catch (e) {} P.wake = null; poke();
 }
 $('pPlay').onclick = play; $('pStop').onclick = () => stop(); $('pClose').onclick = closePlayer;
