@@ -321,15 +321,23 @@ body:has(.safe:not([hidden])) :is(.totop, .mbar, .owner-sw), body:has(#player:no
 .pui { position: absolute; inset: 0; display: grid; grid-template-rows: auto 1fr auto; transition: opacity 1.4s; padding-left: var(--gut); padding-right: var(--gut-r); padding-top: calc(16px + env(safe-area-inset-top, 0px)); padding-bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
 .player.calm .ptop, .player.calm .pctl, .player.calm .track { opacity: .35; } .ptop, .pctl, .track { transition: opacity 1.4s; }
 /* figure in the cocoon stays on screen; the focus point shows where attention goes */
+.paura { position: absolute; left: 50%; top: 38%; width: calc(var(--fh) * .86); aspect-ratio: 1; transform: translate(-50%, -50%) scale(var(--as, 1)); border-radius: 50%; pointer-events: none; mix-blend-mode: screen; opacity: 0; transition: opacity 2s;
+  filter: blur(24px) saturate(1.3); -webkit-mask-image: radial-gradient(circle, transparent 44%, #000 54%, #000 63%, transparent 71%); mask-image: radial-gradient(circle, transparent 44%, #000 54%, #000 63%, transparent 71%); }
+.paura::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, #ff3d6e, #ff9a3d, #ffe14d, #4dffa0, #3dc6ff, #6f5cff, #d75cff, #ff3d6e); animation: aurarot 30s linear infinite; }
+.paura.on { opacity: var(--ao, .6); } @keyframes aurarot { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .paura::before { animation: none; } }
+.player.soft .paura { opacity: .2; }
 .pfocus { position: absolute; z-index: 3; width: 0; height: 0; pointer-events: none; opacity: 0; transition: opacity 1s, left .8s, top .8s; }
 .pfocus.on { opacity: 1; }
-.pfocus i { position: absolute; left: -22px; top: -22px; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--fc, #fff); box-shadow: 0 0 22px var(--fc, #fff), inset 0 0 14px var(--fc, #fff); animation: fpulse 2.4s ease-in-out infinite; }
-.pfocus i::after { content: ""; position: absolute; inset: -14px; border-radius: 50%; border: 1px solid var(--fc, #fff); opacity: .5; animation: fring 2.4s ease-out infinite; }
+.pfocus i { position: absolute; left: -20px; top: -20px; width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--fc, #fff); background: radial-gradient(circle, rgba(255,255,255,.9) 0 12%, transparent 45%); box-shadow: 0 0 26px var(--fc, #fff), 0 0 60px var(--fc, #fff), inset 0 0 14px var(--fc, #fff); animation: fhold 6s ease-in-out infinite; }
+.pfocus i::after { content: ""; position: absolute; inset: -14px; border-radius: 50%; border: 1px solid var(--fc, #fff); opacity: 0; }
+.pfocus.seek i { animation: fpulse .9s ease-in-out infinite; } .pfocus.seek i::after { animation: fring .9s ease-out infinite; }
+@keyframes fhold { 0%,100% { box-shadow: 0 0 22px var(--fc, #fff), 0 0 50px var(--fc, #fff), inset 0 0 12px var(--fc, #fff); } 50% { box-shadow: 0 0 30px var(--fc, #fff), 0 0 80px var(--fc, #fff), inset 0 0 16px var(--fc, #fff); } }
 .pfocus span { position: absolute; left: 50%; top: 30px; transform: translateX(-50%); white-space: nowrap; font-size: 14px; font-weight: 600; color: #fff; padding: 5px 12px; border-radius: 999px; background: rgba(6,5,11,.55); border: 1px solid var(--fc, #fff); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 @keyframes fpulse { 0%,100% { transform: scale(.85); } 50% { transform: scale(1.1); } } @keyframes fring { 0% { transform: scale(.7); opacity: .7; } 100% { transform: scale(1.6); opacity: 0; } }
 @media (max-width: 700px) { .pfocus span { font-size: 12.5px; } }
 .pbr { position: absolute; z-index: 3; top: 50%; transform: translateY(-50%); height: min(46vh, 380px); width: 14px; border-radius: 999px; background: rgba(246,241,232,.14); border: 1px solid rgba(246,241,232,.28); opacity: 0; transition: opacity .8s; pointer-events: none; }
-.pbr.on { opacity: 1; } .pbr--l b, .pbr--l em { left: 0; } .pbr--r b, .pbr--r em { right: 0; } .player { --fh: min(58vh, 112vw); } .pbr { top: 37%; height: calc(var(--fh) * .62); } .pbr--l { left: max(14px, calc(50% - var(--fh) * .375 - 34px)); } .pbr--r { right: max(14px, calc(50% - var(--fh) * .375 - 34px)); }
+.pbr.on { opacity: 1; } .pbr--l b, .pbr--l em { left: 0; } .pbr--r b, .pbr--r em { right: 0; } .player { --fh: min(64vh, 116vw); } .pbr { top: 38%; height: calc(var(--fh) * .62); } .pbr--l { left: max(14px, calc(50% - var(--fh) * .375 - 34px)); } .pbr--r { right: max(14px, calc(50% - var(--fh) * .375 - 34px)); }
 .pbr i { position: absolute; left: 0; right: 0; bottom: 0; height: 0; border-radius: 999px; background: linear-gradient(0deg, #8fe0bd, #dcbd86 60%, #fbf1dc); box-shadow: 0 0 24px rgba(220,189,134,.7); }
 .pbr b { position: absolute; top: calc(100% + 12px); font-size: 15px; font-weight: 700; letter-spacing: .06em; color: #fbf1dc; white-space: nowrap; text-shadow: 0 1px 10px rgba(0,0,0,.8); }
 .pbr em { position: absolute; bottom: calc(100% + 10px); font: 700 22px/1 var(--ff); color: #fff; font-style: normal; }
@@ -450,7 +458,7 @@ body:has(.safe:not([hidden])) :is(.totop, .mbar, .owner-sw), body:has(#player:no
 .kprice { display: flex; flex-direction: column; align-items: flex-start; } .kprice p { flex: 1; } .kprice__n { font-family: var(--ff-serif); font-size: 40px; font-weight: 500; line-height: 1; color: var(--ink); }
 .kprice--best { border-color: var(--gold); box-shadow: 0 30px 60px -30px rgba(143,106,56,.45); }
 .krect { grid-template-columns: 1fr auto; align-items: center; gap: 20px; } @media (max-width: 700px) { .krect { grid-template-columns: 1fr; justify-items: start; } }
-.pcoc { position: absolute; left: 50%; top: 37%; height: min(58vh, 112vw); -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%); mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%); aspect-ratio: 3 / 4; transform: translate(-50%, -50%) scale(.96); opacity: 0; pointer-events: none; transition: opacity 2.2s ease;
+.pcoc { position: absolute; left: 50%; top: 38%; height: var(--fh); filter: saturate(1.35) contrast(1.05); -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%); mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%); aspect-ratio: 3 / 4; transform: translate(-50%, -50%) scale(.96); opacity: 0; pointer-events: none; transition: opacity 2.2s ease;
   -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 58%, transparent 100%); mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 58%, transparent 100%); }
 .pcoc.on { opacity: 1; animation: cocbreath 11s ease-in-out infinite; } .player.grow .pcoc.on { animation: none; transition: opacity 2.2s ease, filter .35s linear, transform .35s linear; } @keyframes cocbreath { 0%,100% { transform: translate(-50%, -50%) scale(.96); filter: brightness(.95) saturate(1); } 50% { transform: translate(-50%, -50%) scale(1.02); filter: brightness(1.12) saturate(1.1); } }
 @media (prefers-reduced-motion: reduce) { .pcoc.on { animation: none; transform: translate(-50%, -50%); } }
@@ -1159,6 +1167,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
   <canvas id="pCv"></canvas>
   <video class="pfly" id="pFly" muted loop playsinline preload="none" aria-hidden="true"></video>
   <img class="pcoc" id="pCoc" src="img/cocoon.webp" alt="" aria-hidden="true">
+  <div class="paura" id="pAura" aria-hidden="true"></div>
   <video class="pvis" id="pVis" muted loop playsinline preload="none" aria-hidden="true"></video>
   <div class="pintent" id="pIntent" aria-live="off"></div>
   <div class="pfocus" id="pFocus" aria-hidden="true"><i></i><span></span></div>
@@ -1274,15 +1283,15 @@ const CH = [
 ];
 
 const COCOON = { key: 'cocoon', name: 'Вход', dur: 160, visual: 'cocoon', breath: 'calm', beat: 8, tone: 3, eyes: 'closed',
-  text: 'Закройте глаза. Энергия земли поднимается через стопы и позвоночник и уходит вверх, в космос. Оттуда спускается золотой свет — через макушку в центр груди, в область сердца. На выдохе свет из груди наполняет золотой кокон, и с каждым выдохом он ярче.',
-  say: ['Сядьте удобно. Спина ровная, стопы на полу, руки свободно лежат на коленях.', 'Закройте глаза.', 'Сделайте медленный вдох. И длинный выдох.', 'Почувствуйте стопы. Под ними земля — тёплая, надёжная.', 'Представьте, как из земли через стопы в вас входит энергия.', 'Она поднимается по ногам, вдоль позвоночника, всё выше и выше.', 'Проходит через макушку и уходит вверх, в космос. И там расширяется, как свет звёзд.', 'Теперь почувствуйте, как из космоса к вам спускается золотой свет.', 'Тёплый, мягкий. Он входит через макушку и опускается в центр груди — в область сердца, четвёртую чакру.', 'Центр груди наполняется этим светом.', 'На выдохе отправляйте свет из груди наружу.', 'Вокруг вас появляется золотой кокон. Примерно два метра во все стороны.', 'С каждым выдохом он плотнее и ярче. Он тихо вибрирует.', 'Эта вибрация защищает вас со всех сторон. Сверху, снизу, спереди и сзади.', 'Всё лишнее может выйти наружу. Внутрь проходит только свет.', 'Вы в безопасности. Можно идти дальше.'] };
-const BREATHE = { key: 'breath', name: 'Погружение', dur: 120, visual: 'breath', breath: 'resonance', beat: 10, tone: 3, cue: true,
-  text: 'Вдох пять с половиной секунд, выдох столько же. Животом, мягко, без усилия.',
-  say: ['Теперь дышите вместе с полосами по бокам.', 'Полоса поднимается — вдох. Опускается — выдох.', 'Вдох и выдох одинаковые, мягкие. Кокон остаётся вокруг вас.'] };
-const INTENT_PH = { key: 'intent', name: 'Намерение', dur: 25, visual: 'breath', breath: 'calm', beat: 10, tone: 3, eyes: 'open', text: 'Прочитайте своё намерение и произнесите его про себя.', say: ['Прежде чем начать — намерение.', 'Прочитайте его на экране и произнесите про себя.', 'Ради этого вы сегодня здесь.'] };
-const RETURN = { key: 'return', name: 'Возвращение', dur: 60, visual: 'breath', breath: 'calm', beat: 10, tone: 0, cue: true,
-  text: 'Глубокий вдох. Почувствуйте опору. Пошевелите пальцами. Кокон остаётся с вами.',
-  say: ['Сделайте глубокий вдох.', 'Почувствуйте опору под собой.', 'Кокон остаётся с вами.', 'Пошевелите пальцами. И когда будете готовы, откройте глаза.'] };
+  text: 'Закройте глаза. Вы внутри сферы, как на картинке. Энергия земли поднимается через стопы и позвоночник и уходит вверх, в космос. Оттуда спускается золотой свет — через макушку в центр груди, в область сердца. На выдохе свет из груди наполняет золотой кокон, и с каждым выдохом он ярче.',
+  say: ['А теперь начинаем.', 'Сядьте удобно. Спина ровная, стопы на полу, руки свободно лежат на коленях.', 'Закройте глаза. Представьте, что вы внутри такой же сферы, как на картинке.', 'Сделайте медленный вдох. И длинный выдох.', 'Почувствуйте стопы. Под ними земля — тёплая, надёжная.', 'Представьте, как из земли через стопы в вас входит энергия.', 'Она поднимается по ногам, вдоль позвоночника, всё выше и выше.', 'Проходит через макушку и уходит вверх, в космос. И там расширяется, как свет звёзд.', 'Теперь почувствуйте, как из космоса к вам спускается золотой свет.', 'Тёплый, мягкий. Он входит через макушку и опускается в центр груди — в область сердца, четвёртую чакру.', 'Центр груди наполняется этим светом.', 'На выдохе отправляйте свет из груди наружу.', 'Вокруг вас появляется золотой кокон. Примерно два метра во все стороны.', 'С каждым выдохом он плотнее и ярче. Он тихо вибрирует.', 'Эта вибрация защищает вас со всех сторон. Сверху, снизу, спереди и сзади.', 'Всё лишнее может выйти наружу. Внутрь проходит только свет.', 'Вы в безопасности. Можно идти дальше.'] };
+const BREATHE = { key: 'breath', name: 'Погружение', dur: 120, visual: 'breath', breath: 'resonance', beat: 10, tone: 3, cue: true, eyes: 'closed',
+  text: 'Вдох пять с половиной секунд, выдох столько же. Животом, мягко. Звук и полосы по бокам ведут дыхание.',
+  say: ['Глаза остаются закрытыми. Дышите вместе со звуком.', 'Волна нарастает — вдох. Стихает — выдох.', 'Вдох и выдох одинаковые, мягкие. Кокон остаётся вокруг вас.'] };
+const INTENT_PH = { key: 'intent', name: 'Намерение', dur: 30, visual: 'breath', breath: 'calm', beat: 10, tone: 3, eyes: 'open', text: 'Посмотрите на картинку: это вы в сфере света. Светящаяся точка показывает, куда направлять внимание. Прочитайте намерение и произнесите его про себя.', say: ['Прежде чем начать, посмотрите на картинку.', 'Это вы — в сфере света. Светящаяся точка показывает, куда вы будете направлять внутреннее внимание.', 'Прочитайте своё намерение на экране и произнесите его про себя.'] };
+const RETURN = { key: 'return', name: 'Завершение', dur: 60, visual: 'breath', breath: 'calm', beat: 8, tone: 3, eyes: 'closed',
+  text: 'Побудьте в этом состоянии. Его не нужно прерывать — оно остаётся с вами. Когда будете готовы, просто откройте глаза.',
+  say: ['Побудьте в этом состоянии столько, сколько хочется.', 'Его не нужно прерывать. Оно остаётся с вами.', 'Кокон и это спокойствие — с вами весь день.', 'Когда будете готовы, просто откройте глаза.'] };
 
 const R = (dur, name, visual, text, say, extra) => Object.assign({ dur, name, visual, text, say, breath: 'resonance', beat: 8 }, extra || {});
 const ROOMS = [
@@ -2667,6 +2676,10 @@ function speak(lines, o) {
   next();
 }
 const guide = (key, lines) => { if ($('vInstr').checked && !playRec(key)) speak(lines); };
+// several fragments in a row: recorded ones are chained by length, otherwise one spoken sequence
+const guideSeq = parts => { if (!$('vInstr').checked) return;
+  if (parts.every(([k]) => recorded[k])) { let t = 0; parts.forEach(([k]) => { setTimeout(() => { if (P.running && !P.paused) playRec(k); }, t * 1000); t += recorded[k].duration + 0.7; }); }
+  else speak(parts.flatMap(([, l]) => l)); };
 $('testVoice').onclick = async () => { initAudio(); if (actx && actx.state === 'suspended') await actx.resume().catch(() => {}); await loadRecorded();
   if (!playRec('cocoon')) { if (!curVoice()) { $('voiceNote').textContent = 'Такого голоса на этом устройстве нет. Откройте сайт в Microsoft Edge.'; return; } speak(['Закройте глаза.', 'Вокруг вас золотая аура. Тёплая и спокойная.']); } };
 document.querySelectorAll('#vGender button').forEach(b => { b.classList.toggle('on', b.dataset.g === VGENDER);
@@ -2707,29 +2720,37 @@ function enter(i) {
   P.idx = i; P.start = P.elapsed; P.ch = -1; P.fc = -1; P.lastLabel = '';
   const ph = P.phases[i]; setTimeout(() => P.running && P.idx === i && fly(ph), i === 0 ? 2500 : 0); vis(ph); $('pEyes').innerHTML = EYES[eyesOf(ph)][1] + EYES[eyesOf(ph)][0]; $('pPhase').textContent = ph.name; $('pInstr').textContent = ph.text; applyAudio(ph);
   if (i > 0) bell(1, CH[ph.tone].tone);
-  const tg = P.room && TARGET[P.room.id], focus = tg && i === P.m0 ? ['Перенесите внимание ' + CH_ACC[tg.ch[0]] + '.', 'Почувствуйте там мягкое тепло и вибрацию звука.'] : [];
+  const tg = P.room && TARGET[P.room.id], c0 = P.room && !P.room.sleep ? namedCentre(ph) : -1, fc0 = c0 >= 0 ? c0 : tg && !P.room.bare ? tg.ch[0] : -1;
+  const focus = tg && i === P.m0 && fc0 >= 0 ? ['Направьте внутреннее внимание ' + CH_ACC[fc0] + '.', 'Держите его там. Почувствуйте мягкое тепло и вибрацию звука.'] : [];
+  const want = eyesOf(ph), saysEyes = /закройте глаза|откройте глаза/i.test((ph.say || []).join(' ')); let eyeCue = null;
+  if (i === 0) P.eyesNow = want === 'closed' ? 'closed' : 'open';
+  else if (want === 'closed' && P.eyesNow !== 'closed') { P.eyesNow = 'closed'; if (!saysEyes) eyeCue = ['eyes-close', ['А теперь закройте глаза.']]; }
+  else if (want === 'open' && P.eyesNow === 'closed') { P.eyesNow = 'open'; if (!saysEyes) eyeCue = ['eyes-open', ['А теперь откройте глаза и смотрите на картинку.']]; }
   const lines = i === P.m0 && P.intent && P.m0 ? ['Помните, зачем вы здесь.', P.intent + '.', ...focus, ...ph.say] : [...focus, ...ph.say];
-  if (tg && i >= P.m0 && i < P.m1) { const named = P.room.sleep ? -1 : namedCentre(ph), c = named >= 0 ? named : P.room.bare ? -1 : tg.ch[(i - P.m0) % tg.ch.length]; P.fc = c; bowl(c >= 0 ? SOL[c] : 0); if (i === P.m0 && c >= 0) $('pInstr').textContent = 'Внимание — ' + CH[c].where + '. ' + ph.text; } else bowl(0);
-  setTimeout(() => { if (P.running && !P.paused && P.idx === i) guide(ph.key, lines); }, i > 0 ? 2600 : 900);
+  if (tg && i >= P.m0 && i < P.m1) { const named = P.room.sleep ? -1 : namedCentre(ph), c = named >= 0 ? named : P.room.bare ? -1 : tg.ch[(i - P.m0) % tg.ch.length]; P.fc = c; bowl(c >= 0 ? SOL[c] : 0); if (i === P.m0 && c >= 0) $('pInstr').textContent = 'Направьте внутреннее внимание: ' + CH[c].where + '. ' + ph.text; } else bowl(0);
+  setTimeout(() => { if (P.running && !P.paused && P.idx === i) guideSeq(eyeCue ? [eyeCue, [ph.key, lines]] : [[ph.key, lines]]); }, i > 0 ? 2600 : 900);
 }
 const CH_WORDS = [[0, /основани|копчик|корн|стоп/], [1, /низ живота|ниже пупка|таз/], [2, /солнечн|под рёбрами/], [3, /груд|сердц/], [4, /горл/], [5, /между бровей|лоб/], [6, /макушк|темя/]];
 const namedCentre = ph => { const t = ((ph.text || '') + ' ' + (ph.say || []).join(' ')).toLowerCase(); let best = -1, at = 1e9; CH_WORDS.forEach(([c, re]) => { const m = t.search(re); if (m >= 0 && m < at) { at = m; best = c; } }); return best; };
 // focus point on the figure: chakra heights as a share of img/cocoon.webp (768×1024), root → crown
 const FOCUS_Y = [0.615, 0.575, 0.534, 0.494, 0.452, 0.371, 0.335];
 function focusUI(c, ph) { const f = $('pFocus'), img = $('pCoc');
-  if (c == null || c < 0 || !img.classList.contains('on')) { f.classList.remove('on'); return; }
+  if (c == null || c < 0 || !img.classList.contains('on')) { f.classList.remove('on'); f.dataset.c = ''; return; }
   const r = img.getBoundingClientRect(), col = CH[c].c, eyes = ph ? eyesOf(ph) : 'any';
   f.style.left = (r.left + r.width / 2) + 'px'; f.style.top = (r.top + r.height * FOCUS_Y[c]) + 'px'; f.style.setProperty('--fc', 'rgb(' + col.join(',') + ')');
-  const t = (eyes === 'closed' ? 'Глаза закрыты · внимание: ' : 'Смотрите сюда · ') + CH[c].where + ' · ' + SOL[c] + ' Гц'; if (f.lastChild.textContent !== t) f.lastChild.textContent = t; f.classList.add('on'); }
+  const t = 'Направьте внутреннее внимание · ' + CH[c].where; if (f.lastChild.textContent !== t) f.lastChild.textContent = t;
+  if (f.dataset.c !== String(c)) { f.dataset.c = c; f.classList.add('seek'); clearTimeout(focusUI.t); focusUI.t = setTimeout(() => f.classList.remove('seek'), 4500); }
+  f.classList.add('on'); }
 // breath guide on both sides: fills on the inhale, empties on the exhale
 function breathUI(st, ph) { [$('pBrL'), $('pBrR')].forEach(e => { if (!st) { e.classList.remove('on'); return; } e.classList.add('on'); e.children[1].style.height = (st.b * 100).toFixed(1) + '%'; e.children[2].textContent = st.label; e.children[0].textContent = st.left != null ? Math.max(1, Math.ceil(st.left)) : ''; }); }
 // the cocoon gets brighter with every exhale while it is being built, then keeps that glow for the session
 function cocoonGlow(ph, pt, st) { const img = $('pCoc'), pl = $('player');
-  if (!ph || !P.running) { pl.classList.remove('grow'); img.style.filter = img.style.transform = ''; P.glow = 0; return; }
+  if (!ph || !P.running) { pl.classList.remove('grow'); img.style.filter = img.style.transform = ''; P.glow = 0; $('pAura').classList.remove('on'); return; }
   if (ph.key === 'cocoon') P.glow = Math.max(P.glow || 0, Math.min(1, pt / ph.dur));
   else if (P.idx < 1) P.glow = 0;
-  const g = P.glow || 0, ex = st ? 1 - st.b : 0.5, b = 0.85 + 0.55 * g + 0.18 * g * ex;
-  pl.classList.add('grow'); img.style.filter = 'brightness(' + b.toFixed(3) + ') saturate(' + (1 + 0.35 * g).toFixed(3) + ') drop-shadow(0 0 ' + Math.round(8 + 46 * g * (0.7 + 0.3 * ex)) + 'px rgba(240,200,120,' + (0.25 + 0.5 * g).toFixed(2) + '))';
+  const g = P.glow || 0, ex = st ? 1 - st.b : 0.5, b = 1 + 0.22 * g + 0.1 * g * ex, au = $('pAura');
+  au.classList.toggle('on', img.classList.contains('on')); au.style.setProperty('--ao', (0.5 + 0.4 * g + 0.1 * ex).toFixed(3)); au.style.setProperty('--as', (1 + 0.04 * ex + 0.05 * g).toFixed(4));
+  pl.classList.add('grow'); img.style.filter = 'brightness(' + b.toFixed(3) + ') saturate(' + (1.35 + 0.3 * g).toFixed(3) + ') contrast(1.05) drop-shadow(0 0 ' + Math.round(8 + 36 * g * (0.7 + 0.3 * ex)) + 'px rgba(240,200,120,' + (0.2 + 0.35 * g).toFixed(2) + '))';
   img.style.transform = 'translate(-50%, -50%) scale(' + (0.96 + 0.05 * g * ex).toFixed(4) + ')'; }
 function chakra(k) {
   P.ch = k; const c = CH[k]; $('pPhase').textContent = c.n; $('pInstr').textContent = c.where[0].toUpperCase() + c.where.slice(1) + '. Мысленно звучит «' + c.bija + '».';
