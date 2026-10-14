@@ -437,6 +437,7 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 .pick__g a { display: grid; gap: 4px; padding: 14px 16px; border-radius: 16px; background: var(--white); border: 1px solid var(--line); transition: border-color .25s, transform .25s, box-shadow .25s; } .pick__g a:hover { border-color: var(--gold); transform: translateY(-2px); box-shadow: var(--shadow); }
 .pick__g b { color: var(--ink); font-size: 15px; font-weight: 600; } .pick__g small { color: var(--gold-d); font-size: 13px; }
 .rsound { display: grid; gap: 10px; max-width: 640px; } .rsnd { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; } @media (max-width: 560px) { .rsnd { grid-template-columns: 1fr 1fr; } }
+.rsnd .rsnd__w { grid-column: 1 / -1; }
 .rsnd div { display: grid; gap: 3px; padding: 12px 14px; border-radius: 14px; background: rgba(255,255,255,.06); border: 1px solid rgba(246,241,232,.16); } .rsnd small { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold-l); } .rsnd b { color: #f6f1e8; font-size: 14.5px; font-weight: 600; line-height: 1.3; }
 .rlv { display: grid; gap: 10px; max-width: 640px; } .rlv__t { font-size: 12.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-l); font-weight: 600; }
 .rlv__g { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } @media (max-width: 520px) { .rlv__g { grid-template-columns: 1fr; } }
@@ -600,6 +601,9 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 .safe__box ul { margin: 0; padding-left: 18px; display: grid; gap: 8px; font-size: 14.5px; line-height: 1.45; color: #d6d1c8; }
 .safe__box b { color: #f3e3c4; font-weight: 600; }
 .pexit { box-shadow: 0 0 0 1.5px rgba(220,189,134,.6); }
+.mood10 { display: grid; gap: 8px; padding: 14px 16px; border-radius: 14px; background: rgba(255,255,255,.05); border: 1px solid rgba(246,241,232,.14); } .mood10 b { color: #fff; font-size: 15.5px; }
+.mood10 input { width: 100%; accent-color: var(--gold-l); } .mood10__s { display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; color: #b9b0a2; } .mood10__s em { font-style: normal; font-family: var(--ff); font-size: 22px; color: var(--gold-l); font-weight: 600; }
+.after__res { font-size: 17px; color: #fff; padding: 14px 16px; border-radius: 14px; background: rgba(120,210,170,.12); border: 1px solid rgba(120,210,170,.4); }
 .safe__exit { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start; padding: 16px 18px; border-radius: 16px; background: rgba(226,173,85,.14); border: 1.5px solid var(--gold-l); }
 .safe__exit svg { width: 30px; height: 30px; color: var(--gold-l); } .safe__exit div { display: grid; gap: 4px; } .safe__exit > div > b { font-size: 17px; color: #fff; } .safe__exit span { font-size: 14.5px; line-height: 1.5; color: #e7ddcc; }
 .safe__act { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; margin-top: 4px; }
@@ -1103,10 +1107,18 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     </ul>
     <p class="small">Практики помогают расслабиться и лучше понимать себя. Они не заменяют врача, психотерапевта или лечение. Если вам плохо прямо сейчас — позвоните в экстренную службу (112).</p>
     <label class="check"><input type="checkbox" id="safeOk"> Я прочитал(а) и подтверждаю, что практика мне подходит. Ответственность за своё состояние беру на себя.</label>
+    <div class="mood10" id="mBefore"><b id="mBeforeQ"></b><input type="range" id="mBeforeV" min="0" max="10" value="5" aria-labelledby="mBeforeQ"><div class="mood10__s"><span id="mBeforeLo"></span><em id="mBeforeN">5</em><span id="mBeforeHi"></span></div></div>
     <label class="check"><input type="checkbox" id="safeSoft"> Спокойный экран: приглушить изображение (только звук и голос)</label>
     <div class="safe__act"><button class="ghost" id="safeNo" type="button">Не сейчас</button><button class="btn btn--gold" id="safeGo" type="button" disabled>Начать сеанс</button></div>
   </div>
 </div>
+
+<div class="safe" id="after" hidden role="dialog" aria-modal="true" aria-labelledby="afterT"><div class="safe__box">
+  <span class="eyebrow">Практика завершена</span><h2 id="afterT">Как вы теперь?</h2>
+  <div class="mood10"><b id="mAfterQ"></b><input type="range" id="mAfterV" min="0" max="10" value="5" aria-labelledby="mAfterQ"><div class="mood10__s"><span id="mAfterLo"></span><em id="mAfterN">5</em><span id="mAfterHi"></span></div></div>
+  <p class="after__res" id="afterRes" hidden></p>
+  <div class="safe__act"><button class="btn btn--gold" id="afterOk" type="button">Сохранить результат</button></div>
+</div></div>
 
 <aside class="drawer" id="drawer" aria-label="Звук и голос">
   <div class="dhead"><h2>Звук и голос</h2><button class="icon" id="dClose" type="button" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
@@ -1343,6 +1355,28 @@ const SOUND = {
   chakras:   { beats: [7, 8, 9, 10, 11, 12, 6], carrier: 200, breath: 'resonance', mode: 'major', tempo: [6, 10], noise: 'pink', goal: 'целостность' },
   habits:    { beats: [10, 10, 8], carrier: 200, breath: 'calm',    mode: 'dorian',    tempo: [7, 11], noise: 'pink',  goal: 'пережить волну тяги' }
 };
+// What each space is aimed at: energy centre(s) the attention and resonance tone go to, and the state we measure before/after.
+const TARGET = {
+  cleanse:   { ch: [6, 3, 0], m: ['Насколько вы сейчас напряжены?', 'спокойно', 'очень напряжён(а)', -1, 'напряжение'] },
+  energy:    { ch: [0, 2],    m: ['Сколько у вас сейчас сил?', 'нет сил', 'много сил', 1, 'энергия'] },
+  health:    { ch: [3, 2],    m: ['Как вы чувствуете своё тело?', 'тяжело', 'легко', 1, 'самочувствие'] },
+  blinders:  { ch: [5, 4],    m: ['Насколько вы уверены, что можете сделать свой шаг?', 'не уверен(а)', 'уверен(а)', 1, 'уверенность'] },
+  abundance: { ch: [2, 3],    m: ['Насколько вы видите свои возможности?', 'не вижу', 'вижу ясно', 1, 'ощущение возможностей'] },
+  luck:      { ch: [2, 5],    m: ['Насколько вы открыты новому?', 'закрыт(а)', 'открыт(а)', 1, 'открытость'] },
+  purpose:   { ch: [5, 6],    m: ['Насколько ясно вы понимаете, чего хотите?', 'туман', 'ясно', 1, 'ясность'] },
+  silence:   { ch: [5, 6],    m: ['Сколько сейчас шума в голове?', 'тихо', 'очень шумно', -1, 'шум в голове'] },
+  breathe:   { ch: [3, 4],    m: ['Насколько вам сейчас тревожно?', 'спокойно', 'очень тревожно', -1, 'тревога'] },
+  event:     { ch: [2, 4],    m: ['Насколько вы спокойны перед событием?', 'очень волнуюсь', 'спокоен(на)', 1, 'спокойствие'] },
+  release:   { ch: [3, 1],    m: ['Насколько тяжело у вас на душе?', 'легко', 'очень тяжело', -1, 'тяжесть'] },
+  selflove:  { ch: [3],       m: ['Насколько тепло вы сейчас к себе относитесь?', 'холодно', 'тепло', 1, 'тепло к себе'] },
+  relations: { ch: [3, 4],    m: ['Насколько вы открыты к близости?', 'закрыт(а)', 'открыт(а)', 1, 'открытость'] },
+  food:      { ch: [2, 1],    m: ['Насколько сильно сейчас желание поесть «на эмоциях»?', 'нет', 'очень сильно', -1, 'тяга к еде'] },
+  ajna:      { ch: [5],       m: ['Насколько вы сосредоточены?', 'рассеян(а)', 'собран(а)', 1, 'сосредоточенность'] },
+  chakras:   { ch: [0, 1, 2, 3, 4, 5, 6], m: ['Насколько вы чувствуете себя цельным(ой)?', 'разобран(а)', 'цельно', 1, 'цельность'] },
+  habits:    { ch: [0, 2],    m: ['Насколько сильна сейчас тяга?', 'нет', 'очень сильная', -1, 'тяга'] }
+};
+const CH_ACC = ['в основание позвоночника', 'в низ живота', 'в солнечное сплетение', 'в центр груди', 'в горло', 'в точку между бровей', 'на макушку'];
+const results = id => { try { return JSON.parse(store.get('res-' + id) || '[]'); } catch (e) { return []; } };
 const BAND = h => h < 8 ? 'θ' : h < 12 ? 'α' : 'β';
 const BREATH_RU = { long: 'длинный выдох 4–8', lift: 'бодрящее 3–3', heart: 'ровное 5–5', resonance: 'резонансное 5,5–5,5', calm: 'успокаивающее 4–6', box: 'квадрат 4–4–4–4', sigh: 'двойной вдох' };
 function setPhases(r) { const sp = SOUND[r.id]; r.main.forEach((s, i) => { s.key = s.key || r.id + '-' + (i + 1); s.tone = r.ci;
@@ -2268,7 +2302,11 @@ function showRoom(id) {
   $('rChips').innerHTML = '<span class="chip">' + mins(sum(r.phases)) + '</span><span class="chip">' + r.ev[1] + '</span><span class="chip">Наушники</span><span class="chip">' + (r.main.some(p => eyesOf(p) === 'open') ? 'Есть шаги с открытыми глазами' : 'Можно с закрытыми глазами') + '</span>';
   const sp = SOUND[r.id];
   if (sp) { const bs = [...new Set(sp.beats)], rng = Math.min(...bs) + (bs.length > 1 ? '–' + Math.max(...bs) : '') + ' Гц', bands = [...new Set(bs.map(BAND))].join('→');
-    $('rSound').innerHTML = '<span class="eyebrow">Звучание пространства</span><div class="rsnd"><div><small>Ритм</small><b>' + bands + ' ' + rng + '</b></div><div><small>Дыхание</small><b>' + (sp.breath ? BREATH_RU[sp.breath] : 'три техники по очереди') + '</b></div><div><small>Музыка</small><b>' + MODE_RU[sp.mode] + ', ' + (sp.tempo[0] < 5 ? 'живой темп' : sp.tempo[0] > 9 ? 'очень редкие ноты' : 'спокойный темп') + '</b></div><div><small>Задача</small><b>' + sp.goal + '</b></div></div>'; $('rSound').hidden = false; }
+    const tg = TARGET[r.id], rs = results(r.id).filter(x => x.a != null), avg = rs.length ? rs.reduce((a, x) => a + (x.a - x.b) * tg.m[3], 0) / rs.length : null;
+    $('rSound').innerHTML = '<span class="eyebrow">Звучание пространства</span><div class="rsnd">'
+      + '<div class="rsnd__w"><small>Центр внимания</small><b>' + tg.ch.slice(0, 3).map(c => CH[c].n).join(' · ') + (tg.ch.length > 3 ? ' и все чакры' : '') + ' — ' + tg.ch.slice(0, 2).map(c => CH[c].where).join(', ') + '</b></div>'
+      + '<div class="rsnd__w"><small>Результат, который мы измеряем</small><b>' + tg.m[4] + (tg.m[3] > 0 ? ' ↑' : ' ↓') + (avg != null ? ' · ваш средний результат: ' + (avg > 0 ? '+' : '') + avg.toFixed(1) + ' балла за ' + rs.length + ' сеанс' + (rs.length === 1 ? '' : rs.length < 5 ? 'а' : 'ов') : ' · оценка до и после каждого сеанса') + '</b></div>'
+      + '<div><small>Ритм</small><b>' + bands + ' ' + rng + '</b></div><div><small>Дыхание</small><b>' + (sp.breath ? BREATH_RU[sp.breath] : 'три техники по очереди') + '</b></div><div><small>Музыка</small><b>' + MODE_RU[sp.mode] + ', ' + (sp.tempo[0] < 5 ? 'живой темп' : sp.tempo[0] > 9 ? 'очень редкие ноты' : 'спокойный темп') + '</b></div><div><small>Задача</small><b>' + sp.goal + '</b></div></div>'; $('rSound').hidden = false; }
   else $('rSound').hidden = true;
   $('rHabitBox').hidden = !r.habit;
   if (r.habit) $('rHabit').innerHTML = Object.entries(HABITS).map(([k, h]) => '<button type="button" data-h="' + k + '" aria-pressed="' + (k === r.habit) + '">' + h.label + '</button>').join('');
@@ -2419,6 +2457,12 @@ function applyAudio(ph) {
   if (window.noiseLP) noiseLP.frequency.setTargetAtTime(sp.noise === 'brown' ? 380 : sp.noise === 'white' ? 6000 : 1600, actx.currentTime, 2);
   padRoot(CH[ph.tone].tone); levels(4);
 }
+let bowlO = null, bowlG = null;
+function bowl(f) { // a soft singing-bowl tone on the target centre's note, swelling on each exhale
+  if (!actx) return;
+  if (!bowlO) { bowlG = actx.createGain(); bowlG.gain.value = 0; bowlG.connect(duck); bowlO = [1, 2.76, 5.4].map((m, i) => { const o = actx.createOscillator(), g = actx.createGain(); o.type = 'sine'; g.gain.value = [1, 0.28, 0.08][i]; o.connect(g).connect(bowlG); o.start(); return { o, m }; }); }
+  bowlO.forEach(v => v.o.frequency.setTargetAtTime((f || 200) * v.m, actx.currentTime, 1.5)); bowl.on = !!f;
+}
 function levels(tc) {
   if (!actx) return; const t = actx.currentTime, on = P.running && !P.paused;
   master.gain.setTargetAtTime(on ? volGain() : 0, t, tc || 0.4);
@@ -2518,7 +2562,9 @@ function enter(i) {
   P.idx = i; P.start = P.elapsed; P.ch = -1; P.lastLabel = '';
   const ph = P.phases[i]; setTimeout(() => P.running && P.idx === i && fly(ph), i === 0 ? 7000 : 0); vis(ph); $('pEyes').innerHTML = EYES[eyesOf(ph)][1] + EYES[eyesOf(ph)][0]; $('pPhase').textContent = ph.name; $('pInstr').textContent = ph.text; applyAudio(ph);
   if (i > 0) bell(1, CH[ph.tone].tone);
-  const lines = i === 2 && P.intent ? ['Помните, зачем вы здесь.', P.intent + '.', ...ph.say] : ph.say;
+  const tg = P.room && TARGET[P.room.id], focus = tg && i === 2 ? ['Перенесите внимание ' + CH_ACC[tg.ch[0]] + '.', 'Почувствуйте там мягкое тепло и вибрацию звука.'] : [];
+  const lines = i === 2 && P.intent ? ['Помните, зачем вы здесь.', P.intent + '.', ...focus, ...ph.say] : [...focus, ...ph.say];
+  if (tg && i >= 2 && i < P.phases.length - 1) { const c = tg.ch[(i - 2) % tg.ch.length]; bowl(CH[c].tone); if (i === 2) $('pInstr').textContent = 'Внимание — ' + CH[c].where + '. ' + ph.text; } else bowl(0);
   setTimeout(() => { if (P.running && !P.paused && P.idx === i) guide(ph.key, lines); }, i > 0 ? 2600 : 900);
 }
 function chakra(k) {
@@ -2537,17 +2583,31 @@ async function play() {
 function stop(done) {
   if (!P.running) return; P.running = false; P.paused = false; sayTok++; fly(null); vis(null); if (synth) synth.cancel(); levels(done ? 5 : 0.6);
   if (P.elapsed > 240) markPractice();
+  if (done && P.room && TARGET[P.room.id] && P.before != null) setTimeout(() => afterCheck(P.room), 2500);
   if (done) { bell(3, 220); $('pPhase').textContent = 'Сессия завершена'; $('pInstr').textContent = 'Посидите минуту с закрытыми глазами. Заметьте, что изменилось. Каждая практика — ещё один шаг.'; }
   else { $('pPhase').textContent = P.room ? P.room.name : ''; $('pInstr').textContent = 'Можно начать снова, когда будете готовы.'; }
   $('pIco').innerHTML = '<path d="M8 5.5v13l11-6.5z"/>'; $('pProg').style.width = '0'; P.idx = -1; $('pEyes').innerHTML = ''; $('pIntent').classList.remove('on');
   try { P.wake && P.wake.release(); } catch (e) {} P.wake = null; poke();
 }
+window.__skipSession = () => { P.elapsed += 1e5; };
+function afterCheck(r) {
+  const tg = TARGET[r.id], b = P.before; $('mAfterQ').textContent = tg.m[0]; $('mAfterLo').textContent = '0 — ' + tg.m[1]; $('mAfterHi').textContent = '10 — ' + tg.m[2];
+  $('mAfterV').value = b; $('mAfterN').textContent = b; $('afterRes').hidden = true; $('after').hidden = false; $('afterOk').textContent = 'Сохранить результат';
+  $('mAfterV').oninput = () => $('mAfterN').textContent = $('mAfterV').value;
+  $('afterOk').onclick = () => { if (!$('afterRes').hidden) { $('after').hidden = true; return; }
+    const a = +$('mAfterV').value, d = (a - b) * tg.m[3], list = results(r.id); list.push({ t: Date.now(), b, a, lvl: LEVEL() }); store.set('res-' + r.id, JSON.stringify(list.slice(-60)));
+    const all = list.reduce((s, x) => s + (x.a - x.b) * tg.m[3], 0) / list.length;
+    $('afterRes').textContent = (d > 0 ? 'Стало лучше: ' + tg.m[4] + ' ' + b + ' → ' + a + '.' : d === 0 ? 'Без изменений: ' + b + ' → ' + a + '. Так бывает — эффект копится от практики к практике.' : 'Сегодня не помогло: ' + b + ' → ' + a + '. Попробуйте версию «Новичок» или другое пространство; если вам плохо — сделайте паузу.')
+      + (list.length > 1 ? ' В среднем за ' + list.length + ' сеансов: ' + (all > 0 ? '+' : '') + all.toFixed(1) + ' балла.' : '');
+    $('afterRes').hidden = false; $('afterOk').textContent = 'Готово'; };
+}
 function safety(go) {
   const box = $('safe'), ok = $('safeOk'), soft = $('safeSoft');
   ok.checked = +store.get('safeOk') > Date.now() - 864e5 * 30; soft.checked = store.get('soft') === '1'; $('safeGo').disabled = !ok.checked;
+  const tg = P.room && TARGET[P.room.id]; $('mBefore').hidden = !tg; if (tg) { $('mBeforeQ').textContent = 'Перед началом: ' + tg.m[0].toLowerCase(); $('mBeforeLo').textContent = '0 — ' + tg.m[1]; $('mBeforeHi').textContent = '10 — ' + tg.m[2]; $('mBeforeV').value = 5; $('mBeforeN').textContent = 5; $('mBeforeV').oninput = () => $('mBeforeN').textContent = $('mBeforeV').value; }
   box.hidden = false; ok.onchange = () => { $('safeGo').disabled = !ok.checked; };
   $('safeNo').onclick = () => { box.hidden = true; };
-  $('safeGo').onclick = () => { store.set('safeOk', Date.now()); store.set('soft', soft.checked ? '1' : '0'); $('player').classList.toggle('soft', soft.checked); box.hidden = true; go(); };
+  $('safeGo').onclick = () => { store.set('safeOk', Date.now()); store.set('soft', soft.checked ? '1' : '0'); $('player').classList.toggle('soft', soft.checked); box.hidden = true; P.before = tg ? +$('mBeforeV').value : null; go(); };
 }
 $('pPlay').onclick = () => P.running ? play() : safety(play); $('pStop').onclick = () => stop(); $('pClose').onclick = closePlayer;
 $('pSet').onclick = () => $('drawer').classList.add('open'); $('dClose').onclick = () => $('drawer').classList.remove('open');
@@ -2568,6 +2628,7 @@ function frame(now) {
       if (ph.key === 'chakras' && pt > 4) { const k = Math.min(6, Math.floor((pt - 4) / 30)); if (k !== P.ch) chakra(k); }
       const st = ph.breath ? breathAt(ph.breath, pt) : null;
       if (actx && breathGain) { const on = st && $('sbreath').checked, lvl = on ? (ph.cue ? 0.42 : 0.2) * (0.06 + 0.94 * st.b) : 0; breathGain.gain.setTargetAtTime(lvl, actx.currentTime, 0.18); breathLP.frequency.setTargetAtTime(280 + 1400 * (st ? st.b : 0), actx.currentTime, 0.18); }
+      if (bowlG) bowlG.gain.setTargetAtTime(bowl.on && P.running && !P.paused && $('music').checked ? 0.035 * (0.35 + 0.65 * (st ? 1 - st.b : 0.5)) : 0, actx.currentTime, 0.4);
       if (st && ph.cue && st.label !== P.lastLabel) { if (P.lastLabel && st.label !== 'Пауза' && $('vBreath').checked && !playRec({ 'Вдох': 'inhale', 'Выдох': 'exhale' }[st.label] || '') && synth && !synth.speaking) speak([st.label], { rate: 0.7, gap: 0 }); P.lastLabel = st.label; }
       const inMain = P.idx >= 2 && P.idx < P.phases.length - 1, el = P.elapsed - P.phases.slice(0, 2).reduce((a, p) => a + p.dur, 0);
       $('pIntent').classList.toggle('on', inMain && (el % 75) < 9);
