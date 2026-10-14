@@ -1,186 +1,197 @@
-<title>Аджна</title>
+<title>Дорога к себе</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@1,300;1,400;1,500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;1,300;1,400;1,500&display=swap">
 <style>
-/* Layout: Planex structure in black and gold. Fixed header, full-bleed cosmic hero, dark stats strip, gold marquee, then a rhythm of black / ink sections; the cabinets live on their own page; each cabinet has a detail page and a full-screen player. Single dark world by design. */
+/* Layout: a light, pearl-and-gold site (Planex structure) with dark "windows" into space: the hero (video + living yantra network), each cabinet's own immersive hero, and the full-screen session. Single deliberate look; light is the ground, the cosmos is the depth. */
 :root {
-  --black: #0a0a0b;
-  --ink: #111113;
-  --ink-2: #18181b;
-  --ink-3: #222226;
-  --line: rgba(245,241,234,.1);
-  --text: #f5f1ea;
-  --mute: #a39e95;
-  --gold: #c9a26a;       /* brass gold, the brand accent */
-  --gold-l: #e4cba3;
-  --gold-d: #a9844d;
+  --pearl: #f7f3ec;      /* page ground */
+  --pearl-2: #efe8dc;    /* alternate band */
+  --white: #fffdf9;      /* cards */
+  --ink: #1e1a15;
+  --ink-2: #3b342b;
+  --mute: #72695d;
+  --line: rgba(30,26,21,.1);
+  --gold: #b0844a;       /* accent */
+  --gold-d: #8f6a38;
+  --gold-l: #dcbd86;
+  --night: #06050b;      /* the cosmos windows */
+  --on-dark: #f6f1e8;
   --c1: #e5383b; --c2: #f77f00; --c3: #fcbf49; --c4: #2ec27e; --c5: #3a86ff; --c6: #6a4cff; --c7: #c77dff;
   --ff: "Inter Tight", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --ff-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
-  --r: 14px; --r-lg: 22px;
+  --r: 16px; --r-lg: 26px;
   --ease: cubic-bezier(.2,.7,.1,1);
+  --shadow: 0 30px 60px -34px rgba(90,64,24,.35);
   --container: 1320px;
   --gut: max(16px, env(safe-area-inset-left, 0px));
   --gut-r: max(16px, env(safe-area-inset-right, 0px));
-  color-scheme: dark;
+  color-scheme: light;
 }
 [hidden] { display: none !important; }
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 92px; }
-body { margin: 0; background: var(--black); color: var(--text); font-family: var(--ff); font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+body { margin: 0; color: var(--ink); font-family: var(--ff); font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  background: radial-gradient(1200px 700px at 85% 10%, rgba(220,189,134,.18), transparent 60%), radial-gradient(900px 600px at 5% 60%, rgba(199,170,230,.12), transparent 60%), radial-gradient(900px 600px at 70% 95%, rgba(170,210,230,.12), transparent 60%), var(--pearl); background-attachment: fixed; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
 h1, h2, h3, h4 { margin: 0; font-weight: 600; line-height: 1.06; letter-spacing: -.025em; text-wrap: balance; }
 p { margin: 0; }
-em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-spacing: -.005em; color: var(--gold-l); }
-::selection { background: var(--gold); color: var(--black); }
+em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-spacing: -.005em; color: var(--gold); }
+.dark em { color: var(--gold-l); }
+::selection { background: var(--gold-l); color: var(--ink); }
 :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px; }
 .container { width: 100%; max-width: var(--container); margin: 0 auto; padding-left: max(var(--gut), clamp(16px, 4vw, 40px)); padding-right: max(var(--gut-r), clamp(16px, 4vw, 40px)); }
 .ico { width: 1.1em; height: 1.1em; flex: none; }
-
-.display { font-size: clamp(46px, 7.2vw, 108px); line-height: .98; letter-spacing: -.04em; font-weight: 600; }
+.display { font-size: clamp(46px, 7vw, 104px); line-height: .98; letter-spacing: -.04em; font-weight: 600; }
 .display em { font-weight: 400; letter-spacing: -.01em; }
-.h2 { font-size: clamp(34px, 4.4vw, 60px); letter-spacing: -.035em; }
-.h3 { font-size: clamp(22px, 2vw, 28px); letter-spacing: -.02em; }
+.h2 { font-size: clamp(34px, 4.3vw, 58px); letter-spacing: -.035em; }
 .lead { font-size: clamp(18px, 1.45vw, 21px); line-height: 1.55; color: var(--mute); max-width: 58ch; }
-.lead--xl { font-size: clamp(21px, 2vw, 27px); line-height: 1.45; color: var(--text); letter-spacing: -.01em; }
+.dark .lead { color: #d8d2c7; }
 .eyebrow { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 18px; font-size: 13px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); }
 .eyebrow::before { content: ""; width: 26px; height: 1px; background: currentColor; }
-.eyebrow.dot::before { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 4px rgba(201,162,106,.18); }
-.link-arrow { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; border-bottom: 1px solid var(--text); padding-bottom: 3px; }
+.dark .eyebrow { color: var(--gold-l); }
+.eyebrow.dot::before { width: 8px; height: 8px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 4px rgba(220,189,134,.22); }
+.link-arrow { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; border-bottom: 1px solid currentColor; padding-bottom: 3px; }
 .link-arrow .ico { transition: transform .3s var(--ease); }
 .link-arrow:hover .ico { transform: translateX(4px); }
 
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 12px; padding: 17px 30px; border-radius: 999px; font-weight: 600; font-size: 16px; letter-spacing: -.01em; transition: transform .35s var(--ease), background .3s, border-color .3s, color .3s, box-shadow .35s; white-space: nowrap; }
 .btn .ico { transition: transform .3s var(--ease); }
 .btn:hover .ico { transform: translateX(4px); }
-.btn--gold { background: var(--gold); color: var(--black); box-shadow: 0 14px 40px -14px rgba(201,162,106,.6); }
-.btn--gold:hover { background: var(--gold-l); transform: translateY(-2px); }
-.btn--line { border: 1px solid rgba(245,241,234,.3); color: var(--text); }
-.btn--line:hover { border-color: var(--gold); color: var(--gold-l); }
-.btn--dark { background: var(--black); color: var(--text); }
-.btn--dark:hover { background: var(--ink-3); }
+.btn--gold { background: linear-gradient(135deg, #d2a866, var(--gold) 55%, var(--gold-d)); color: #fff; box-shadow: 0 16px 40px -16px rgba(143,106,56,.7); }
+.btn--gold:hover { transform: translateY(-2px); box-shadow: 0 22px 50px -18px rgba(143,106,56,.8); }
+.btn--line { border: 1px solid rgba(30,26,21,.22); color: var(--ink); }
+.btn--line:hover { border-color: var(--gold); color: var(--gold-d); }
+.dark .btn--line { border-color: rgba(246,241,232,.35); color: var(--on-dark); }
+.dark .btn--line:hover { border-color: var(--gold-l); color: var(--gold-l); }
 .btn--sm { padding: 12px 22px; font-size: 15px; }
 
-/* header */
-.header { position: fixed; z-index: 30; top: 0; left: 0; right: 0; padding-top: env(safe-area-inset-top, 0px); transition: background .4s, border-color .4s, backdrop-filter .4s; border-bottom: 1px solid transparent; }
-.header.solid { background: rgba(10,10,11,.86); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-color: var(--line); }
+/* header: light text over the dark hero, pearl glass once scrolled */
+.header { position: fixed; z-index: 30; top: 0; left: 0; right: 0; padding-top: env(safe-area-inset-top, 0px); color: var(--on-dark); transition: background .4s, color .4s, border-color .4s; border-bottom: 1px solid transparent; }
+.header.solid { background: rgba(247,243,236,.86); backdrop-filter: blur(18px) saturate(1.2); -webkit-backdrop-filter: blur(18px) saturate(1.2); border-color: var(--line); color: var(--ink); }
 .header .container { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 76px; }
-.logo { display: inline-flex; align-items: center; gap: 12px; font-weight: 700; font-size: 20px; letter-spacing: .32em; color: var(--text); }
-.logo svg { width: 30px; height: 30px; }
-.nav { display: flex; align-items: center; gap: 30px; font-size: 15px; font-weight: 500; color: #d6d1c8; }
-.nav a { position: relative; padding: 6px 0; }
+.logo { display: inline-flex; align-items: center; gap: 12px; font-weight: 600; font-size: 17px; letter-spacing: .2em; white-space: nowrap; }
+.logo svg { width: 32px; height: 32px; }
+.nav { display: flex; align-items: center; gap: 30px; font-size: 15px; font-weight: 500; }
+.nav a { position: relative; padding: 6px 0; opacity: .85; }
 .nav a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: 0; height: 1px; background: var(--gold); transition: right .35s var(--ease); }
-.nav a:hover { color: var(--text); }
+.nav a:hover { opacity: 1; }
 .nav a:hover::after, .nav a.on::after { right: 0; }
 .hright { display: flex; align-items: center; gap: 18px; }
-.burger { display: none; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); align-items: center; justify-content: center; }
+.burger { display: none; width: 44px; height: 44px; border-radius: 50%; border: 1px solid currentColor; align-items: center; justify-content: center; opacity: .7; }
 .burger svg { width: 18px; height: 18px; }
 @media (max-width: 960px) { .nav { display: none; } .burger { display: inline-flex; } }
 @media (max-width: 480px) { .hright .btn { display: none; } }
-.mnav { position: fixed; z-index: 29; inset: 0; background: rgba(10,10,11,.97); display: grid; align-content: center; justify-items: center; gap: 22px; font-size: 26px; font-weight: 600; letter-spacing: -.02em; }
+.mnav { position: fixed; z-index: 29; inset: 0; background: rgba(247,243,236,.97); display: grid; align-content: center; justify-items: center; gap: 22px; font-size: 26px; font-weight: 600; letter-spacing: -.02em; color: var(--ink); }
 
-/* hero */
+/* hero: dark window into space */
+.dark { color: var(--on-dark); }
 .hero { position: relative; min-height: 100vh; min-height: 100svh; display: flex; align-items: center; overflow: hidden; background: #020106; }
 .hero > canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-.hero .hlayer { z-index: 2; pointer-events: none; opacity: .88; }
-.hero .hlayer--front { z-index: 4; }
-.art { position: absolute; top: -2%; bottom: -2%; right: max(0px, calc(50vw - 760px)); aspect-ratio: 1600 / 2142; pointer-events: none; will-change: transform; }
-.art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.art--bg { z-index: 1; -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 26%, #000 78%, transparent 100%), linear-gradient(to top, transparent 0%, #000 22%); -webkit-mask-composite: source-in; mask-image: linear-gradient(to right, transparent 0%, #000 26%, #000 78%, transparent 100%), linear-gradient(to top, transparent 0%, #000 22%); mask-composite: intersect; }
-.art--fg { z-index: 3; -webkit-mask-image: linear-gradient(to top, transparent 0%, #000 16%); mask-image: linear-gradient(to top, transparent 0%, #000 16%); filter: drop-shadow(0 0 40px rgba(255,190,110,.18)); }
-.hero::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(90deg, rgba(2,1,6,.92) 0%, rgba(2,1,6,.55) 34%, rgba(2,1,6,0) 56%), linear-gradient(to top, rgba(10,10,11,1) 0%, rgba(10,10,11,0) 18%); }
+.hero #heroNet { z-index: 3; }
+.art { position: absolute; z-index: 1; top: 0; bottom: 0; right: max(0px, calc(50vw - 760px)); aspect-ratio: 900 / 1204; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 22%, #000 82%, transparent 100%), linear-gradient(to top, transparent 0%, #000 18%); -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to right, transparent 0%, #000 22%, #000 82%, transparent 100%), linear-gradient(to top, transparent 0%, #000 18%); mask-composite: intersect; }
+.art video, .art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(90deg, rgba(2,1,6,.92) 0%, rgba(2,1,6,.55) 34%, rgba(2,1,6,0) 56%), linear-gradient(to top, rgba(2,1,6,.9) 0%, rgba(2,1,6,0) 20%); }
 .hero .container { position: relative; z-index: 5; padding-block: 130px 110px; pointer-events: none; }
 .hero .container a, .hero .container button { pointer-events: auto; }
-.hero__inner { max-width: 620px; }
+.hero__inner { max-width: 600px; }
 .hero .display { margin: 0 0 28px; }
-.hero .lead { color: #d6d1c8; }
 .hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 38px; }
-.hero__meta { display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 42px; font-size: 14px; color: var(--mute); }
+.hero__meta { display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 42px; font-size: 14px; color: #bdb5a8; }
 .hero__meta span { display: inline-flex; align-items: center; gap: 8px; }
-.hero__meta span::before { content: "✦"; color: var(--gold); font-size: 12px; }
-@media (max-width: 960px) { .hero { align-items: end; } .hero::after { background: linear-gradient(to top, rgba(10,10,11,1) 8%, rgba(2,1,6,.75) 40%, rgba(2,1,6,0) 62%); } .hero .container { padding-top: 58vh; padding-bottom: 60px; } .art { top: 56px; bottom: auto; right: auto; left: 50%; height: 68vh; margin-left: calc(-34vh * 1600 / 2142); } }
+.hero__meta span::before { content: "✦"; color: var(--gold-l); font-size: 12px; }
+@media (max-width: 960px) { .hero { align-items: end; } .hero::after { background: linear-gradient(to top, rgba(2,1,6,1) 8%, rgba(2,1,6,.75) 40%, rgba(2,1,6,0) 62%); } .hero .container { padding-top: 58vh; padding-bottom: 60px; } .art { bottom: auto; top: 56px; right: auto; left: 50%; height: 68vh; transform: translateX(-50%); } }
 
 /* stats + marquee */
-.stats { background: var(--ink); border-bottom: 1px solid var(--line); }
+.stats { background: var(--white); border-bottom: 1px solid var(--line); }
 .stats .container { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .stat { padding: 38px 24px; border-left: 1px solid var(--line); display: grid; gap: 6px; }
 .stat:first-child { border-left: 0; padding-left: 0; }
-.stat b { font-family: var(--ff-serif); font-weight: 400; font-size: clamp(44px, 4.6vw, 64px); line-height: 1; color: var(--gold-l); font-variant-numeric: lining-nums; }
+.stat b { font-family: var(--ff-serif); font-weight: 400; font-size: clamp(44px, 4.6vw, 64px); line-height: 1; color: var(--gold); }
 .stat span { font-size: 14px; color: var(--mute); }
 @media (max-width: 800px) { .stats .container { grid-template-columns: 1fr 1fr; } .stat { border-left: 0; padding-left: 0; border-top: 1px solid var(--line); } .stat:nth-child(-n+2) { border-top: 0; } }
-.marquee { background: var(--gold); color: var(--black); overflow: hidden; white-space: nowrap; }
-.marquee__track { display: inline-flex; gap: 36px; padding: 24px 0; font-size: clamp(22px, 2.4vw, 32px); font-weight: 600; letter-spacing: -.02em; animation: mq 60s linear infinite; }
+.marquee { background: linear-gradient(90deg, #e9d7b4, #f4e7cd 50%, #e9d7b4); color: var(--ink-2); overflow: hidden; white-space: nowrap; border-bottom: 1px solid var(--line); }
+.marquee__track { display: inline-flex; gap: 36px; padding: 22px 0; font-family: var(--ff-serif); font-style: italic; font-size: clamp(24px, 2.6vw, 34px); animation: mq 70s linear infinite; }
 .marquee__track span { display: inline-flex; align-items: center; gap: 36px; }
-.marquee__track span::after { content: "✦"; font-size: .7em; }
+.marquee__track span::after { content: "✦"; font-family: var(--ff); font-style: normal; font-size: .55em; color: var(--gold); }
 @keyframes mq { to { transform: translateX(-50%); } }
 
 /* sections */
 .section { padding-block: clamp(80px, 10vw, 140px); }
-.section--ink { background: var(--ink); }
-.section--panel { background: var(--ink-2); }
+.section--alt { background: linear-gradient(180deg, rgba(239,232,220,.7), rgba(239,232,220,.35)); }
 .shead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 24px 40px; margin-bottom: 56px; }
 .shead > div { max-width: 760px; }
 .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 60px; align-items: start; }
-.split .lead--xl { margin-bottom: 24px; }
-.split .lead { margin-bottom: 30px; }
 @media (max-width: 900px) { .split { grid-template-columns: minmax(0, 1fr); gap: 30px; } }
+.card { background: var(--white); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--shadow); }
 
 /* quick start */
 .moods { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-.mood { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 24px 26px; border-radius: var(--r-lg); border: 1px solid var(--line); background: var(--ink-2); transition: border-color .3s, background .3s, transform .35s var(--ease); min-width: 0; }
-.mood:hover { border-color: var(--gold); background: var(--ink-3); transform: translateY(-3px); }
+.mood { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 24px 26px; border-radius: var(--r-lg); border: 1px solid var(--line); background: var(--white); transition: border-color .3s, transform .35s var(--ease), box-shadow .35s; min-width: 0; }
+.mood:hover { border-color: var(--gold-l); transform: translateY(-3px); box-shadow: var(--shadow); }
 .mood b { font-size: 19px; font-weight: 600; letter-spacing: -.015em; display: block; }
 .mood small { display: block; margin-top: 4px; font-size: 14px; color: var(--mute); }
 .mood .ico { color: var(--gold); width: 22px; height: 22px; }
 @media (max-width: 900px) { .moods { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .moods { grid-template-columns: 1fr; } }
 
-/* room cards */
-.rooms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+/* benefits */
+.benefits { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.benefit { padding: 34px 32px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.benefit .glyph { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 35% 30%, #fff, #f1e3c6); border: 1px solid rgba(176,132,74,.3); color: var(--gold-d); margin-bottom: 6px; }
+.benefit .glyph svg { width: 24px; height: 24px; }
+.benefit h3 { font-size: 22px; }
+.benefit p { color: var(--mute); font-size: 16px; }
+@media (max-width: 1000px) { .benefits { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .benefits { grid-template-columns: 1fr; } }
+
+/* room cards: a dark portal on a pearl card */
+.rooms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
 @media (max-width: 1000px) { .rooms { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 640px) { .rooms { grid-template-columns: minmax(0, 1fr); } }
-.room { position: relative; display: block; border-radius: var(--r-lg); overflow: hidden; background: var(--ink-2); min-height: 440px; isolation: isolate; transition: transform .5s var(--ease), box-shadow .5s; min-width: 0; }
-.room:hover { transform: translateY(-6px); box-shadow: 0 40px 80px -40px color-mix(in srgb, var(--rc) 55%, transparent); }
-.room .art { position: absolute; inset: 0; z-index: -1; }
-.room .art canvas { position: absolute; inset: 0; width: 100%; height: 100%; transition: transform 1.2s var(--ease); }
-.room:hover .art canvas { transform: scale(1.04); }
-.room::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, rgba(10,10,11,.96) 18%, rgba(10,10,11,.4) 50%, rgba(10,10,11,0) 72%); }
-.room .num { position: absolute; top: 22px; left: 26px; font-family: var(--ff-serif); font-size: 22px; color: var(--gold-l); }
-.room .tag { position: absolute; top: 20px; right: 20px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; padding: 7px 12px; border-radius: 999px; background: rgba(10,10,11,.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid var(--line); color: var(--text); }
+.room { display: grid; grid-template-rows: auto 1fr; padding: 10px; border-radius: var(--r-lg); background: var(--white); border: 1px solid var(--line); box-shadow: 0 20px 50px -38px rgba(90,64,24,.5); transition: transform .5s var(--ease), box-shadow .5s, border-color .4s; min-width: 0; }
+.room:hover { transform: translateY(-6px); border-color: rgba(176,132,74,.35); box-shadow: 0 40px 70px -40px color-mix(in srgb, var(--rc) 55%, rgba(90,64,24,.6)); }
+.room .art2 { position: relative; aspect-ratio: 4 / 3; max-width: 100%; border-radius: 18px; overflow: hidden; background: var(--night); }
+.room .art2 canvas, .room .art2 img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
+.room:hover .art2 canvas, .room:hover .art2 img { transform: scale(1.04); }
+.room .num { position: absolute; top: 16px; left: 18px; font-family: var(--ff-serif); font-size: 22px; color: var(--gold-l); }
+.room .tag { position: absolute; top: 14px; right: 14px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; padding: 7px 12px; border-radius: 999px; background: rgba(6,5,11,.55); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: var(--on-dark); }
 .tag.t-a::before, .tag.t-b::before, .tag.t-c::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; }
-.tag.t-a::before { background: #3ddc97; } .tag.t-b::before { background: var(--gold); } .tag.t-c::before { background: var(--c7); }
-.room .body { position: absolute; left: 0; right: 0; bottom: 0; padding: 30px 28px; display: grid; gap: 10px; }
-.room h3 { font-size: clamp(24px, 2.1vw, 30px); letter-spacing: -.025em; }
-.room p { font-size: 15px; color: #cfc9bf; max-width: 46ch; }
-.room .meta { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 14px; font-weight: 600; }
+.tag.t-a::before { background: #3ddc97; } .tag.t-b::before { background: var(--gold-l); } .tag.t-c::before { background: var(--c7); }
+.room .body { padding: 22px 16px 14px; display: grid; gap: 8px; align-content: start; }
+.room h3 { font-size: clamp(22px, 1.9vw, 27px); letter-spacing: -.025em; }
+.room p { font-size: 15px; color: var(--mute); }
+.room .meta { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 14px; font-weight: 600; }
 .room .meta span:first-child { color: var(--mute); font-weight: 500; }
-.room .meta span:last-child { color: var(--gold-l); display: inline-flex; gap: 8px; align-items: center; }
-.room.wide { grid-column: 1 / -1; min-height: 480px; }
-.room.wide .body { max-width: 640px; padding: 44px; }
-.room.wide::after { background: linear-gradient(90deg, rgba(10,10,11,.95) 20%, rgba(10,10,11,.3) 60%, rgba(10,10,11,0) 80%); }
-@media (max-width: 640px) { .room.wide::after { background: linear-gradient(to top, rgba(10,10,11,.96) 25%, rgba(10,10,11,0) 75%); } .room.wide .body { padding: 30px 28px; } }
-
+.room .meta span:last-child { color: var(--gold-d); display: inline-flex; gap: 8px; align-items: center; }
+.room.wide { grid-column: 1 / -1; grid-template-rows: none; grid-template-columns: 1.5fr 1fr; align-items: center; }
+.room.wide .art2 { aspect-ratio: 16 / 8; }
+.room.wide .body { padding: 30px 40px; gap: 12px; }
+.room.wide h3 { font-size: clamp(28px, 2.8vw, 40px); }
+@media (max-width: 800px) { .room.wide { grid-template-columns: minmax(0, 1fr); } .room.wide .art2 { aspect-ratio: 4 / 3; } .room.wide .body { padding: 22px 16px 14px; } }
 .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 36px; }
-.filters button { padding: 11px 20px; border-radius: 999px; border: 1px solid var(--line); font-size: 15px; font-weight: 500; color: #d6d1c8; transition: border-color .3s, background .3s, color .3s; }
-.filters button:hover { border-color: var(--gold); }
-.filters button[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: var(--black); }
+.filters button { padding: 11px 20px; border-radius: 999px; border: 1px solid var(--line); background: var(--white); font-size: 15px; font-weight: 500; color: var(--ink-2); transition: border-color .3s, background .3s, color .3s; }
+.filters button:hover { border-color: var(--gold-l); }
+.filters button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--pearl); }
 
 /* path + process */
-.path { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); }
-.path > div { padding: 36px 28px 0 0; display: grid; gap: 12px; align-content: start; min-width: 0; }
-.path b { font-family: var(--ff-serif); font-weight: 400; font-size: 64px; line-height: 1; color: var(--gold-l); }
-.path h3 { font-size: 22px; }
+.path { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.path > div { padding: 32px 28px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.path b { font-family: var(--ff-serif); font-weight: 400; font-size: 26px; line-height: 1.1; color: var(--gold); }
+.path h3 { font-size: 21px; }
 .path p { color: var(--mute); font-size: 16px; }
-.streak { margin-top: 48px; display: inline-flex; align-items: center; gap: 14px; padding: 16px 24px; border-radius: 999px; border: 1px solid rgba(201,162,106,.4); font-family: var(--ff-serif); font-style: italic; font-size: 22px; color: var(--gold-l); }
-@media (max-width: 900px) { .path { grid-template-columns: 1fr 1fr; row-gap: 20px; } }
-.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
-.step { padding: 34px 30px 36px; border-radius: var(--r-lg); background: var(--ink-2); border: 1px solid var(--line); display: grid; gap: 14px; align-content: start; min-width: 0; }
+.streak { margin-top: 40px; display: inline-flex; align-items: center; gap: 14px; padding: 14px 24px; border-radius: 999px; background: var(--white); border: 1px solid rgba(176,132,74,.35); font-family: var(--ff-serif); font-style: italic; font-size: 22px; color: var(--gold-d); }
+@media (max-width: 1000px) { .path { grid-template-columns: 1fr 1fr; } }
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; counter-reset: s; }
+.step { padding: 34px 30px 36px; display: grid; gap: 14px; align-content: start; min-width: 0; position: relative; overflow: hidden; }
 .step .n { font-family: var(--ff-serif); font-size: 58px; line-height: 1; color: var(--gold); }
-.step h3 { font-size: 22px; }
+.step h3 { font-size: 23px; }
 .step p { color: var(--mute); font-size: 16px; }
+.step::after { content: ""; position: absolute; right: -40px; top: -40px; width: 140px; height: 140px; border-radius: 50%; background: radial-gradient(circle, rgba(220,189,134,.35), transparent 70%); }
 @media (max-width: 1000px) { .steps { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .steps, .path { grid-template-columns: 1fr; } }
 
@@ -189,236 +200,317 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 .faq details { border-bottom: 1px solid var(--line); }
 .faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 26px 0; font-size: clamp(19px, 1.6vw, 23px); font-weight: 600; letter-spacing: -.015em; }
 .faq summary::-webkit-details-marker { display: none; }
-.faq summary i { width: 36px; height: 36px; flex: none; border-radius: 50%; border: 1px solid var(--line); position: relative; transition: transform .35s var(--ease), border-color .3s; }
+.faq summary i { width: 36px; height: 36px; flex: none; border-radius: 50%; border: 1px solid var(--line); position: relative; transition: border-color .3s; background: var(--white); }
 .faq summary i::before, .faq summary i::after { content: ""; position: absolute; left: 50%; top: 50%; width: 12px; height: 1.5px; background: var(--gold); transform: translate(-50%, -50%); }
 .faq summary i::after { transform: translate(-50%, -50%) rotate(90deg); transition: transform .35s var(--ease); }
 .faq details[open] summary i { border-color: var(--gold); }
 .faq details[open] summary i::after { transform: translate(-50%, -50%) rotate(0); }
 .faq details p { padding: 0 60px 28px 0; color: var(--mute); max-width: 72ch; }
 
-/* cta band + footer */
-.cta-band { background: var(--gold); color: var(--black); }
+/* mission + cta + footer */
+.mission { text-align: center; }
+.mission blockquote { margin: 0 auto; max-width: 22ch; font-family: var(--ff-serif); font-weight: 400; font-size: clamp(34px, 4.4vw, 62px); line-height: 1.12; letter-spacing: -.01em; color: var(--ink); }
+.mission blockquote em { color: var(--gold); }
+.mission p { margin: 28px auto 0; max-width: 60ch; color: var(--mute); font-size: 18px; }
+.cta-band { background: radial-gradient(900px 400px at 80% 0%, rgba(255,255,255,.55), transparent 60%), linear-gradient(135deg, #ead7b0, #d9b67d 60%, #c99d5e); color: var(--ink); }
 .cta-band .container { padding-block: clamp(70px, 8vw, 110px); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 30px; }
-.cta-band h2 em { color: var(--black); }
-.cta-band p { color: rgba(10,10,11,.7); margin-top: 14px; font-size: 18px; }
-.footer { background: var(--black); border-top: 1px solid var(--line); }
+.cta-band h2 em { color: var(--ink); }
+.cta-band p { color: rgba(30,26,21,.7); margin-top: 14px; font-size: 18px; }
+.btn--ink { background: var(--ink); color: var(--pearl); }
+.btn--ink:hover { background: #000; }
+.footer { background: var(--white); border-top: 1px solid var(--line); }
 .footer .container { padding-block: 70px 36px; display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 40px; }
 .footer h4 { font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; font-weight: 600; }
-.footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 15px; color: #cfc9bf; }
-.footer ul a:hover { color: var(--gold-l); }
+.footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 15px; color: var(--ink-2); }
+.footer ul a:hover { color: var(--gold-d); }
 .footer .about { color: var(--mute); font-size: 15px; max-width: 36ch; margin-top: 18px; }
 .footer .bottom { grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 30px; border-top: 1px solid var(--line); font-size: 13px; color: var(--mute); }
 @media (max-width: 800px) { .footer .container { grid-template-columns: 1fr; } }
 
-/* page hero (catalog, room) */
-.phero { position: relative; overflow: hidden; background: #020106; }
-.phero > canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-.phero::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(2,1,6,.9) 0%, rgba(2,1,6,.45) 50%, rgba(2,1,6,0) 75%), linear-gradient(to top, var(--black) 0%, rgba(10,10,11,0) 30%); }
-.phero .container { position: relative; z-index: 1; padding-block: 160px 80px; display: grid; gap: 22px; }
+/* catalog hero: light, with a gold yantra network */
+.lhero { position: relative; overflow: hidden; }
+.lhero canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.lhero .container { position: relative; z-index: 1; padding-block: 170px 70px; display: grid; gap: 22px; pointer-events: none; }
+.lhero .container a { pointer-events: auto; }
 .crumbs { display: flex; flex-wrap: wrap; gap: 10px; font-size: 14px; color: var(--mute); }
-.crumbs a:hover { color: var(--gold-l); }
-.crumbs span::before { content: "/"; margin-right: 10px; color: var(--ink-3); }
-.rhero { min-height: 88vh; display: flex; align-items: end; }
+.dark .crumbs { color: #bdb5a8; }
+.crumbs a:hover { color: var(--gold); }
+.crumbs span::before { content: "/"; margin-right: 10px; opacity: .4; }
+
+/* cabinet page: its own immersive space on top, light content below */
+.phero { position: relative; overflow: hidden; background: var(--night); }
+.phero > canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.phero::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(2,1,6,.88) 0%, rgba(2,1,6,.4) 50%, rgba(2,1,6,0) 75%), linear-gradient(to top, rgba(2,1,6,.85) 0%, rgba(2,1,6,0) 30%); }
+.phero .container { position: relative; z-index: 1; padding-block: 160px 80px; display: grid; gap: 22px; }
+.rhero { min-height: 92vh; display: flex; align-items: end; }
 .rhero .display { font-size: clamp(44px, 6.4vw, 96px); max-width: 13ch; }
 @media (min-width: 901px) { .rhero .container > * { max-width: 640px; } }
 .chips { display: flex; flex-wrap: wrap; gap: 10px; }
-.chip { border: 1px solid rgba(245,241,234,.2); border-radius: 999px; padding: 8px 15px; font-size: 14px; color: var(--text); background: rgba(10,10,11,.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.chip { border: 1px solid rgba(246,241,232,.22); border-radius: 999px; padding: 8px 15px; font-size: 14px; background: rgba(6,5,11,.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 .habit { display: grid; gap: 4px; }
 .habit .eyebrow, .intent .eyebrow { margin: 0; }
 .hchips { display: flex; flex-wrap: wrap; gap: 8px; }
-.hchips button { border: 1px solid rgba(245,241,234,.22); border-radius: 999px; padding: 10px 18px; font-size: 15px; font-weight: 500; background: rgba(10,10,11,.45); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: border-color .3s, background .3s, color .3s; }
-.hchips button[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: var(--black); }
+.hchips button { border: 1px solid rgba(246,241,232,.25); border-radius: 999px; padding: 10px 18px; font-size: 15px; font-weight: 500; background: rgba(6,5,11,.45); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: border-color .3s, background .3s, color .3s; }
+.hchips button[aria-pressed="true"] { background: var(--gold-l); border-color: var(--gold-l); color: var(--ink); }
 .intent { display: grid; gap: 10px; max-width: 480px; }
-.intent input { font-family: var(--ff-serif); font-style: italic; font-size: 28px; font-weight: 400; color: var(--gold-l); background: transparent; border: 0; border-bottom: 1px solid rgba(201,162,106,.45); padding: 4px 2px 8px; outline: none; width: 100%; }
-.intent input:focus { border-bottom-color: var(--gold); }
+.intent input { font-family: var(--ff-serif); font-style: italic; font-size: 28px; color: var(--gold-l); background: transparent; border: 0; border-bottom: 1px solid rgba(220,189,134,.45); padding: 4px 2px 8px; outline: none; width: 100%; }
+.intent input:focus { border-bottom-color: var(--gold-l); }
 .rgrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 70px; }
 @media (max-width: 900px) { .rgrid { grid-template-columns: minmax(0, 1fr); gap: 50px; } }
 .timeline { list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid var(--line); }
 .timeline li { display: grid; grid-template-columns: 22px 1fr auto; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--line); align-items: start; }
-.timeline li i { width: 10px; height: 10px; border-radius: 50%; margin-top: 9px; background: currentColor; box-shadow: 0 0 12px currentColor; }
-.timeline b { color: var(--text); font-weight: 600; display: block; font-size: 18px; letter-spacing: -.01em; }
+.timeline li i { width: 10px; height: 10px; border-radius: 50%; margin-top: 9px; background: currentColor; box-shadow: 0 0 10px currentColor; }
+.timeline b { color: var(--ink); font-weight: 600; display: block; font-size: 18px; letter-spacing: -.01em; }
 .timeline small { font-size: 15px; color: var(--mute); display: block; margin-top: 3px; }
-.timeline .d { font-size: 15px; font-variant-numeric: tabular-nums; color: var(--text); }
+.timeline .d { font-size: 15px; font-variant-numeric: tabular-nums; color: var(--ink); }
 .hz { font-family: var(--ff); font-style: normal; font-size: 12px; letter-spacing: .1em; color: var(--gold); margin-left: 10px; font-weight: 600; }
-.note-box { margin-top: 30px; padding: 24px 26px; border-radius: var(--r-lg); border: 1px solid var(--line); background: var(--ink-2); font-size: 16px; color: var(--mute); }
-.note-box b { color: var(--text); font-weight: 600; }
+.note-box { margin-top: 30px; padding: 24px 26px; font-size: 16px; color: var(--mute); }
+.note-box b { color: var(--ink); font-weight: 600; }
 .nextnav { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.nextnav a { padding: 30px; border-radius: var(--r-lg); border: 1px solid var(--line); background: var(--ink-2); display: grid; gap: 4px; transition: border-color .3s; min-width: 0; }
-.nextnav a:hover { border-color: var(--gold); }
+.nextnav a { padding: 30px; display: grid; gap: 4px; transition: border-color .3s, transform .35s var(--ease); min-width: 0; }
+.nextnav a:hover { border-color: var(--gold-l); transform: translateY(-3px); }
 .nextnav a:last-child { text-align: right; }
 .nextnav .eyebrow { margin: 0; }
 .nextnav .eyebrow::before { display: none; }
 .nextnav b { font-size: 24px; font-weight: 600; letter-spacing: -.02em; }
 
-/* player */
-.player { position: fixed; inset: 0; z-index: 40; background: #020106; }
+/* player: the session, always dim and immersive */
+.player { position: fixed; inset: 0; z-index: 40; background: #020106; color: var(--on-dark); }
 .player canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .pui { position: absolute; inset: 0; display: grid; grid-template-rows: auto 1fr auto; transition: opacity 1.4s; padding-left: var(--gut); padding-right: var(--gut-r); padding-top: calc(16px + env(safe-area-inset-top, 0px)); padding-bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
 .player.calm .pui { opacity: .08; }
 .ptop { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .ptop .ttl { font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold-l); font-weight: 600; text-align: center; }
-.icon { width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(245,241,234,.18); display: grid; place-items: center; color: var(--text); background: rgba(10,10,11,.4); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: border-color .3s; }
-.icon:hover { border-color: var(--gold); }
+.icon { width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(246,241,232,.2); display: grid; place-items: center; background: rgba(6,5,11,.4); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: border-color .3s; }
+.icon:hover { border-color: var(--gold-l); }
 .icon svg { width: 18px; height: 18px; }
 .tools { display: flex; gap: 10px; }
 .pbottom { display: grid; justify-items: center; gap: 12px; text-align: center; }
 .pbottom .eyebrow { margin: 0; }
 .pbottom .eyebrow::before { display: none; }
-.pphase { font-family: var(--ff-serif); font-style: italic; font-weight: 400; font-size: clamp(34px, 4.6vw, 54px); color: var(--text); line-height: 1.05; letter-spacing: -.01em; text-shadow: 0 0 30px rgba(0,0,0,.6); }
+.pphase { font-family: var(--ff-serif); font-style: italic; font-weight: 400; font-size: clamp(34px, 4.6vw, 54px); line-height: 1.05; letter-spacing: -.01em; text-shadow: 0 0 30px rgba(0,0,0,.6); }
 .pinstr { max-width: 48ch; color: #ddd7cc; font-size: 17px; min-height: 3.2em; text-shadow: 0 1px 14px rgba(2,1,6,.95); }
-.track { width: min(460px, 82vw); height: 2px; background: rgba(245,241,234,.12); position: relative; border-radius: 2px; overflow: hidden; }
-.track i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: linear-gradient(90deg, var(--gold-d), var(--gold-l)); }
+.track { width: min(460px, 82vw); height: 2px; background: rgba(246,241,232,.12); position: relative; border-radius: 2px; overflow: hidden; }
+.track i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: linear-gradient(90deg, var(--gold), var(--gold-l)); }
 .pctl { display: flex; align-items: center; gap: 22px; }
-.play { width: 80px; height: 80px; border-radius: 50%; display: grid; place-items: center; color: var(--black); background: radial-gradient(circle at 35% 30%, #f3e1bf, var(--gold) 55%, var(--gold-d)); box-shadow: 0 0 0 1px rgba(228,203,163,.6), 0 0 50px rgba(201,162,106,.45); transition: transform .3s; }
+.play { width: 80px; height: 80px; border-radius: 50%; display: grid; place-items: center; color: var(--ink); background: radial-gradient(circle at 35% 30%, #fbf1dc, #dcbd86 55%, #b0844a); box-shadow: 0 0 0 1px rgba(220,189,134,.6), 0 0 50px rgba(220,189,134,.45); transition: transform .3s; }
 .play:hover { transform: scale(1.05); }
 .play svg { width: 24px; height: 24px; }
-.ptime { font-size: 14px; letter-spacing: .12em; font-variant-numeric: tabular-nums; min-width: 3.4em; color: var(--text); }
+.ptime { font-size: 14px; letter-spacing: .12em; font-variant-numeric: tabular-nums; min-width: 3.4em; }
 .pintent { position: absolute; z-index: 2; left: 0; right: 0; top: calc(84px + env(safe-area-inset-top, 0px)); text-align: center; font-family: var(--ff-serif); font-style: italic; font-size: clamp(22px, 2.6vw, 30px); color: var(--gold-l); opacity: 0; transition: opacity 3s ease; pointer-events: none; padding-inline: 20px; text-shadow: 0 0 24px rgba(0,0,0,.8); }
 .pintent.on { opacity: .8; }
-
-.drawer { position: fixed; z-index: 50; top: 0; right: 0; bottom: 0; width: min(400px, 100%); background: rgba(17,17,19,.92); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-left: 1px solid var(--line);
+.drawer { position: fixed; z-index: 50; top: 0; right: 0; bottom: 0; width: min(400px, 100%); background: rgba(14,12,20,.92); color: var(--on-dark); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-left: 1px solid rgba(246,241,232,.1);
   transform: translateX(102%); transition: transform .6s var(--ease); overflow-y: auto; padding: calc(24px + env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px)) 30px 24px; display: grid; gap: 28px; align-content: start; }
 .drawer.open { transform: none; }
 .dhead { display: flex; justify-content: space-between; align-items: center; }
 .dhead h2 { font-size: 26px; }
 .sect { display: grid; gap: 12px; }
-.sect .eyebrow { margin: 0; font-size: 12px; }
-select { font: inherit; font-size: 15px; width: 100%; background: var(--black); color: var(--text); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+.sect .eyebrow { margin: 0; font-size: 12px; color: var(--gold-l); }
+select { font: inherit; font-size: 15px; width: 100%; background: #06050b; color: var(--on-dark); border: 1px solid rgba(246,241,232,.15); border-radius: 12px; padding: 12px; }
 .check { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; color: #d6d1c8; cursor: pointer; }
-.check input { accent-color: var(--gold); margin-top: 5px; }
-input[type=range] { width: 100%; accent-color: var(--gold); }
-.row { display: flex; justify-content: space-between; font-size: 13px; color: var(--mute); font-variant-numeric: tabular-nums; }
-.small { font-size: 13px; color: var(--mute); }
-.ghost { border: 1px solid rgba(245,241,234,.22); border-radius: 999px; padding: 10px 18px; font-size: 14px; justify-self: start; }
-.ghost:hover { border-color: var(--gold); }
+.check input { accent-color: var(--gold-l); margin-top: 5px; }
+input[type=range] { width: 100%; accent-color: var(--gold-l); }
+.row { display: flex; justify-content: space-between; font-size: 13px; color: #a8a094; font-variant-numeric: tabular-nums; }
+.small { font-size: 13px; color: #a8a094; }
+.ghost { border: 1px solid rgba(246,241,232,.25); border-radius: 999px; padding: 10px 18px; font-size: 14px; justify-self: start; }
+.ghost:hover { border-color: var(--gold-l); }
+/* journal */
+.jgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+@media (max-width: 1000px) { .jgrid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px) { .jgrid { grid-template-columns: 1fr; } }
+.jcard { display: grid; align-content: start; gap: 12px; padding: 30px 30px 28px; min-width: 0; transition: transform .4s var(--ease), border-color .3s; position: relative; overflow: hidden; }
+.jcard:hover { transform: translateY(-4px); border-color: rgba(176,132,74,.4); }
+.jcard .jcat { font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); }
+.jcard h3 { font-size: 24px; letter-spacing: -.02em; }
+.jcard p { color: var(--mute); font-size: 16px; }
+.jcard .jmeta { display: flex; justify-content: space-between; margin-top: 10px; font-size: 14px; font-weight: 600; color: var(--gold-d); }
+.jcard .jmeta span:first-child { color: var(--mute); font-weight: 500; }
+.jcard.feature { grid-column: 1 / -1; padding: 46px 48px; background: radial-gradient(700px 300px at 90% 0%, rgba(220,189,134,.25), transparent 60%), var(--white); }
+.jcard.feature h3 { font-family: var(--ff-serif); font-weight: 400; font-size: clamp(32px, 3.6vw, 48px); letter-spacing: -.01em; max-width: 22ch; }
+.jcard.feature p { font-size: 18px; max-width: 62ch; }
+.article { max-width: 720px; margin: 0 auto; }
+.article .crumbs { margin-bottom: 26px; }
+.article h1 { font-family: var(--ff-serif); font-weight: 400; font-size: clamp(40px, 5vw, 64px); line-height: 1.05; letter-spacing: -.01em; margin: 14px 0 22px; }
+.article .alead { font-size: 21px; line-height: 1.55; color: var(--ink-2); margin-bottom: 36px; }
+.article .abody { font-size: 18px; line-height: 1.75; color: var(--ink-2); display: grid; gap: 22px; }
+.article .abody h2 { font-size: 26px; margin-top: 16px; letter-spacing: -.02em; }
+.article .abody blockquote { margin: 10px 0; padding: 6px 0 6px 26px; border-left: 2px solid var(--gold); font-family: var(--ff-serif); font-style: italic; font-size: 26px; line-height: 1.35; color: var(--ink); }
+.article .abody .fact { padding: 22px 24px; border-radius: var(--r); background: var(--white); border: 1px solid var(--line); box-shadow: var(--shadow); font-size: 16px; }
+.article .abody .fact b { color: var(--gold-d); }
+.article .abody .todo { padding: 14px 18px; border-radius: 12px; background: #fff4dc; border: 1px dashed var(--gold); font-size: 15px; color: var(--ink-2); }
+.article .abody ul { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; }
+.article .sources { margin-top: 40px; padding-top: 26px; border-top: 1px solid var(--line); font-size: 14px; color: var(--mute); display: grid; gap: 8px; }
+.article .sources a { color: var(--gold-d); text-decoration: underline; text-underline-offset: 3px; }
+.article .anext { margin-top: 50px; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .marquee__track { animation: none; } .room, .btn, .drawer, .pui, .play, .mood { transition: none; } }
 </style>
 
 <header class="header" id="nav">
   <div class="container">
-    <a class="logo" href="#top" aria-label="Аджна — на главную"><svg viewBox="0 0 40 40" fill="none"><path d="M3 20c5-8 11-12 17-12s12 4 17 12c-5 8-11 12-17 12S8 28 3 20Z" stroke="#c9a26a" stroke-width="1.3"/><circle cx="20" cy="20" r="6.5" stroke="#e4cba3" stroke-width="1.1"/><circle cx="20" cy="20" r="2" fill="#e4cba3"/></svg>АДЖНА</a>
-    <nav class="nav" aria-label="Главное меню"><a href="#kabinety" data-r="kabinety">Кабинеты</a><a href="#how">Как это работает</a><a href="#about">О проекте</a><a href="#faq">Вопросы</a></nav>
+    <a class="logo" href="#top" aria-label="Дорога к себе — на главную"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="17" stroke="#dcbd86" stroke-width="1"/><path d="M20 5l3.2 11.8L35 20l-11.8 3.2L20 35l-3.2-11.8L5 20l11.8-3.2z" stroke="#dcbd86" stroke-width="1.1" stroke-linejoin="round"/><circle cx="20" cy="20" r="3" fill="#dcbd86"/></svg>ДОРОГА К СЕБЕ</a>
+    <nav class="nav" aria-label="Главное меню"><a href="#kabinety" data-r="kabinety">Кабинеты</a><a href="#zhurnal" data-r="zhurnal">Журнал</a><a href="#benefits">Что вы получите</a><a href="#how">Как проходит сеанс</a></nav>
     <div class="hright">
-      <a class="btn btn--gold btn--sm" href="#room-cleanse">Начать практику <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+      <a class="btn btn--gold btn--sm" href="#kabinety">Выбрать практику <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
       <button class="burger" id="burger" type="button" aria-label="Меню"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h14M3 14h14"/></svg></button>
     </div>
   </div>
 </header>
-<div class="mnav" id="mnav" hidden><a href="#kabinety">Кабинеты</a><a href="#how">Как это работает</a><a href="#about">О проекте</a><a href="#faq">Вопросы</a><a class="btn btn--gold" href="#room-cleanse">Начать практику</a></div>
+<div class="mnav" id="mnav" hidden><a href="#kabinety">Кабинеты</a><a href="#zhurnal">Журнал</a><a href="#benefits">Что вы получите</a><a href="#how">Как проходит сеанс</a><a href="#faq">Вопросы</a><a class="btn btn--gold" href="#kabinety">Выбрать практику</a></div>
 
 <main id="home">
-  <section class="hero" id="top">
+  <section class="hero dark" id="top">
     <canvas id="heroCv"></canvas>
-    <div class="art art--bg" id="artBg"><img src="img/hero-bg.webp" alt=""></div>
-    <canvas id="heroMid" class="hlayer"></canvas>
-    <div class="art art--fg" id="artFg"><img src="img/hero-fg.webp" alt="Девушка в красном платье в наушниках медитирует в золотом кресле среди звёзд"></div>
-    <canvas id="heroFront" class="hlayer hlayer--front"></canvas>
+    <div class="art" id="art"><video id="heroVid" src="media/hero.mp4" poster="media/hero-poster.jpg" muted loop playsinline autoplay preload="auto"></video></div>
+    <canvas id="heroNet"></canvas>
     <div class="container">
       <div class="hero__inner">
-        <span class="eyebrow dot">Пространство медитации · 17 кабинетов</span>
+        <span class="eyebrow dot">Пространство медитации</span>
         <h1 class="display">Здесь шум <em>стихает.</em></h1>
-        <p class="lead">Пятнадцать минут, чтобы выдохнуть, почувствовать себя целым и снова услышать себя. Женский голос, ритмы и кокон защиты в начале каждой практики.</p>
+        <p class="lead">Пятнадцать минут — и вы спокойнее, яснее и ближе к себе. Голос ведёт, музыка поддерживает, вам остаётся только слушать.</p>
         <div class="hero__cta">
-          <a class="btn btn--gold" href="#kabinety">Выбрать кабинет <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
-          <a class="btn btn--line" href="#how">Как это работает</a>
+          <a class="btn btn--gold" href="#kabinety">Выбрать практику <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+          <a class="btn btn--line" href="#how">Как проходит сеанс</a>
         </div>
-        <div class="hero__meta"><span>Кокон защиты</span><span>Мягкий женский голос</span><span>Ритмы α и θ</span></div>
+        <div class="hero__meta"><span>17 практик</span><span>Мягкий женский голос</span><span>Музыка и ритмы покоя</span></div>
       </div>
     </div>
   </section>
 
   <div class="stats"><div class="container">
-    <div class="stat"><b>17</b><span>кабинетов под разные задачи</span></div>
-    <div class="stat"><b>11–16</b><span>минут одна сессия</span></div>
-    <div class="stat"><b>2 м</b><span>золотой кокон вокруг вас</span></div>
-    <div class="stat"><b>5,5</b><span>вдохов в минуту — ритм покоя</span></div>
+    <div class="stat"><b>17</b><span>практик под разные состояния</span></div>
+    <div class="stat"><b>15</b><span>минут — и вы другой человек</span></div>
+    <div class="stat"><b>1</b><span>кнопка: нажали и слушаете</span></div>
+    <div class="stat"><b>0</b><span>опыта медитации нужно, чтобы начать</span></div>
   </div></div>
   <div class="marquee" aria-hidden="true"><div class="marquee__track" id="marquee"></div></div>
 
   <section class="section" id="start">
     <div class="container">
-      <div class="shead"><div><span class="eyebrow">С чего начать</span><h2 class="h2">С чем вы пришли <em>сегодня?</em></h2></div>
-        <p class="lead">Выберите состояние — мы откроем кабинет, который поможет именно сейчас.</p></div>
+      <div class="shead"><div><span class="eyebrow">С чего начать</span><h2 class="h2">Как вы <em>сегодня?</em></h2></div>
+        <p class="lead">Выберите, что ближе, — и мы откроем практику, которая поможет именно сейчас.</p></div>
       <div class="moods" id="moods"></div>
     </div>
   </section>
 
-  <section class="section section--ink" id="about">
-    <div class="container split">
-      <div><span class="eyebrow">О проекте</span><h2 class="h2">Мир шумит. <em>Здесь можно услышать себя.</em></h2></div>
-      <div>
-        <p class="lead--xl">Новости, чаты, чужие ожидания. Внимание раздёргано, и своё желание уже трудно отличить от навязанного.</p>
-        <p class="lead">Аджна — это пятнадцать минут, когда никто ничего от вас не хочет. Каждая практика начинается с кокона защиты, проходит через дыхание и ведёт к одной задаче: отпустить, наполниться силой, снять шоры или просто стать тише.</p>
-        <a class="link-arrow" href="#how">Как устроена сессия <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+  <section class="section section--alt" id="benefits">
+    <div class="container">
+      <div class="shead"><div><span class="eyebrow">Что вы получите</span><h2 class="h2">Больше покоя. <em>Больше себя.</em></h2></div>
+        <p class="lead">Короткие практики, после которых жить становится легче. Уже с первого раза — и всё заметнее с каждым следующим.</p></div>
+      <div class="benefits">
+        <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 14c3-4 6-4 9 0s6 4 9 0"/><path d="M3 9c3-4 6-4 9 0s6 4 9 0" opacity=".5"/></svg></span><h3>Спокойствие за 15 минут</h3><p>Тело расслабляется, мысли замедляются. Вы выходите из сеанса тише, чем вошли.</p></div>
+        <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></span><h3>Ясная голова</h3><p>Меньше информационного шума — больше места для своих мыслей, решений и желаний.</p></div>
+        <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M13 3L5 13h6l-1 8 8-10h-6z"/></svg></span><h3>Силы и энергия</h3><p>Практики, которые наполняют, а не забирают. Особенно в дни, когда сил совсем нет.</p></div>
+        <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg></span><h3>Тепло к себе и близким</h3><p>Меньше самокритики и обид, больше понимания — к себе и к людям рядом.</p></div>
+        <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h16M14 6l6 6-6 6"/></svg></span><h3>Свобода от лишнего</h3><p>Тяга к сигаретам, сладкому, телефону слабеет. Старые установки перестают управлять вами.</p></div>
+        <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg></span><h3>Встреча с собой</h3><p>Тишина, в которой слышно главное: чего вы на самом деле хотите и куда идёте.</p></div>
       </div>
     </div>
   </section>
 
   <section class="section" id="featured">
     <div class="container">
-      <div class="shead"><div><span class="eyebrow">Кабинеты</span><h2 class="h2">Одна практика. <em>Одна задача.</em></h2></div>
+      <div class="shead"><div><span class="eyebrow">Кабинеты</span><h2 class="h2">У каждой практики — <em>своё пространство.</em></h2></div>
         <a class="btn btn--line" href="#kabinety">Все кабинеты <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
       <div class="rooms" id="featGrid"></div>
     </div>
   </section>
 
-  <section class="section section--ink" id="path">
+  <section class="section section--alt" id="how">
     <div class="container">
-      <div class="shead"><div><span class="eyebrow">Путь</span><h2 class="h2">Перемены приходят <em>шаг за шагом.</em></h2></div>
-        <p class="lead">Одна сессия даёт передышку. Регулярная практика меняет то, как вы реагируете, думаете и живёте. Так растёт любой навык.</p></div>
+      <div class="shead"><div><span class="eyebrow">Как проходит сеанс</span><h2 class="h2">Вы просто слушаете. <em>Остальное происходит само.</em></h2></div>
+        <p class="lead">Наденьте наушники, сядьте удобно и нажмите «Начать». Дальше голос и музыка бережно проведут вас от начала до конца.</p></div>
+      <div class="steps">
+        <div class="step card"><span class="n">01</span><h3>Вход</h3><p>Голос помогает отпустить день. Вокруг вас появляется золотой кокон — пространство, где спокойно и безопасно.</p></div>
+        <div class="step card"><span class="n">02</span><h3>Погружение</h3><p>Дыхание замедляется, звук становится глубже. Мысли отступают, тело тяжелеет и отдыхает.</p></div>
+        <div class="step card"><span class="n">03</span><h3>Сеанс</h3><p>Вы внутри своей практики. Образы, музыка и голос ведут к тому, ради чего вы пришли.</p></div>
+        <div class="step card"><span class="n">04</span><h3>Возвращение</h3><p>Мягкий выход. Остаются лёгкость, ясность и ощущение, что вы снова на своей стороне.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section mission" id="about">
+    <div class="container">
+      <span class="eyebrow">Зачем мы это сделали</span>
+      <blockquote>Мир шумит всё громче. <em>Пятнадцать минут тишины</em> возвращают вас себе.</blockquote>
+      <p>Новости, чаты, чужие ожидания — внимание раздёргано, и своё желание трудно отличить от навязанного. «Дорога к себе» — место, где можно выдохнуть, услышать себя и шаг за шагом стать спокойнее, сильнее и свободнее.</p>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="path">
+    <div class="container">
+      <div class="shead"><div><span class="eyebrow">Ваш путь</span><h2 class="h2">Как меняется жизнь <em>с практикой.</em></h2></div>
+        <p class="lead">Каждый сеанс — шаг. Шаги складываются в перемены, которые замечаете вы и люди рядом.</p></div>
       <div class="path">
-        <div><b>1</b><h3>Сегодня</h3><p>Тише в голове, ровнее дыхание. Уже это немало.</p></div>
-        <div><b>7</b><h3>Неделя</h3><p>Легче возвращаться в спокойствие. Тяга и тревога слабее.</p></div>
-        <div><b>30</b><h3>Месяц</h3><p>Новые реакции становятся привычными. Перемены видны в делах и отношениях.</p></div>
-        <div><b>∞</b><h3>Дальше</h3><p>Бывают дни, когда не получается. Это часть пути — вы просто возвращаетесь.</p></div>
+        <div class="card"><b>После первого сеанса</b><h3>Передышка</h3><p>В голове тише, дыхание ровнее, плечи опускаются. Хочется вернуться.</p></div>
+        <div class="card"><b>Через неделю</b><h3>Устойчивость</h3><p>Легче засыпать и легче возвращаться в спокойствие, когда день давит.</p></div>
+        <div class="card"><b>Через месяц</b><h3>Новые привычки</h3><p>Реакции мягче, решения яснее. Перемены видны в делах и отношениях.</p></div>
+        <div class="card"><b>И дальше</b><h3>Своя опора</h3><p>Бывают дни, когда не получается, — и это нормально. Вы просто возвращаетесь.</p></div>
       </div>
       <p class="streak" id="streak"></p>
     </div>
   </section>
 
-  <section class="section" id="how">
+  <section class="section" id="trust">
     <div class="container">
-      <div class="shead"><div><span class="eyebrow">Как это работает</span><h2 class="h2">Четыре шага. <em>Всегда в этом порядке.</em></h2></div>
-        <p class="lead">Сначала защита и опора, потом дыхание. Только после этого — сама практика.</p></div>
-      <div class="steps">
-        <div class="step"><span class="n">01</span><h3>Кокон</h3><p>Золотой кокон на два метра вокруг вас. На выдохе вы посылаете в него свет из сердца — и он становится плотным.</p></div>
-        <div class="step"><span class="n">02</span><h3>Дыхание</h3><p>Две минуты в резонансном темпе. Сердце и дыхание входят в общий спокойный ритм.</p></div>
-        <div class="step"><span class="n">03</span><h3>Практика</h3><p>Голос ведёт через задачу кабинета. Музыка и ритм подобраны под каждый шаг.</p></div>
-        <div class="step"><span class="n">04</span><h3>Возвращение</h3><p>Мягкий выход: опора, движение, открытые глаза. Кокон остаётся с вами.</p></div>
-      </div>
+      <div class="shead"><div><span class="eyebrow">Почему этому можно доверять</span><h2 class="h2">Не из головы. <em>Из опыта и исследований.</em></h2></div>
+        <a class="btn btn--line" href="#zhurnal">Весь журнал <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
+      <div class="jgrid" id="jTeaser"></div>
     </div>
   </section>
 
-  <section class="section section--ink" id="faq">
+  <section class="section" id="faq">
     <div class="container split">
       <div><span class="eyebrow">Вопросы</span><h2 class="h2">Коротко <em>о главном.</em></h2></div>
       <div class="faq">
-        <details><summary>Как часто практиковать?<i></i></summary><p>Лучше понемногу, но регулярно: одна сессия в день или через день. Эффект накапливается, и первые перемены обычно заметны через одну–две недели.</p></details>
-        <details><summary>Зачем кокон в начале каждой сессии?<i></i></summary><p>Это ваше защищённое пространство. Когда внутри есть ощущение безопасности, ум перестаёт ждать угрозу и расслабление идёт глубже. Кокон остаётся с вами до конца практики.</p></details>
-        <details><summary>Нужны ли наушники?<i></i></summary><p>Да. Бинауральный ритм возникает, только когда в каждое ухо идёт свой звук. Громкость — тихая, на грани слышимости.</p></details>
-        <details><summary>Что если не получается сосредоточиться?<i></i></summary><p>Это нормально. Мысли уходят — вы возвращаетесь. Каждое такое возвращение и есть тренировка, с которой всё начинается.</p></details>
-        <details><summary>На что опираются практики?<i></i></summary><p>На изученные методы — резонансное дыхание, осознанность, работу с убеждениями, сочувствие к себе — и на традицию йоги. У каждого кабинета указана его основа.</p></details>
+        <details><summary>Мне нужен опыт медитации?<i></i></summary><p>Нет. Голос ведёт каждый шаг: что представить, как дышать, когда открыть глаза. Достаточно наушников и пятнадцати спокойных минут.</p></details>
+        <details><summary>Как часто практиковать?<i></i></summary><p>Лучше понемногу, но регулярно: один сеанс в день или через день. Эффект накапливается, и первые перемены обычно заметны через одну–две недели.</p></details>
+        <details><summary>Что такое золотой кокон?<i></i></summary><p>Это ваше защищённое пространство в начале каждого сеанса. Когда внутри есть ощущение безопасности, ум перестаёт ждать угрозу и погружение идёт глубже.</p></details>
+        <details><summary>Почему нужны наушники?<i></i></summary><p>Музыка и ритмы покоя звучат по-разному в каждом ухе — так они работают в полную силу. Громкость — тихая, на грани слышимости.</p></details>
+        <details><summary>А если не получается сосредоточиться?<i></i></summary><p>Это нормально. Мысли уходят — вы возвращаетесь. Каждое такое возвращение и есть тренировка.</p></details>
         <details><summary>Кому стоит быть осторожнее?<i></i></summary><p>При эпилепсии, серьёзных психических расстройствах и после травм головы сначала посоветуйтесь с врачом. Не слушайте за рулём. Практика поддерживает, но не заменяет лечение.</p></details>
       </div>
     </div>
   </section>
 
   <section class="cta-band"><div class="container">
-    <div><h2 class="h2">Начните с <em>очищения.</em></h2><p>Двенадцать минут. Наушники, тишина, удобное кресло.</p></div>
-    <a class="btn btn--dark" href="#room-cleanse">Войти в кабинет <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    <div><h2 class="h2">Начните с <em>очищения.</em></h2><p>Двенадцать минут, чтобы сбросить день и освободить место для нового.</p></div>
+    <a class="btn btn--ink" href="#room-cleanse">Войти в кабинет <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
   </div></section>
 </main>
 
+<main id="journal" hidden>
+  <section class="lhero">
+    <div class="container">
+      <nav class="crumbs" aria-label="Путь"><a href="#top">Главная</a><span>Журнал</span></nav>
+      <h1 class="display">Журнал <em>«Дороги к себе».</em></h1>
+      <p class="lead">Кто мы, почему выбрали именно эти практики и что о них говорят исследования. Без обещаний чудес — только то, что можно проверить.</p>
+    </div>
+  </section>
+  <section class="section" style="padding-top:20px"><div class="container"><div class="jgrid" id="jGrid"></div></div></section>
+</main>
+
+<main id="article" hidden>
+  <section class="section" style="padding-top:150px"><div class="container"><article class="article">
+    <nav class="crumbs" aria-label="Путь"><a href="#top">Главная</a><a href="#zhurnal"><span>Журнал</span></a></nav>
+    <span class="eyebrow" id="aCat"></span>
+    <h1 id="aTitle"></h1>
+    <p class="alead" id="aLead"></p>
+    <div class="abody" id="aBody"></div>
+    <div class="sources" id="aSrc"></div>
+    <div class="anext nextnav" id="aNav"></div>
+  </article></div></section>
+</main>
+
 <main id="catalog" hidden>
-  <section class="phero">
-    <canvas id="catCv"></canvas>
+  <section class="lhero">
+    <canvas id="catNet"></canvas>
     <div class="container">
       <nav class="crumbs" aria-label="Путь"><a href="#top">Главная</a><span>Кабинеты</span></nav>
       <h1 class="display">Все <em>кабинеты.</em></h1>
-      <p class="lead">Семнадцать практик. Каждая начинается с кокона и дыхания и ведёт к одной задаче.</p>
+      <p class="lead">Семнадцать практик — у каждой своё пространство, своя музыка и свой путь. Выберите то, что откликается сегодня.</p>
     </div>
   </section>
-  <section class="section" style="padding-top:40px">
+  <section class="section" style="padding-top:20px">
     <div class="container">
       <div class="filters" id="filters" role="group" aria-label="Фильтр"></div>
       <div class="rooms" id="roomGrid"></div>
@@ -427,7 +519,7 @@ input[type=range] { width: 100%; accent-color: var(--gold); }
 </main>
 
 <main id="roomPage" hidden>
-  <section class="phero rhero">
+  <section class="phero rhero dark">
     <canvas id="roomCv"></canvas>
     <div class="container">
       <nav class="crumbs" aria-label="Путь"><a href="#top">Главная</a><a href="#kabinety"><span>Кабинеты</span></a><span id="rCrumb"></span></nav>
@@ -437,22 +529,22 @@ input[type=range] { width: 100%; accent-color: var(--gold); }
       <div class="chips" id="rChips"></div>
       <div class="habit" id="rHabitBox" hidden><span class="eyebrow">Ваша привычка</span><div class="hchips" id="rHabit" role="group" aria-label="Привычка"></div></div>
       <label class="intent"><span class="eyebrow">Ваше намерение</span><input id="rIntent" type="text" maxlength="80" autocomplete="off"></label>
-      <div><button class="btn btn--gold" id="rStart" type="button">Начать сессию <svg class="ico" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3v10l8-5z"/></svg></button></div>
+      <div><button class="btn btn--gold" id="rStart" type="button">Начать сеанс <svg class="ico" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3v10l8-5z"/></svg></button></div>
     </div>
   </section>
   <section class="section"><div class="container rgrid">
-    <div><span class="eyebrow">Для чего</span><h2 class="h2" style="margin-bottom:24px" id="rWhyT"></h2><p class="lead" id="rWhy"></p><div class="note-box" id="rNote"></div></div>
+    <div><span class="eyebrow">Для чего</span><h2 class="h2" style="margin-bottom:24px" id="rWhyT"></h2><p class="lead" id="rWhy"></p><div class="note-box card" id="rNote"></div></div>
     <div><span class="eyebrow">Что вас ждёт</span><ol class="timeline" id="rSteps"></ol></div>
   </div></section>
   <section class="section" style="padding-top:0"><div class="container nextnav" id="rNav"></div></section>
 </main>
 
 <footer class="footer"><div class="container">
-  <div><a class="logo" href="#top"><svg viewBox="0 0 40 40" fill="none"><path d="M3 20c5-8 11-12 17-12s12 4 17 12c-5 8-11 12-17 12S8 28 3 20Z" stroke="#c9a26a" stroke-width="1.3"/><circle cx="20" cy="20" r="6.5" stroke="#e4cba3" stroke-width="1.1"/><circle cx="20" cy="20" r="2" fill="#e4cba3"/></svg>АДЖНА</a>
-    <p class="about">Пространство медитации. Кокон, дыхание, голос и ритм — пятнадцать минут, чтобы услышать себя.</p></div>
+  <div><a class="logo" href="#top" style="color:var(--ink)"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="17" stroke="#b0844a" stroke-width="1"/><path d="M20 5l3.2 11.8L35 20l-11.8 3.2L20 35l-3.2-11.8L5 20l11.8-3.2z" stroke="#b0844a" stroke-width="1.1" stroke-linejoin="round"/><circle cx="20" cy="20" r="3" fill="#b0844a"/></svg>ДОРОГА К СЕБЕ</a>
+    <p class="about">Пространство медитации. Пятнадцать минут, чтобы выдохнуть, услышать себя и вернуться в день спокойнее.</p></div>
   <div><h4>Кабинеты</h4><ul id="footRooms"></ul></div>
-  <div><h4>Проект</h4><ul><li><a href="#how">Как это работает</a></li><li><a href="#path">Путь шаг за шагом</a></li><li><a href="#about">О проекте</a></li><li><a href="#faq">Вопросы</a></li></ul></div>
-  <div class="bottom"><span>© Аджна</span><span>Наушники обязательны · практика не заменяет лечение</span></div>
+  <div><h4>Проект</h4><ul><li><a href="#benefits">Что вы получите</a></li><li><a href="#how">Как проходит сеанс</a></li><li><a href="#path">Ваш путь</a></li><li><a href="#zhurnal">Журнал</a></li><li><a href="#faq">Вопросы</a></li></ul></div>
+  <div class="bottom"><span>© Дорога к себе</span><span>Слушайте в наушниках · практика не заменяет лечение</span></div>
 </div></footer>
 
 <div class="player" id="player" hidden>
@@ -460,7 +552,7 @@ input[type=range] { width: 100%; accent-color: var(--gold); }
   <div class="pintent" id="pIntent" aria-live="off"></div>
   <div class="pui">
     <div class="ptop">
-      <button class="icon" id="pClose" type="button" aria-label="Выйти из сессии"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <button class="icon" id="pClose" type="button" aria-label="Выйти из сеанса"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       <div class="ttl" id="pTtl"></div>
       <div class="tools">
         <button class="icon" id="pFs" type="button" aria-label="Во весь экран"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
@@ -487,17 +579,18 @@ input[type=range] { width: 100%; accent-color: var(--gold); }
   <div class="sect"><span class="eyebrow">Женский голос</span>
     <select id="voiceSel" aria-label="Голос"></select>
     <button class="ghost" id="testVoice" type="button">Послушать</button>
-    <label class="check"><input type="checkbox" id="vInstr" checked> Голос ведёт по сессии</label>
-    <label class="check"><input type="checkbox" id="vBreath"> Подсказывать «вдох» и «выдох»</label>
+    <label class="check"><input type="checkbox" id="vInstr" checked> Голос ведёт по сеансу</label>
+    <label class="check"><input type="checkbox" id="vBreath"> Подсказывать «вдох» и «выдох» голосом</label>
     <p class="small" id="voiceNote"></p></div>
   <div class="sect"><span class="eyebrow">Звук</span>
     <input type="range" id="vol" min="0" max="100" value="30" aria-label="Громкость">
     <div class="row"><span>Громкость</span><span id="volV">30%</span></div>
+    <label class="check"><input type="checkbox" id="sbreath" checked> Звук ведёт дыхание: волна на вдохе и выдохе</label>
     <label class="check"><input type="checkbox" id="music" checked> Тихая музыка</label>
     <label class="check"><input type="checkbox" id="melody" checked> Мелодия: редкие мягкие ноты</label>
-    <label class="check"><input type="checkbox" id="beat" checked> Бинауральный ритм</label>
+    <label class="check"><input type="checkbox" id="beat" checked> Ритмы покоя (бинауральные)</label>
     <label class="check"><input type="checkbox" id="noise"> Мягкий шум</label>
-    <p class="small">Бинауральный ритм слышен только в стереонаушниках.</p></div>
+    <p class="small">Ритмы покоя слышны только в стереонаушниках.</p></div>
 </aside>
 
 <script>
@@ -518,10 +611,10 @@ const CH = [
   { n: 'Сахасрара',    where: 'макушка',                bija: 'тишина', c: [199,125,255], petals: 1000, tone: 246.94, say: ['Сахасрара.', 'Макушка.', 'Фиолетовый, почти белый свет. Тишина.'] }
 ];
 
-const COCOON = { key: 'cocoon', name: 'Кокон', dur: 100, visual: 'cocoon', breath: 'calm', beat: 8, tone: 3,
+const COCOON = { key: 'cocoon', name: 'Вход', dur: 100, visual: 'cocoon', breath: 'calm', beat: 8, tone: 3,
   text: 'Золотой кокон на два метра вокруг вас. На вдохе свет собирается в сердце, на выдохе уходит в кокон. Он становится плотным и защищает со всех сторон.',
   say: ['Устройтесь удобно. Спина ровная, плечи мягкие.', 'Представьте вокруг себя кокон золотого света.', 'Примерно два метра во все стороны от вас.', 'На вдохе набирайте свет в сердце.', 'На выдохе отправляйте его из сердца в кокон.', 'С каждым выдохом он плотнее и ярче.', 'Он защищает вас со всех сторон. Сверху, снизу, спереди и сзади.', 'Всё лишнее может выйти наружу. Внутрь проходит только свет.'] };
-const BREATHE = { key: 'breath', name: 'Дыхание', dur: 120, visual: 'breath', breath: 'resonance', beat: 10, tone: 3, cue: true,
+const BREATHE = { key: 'breath', name: 'Погружение', dur: 120, visual: 'breath', breath: 'resonance', beat: 10, tone: 3, cue: true,
   text: 'Вдох пять с половиной секунд, выдох столько же. Животом, мягко, без усилия.',
   say: ['Теперь дышите вместе со сферой.', 'Вдох и выдох одинаковые, мягкие.', 'Кокон остаётся вокруг вас.'] };
 const RETURN = { key: 'return', name: 'Возвращение', dur: 60, visual: 'breath', breath: 'calm', beat: 10, tone: 0, cue: true,
@@ -537,7 +630,7 @@ const ROOMS = [
       R(120, 'Светлый поток', 'cleanse', 'Над головой источник чистого света. Он льётся вниз, как тёплый водопад.', ['Представьте над головой источник чистого света.', 'Он льётся вниз, как тёплый водопад.', 'Через макушку, лицо, горло, плечи.', 'Всё тяжёлое смывается и уходит в землю.']),
       R(120, 'Тело', 'cleanse', 'Свет проходит через грудь, живот, руки и ноги. Всё лишнее уходит вниз.', ['Свет проходит через грудь и живот.', 'Через руки, до кончиков пальцев.', 'Через ноги, до самых стоп.', 'Всё, что вам больше не нужно, уходит вниз и растворяется.']),
       R(90, 'Мысли', 'cleanse', 'Свет проходит через мысли. Чужие слова и заботы дня уходят на выдохе.', ['Теперь свет проходит через мысли.', 'Чужие слова, новости, заботы дня.', 'Просто отпускайте их на выдохе.']),
-      R(90, 'Чистота', 'mandala', 'Вы чистые и лёгкие. Кокон сияет ровным золотым светом.', ['Вы чистые и лёгкие.', 'Кокон сияет ровным золотым светом.', 'Побудьте в этой тишине.'], { beat: 6 })
+      R(90, 'Чистота', 'flight', 'Вы чистые и лёгкие. Кокон сияет ровным золотым светом.', ['Вы чистые и лёгкие.', 'Кокон сияет ровным золотым светом.', 'Побудьте в этой тишине.'], { beat: 6 })
     ] },
   { id: 'energy', name: 'Жизненная энергия', ci: 0, tag: 'Поднять силу от корня до макушки.', ev: ['t-c', 'Традиция · визуализация'],
     whyT: 'Сила, которая всегда с вами', why: 'Внимание поднимается по позвоночнику от корня к макушке, и вместе с ним — ощущение тепла и силы. Хорошо утром или после тяжёлого дня, когда сил нет совсем.',
@@ -587,7 +680,7 @@ const ROOMS = [
     main: [
       R(90, 'Шум', 'silence', 'Заметьте все мысли, которые сейчас есть. Не спорьте с ними.', ['Заметьте все мысли, которые сейчас есть.', 'Не спорьте с ними.']),
       R(150, 'Облака', 'silence', 'Мысли — облака. Они приходят и уходят. Вы — небо.', ['Представьте, что мысли — это облака.', 'Они приходят и уходят.', 'Вы — небо. Спокойное и большое.'], { beat: 6 }),
-      R(180, 'Паузы', 'mandala', 'Между мыслями есть паузы. Побудьте в них.', ['Между мыслями есть паузы.', 'Побудьте в них.', 'Ничего не нужно делать.'], { beat: 6 })
+      R(180, 'Паузы', 'flight', 'Между мыслями есть паузы. Побудьте в них.', ['Между мыслями есть паузы.', 'Побудьте в них.', 'Ничего не нужно делать.'], { beat: 6 })
     ] },
   { id: 'ajna', name: 'Третий глаз', ci: 5, tag: 'Тратака: взгляд в одну точку и внутренний свет.', ev: ['t-b', 'Внимание · малые исследования'],
     whyT: 'Внимание в одной точке', why: 'Классическая тратака: неподвижный взгляд в золотую точку третьего глаза, затем образ с закрытыми глазами. Тренирует концентрацию и внутреннее видение.',
@@ -595,14 +688,14 @@ const ROOMS = [
     main: [
       R(180, 'Взгляд', 'eye', 'Смотрите в золотую точку в центре зрачка. Моргайте реже, без напряжения.', ['Посмотрите в центр третьего глаза.', 'Там золотая точка. Оставайтесь с ней.', 'Моргайте реже. Без напряжения.'], { breath: null, beat: 10 }),
       R(90, 'Внутренний свет', 'dark', 'Закройте глаза. Удерживайте образ между бровей.', ['Теперь закройте глаза.', 'Образ остался внутри. Между бровей.', 'Просто смотрите на него.'], { breath: null, beat: 6 }),
-      R(120, 'Тишина', 'mandala', 'Глаза закрыты. Мысли приходят и уходят.', ['Отпустите дыхание.', 'Ничего не нужно делать.', 'Просто будьте здесь.'], { beat: 6 })
+      R(120, 'Тишина', 'flight', 'Глаза закрыты. Мысли приходят и уходят.', ['Отпустите дыхание.', 'Ничего не нужно делать.', 'Просто будьте здесь.'], { beat: 6 })
     ] },
   { id: 'chakras', name: 'Семь чакр', ci: 6, tag: 'Путь снизу вверх: от опоры к тишине.', ev: ['t-c', 'Традиция · визуализация'],
     whyT: 'Вся энергетическая вертикаль', why: 'По полминуты на каждую чакру: цвет, место в теле, звук. Внимание проходит от основания позвоночника к макушке и собирает тело в одно целое.',
     note: '<b>Основа:</b> система чакр из тантры и хатха-йоги. Число лепестков и биджа-мантры — по классическим текстам.',
     main: [
       R(216, 'Семь чакр', 'chakras', 'Внимание поднимается от основания позвоночника к макушке. Полминуты на каждую.', ['Теперь пройдём по чакрам.', 'Снизу вверх.'], { key: 'chakras' }),
-      R(90, 'Единство', 'mandala', 'Все семь чакр светятся вместе. Побудьте в этом целом.', ['Все семь центров светятся вместе.', 'Побудьте в этом целом.'], { beat: 6 })
+      R(90, 'Единство', 'flight', 'Все семь чакр светятся вместе. Побудьте в этом целом.', ['Все семь центров светятся вместе.', 'Побудьте в этом целом.'], { beat: 6 })
     ] },
   { id: 'blinders', name: 'Снять шоры', ci: 5, wide: true, tag: 'Увидеть больше возможностей, чем позволяет старая призма.', ev: ['t-a', 'Работа с убеждениями'],
     whyT: 'Мир шире, чем нас учили', why: 'С детства нам надевают шоры: «так не принято», «это не для нас», «неудобно попросить». Мы смотрим на мир через узкую щель и принимаем её за весь мир. Здесь вы находите одно своё ограничивающее убеждение, проверяете его на правду, примеряете новое и делаете один маленький смелый шаг. Шоры снимаются постепенно: каждый шаг открывает ещё немного.',
@@ -773,9 +866,50 @@ function yantraSVG(i) {
   return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-102 -102 204 204" width="512" height="512"><defs><radialGradient id="pf" cx="0" cy="0" r="100" gradientUnits="userSpaceOnUse"><stop offset=".35" stop-color="' + col + '" stop-opacity=".55"/><stop offset="1" stop-color="' + col + '" stop-opacity=".06"/></radialGradient></defs>' +
     dots + petals + ring + inner + '<circle r="2.6" fill="#fff6dc"/></svg>';
 }
-const YANTRA = CH.map((_, i) => { const im = new Image(), cv = document.createElement('canvas'); cv.width = cv.height = 512; const y = { cv, ready: false };
+function sacredSVG(k, light) {
+  const sc = light ? '#a87d44' : GOLD, tint = ['#ff8fa8', '#6fb1ff', '#c99bff', '#7fe0b0', '#7fe6ff'][k], tw = light ? 0.9 : 1.1;
+  const circ = (x, y, r, col, w, op) => '<circle cx="' + x.toFixed(2) + '" cy="' + y.toFixed(2) + '" r="' + r + '" fill="none" stroke="' + col + '" stroke-width="' + w + '" stroke-opacity="' + (op || 1) + '"/>';
+  const poly = (pts, col, w, fill) => '<polygon points="' + pts + '" fill="' + (fill || 'none') + '" fill-opacity=".12" stroke="' + col + '" stroke-width="' + w + '" stroke-linejoin="round"/>';
+  const triAt = (r, up, dy) => [0, 1, 2].map(j => { const a = (up ? -90 : 90) + j * 120; return (r * Math.cos(a * Math.PI / 180)).toFixed(2) + ',' + (r * Math.sin(a * Math.PI / 180) + dy).toFixed(2); }).join(' ');
+  let body = '';
+  if (k === 0) { // Sri Yantra: square with gates, circles, two lotus rings, nine interlocking triangles
+    const g = 92, d = 18; body += '<path d="M' + -g + ' ' + -g + 'H' + -d + 'V' + (-g - 6) + 'H' + d + 'V' + -g + 'H' + g + 'V' + -d + 'H' + (g + 6) + 'V' + d + 'H' + g + 'V' + g + 'H' + d + 'V' + (g + 6) + 'H' + -d + 'V' + g + 'H' + -g + 'V' + d + 'H' + (-g - 6) + 'V' + -d + 'H' + -g + 'Z" fill="none" stroke="' + sc + '" stroke-width="' + tw + '"/>';
+    body += circ(0, 0, 80, sc, tw * 0.8) + circ(0, 0, 76, tint, 0.6, 0.8) + petalRing(16, 58, 75, tint, 0.8, 0) + petalRing(8, 44, 58, sc, 0.9, 22.5) + circ(0, 0, 44, sc, tw);
+    [[40, false, 4], [33, false, -5], [26, false, 9], [18, false, -2], [10, false, 4]].forEach(([r, u, dy]) => body += poly(triAt(r, u, dy), tint, 0.9));
+    [[38, true, -5], [30, true, 5], [22, true, -1], [14, true, 6]].forEach(([r, u, dy]) => body += poly(triAt(r, u, dy), sc, 0.9));
+  } else if (k === 1) { // Metatron's cube
+    const P = [[0, 0]]; for (let j = 0; j < 6; j++) { const a = j * Math.PI / 3 - Math.PI / 2; P.push([Math.cos(a) * 32, Math.sin(a) * 32], [Math.cos(a) * 64, Math.sin(a) * 64]); }
+    for (let i = 0; i < P.length; i++) for (let j = i + 1; j < P.length; j++) body += '<line x1="' + P[i][0].toFixed(1) + '" y1="' + P[i][1].toFixed(1) + '" x2="' + P[j][0].toFixed(1) + '" y2="' + P[j][1].toFixed(1) + '" stroke="' + tint + '" stroke-width=".45" stroke-opacity=".75"/>';
+    P.forEach(([x, y]) => body += circ(x, y, 16, sc, tw * 0.85));
+  } else if (k === 2 || k === 3) { // Flower of life / Seed of life
+    const r = k === 2 ? 22 : 30, C = [[0, 0]];
+    for (let j = 0; j < 6; j++) { const a = j * Math.PI / 3; C.push([Math.cos(a) * r, Math.sin(a) * r]); }
+    if (k === 2) for (let j = 0; j < 6; j++) { const a = j * Math.PI / 3; C.push([Math.cos(a) * r * 2, Math.sin(a) * r * 2]); const b = a + Math.PI / 6; C.push([Math.cos(b) * r * Math.sqrt(3), Math.sin(b) * r * Math.sqrt(3)]); }
+    C.forEach(([x, y], i) => body += circ(x, y, r, i % 2 ? tint : sc, tw * 0.85));
+    body += circ(0, 0, k === 2 ? r * 3 : r * 2, sc, tw * 1.2) + circ(0, 0, (k === 2 ? r * 3 : r * 2) + 5, tint, 0.6, 0.7);
+  } else { // Merkaba: star tetrahedron in projection
+    body += circ(0, 0, 90, sc, tw * 0.8) + poly(triAt(80, true, 0), sc, tw * 1.1, tint) + poly(triAt(80, false, 0), tint, tw * 1.1, sc);
+    const H = [0, 1, 2, 3, 4, 5].map(j => { const a = j * Math.PI / 3 - Math.PI / 2; return [Math.cos(a) * 46, Math.sin(a) * 46]; });
+    body += '<polygon points="' + H.map(p => p.map(v => v.toFixed(1)).join(',')).join(' ') + '" fill="none" stroke="' + sc + '" stroke-width=".8"/>';
+    H.forEach(([x, y]) => body += '<line x1="0" y1="0" x2="' + x.toFixed(1) + '" y2="' + y.toFixed(1) + '" stroke="' + tint + '" stroke-width=".6"/>');
+  }
+  const col = light ? '#b0844a' : tint;
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-102 -102 204 204" width="512" height="512"><defs><radialGradient id="pf" cx="0" cy="0" r="100" gradientUnits="userSpaceOnUse"><stop offset=".35" stop-color="' + col + '" stop-opacity=".35"/><stop offset="1" stop-color="' + col + '" stop-opacity=".04"/></radialGradient></defs>' + body + '<circle r="2.6" fill="' + (light ? '#b0844a' : '#fff6dc') + '"/></svg>';
+}
+const lightify = svg => svg.replace(/#05030c/g, '#fffaf2').replace(/#e8eefc/g, '#a07a46').replace(/#fff6dc/g, '#b0844a').replace(new RegExp(GOLD, 'g'), '#a87d44');
+function raster(svg) { const im = new Image(), cv = document.createElement('canvas'); cv.width = cv.height = 512; const y = { cv, ready: false };
   im.onload = () => { cv.getContext('2d').drawImage(im, 0, 0, 512, 512); y.ready = true; surfaces.forEach(s => s.dirty = true); };
-  im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(yantraSVG(i)); return y; });
+  im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg); return y; }
+const YANTRA = CH.map((_, i) => raster(yantraSVG(i)));
+const YANTRA_ALL = YANTRA.concat([0, 1, 2, 3, 4].map(k => raster(sacredSVG(k, false))));
+const YANTRA_LIGHT = CH.map((_, i) => raster(lightify(yantraSVG(i)))).concat([0, 1, 2, 3, 4].map(k => raster(sacredSVG(k, true))));
+const YCOL = CH.map(c => c.c).concat([[255, 143, 168], [111, 177, 255], [201, 155, 255], [127, 224, 176], [127, 230, 255]]);
+function drawYantra(ctx, x, y, size, idx, light, rot, alpha) {
+  const yi = (light ? YANTRA_LIGHT : YANTRA_ALL)[idx]; if (!yi || !yi.ready) return;
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+  if (!light) { ctx.globalCompositeOperation = 'lighter'; const h = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 0.9); h.addColorStop(0, rgba(YCOL[idx], 0.22 * alpha)); h.addColorStop(1, rgba(YCOL[idx], 0)); ctx.fillStyle = h; ctx.beginPath(); ctx.arc(0, 0, size * 0.9, 0, TAU); ctx.fill(); }
+  ctx.globalAlpha = alpha; ctx.drawImage(yi.cv, -size / 2, -size / 2, size, size); ctx.restore();
+}
 const PET2I = { 4: 0, 6: 1, 10: 2, 12: 3, 16: 4, 2: 5, 1000: 6 };
 function lotus(x, y, r, c, petals, glow, rot) {
   const yi = YANTRA[PET2I[petals]];
@@ -1026,6 +1160,24 @@ function drawShutters(t, st, open) { // blinders part to reveal a wider world
     const glow = g.createLinearGradient(edge, 0, edge + sd * -m * 0.08, 0); glow.addColorStop(0, 'rgba(231,194,125,.18)'); glow.addColorStop(1, 'rgba(231,194,125,0)'); g.fillStyle = glow; g.fillRect(Math.min(edge, edge - sd * m * 0.08), 0, m * 0.08, H);
   });
 }
+const FLY = Array.from({ length: 420 }, (_, i) => ({ x: (Math.random() - 0.5) * 2.4, y: (Math.random() - 0.5) * 2.4, z: Math.random(), c: i % 9 === 0 ? [255, 214, 150] : i % 7 === 0 ? [170, 200, 255] : [245, 240, 255] }));
+const FLYY = Array.from({ length: 6 }, (_, i) => ({ x: (i % 2 ? 1 : -1) * (0.35 + Math.random() * 0.5), y: (Math.random() - 0.5) * 0.9, z: i / 6, k: Math.floor(Math.random() * 12) }));
+function drawFlight(t, st) { // a slow flight through deep space; stars and the odd yantra drift past
+  const m = M(), x0 = cx(), y0 = cy(), f = Math.max(W, H) * 0.42, sp = reduce ? 0 : 0.022 + (st ? 0.006 * st.b : 0);
+  g.globalCompositeOperation = 'lighter';
+  const core = g.createRadialGradient(x0, y0, 0, x0, y0, m * 0.35); core.addColorStop(0, 'rgba(255,236,200,.12)'); core.addColorStop(1, 'rgba(255,236,200,0)'); g.fillStyle = core; g.fillRect(0, 0, W, H);
+  for (const s of FLY) {
+    const z = 0.03 + ((((s.z - t * sp) % 1) + 1) % 1) * 0.97, z2 = Math.min(1, z + 0.02);
+    const X = x0 + s.x / z * f * 0.5, Y = y0 + s.y / z * f * 0.5; if (X < -20 || X > W + 20 || Y < -20 || Y > H + 20) continue;
+    const X2 = x0 + s.x / z2 * f * 0.5, Y2 = y0 + s.y / z2 * f * 0.5, a = Math.min(1, (1 - z) * 1.3) * (z < 0.08 ? z / 0.08 : 1);
+    g.strokeStyle = rgba(s.c, 0.85 * a); g.lineWidth = Math.min(2.6, 0.5 / z * 0.6); g.beginPath(); g.moveTo(X2, Y2); g.lineTo(X, Y); g.stroke();
+  }
+  for (const y of FLYY) {
+    const z = 0.12 + ((((y.z - t * sp * 0.5) % 1) + 1) % 1) * 0.88, X = x0 + y.x / z * f * 0.5, Y = y0 + y.y / z * f * 0.5, sz = m * 0.05 / z, a = Math.min(1, (1 - z) * 1.4) * Math.min(1, (z - 0.12) / 0.1);
+    if (sz < m * 1.2) drawYantra(g, X, Y, sz, y.k, false, t * 0.04, 0.5 * a);
+  }
+  g.globalCompositeOperation = 'source-over';
+}
 const CLOUDS = Array.from({ length: 9 }, (_, i) => ({ y: 0.15 + i * 0.09, s: 0.004 + (i % 3) * 0.003, r: 0.12 + (i % 4) * 0.05, o: Math.random() }));
 function drawSilence(t, st) { // thoughts as clouds drifting across a still sky
   const m = M(), b = st ? st.b : 0.5;
@@ -1088,6 +1240,7 @@ function scene(visual, t, o) {
     case 'purpose': drawPurpose(t, st); break;
     case 'silence': drawSilence(t, st); break;
     case 'urge': drawUrge(t, st); break;
+    case 'flight': drawFlight(t, st); break;
     case 'release': drawRelease(t); break;
     case 'heart': drawHeart(t, st); break;
     case 'bond': drawBond(t, st); break;
@@ -1124,9 +1277,9 @@ const ARROW = '<svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentC
 const roomVisual = r => ({ visual: r.main[0].visual === 'silence' && r.id === 'purpose' ? 'purpose' : r.main[0].visual, ci: r.ci, active: r.id === 'chakras' ? 5 : undefined });
 function card(r, wide) {
   const a = document.createElement('a'); a.className = 'room' + (wide ? ' wide' : ''); a.href = '#room-' + r.id; a.style.setProperty('--rc', rgba(r.color, 1)); a.dataset.id = r.id;
-  a.innerHTML = '<div class="art"><canvas></canvas></div><span class="num">' + String(ROOMS.indexOf(r) + 1).padStart(2, '0') + '</span><span class="tag ' + r.ev[0] + '">' + r.ev[1].split(' · ')[0] + '</span>' +
+  a.innerHTML = '<div class="art2"><canvas></canvas><span class="num">' + String(ROOMS.indexOf(r) + 1).padStart(2, '0') + '</span><span class="tag ' + r.ev[0] + '">' + r.ev[1].split(' · ')[0] + '</span></div>' +
     '<div class="body"><h3>' + r.name + '</h3><p>' + r.tag + '</p><div class="meta"><span>' + mins(sum(r.phases)) + '</span><span>Войти ' + ARROW + '</span></div></div>';
-  a._surf = surface(a.querySelector('canvas'), { cyr: wide ? 0.5 : 0.36, mr: wide ? 0.95 : 0.9, cxr: wide ? 0.72 : 0, visual: roomVisual(r) });
+  a._surf = surface(a.querySelector('canvas'), { cyr: 0.5, mr: 1, visual: roomVisual(r) });
   return a;
 }
 const FEATURED = ['blinders', 'cleanse', 'energy', 'breathe', 'release', 'selflove', 'event'];
@@ -1134,7 +1287,7 @@ FEATURED.forEach(id => { const r = ROOMS.find(x => x.id === id); $('featGrid').a
 const catCards = ROOMS.map(r => { const a = card(r, !!r.wide); $('roomGrid').appendChild(a); return a; });
 function filterCat(c) {
   [...$('filters').children].forEach(b => b.setAttribute('aria-pressed', b.dataset.c === c));
-  catCards.forEach(a => { const r = ROOMS.find(x => x.id === a.dataset.id); a.hidden = c !== 'all' && CAT[r.id] !== c; a.classList.toggle('wide', c === 'all' && !!r.wide); a._surf.cxr = a.classList.contains('wide') ? 0.72 : 0; a._surf.cyr = a.classList.contains('wide') ? 0.5 : 0.36; a._surf.dirty = true; });
+  catCards.forEach(a => { const r = ROOMS.find(x => x.id === a.dataset.id); a.hidden = c !== 'all' && CAT[r.id] !== c; a.classList.toggle('wide', c === 'all' && !!r.wide); a._surf.dirty = true; });
 }
 $('filters').innerHTML = Object.entries(CATS).map(([k, v]) => '<button type="button" data-c="' + k + '" aria-pressed="' + (k === 'all') + '">' + v + '</button>').join('');
 $('filters').addEventListener('click', e => { const b = e.target.closest('button[data-c]'); if (b) filterCat(b.dataset.c); });
@@ -1143,55 +1296,133 @@ $('moods').innerHTML = MOODS.map(([t, s, id]) => '<a class="mood" href="#room-' 
 const names = ROOMS.map(r => '<span>' + r.name + '</span>').join('');
 $('marquee').innerHTML = names + names;
 $('footRooms').innerHTML = ROOMS.slice(0, 7).map(r => '<li><a href="#room-' + r.id + '">' + r.name + '</a></li>').join('') + '<li><a href="#kabinety">Все кабинеты →</a></li>';
-surface($('catCv'), { cyr: 0.5, mr: 0.9, visual: { visual: 'hero', ci: 6 } });
 surface($('heroCv'), { cyr: 0.45, mr: 0.9, cxr: 0.68, visual: { visual: 'stars', ci: 1 } });
 
-// ---- interactive yantras: float across the whole hero, scatter from the pointer, ripple on click
-const HY = { mid: $('heroMid'), front: $('heroFront'), w: 0, h: 0, dpr: 1, items: [], ripples: [], mx: 0.5, my: 0.5, tx: 0.5, ty: 0.5, px: -1e4, py: -1e4, last: 0, active: false };
-HY.ctxM = HY.mid.getContext('2d'); HY.ctxF = HY.front.getContext('2d');
-function hyFit() {
-  const r = $('top').getBoundingClientRect(); HY.dpr = Math.min(2, devicePixelRatio || 1); HY.w = r.width; HY.h = r.height;
-  [HY.mid, HY.front].forEach(c => { c.width = Math.round(r.width * HY.dpr); c.height = Math.round(r.height * HY.dpr); c.getContext('2d').setTransform(HY.dpr, 0, 0, HY.dpr, 0, 0); });
-  const n = r.width > 900 ? 22 : 12;
-  while (HY.items.length < n) HY.items.push({ x: Math.random(), y: Math.random(), vx: (Math.random() - 0.5) * 0.012, vy: (Math.random() - 0.5) * 0.01, d: Math.random(), ci: Math.floor(Math.random() * 7), rot: Math.random() * TAU, vr: (Math.random() - 0.5) * 0.2, ox: 0, oy: 0, vox: 0, voy: 0 });
-  HY.items.length = n;
+// ---- yantra network (plexus): yantras and star points drift, joined by threads; the pointer pulls threads and scatters nodes
+function makeNet(canvas, host, light) {
+  const N = { canvas, host, light, ctx: canvas.getContext('2d'), nodes: [], rip: [], px: -1e4, py: -1e4, w: 0, h: 0, last: 0 };
+  N.fit = () => {
+    const r = canvas.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio || 1); if (!N.w && r.width) N.nodes.forEach(o => { o.x = Math.random() * r.width; o.y = Math.random() * r.height; }); N.w = r.width; N.h = r.height; N.u = Math.max(0.7, Math.min(r.width, r.height) / 850);
+    canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr); N.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.max(22, Math.min(64, Math.round(r.width * r.height / 24000)));
+    while (N.nodes.length < n) { const yan = Math.random() < 0.38, a = Math.random() * TAU, sp = 6 + Math.random() * 10;
+      N.nodes.push({ x: Math.random() * r.width, y: Math.random() * r.height, bx: Math.cos(a) * sp, by: Math.sin(a) * sp, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, yan, k: Math.floor(Math.random() * 12), s: yan ? 26 + Math.random() * 46 : 1.2 + Math.random() * 1.8, rot: Math.random() * TAU, vr: (Math.random() - 0.5) * 0.25 }); }
+    N.nodes.length = n;
+  };
+  new ResizeObserver(N.fit).observe(canvas); N.fit();
+  host.addEventListener('pointermove', e => { const r = canvas.getBoundingClientRect(); N.px = e.clientX - r.left; N.py = e.clientY - r.top; });
+  host.addEventListener('pointerleave', () => { N.px = N.py = -1e4; });
+  host.addEventListener('pointerdown', e => { if (e.target.closest('a, button, input')) return; const r = canvas.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top; N.rip.push({ x, y, t: performance.now() / 1000 });
+    N.nodes.forEach(o => { const dx = o.x - x, dy = o.y - y, d = Math.hypot(dx, dy) || 1; if (d < 340 * N.u) { const f = (1 - d / (340 * N.u)) * 520; o.vx += dx / d * f; o.vy += dy / d * f; } }); });
+  N.tick = t => {
+    const dt = Math.min(0.05, t - (N.last || t)), c = N.ctx, L = N.light, D = 165 * N.u, R = 170 * N.u; N.last = t;
+    c.clearRect(0, 0, N.w, N.h);
+    for (const o of N.nodes) {
+      const dx = o.x - N.px, dy = o.y - N.py, d = Math.hypot(dx, dy);
+      if (d < R && d > 0) { const f = (1 - d / R) * 1400 * dt; o.vx += dx / d * f; o.vy += dy / d * f; }
+      o.vx += (o.bx - o.vx) * 0.02; o.vy += (o.by - o.vy) * 0.02;
+      if (!reduce) { o.x += o.vx * dt; o.y += o.vy * dt; o.rot += o.vr * dt * (1 + Math.hypot(o.vx, o.vy) / 60); }
+      const pad = o.yan ? o.s : 10;
+      if (o.x < -pad) o.x = N.w + pad; if (o.x > N.w + pad) o.x = -pad; if (o.y < -pad) o.y = N.h + pad; if (o.y > N.h + pad) o.y = -pad;
+    }
+    c.lineWidth = 0.8;
+    for (let i = 0; i < N.nodes.length; i++) for (let j = i + 1; j < N.nodes.length; j++) {
+      const a = N.nodes[i], b = N.nodes[j], d = Math.hypot(a.x - b.x, a.y - b.y); if (d > D) continue;
+      const al = (1 - d / D) * (L ? 0.32 : 0.38); c.strokeStyle = L ? 'rgba(160,118,62,' + al + ')' : 'rgba(205,195,255,' + al + ')';
+      c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(b.x, b.y); c.stroke();
+    }
+    if (N.px > -1e3) for (const o of N.nodes) { const d = Math.hypot(o.x - N.px, o.y - N.py); if (d < R * 1.35) { c.strokeStyle = L ? 'rgba(176,132,74,' + (1 - d / (R * 1.35)) * 0.55 + ')' : 'rgba(228,203,163,' + (1 - d / (R * 1.35)) * 0.6 + ')'; c.beginPath(); c.moveTo(N.px, N.py); c.lineTo(o.x, o.y); c.stroke(); } }
+    for (const o of N.nodes) {
+      if (o.yan) drawYantra(c, o.x, o.y, o.s * N.u * (L ? 1.35 : 1), o.k, L, o.rot, L ? 0.9 : 0.9);
+      else { c.fillStyle = L ? 'rgba(150,110,58,.75)' : 'rgba(240,234,255,.9)'; c.beginPath(); c.arc(o.x, o.y, o.s, 0, TAU); c.fill(); }
+    }
+    N.rip = N.rip.filter(rp => t - rp.t < 1.4);
+    for (const rp of N.rip) { const k = (t - rp.t) / 1.4; c.strokeStyle = L ? 'rgba(176,132,74,' + 0.5 * (1 - k) + ')' : 'rgba(228,203,163,' + 0.55 * (1 - k) + ')'; c.lineWidth = 1.4; c.beginPath(); c.arc(rp.x, rp.y, 20 + k * 360 * N.u, 0, TAU); c.stroke(); }
+  };
+  return N;
 }
-new ResizeObserver(hyFit).observe($('top')); hyFit();
-const hero = $('top');
-hero.addEventListener('pointermove', e => { const r = hero.getBoundingClientRect(); HY.px = e.clientX - r.left; HY.py = e.clientY - r.top; HY.tx = HY.px / r.width; HY.ty = HY.py / r.height; HY.active = true; });
-hero.addEventListener('pointerleave', () => { HY.px = HY.py = -1e4; HY.tx = 0.5; HY.ty = 0.5; });
-hero.addEventListener('pointerdown', e => { if (e.target.closest('a, button')) return; const r = hero.getBoundingClientRect(); HY.ripples.push({ x: e.clientX - r.left, y: e.clientY - r.top, t: performance.now() / 1000 }); hyPush(e.clientX - r.left, e.clientY - r.top, 340, 9); });
-function hyPush(x, y, R, k) {
-  for (const it of HY.items) {
-    const ix = it.x * HY.w + it.ox, iy = it.y * HY.h + it.oy, dx = ix - x, dy = iy - y, d = Math.hypot(dx, dy) || 1;
-    if (d < R) { const f = Math.pow(1 - d / R, 2) * k * (0.6 + it.d * 0.7); it.vox += dx / d * f; it.voy += dy / d * f; }
-  }
-}
-function heroTick(t) {
-  const dt = Math.min(0.05, t - (HY.last || t)); HY.last = t;
-  HY.mx += (HY.tx - HY.mx) * 0.05; HY.my += (HY.ty - HY.my) * 0.05;
-  const sx = HY.mx - 0.5, sy = HY.my - 0.5;
-  $('artBg').style.transform = 'translate3d(' + (-sx * 14).toFixed(1) + 'px,' + (-sy * 10).toFixed(1) + 'px,0)';
-  $('artFg').style.transform = 'translate3d(' + (-sx * 30).toFixed(1) + 'px,' + (-sy * 18).toFixed(1) + 'px,0)';
-  if (HY.px > -1e3) hyPush(HY.px, HY.py, 190, 0.9);
-  const unit = Math.min(HY.w, HY.h) / 900;
-  [HY.ctxM, HY.ctxF].forEach(c => c.clearRect(0, 0, HY.w, HY.h));
-  const order = HY.items.slice().sort((a, b) => a.d - b.d);
-  for (const it of order) {
-    if (!reduce) { it.x += it.vx * dt; it.y += it.vy * dt; it.rot += it.vr * dt; }
-    if (it.x < -0.08) it.x += 1.16; if (it.x > 1.08) it.x -= 1.16; if (it.y < -0.08) it.y += 1.16; if (it.y > 1.08) it.y -= 1.16;
-    it.vox += -it.ox * 0.025; it.voy += -it.oy * 0.025; it.vox *= 0.9; it.voy *= 0.9; it.ox += it.vox; it.oy += it.voy;
-    const par = 10 + it.d * 50, x = it.x * HY.w + it.ox - sx * par, y = it.y * HY.h + it.oy - sy * par;
-    g = it.d < 0.45 ? HY.ctxM : HY.ctxF;
-    const c = CH[it.ci], r = (7 + it.d * 18) * Math.max(0.7, unit);
-    g.globalAlpha = 1; lotus(x, y, r, c.c, c.petals, 0.1 + 0.45 * it.d, it.rot); g.globalCompositeOperation = 'source-over';
-  }
-  g = HY.ctxF; g.globalCompositeOperation = 'lighter';
-  HY.ripples = HY.ripples.filter(rp => t - rp.t < 1.4);
-  for (const rp of HY.ripples) { const k = (t - rp.t) / 1.4, rr = 20 + k * 380 * Math.max(0.8, unit);
-    g.strokeStyle = 'rgba(228,203,163,' + (0.55 * (1 - k)) + ')'; g.lineWidth = 1.5; g.beginPath(); g.arc(rp.x, rp.y, rr, 0, TAU); g.stroke();
-    g.strokeStyle = 'rgba(228,203,163,' + (0.25 * (1 - k)) + ')'; g.beginPath(); g.arc(rp.x, rp.y, rr * 0.7, 0, TAU); g.stroke(); }
-  g.globalCompositeOperation = 'source-over';
+const NETS = [makeNet($('heroNet'), $('top'), false), makeNet($('catNet'), $('catalog'), true)];
+
+// ======================= journal =======================
+const SRC = {
+  goessl: '<a href="https://www.cambridge.org/core/journals/psychological-medicine/article/effect-of-heart-rate-variability-biofeedback-training-on-stress-and-anxiety-a-metaanalysis/A839E9C968E54774DF5C8FB186764EF0" target="_blank" rel="noopener">Goessl, Curtiss, Hofmann (2017). Psychological Medicine — мета-анализ 24 исследований</a>',
+  balban: 'Balban и соавт. (2023). Cell Reports Medicine — дыхательные практики и настроение',
+  garcia: '<a href="https://pubmed.ncbi.nlm.nih.gov/30073406/" target="_blank" rel="noopener">Garcia-Argibay и соавт. (2019). Psychological Research — мета-анализ бинауральных ритмов</a>',
+  brewer: '<a href="https://www.association-mindfulness.org/docs/Brewer_et_al_2011_DAD.pdf" target="_blank" rel="noopener">Brewer и соавт. (2011). Drug and Alcohol Dependence — осознанность и отказ от курения</a>',
+  bowen: '<a href="https://www.psychiatry.wisc.edu/wp-content/uploads/2025/05/Article-1_Bowen-et-al-JAMA-2014.pdf" target="_blank" rel="noopener">Bowen и соавт. (2014). JAMA Psychiatry — профилактика срывов на основе осознанности</a>',
+  nidra: '<a href="https://pubmed.ncbi.nlm.nih.gov/41327816/" target="_blank" rel="noopener">Ghai и соавт. (2025). Annals of the New York Academy of Sciences — йога-нидра, 73 исследования</a>',
+  lutz: '<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC526201" target="_blank" rel="noopener">Lutz и соавт. (2004). PNAS — гамма-активность мозга у опытных медитирующих</a>',
+  neff: 'MacBeth, Gumley (2012). Clinical Psychology Review — мета-анализ: сочувствие к себе и психологическое благополучие',
+  wade: 'Wade и соавт. (2014). Journal of Consulting and Clinical Psychology — мета-анализ программ прощения',
+  fred: 'Fredrickson и соавт. (2008). Journal of Personality and Social Psychology — медитация любящей доброты',
+  brooks: 'Brooks (2014). Journal of Experimental Psychology: General — волнение как энергия',
+  mbsr: 'Khoury и соавт. (2015). Journal of Psychosomatic Research — мета-анализ программ снижения стресса на основе осознанности'
+};
+const JOURNAL = [
+  { id: 'author', cat: 'От автора', title: 'Почему появилась «Дорога к себе»', read: '6 минут', feature: true,
+    lead: 'Эта программа выросла не из книг, а из жизни. Из пути, который я прошёл сам — от зависимостей и хаоса к семье, делу и спокойной силе.',
+    body: `<p>Было время, когда я много пил, курил, употреблял наркотики и жил так, что сейчас вспоминать об этом непросто. Снаружи это выглядело как свобода. Внутри был постоянный шум — и ни минуты тишины, чтобы услышать себя.</p>
+<p>Выход начался не с подвига, а с маленьких шагов. Я пробовал разные практики, проходил посвящения, учился у мастеров. Что-то не работало. Что-то работало удивительно хорошо — и именно это я оставлял себе.</p>
+<blockquote>Сегодня я не пью уже [10] лет и не курю [12] лет. Это не про запреты. Это про то, что внутри наконец стало тихо.</blockquote>
+<p>Сейчас у меня своё дело, которое я развиваю, семья и двое детей. Я тренируюсь — бокс помогает держать голову ясной, мотоцикл даёт ощущение дороги. Практики остались со мной каждый день: не как ритуал, а как способ вернуться к себе, когда мир становится слишком громким.</p>
+<h2>Зачем я это делаю</h2>
+<p>Я знаю, каково это — жить в шуме и не понимать, чего ты хочешь на самом деле. И знаю, что из этого есть дорога. Я собрал в «Дороге к себе» то, что прошло проверку моей жизнью и подтверждается исследованиями, чтобы каждый мог начать свой путь — с пятнадцати минут в день.</p>
+<div class="todo">Черновик по вашим словам. Проверьте цифры в квадратных скобках и детали, которые хотите оставить или убрать.</div>`, src: [] },
+  { id: 'team', cat: 'Кто ведёт практики', title: 'Люди за «Дорогой к себе»', read: '3 минуты',
+    lead: 'Программу создают люди, которые сами прошли через трудное и много лет работают с собой и другими.',
+    body: `<h2>Автор</h2><p>Основатель программы. Прошёл путь от зависимостей к трезвой, наполненной жизни: [10] лет без алкоголя, [12] лет без сигарет. Предприниматель, отец двоих детей, занимается боксом. Много лет практикует медитацию и работу с сознанием, прошёл обучение и посвящения у мастеров.</p>
+<h2>Элен</h2><p>[Роль и опыт Элен: например, специалист по работе с травмой, сколько лет практикует, где училась.] Вместе мы отбираем практики и следим, чтобы они были бережными и безопасными.</p>
+<div class="todo">Пришлите для Элен: роль, образование, опыт и фото — оформлю красиво. Если у мастера можно упомянуть имя — тоже.</div>
+<h2>Наш принцип</h2><p>Мы оставляем только то, что помогает на практике и находит подтверждение в исследованиях. А где наука пока молчит — так и говорим.</p>`, src: [] },
+  { id: 'why', cat: 'Подход', title: 'Почему мы выбрали именно эти практики', read: '5 минут',
+    lead: 'Каждая практика прошла два фильтра: она работает в нашей жизни и опирается на исследования или многовековую традицию.',
+    body: `<p>Мы не придумывали практики с нуля. Мы взяли то, что изучено лучше всего, и соединили с образами из йоги и медитативных традиций — потому что образы помогают погрузиться глубже.</p>
+<h2>Что подтверждено исследованиями</h2>
+<ul><li><b>Медленное дыхание</b> снижает стресс и тревогу.</li><li><b>Медитация осознанности</b> снижает стресс и помогает при тяге к сигаретам и алкоголю.</li><li><b>Йога-нидра</b> уменьшает стресс, тревогу и подавленность.</li><li><b>Сочувствие к себе, прощение, любящая доброта</b> — улучшают настроение и отношения.</li><li><b>Бинауральные ритмы</b> — умеренно помогают вниманию и снижают тревогу.</li></ul>
+<h2>Что взято из традиции</h2>
+<p>Чакры, золотой кокон, третий глаз — образы из йоги и тантры. Их действие «на тонком плане» наука не измеряла, и мы честно об этом говорим. Зато измерено другое: такие образы углубляют расслабление и дают ощущение защищённости.</p>
+<h2>Чего мы не обещаем</h2>
+<p>Мгновенных чудес, исцеления болезней и денег «просто так». Практика — это шаги. Один сеанс даёт передышку, регулярные — меняют реакции, сон, отношения и решения.</p>
+<div class="fact">У каждого кабинета на сайте есть метка: <b>подтверждено</b>, <b>работает через внимание</b> или <b>традиция</b> — чтобы вы всегда знали, на что опирается практика.</div>`, src: ['goessl', 'mbsr', 'nidra', 'garcia'] },
+  { id: 'breath', cat: 'Наука', title: 'Дыхание: самый быстрый путь к спокойствию', read: '4 минуты',
+    lead: 'Дыхание работает само, но им можно управлять. А через него — пульсом, напряжением и настроением.',
+    body: `<p>Когда мы дышим медленно, примерно 5–6 раз в минуту, ритм сердца и дыхания входит в резонанс. Нервная система переключается с режима «бей или беги» на режим отдыха.</p>
+<div class="fact">Мета-анализ 24 исследований: тренировка медленного дыхания с обратной связью дала <b>сильное снижение стресса и тревоги</b> по сравнению с контрольными группами.</div>
+<p>В исследовании 2023 года пять минут «циклического вздоха» в день — два вдоха носом подряд и длинный выдох — улучшали настроение сильнее, чем такая же по времени медитация осознанности.</p>
+<p>Поэтому каждый сеанс «Дороги к себе» начинается с погружения через дыхание, а звук ведёт вас: волна нарастает на вдохе и стихает на выдохе.</p>`, src: ['goessl', 'balban'] },
+  { id: 'habits', cat: 'Наука', title: 'Тяга — это волна. Как осознанность помогает не сорваться', read: '5 минут',
+    lead: 'Курение, алкоголь, сладкое, телефон: тяга длится минуты. Если научиться её пережидать, она теряет власть.',
+    body: `<p>Практика «сёрфинга тяги» учит не бороться с желанием и не подчиняться ему, а наблюдать, как оно поднимается, достигает пика и спадает.</p>
+<div class="fact">В рандомизированном исследовании через 17 недель не курили <b>31% участников программы осознанности против 6%</b> в стандартной программе отказа от курения.</div>
+<p>В другом исследовании с участием 286 человек программа профилактики срывов на основе осознанности через год лучше других снижала употребление алкоголя и веществ.</p>
+<blockquote>Я прошёл через это сам. Тяга не исчезает за один день — но с каждым разом она слабее, а вы сильнее.</blockquote>
+<p>При алкогольной зависимости резкий отказ бывает опасен: начинайте вместе с врачом. Практика — поддержка на этом пути.</p>`, src: ['brewer', 'bowen'] },
+  { id: 'rest', cat: 'Наука', title: 'Йога-нидра и глубокий отдых', read: '3 минуты',
+    lead: 'Осознанный сон — практика, в которой тело спит, а ум остаётся ясным.',
+    body: `<p>Йога-нидра ведёт внимание по телу, дыханию и образам. Тело глубоко расслабляется, при этом вы остаётесь в сознании.</p>
+<div class="fact">Мета-анализ 2025 года: <b>73 исследования, более 5000 участников</b>. Практика заметно снижала стресс, тревогу и подавленность. Авторы отмечают, что исследования различаются по качеству — нужны ещё более строгие.</div>
+<p>Элементы йоги-нидры есть в каждом нашем сеансе: вход, погружение и мягкое возвращение.</p>`, src: ['nidra'] },
+  { id: 'heart', cat: 'Наука', title: 'Тепло к себе и другим — тоже навык', read: '4 минуты',
+    lead: 'Сочувствие к себе, прощение и любящая доброта изучены не меньше дыхания.',
+    body: `<p>Внутренний критик громкий. Исследования показывают: чем добрее человек к себе, тем ниже у него тревога и подавленность и тем легче ему двигаться дальше после ошибок.</p>
+<p>Программы прощения в контролируемых исследованиях уменьшали гнев и тревогу. Простить — не значит оправдать: это значит перестать носить груз.</p>
+<p>Медитация любящей доброты увеличивала позитивные эмоции и чувство связи с людьми — эффект, который участники замечали в повседневной жизни.</p>`, src: ['neff', 'wade', 'fred'] },
+  { id: 'sound', cat: 'Наука', title: 'Музыка и бинауральные ритмы: что доказано', read: '3 минуты',
+    lead: 'Когда в каждое ухо звучит своя частота, мозг слышит разницу — мягкую пульсацию.',
+    body: `<p>Бинауральные ритмы — это два тона в наушниках с небольшой разницей частот. Мы используем мягкие диапазоны: альфа (8–10 Гц) для спокойного внимания и тета (6 Гц) для глубины.</p>
+<div class="fact">Мета-анализ 22 исследований: <b>умеренный эффект</b> на внимание, память, тревожность и восприятие боли. Важны длительность и время прослушивания.</div>
+<p>Мы не обещаем «перепрошивки мозга». Ритмы — один из слоёв сеанса вместе с голосом, дыханием и музыкой.</p>`, src: ['garcia'] }
+];
+const jCard = (j, feat) => '<a class="jcard card' + (feat ? ' feature' : '') + '" href="#j-' + j.id + '"><span class="jcat">' + j.cat + '</span><h3>' + j.title + '</h3><p>' + j.lead + '</p><div class="jmeta"><span>' + j.read + '</span><span>Читать ' + ARROW + '</span></div></a>';
+$('jGrid').innerHTML = JOURNAL.map(j => jCard(j, j.feature)).join('');
+$('jTeaser').innerHTML = ['author', 'breath', 'habits'].map(id => jCard(JOURNAL.find(j => j.id === id))).join('');
+function showArticle(id) {
+  const j = JOURNAL.find(x => x.id === id); if (!j) return show('journal');
+  show('article'); const i = JOURNAL.indexOf(j), nx = JOURNAL[(i + 1) % JOURNAL.length];
+  $('aCat').textContent = j.cat + ' · ' + j.read; $('aTitle').textContent = j.title; $('aLead').textContent = j.lead; $('aBody').innerHTML = j.body;
+  $('aSrc').innerHTML = j.src.length ? '<b style="color:var(--ink)">Источники</b>' + j.src.map(k => '<span>' + SRC[k] + '</span>').join('') : '';
+  $('aNav').innerHTML = '<a class="card" href="#zhurnal"><span class="eyebrow">← Журнал</span><b>Все статьи</b></a><a class="card" href="#j-' + nx.id + '"><span class="eyebrow">Дальше →</span><b>' + nx.title + '</b></a>';
+  scrollTo(0, 0);
 }
 let curRoom = ROOMS[0];
 const roomSurf = surface($('roomCv'), { cyr: 0.46, mr: 0.66, cxr: 0.7, visual: () => ({ visual: curRoom.main[0].visual === 'silence' && curRoom.id === 'purpose' ? 'purpose' : curRoom.main[0].visual, ci: curRoom.ci, active: curRoom.id === 'chakras' ? 5 : undefined }) });
@@ -1226,7 +1457,7 @@ function markPractice() { let days = []; try { days = JSON.parse(store.get('ajna
 const plural = (n, a, b, c) => { const m10 = n % 10, m100 = n % 100; return m10 === 1 && m100 !== 11 ? a : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? b : c; };
 function renderStreak() { const n = streakDays(); $('streak').textContent = n ? 'Вы практикуете ' + n + ' ' + plural(n, 'день', 'дня', 'дней') + ' подряд' : 'Первая сессия — первый шаг.'; }
 renderStreak();
-function show(page) { ['home', 'catalog', 'roomPage'].forEach(id => $(id).hidden = id !== page); document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('on', a.dataset.r === 'kabinety' && page !== 'home')); $('mnav').hidden = true; }
+function show(page) { ['home', 'catalog', 'roomPage', 'journal', 'article'].forEach(id => $(id).hidden = id !== page); setTimeout(solidHeader, 0); document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('on', (a.dataset.r === 'kabinety' && (page === 'catalog' || page === 'roomPage')) || (a.dataset.r === 'zhurnal' && (page === 'journal' || page === 'article')))); $('mnav').hidden = true; }
 function showHome(anchor) {
   show('home');
   if (anchor) { const el = $(anchor); if (el) setTimeout(() => el.scrollIntoView(), 0); } else scrollTo(0, 0);
@@ -1234,6 +1465,8 @@ function showHome(anchor) {
 function route() {
   const h = location.hash.slice(1);
   if (h === 'kabinety') { show('catalog'); scrollTo(0, 0); }
+  else if (h === 'zhurnal') { show('journal'); scrollTo(0, 0); }
+  else if (h.startsWith('j-')) showArticle(h.slice(2));
   else if (h.startsWith('room-')) showRoom(h.slice(5));
   else if (h && $(h) && $('home').contains($(h))) showHome(h);
   else showHome();
@@ -1241,12 +1474,12 @@ function route() {
 addEventListener('hashchange', route);
 $('burger').onclick = () => { $('mnav').hidden = !$('mnav').hidden; };
 $('mnav').addEventListener('click', e => { if (e.target.closest('a')) $('mnav').hidden = true; });
-addEventListener('scroll', () => $('nav').classList.toggle('solid', scrollY > 40), { passive: true });
-$('nav').classList.toggle('solid', scrollY > 40);
+const solidHeader = () => $('nav').classList.toggle('solid', scrollY > 40 || !$('catalog').hidden || !$('journal').hidden || !$('article').hidden);
+addEventListener('scroll', solidHeader, { passive: true }); solidHeader();
 $('rStart').onclick = () => openPlayer(curRoom);
 
 // ======================= audio =======================
-let actx = null, melBus, curRoot = 174.61, nextNote = 0, deg = 2, master, duck, beatGain, noiseGain, padBus, oscL, oscR, voiceBus, padVoices = [];
+let breathLP, breathGain, actx = null, melBus, curRoot = 174.61, nextNote = 0, deg = 2, master, duck, beatGain, noiseGain, padBus, oscL, oscR, voiceBus, padVoices = [];
 const CARRIER = 200, volGain = () => Math.pow(+$('vol').value / 100, 2) * 0.35;
 function ir(ac, secs) { const len = ac.sampleRate * secs, b = ac.createBuffer(2, len, ac.sampleRate); for (let c = 0; c < 2; c++) { const d = b.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3) * 0.6; } return b; }
 function pink(ac) { const len = ac.sampleRate * 6, buf = ac.createBuffer(2, len, ac.sampleRate);
@@ -1264,6 +1497,8 @@ function initAudio() {
   oscL.connect(gL).connect(mg, 0, 0); oscR.connect(gR).connect(mg, 0, 1); oscL.start(); oscR.start();
   const src = actx.createBufferSource(); src.buffer = pink(actx); src.loop = true; const lp = actx.createBiquadFilter(); lp.frequency.value = 1400;
   noiseGain = actx.createGain(); noiseGain.gain.value = 0; src.connect(lp).connect(noiseGain).connect(duck); src.start();
+  const bsrc = actx.createBufferSource(); bsrc.buffer = src.buffer; bsrc.loop = true; breathLP = actx.createBiquadFilter(); breathLP.type = 'lowpass'; breathLP.frequency.value = 400; breathLP.Q.value = 0.8;
+  breathGain = actx.createGain(); breathGain.gain.value = 0; bsrc.connect(breathLP).connect(breathGain).connect(master); bsrc.start(0, 1.7);
   padBus = actx.createGain(); padBus.gain.value = 0;
   const pf = actx.createBiquadFilter(); pf.type = 'lowpass'; pf.frequency.value = 900; pf.Q.value = 0.3;
   const hall = actx.createConvolver(); hall.buffer = ir(actx, 5); const hw = actx.createGain(); hw.gain.value = 0.55;
@@ -1304,12 +1539,12 @@ function levels(tc) {
 const setDuck = on => { if (actx) duck.gain.setTargetAtTime(on ? 0.45 : 1, actx.currentTime, 0.6); };
 $('vol').oninput = () => { $('volV').textContent = $('vol').value + '%'; levels(0.2); };
 ['noise', 'music', 'beat', 'melody'].forEach(id => $(id).onchange = () => levels());
-function bell(n, f0) {
+function bell(n, f0) { // a soft swelling chime: no strike, slow attack, long fade
   if (!actx) return;
-  for (let k = 0; k < (n || 1); k++) { const t0 = actx.currentTime + k * 2.2;
-    [[1, 0.6], [2, 1], [3, 0.35], [4.5, 0.12]].forEach(([m, a]) => { const o = actx.createOscillator(), gg = actx.createGain(); o.frequency.value = (f0 || 220) * m;
-      gg.gain.setValueAtTime(0, t0); gg.gain.linearRampToValueAtTime(0.12 * a * Math.max(0.35, +$('vol').value / 60), t0 + 0.015); gg.gain.exponentialRampToValueAtTime(0.0001, t0 + 6);
-      o.connect(gg).connect(voiceBus); o.start(t0); o.stop(t0 + 6.1); }); }
+  const v = 0.05 * Math.max(0.35, +$('vol').value / 60);
+  for (let k = 0; k < (n || 1); k++) { const t0 = actx.currentTime + k * 3.2, lp = actx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1800; lp.connect(voiceBus);
+    [[1, 1], [1.5, 0.35], [2, 0.22], [3, 0.06]].forEach(([m, a]) => { const o = actx.createOscillator(), gg = actx.createGain(); o.type = 'sine'; o.frequency.value = (f0 || 196) * m * (1 + (Math.random() - 0.5) * 0.003);
+      gg.gain.setValueAtTime(0, t0); gg.gain.linearRampToValueAtTime(v * a, t0 + 1.6); gg.gain.exponentialRampToValueAtTime(0.0001, t0 + 9); o.connect(gg).connect(lp); o.start(t0); o.stop(t0 + 9.2); }); }
 }
 
 // ======================= voice (female only) =======================
@@ -1414,6 +1649,7 @@ function frame(now) {
       const ph = P.phases[P.idx], pt = P.elapsed - P.start, tot = sum(P.phases);
       if (ph.key === 'chakras' && pt > 4) { const k = Math.min(6, Math.floor((pt - 4) / 30)); if (k !== P.ch) chakra(k); }
       const st = ph.breath ? breathAt(ph.breath, pt) : null;
+      if (actx && breathGain) { const on = st && $('sbreath').checked, lvl = on ? (ph.cue ? 0.42 : 0.2) * (0.06 + 0.94 * st.b) : 0; breathGain.gain.setTargetAtTime(lvl, actx.currentTime, 0.18); breathLP.frequency.setTargetAtTime(280 + 1400 * (st ? st.b : 0), actx.currentTime, 0.18); }
       if (st && ph.cue && st.label !== P.lastLabel) { if (P.lastLabel && st.label !== 'Пауза' && $('vBreath').checked && !playRec({ 'Вдох': 'inhale', 'Выдох': 'exhale' }[st.label] || '') && synth && !synth.speaking) speak([st.label], { rate: 0.7, gap: 0 }); P.lastLabel = st.label; }
       const inMain = P.idx >= 2 && P.idx < P.phases.length - 1, el = P.elapsed - P.phases.slice(0, 2).reduce((a, p) => a + p.dur, 0);
       $('pIntent').classList.toggle('on', inMain && (el % 75) < 9);
@@ -1423,7 +1659,7 @@ function frame(now) {
   }
   P.last = now;
   const t = now / 1000, inPlayer = !$('player').hidden;
-  if (!inPlayer && !$('home').hidden && visible(hero)) heroTick(t);
+  if (!inPlayer) NETS.forEach(n => { if (visible(n.canvas)) n.tick(t); });
   for (const s of surfaces) {
     if (inPlayer ? s !== pSurf : s === pSurf) continue;
     if (!visible(s.canvas)) continue;
