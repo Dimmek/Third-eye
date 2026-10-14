@@ -150,6 +150,18 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 .rhero h1 { font-size: clamp(3rem, 8vw, 6.4rem); line-height: 1; }
 .chips { display: flex; flex-wrap: wrap; gap: 10px; }
 .chip { border: 1px solid rgba(243,237,228,.2); border-radius: 999px; padding: 8px 14px; font-size: .8rem; color: var(--ivory); background: rgba(7,6,12,.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.habit { display: grid; gap: 10px; }
+.hchips { display: flex; flex-wrap: wrap; gap: 8px; }
+.hchips button { border: 1px solid rgba(243,237,228,.22); border-radius: 999px; padding: 9px 16px; font-size: .88rem; color: var(--ivory); background: rgba(7,6,12,.45); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: border-color .3s, background .3s; }
+.hchips button[aria-pressed="true"] { border-color: #2ec27e; background: rgba(46,194,126,.18); }
+.intent { display: grid; gap: 8px; max-width: 460px; }
+.intent input { font-family: var(--f-accent); font-style: italic; font-size: 1.5rem; font-weight: 300; color: var(--gold); background: rgba(7,6,12,.45); border: 0; border-bottom: 1px solid rgba(231,194,125,.4); padding: 6px 2px; outline: none; width: 100%; }
+.intent input:focus { border-bottom-color: var(--gold); }
+.hz { font-style: normal; font-size: .72rem; letter-spacing: .1em; color: var(--gold); margin-left: 10px; font-weight: 400; }
+.room.wide { grid-column: 1 / -1; }
+@media (min-width: 1001px) { .room.wide { grid-template-rows: none; grid-template-columns: 1.5fr 1fr; } .room.wide .art { aspect-ratio: auto; min-height: 300px; } .room.wide .body { align-content: center; padding: 40px; } .room.wide h3 { font-size: 2.2rem; } }
+.pintent { position: absolute; z-index: 2; left: 0; right: 0; top: calc(78px + env(safe-area-inset-top, 0px)); text-align: center; font-family: var(--f-accent); font-style: italic; font-weight: 300; font-size: clamp(1.2rem, 2.4vw, 1.6rem); color: var(--gold); opacity: 0; transition: opacity 3s ease; pointer-events: none; padding-inline: 20px; text-shadow: 0 0 24px rgba(0,0,0,.8); }
+.pintent.on { opacity: .75; }
 .rgrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 70px; padding-block: 90px; }
 @media (max-width: 900px) { .rgrid { grid-template-columns: minmax(0, 1fr); gap: 50px; padding-block: 60px; } }
 .timeline { list-style: none; margin: 0; padding: 0; display: grid; }
@@ -157,7 +169,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 .timeline li i { width: 10px; height: 10px; border-radius: 50%; margin-top: 8px; box-shadow: 0 0 12px currentColor; background: currentColor; }
 .timeline b { color: var(--ivory); font-weight: 500; display: block; }
 .timeline span.d { font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--ivory); }
-.timeline small { font-size: .88rem; }
+.timeline small { font-size: .88rem; color: var(--mute); display: block; margin-top: 2px; }
 .note-box { margin-top: 28px; padding: 22px 24px; border-radius: 18px; border: 1px solid var(--line); background: var(--ink); font-size: .92rem; }
 .note-box b { color: var(--ivory); font-weight: 500; }
 .nextnav { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; padding-bottom: 100px; }
@@ -235,7 +247,7 @@ input[type=range] { width: 100%; accent-color: var(--crimson); }
   </section>
 
   <div class="facts"><div class="wrap">
-    <div class="fact"><b>9</b><span>кабинетов под разные задачи</span></div>
+    <div class="fact"><b>10</b><span>кабинетов под разные задачи</span></div>
     <div class="fact"><b>11–14</b><span>минут одна сессия</span></div>
     <div class="fact"><b>2 м</b><span>золотой кокон в начале каждой практики</span></div>
     <div class="fact"><b>5,5</b><span>вдохов в минуту — резонансное дыхание</span></div>
@@ -326,6 +338,8 @@ input[type=range] { width: 100%; accent-color: var(--crimson); }
       <h1 id="rName"></h1>
       <p class="lead" id="rTag"></p>
       <div class="chips" id="rChips"></div>
+      <div class="habit" id="rHabitBox" hidden><span class="eyebrow">Ваша привычка</span><div class="hchips" id="rHabit" role="group" aria-label="Привычка"></div></div>
+      <label class="intent"><span class="eyebrow">Ваше намерение</span><input id="rIntent" type="text" maxlength="80" autocomplete="off"></label>
       <div><button class="btn red" id="rStart" type="button">Начать сессию <svg viewBox="0 0 16 16" fill="currentColor"><path d="M5 3v10l8-5z"/></svg></button></div>
     </div>
   </section>
@@ -340,6 +354,7 @@ input[type=range] { width: 100%; accent-color: var(--crimson); }
 
 <div class="player" id="player" hidden>
   <canvas id="pCv"></canvas>
+  <div class="pintent" id="pIntent" aria-live="off"></div>
   <div class="pui">
     <div class="ptop">
       <button class="icon" id="pClose" type="button" aria-label="Выйти из сессии"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
@@ -376,6 +391,7 @@ input[type=range] { width: 100%; accent-color: var(--crimson); }
     <input type="range" id="vol" min="0" max="100" value="30" aria-label="Громкость">
     <div class="row"><span>Громкость</span><span id="volV">30%</span></div>
     <label class="check"><input type="checkbox" id="music" checked> Тихая музыка</label>
+    <label class="check"><input type="checkbox" id="melody" checked> Мелодия: редкие мягкие ноты</label>
     <label class="check"><input type="checkbox" id="beat" checked> Бинауральный ритм</label>
     <label class="check"><input type="checkbox" id="noise"> Мягкий шум</label>
     <p class="small">Бинауральный ритм слышен только в стереонаушниках.</p></div>
@@ -484,9 +500,34 @@ const ROOMS = [
     main: [
       R(216, 'Семь чакр', 'chakras', 'Внимание поднимается от основания позвоночника к макушке. Полминуты на каждую.', ['Теперь пройдём по чакрам.', 'Снизу вверх.'], { key: 'chakras' }),
       R(90, 'Единство', 'mandala', 'Все семь чакр светятся вместе. Побудьте в этом целом.', ['Все семь центров светятся вместе.', 'Побудьте в этом целом.'], { beat: 6 })
-    ] }
+    ] },
+  { id: 'habits', name: 'Свобода от привычки', ci: 3, wide: true, tag: 'Курение, алкоголь, сладкое, телефон: пережить тягу и не сорваться.', ev: ['t-a', 'Тяга и срывы · подтверждено'],
+    whyT: 'Тяга — это волна', why: 'Тяга не длится вечно: она поднимается, достигает пика и спадает за несколько минут. Здесь вы учитесь не бороться и не поддаваться, а наблюдать её, как сёрфер волну. Потом — пауза выбора и образ себя свободного. Выберите свою привычку перед началом.',
+    note: '<b>Основа:</b> «сёрфинг тяги» из программы профилактики срывов на основе осознанности. Исследования: при отказе от курения через 17 недель не курили 31% группы осознанности против 6% в стандартной программе (Brewer, 2011); через год меньше срывов по алкоголю и веществам (Bowen, 2014). <b>При алкогольной зависимости резкий отказ бывает опасен — сначала к врачу.</b> Практика дополняет лечение и не заменяет его.',
+    habit: 'smoke', main: [] }
 ];
-ROOMS.forEach(r => { r.color = CH[r.ci].c; r.main.forEach((s, i) => { s.key = s.key || r.id + '-' + (i + 1); s.tone = r.ci; }); r.phases = [COCOON, BREATHE, ...r.main, RETURN]; });
+const HABITS = {
+  smoke:   { label: 'Курение', act: 'закурить', free: 'без сигарет', obj: 'сигарете', intent: 'Я дышу свободно', gain: 'Как легко дышится. Как пахнут руки и волосы. Какой яркий вкус у еды.' },
+  alcohol: { label: 'Алкоголь', act: 'выпить', free: 'без алкоголя', obj: 'алкоголе', intent: 'Я выбираю ясную голову', gain: 'Как вы просыпаетесь свежими. Ясная голова. Ровное настроение.' },
+  sugar:   { label: 'Сладкое и переедание', act: 'съесть что-то сладкое', free: 'без лишнего сладкого', obj: 'сладком', intent: 'Я слышу настоящий голод', gain: 'Лёгкость в теле. Ровная энергия весь день.' },
+  phone:   { label: 'Телефон и соцсети', act: 'взять телефон и пролистать ленту', free: 'без бесконечной ленты', obj: 'телефоне', intent: 'Моё внимание принадлежит мне', gain: 'Сколько времени появилось. Как тихо в голове.' }
+};
+function habitMain(k) {
+  const h = HABITS[k], key = n => 'habit-' + k + '-' + n;
+  return [
+    R(90, 'Честный взгляд', 'urge', 'Без упрёков: что привычка даёт и что забирает.', ['Подумайте о ' + h.obj + '.', 'Не ругайте себя. Просто посмотрите честно.', 'Что эта привычка вам даёт?', 'И что она у вас забирает?'], { key: key(1), beat: 10 }),
+    R(210, 'Волна тяги', 'urge', 'Тяга поднимается, достигает пика и спадает. Вы не боретесь и не поддаётесь — вы наблюдаете.', ['Вспомните момент, когда очень хочется ' + h.act + '.', 'Найдите, где эта тяга живёт в теле. Грудь, горло, руки.', 'Не боритесь с ней и не поддавайтесь. Просто наблюдайте.', 'Тяга — это волна. Она поднимается, достигает пика и спадает.', 'Вы едете по этой волне, как сёрфер.', 'Дышите. Волна уже слабее.'], { key: key(2), beat: 8 }),
+    R(120, 'Пауза выбора', 'urge', 'Между желанием и действием есть пауза. В ней ваша свобода.', ['Между желанием и действием есть пауза.', 'В этой паузе ваша свобода.', 'Каждый раз, когда вы замечаете тягу, вы сильнее неё.'], { key: key(3), beat: 6 }),
+    R(150, 'Вы через три месяца', 'purpose', 'Вы ' + h.free + '. ' + h.gain, ['Представьте себя через три месяца ' + h.free + '.', h.gain, 'Кто радуется рядом с вами?', 'Почувствуйте эту лёгкость прямо сейчас.'], { key: key(4), beat: 6 }),
+    R(60, 'Якорь', 'urge', 'Когда потянет: три медленных выдоха и это чувство свободы.', ['Когда потянет, сделайте три медленных выдоха.', 'И вспомните это чувство.'], { key: key(5), beat: 10 })
+  ];
+}
+const INTENT = { cleanse: 'Я отпускаю всё лишнее', energy: 'Сила возвращается ко мне', health: 'Моё тело в покое и заботе', abundance: 'Я вижу возможности и действую', luck: 'Я замечаю свои шансы', purpose: 'Я слышу себя', silence: 'Мой ум спокоен', ajna: 'Внимание в одной точке', chakras: 'Я целый' };
+const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+function setPhases(r) { r.main.forEach((s, i) => { s.key = s.key || r.id + '-' + (i + 1); s.tone = r.ci; }); r.phases = [COCOON, BREATHE, ...r.main, RETURN]; }
+function setHabit(r, k) { r.habit = k; r.main = habitMain(k); setPhases(r); }
+ROOMS.forEach(r => { r.color = CH[r.ci].c; if (r.id === 'habits') setHabit(r, store.get('ajna-habit') in HABITS ? store.get('ajna-habit') : 'smoke'); else setPhases(r); });
+const intentOf = r => store.get('ajna-intent-' + r.id + (r.habit ? '-' + r.habit : '')) || (r.habit ? HABITS[r.habit].intent : INTENT[r.id]);
 
 const BREATH = { resonance: [5.45, 0, 5.45, 0], calm: [4, 0, 6, 0] };
 const fmt = s => { s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
@@ -496,7 +537,7 @@ const sum = ph => ph.reduce((a, p) => a + p.dur, 0);
 // script for voice recording (keys = file names)
 window.AJNA_SCRIPT = () => {
   const out = [['cocoon', COCOON.say], ['breath', BREATHE.say], ['return', RETURN.say]];
-  ROOMS.forEach(r => r.main.forEach(s => out.push([s.key, s.say])));
+  ROOMS.forEach(r => (r.habit ? Object.keys(HABITS).flatMap(habitMain) : r.main).forEach(s => out.push([s.key, s.say])));
   CH.forEach((c, i) => out.push(['c' + (i + 1), c.say]));
   out.push(['inhale', ['Вдох']], ['exhale', ['Выдох']]);
   return out;
@@ -757,6 +798,19 @@ function drawPurpose(t, st) { // a path of light toward a rising star
   g.fillStyle = s; g.beginPath(); g.arc(x, sy, m * 0.16, 0, TAU); g.fill();
   for (let i = 0; i < 4; i++) { const a = i * Math.PI / 4 + (reduce ? 0 : t * 0.03), l = m * (i % 2 ? 0.1 : 0.18); g.strokeStyle = 'rgba(255,245,230,.5)'; g.beginPath(); g.moveTo(x - Math.cos(a) * l, sy - Math.sin(a) * l); g.lineTo(x + Math.cos(a) * l, sy + Math.sin(a) * l); g.stroke(); }
 }
+function drawUrge(t, st) { // the craving as a wave: it rises, peaks and falls; a point of awareness rides it
+  const m = M(), y0 = cy(), b = st ? st.b : 0.5, cyc = reduce ? 0.5 : (t % 36) / 36, amp = m * (0.03 + 0.13 * Math.pow(Math.sin(Math.PI * cyc), 2));
+  g.globalCompositeOperation = 'lighter';
+  for (let L = 0; L < 6; L++) {
+    const ph = t * (0.5 + L * 0.07) + L, a = amp * (1 - L * 0.12), col = L % 2 ? [58, 134, 255] : [46, 194, 126];
+    g.strokeStyle = rgba(col, 0.5 - L * 0.06); g.lineWidth = L ? 1 : 2.2; g.beginPath();
+    for (let x = 0; x <= W; x += 6) { const yy = y0 + Math.sin(x / (m * 0.22) + ph) * a + L * 6; x ? g.lineTo(x, yy) : g.moveTo(x, yy); }
+    g.stroke();
+  }
+  const sx = cx(), sy = y0 + Math.sin(sx / (m * 0.22) + t * 0.5) * amp - m * 0.015;
+  const h = g.createRadialGradient(sx, sy, 0, sx, sy, m * (0.06 + 0.02 * b)); h.addColorStop(0, 'rgba(255,255,255,.95)'); h.addColorStop(0.3, 'rgba(120,230,200,.5)'); h.addColorStop(1, 'rgba(46,194,126,0)');
+  g.fillStyle = h; g.beginPath(); g.arc(sx, sy, m * 0.08, 0, TAU); g.fill();
+}
 const CLOUDS = Array.from({ length: 9 }, (_, i) => ({ y: 0.15 + i * 0.09, s: 0.004 + (i % 3) * 0.003, r: 0.12 + (i % 4) * 0.05, o: Math.random() }));
 function drawSilence(t, st) { // thoughts as clouds drifting across a still sky
   const m = M(), b = st ? st.b : 0.5;
@@ -818,6 +872,7 @@ function scene(visual, t, o) {
     case 'luck': drawLuck(t, st); break;
     case 'purpose': drawPurpose(t, st); break;
     case 'silence': drawSilence(t, st); break;
+    case 'urge': drawUrge(t, st); break;
     case 'network': drawNetwork(t); break;
     case 'hero': drawHero(t); break;
     case 'dark': drawDark(t, o.since || 0); break;
@@ -845,7 +900,7 @@ const visible = el => { const r = el.getBoundingClientRect(); return r.bottom > 
 // ======================= pages =======================
 const roomGrid = $('roomGrid');
 ROOMS.forEach((r, i) => {
-  const a = document.createElement('a'); a.className = 'room'; a.href = '#room-' + r.id; a.style.setProperty('--rc', rgba(r.color, 1));
+  const a = document.createElement('a'); a.className = 'room' + (r.wide ? ' wide' : ''); a.href = '#room-' + r.id; a.style.setProperty('--rc', rgba(r.color, 1));
   a.innerHTML = '<div class="art"><canvas></canvas><span class="num">' + String(i + 1).padStart(2, '0') + '</span><span class="tag ' + r.ev[0] + '">' + r.ev[1].split(' · ')[0] + '</span></div>' +
     '<div class="body"><h3>' + r.name + '</h3><p>' + r.tag + '</p><div class="meta"><span>' + mins(sum(r.phases)) + '</span><span>Войти →</span></div></div>';
   roomGrid.appendChild(a);
@@ -868,13 +923,18 @@ function showRoom(id) {
   $('rNum').textContent = 'Кабинет ' + String(idx + 1).padStart(2, '0');
   $('rName').textContent = r.name; $('rTag').textContent = r.tag;
   $('rChips').innerHTML = '<span class="chip">' + mins(sum(r.phases)) + '</span><span class="chip">' + r.ev[1] + '</span><span class="chip">Наушники</span>';
+  $('rHabitBox').hidden = !r.habit;
+  if (r.habit) $('rHabit').innerHTML = Object.entries(HABITS).map(([k, h]) => '<button type="button" data-h="' + k + '" aria-pressed="' + (k === r.habit) + '">' + h.label + '</button>').join('');
+  $('rIntent').value = intentOf(r);
   $('rWhyT').textContent = r.whyT; $('rWhy').textContent = r.why; $('rNote').innerHTML = r.note;
-  $('rSteps').innerHTML = r.phases.map(p => '<li style="color:' + rgba(CH[p.tone].c, 1) + '"><i></i><div><b>' + p.name + '</b><small>' + p.text + '</small></div><span class="d">' + fmt(p.dur) + '</span></li>').join('');
+  $('rSteps').innerHTML = r.phases.map(p => '<li style="color:' + rgba(CH[p.tone].c, 1) + '"><i></i><div><b>' + p.name + (p.beat ? '<em class="hz">' + (p.beat >= 8 ? 'α ' : 'θ ') + p.beat + ' Гц</em>' : '') + '</b><small>' + p.text + '</small></div><span class="d">' + fmt(p.dur) + '</span></li>').join('');
   const prev = ROOMS[(idx + ROOMS.length - 1) % ROOMS.length], next = ROOMS[(idx + 1) % ROOMS.length];
   $('rNav').innerHTML = '<a href="#room-' + prev.id + '"><span class="eyebrow">← Предыдущий</span><b>' + prev.name + '</b></a><a href="#room-' + next.id + '"><span class="eyebrow">Следующий →</span><b>' + next.name + '</b></a>';
   document.title = 'Аджна';
   scrollTo(0, 0);
 }
+$('rHabit').addEventListener('click', e => { const b = e.target.closest('button[data-h]'); if (!b) return; setHabit(curRoom, b.dataset.h); store.set('ajna-habit', b.dataset.h); const y = scrollY; showRoom(curRoom.id); scrollTo(0, y); });
+$('rIntent').addEventListener('input', () => store.set('ajna-intent-' + curRoom.id + (curRoom.habit ? '-' + curRoom.habit : ''), $('rIntent').value.trim()));
 function showHome(anchor) {
   $('home').hidden = false; $('roomPage').hidden = true;
   if (anchor) { const el = $(anchor); if (el) setTimeout(() => el.scrollIntoView(), 0); } else scrollTo(0, 0);
@@ -890,7 +950,7 @@ addEventListener('scroll', () => $('nav').classList.toggle('solid', scrollY > 40
 $('rStart').onclick = () => openPlayer(curRoom);
 
 // ======================= audio =======================
-let actx = null, master, duck, beatGain, noiseGain, padBus, oscL, oscR, voiceBus, padVoices = [];
+let actx = null, melBus, curRoot = 174.61, nextNote = 0, deg = 2, master, duck, beatGain, noiseGain, padBus, oscL, oscR, voiceBus, padVoices = [];
 const CARRIER = 200, volGain = () => Math.pow(+$('vol').value / 100, 2) * 0.35;
 function ir(ac, secs) { const len = ac.sampleRate * secs, b = ac.createBuffer(2, len, ac.sampleRate); for (let c = 0; c < 2; c++) { const d = b.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3) * 0.6; } return b; }
 function pink(ac) { const len = ac.sampleRate * 6, buf = ac.createBuffer(2, len, ac.sampleRate);
@@ -912,6 +972,7 @@ function initAudio() {
   const pf = actx.createBiquadFilter(); pf.type = 'lowpass'; pf.frequency.value = 900; pf.Q.value = 0.3;
   const hall = actx.createConvolver(); hall.buffer = ir(actx, 5); const hw = actx.createGain(); hw.gain.value = 0.55;
   padBus.connect(pf); pf.connect(duck); pf.connect(hall).connect(hw).connect(duck);
+  melBus = actx.createGain(); melBus.gain.value = 0; melBus.connect(duck); melBus.connect(hall);
   const lfo = actx.createOscillator(), lg = actx.createGain(); lfo.frequency.value = 0.05; lg.gain.value = 220; lfo.connect(lg).connect(pf.frequency); lfo.start();
   [1, 1.5, 2, 3].forEach((mult, i) => [-1, 1].forEach(det => {
     const o = actx.createOscillator(), og = actx.createGain(), pan = actx.createStereoPanner ? actx.createStereoPanner() : null;
@@ -920,7 +981,16 @@ function initAudio() {
   voiceBus = actx.createGain(); const conv = actx.createConvolver(); conv.buffer = ir(actx, 2.4); const wet = actx.createGain(); wet.gain.value = 0.18;
   voiceBus.connect(actx.destination); voiceBus.connect(conv).connect(wet).connect(actx.destination);
 }
-function padRoot(f) { if (actx) padVoices.forEach(v => v.o.frequency.setTargetAtTime(f * v.mult / 2, actx.currentTime, 2.5)); }
+const PENTA = [0, 2, 4, 7, 9, 12, 14, 16, 19];
+function melodyNote() { // a slow random walk on the major pentatonic of the current room's tone
+  if (!actx) return;
+  deg = Math.max(0, Math.min(PENTA.length - 1, deg + [-2, -1, -1, 1, 1, 2][Math.floor(Math.random() * 6)]));
+  const f = curRoot * 2 * Math.pow(2, PENTA[deg] / 12), t0 = actx.currentTime;
+  [[1, 'sine', 0.22], [2, 'triangle', 0.035]].forEach(([m, type, a]) => { const o = actx.createOscillator(), gg = actx.createGain(); o.type = type; o.frequency.value = f * m;
+    gg.gain.setValueAtTime(0, t0); gg.gain.linearRampToValueAtTime(a, t0 + 0.9); gg.gain.exponentialRampToValueAtTime(0.0001, t0 + 8); o.connect(gg).connect(melBus); o.start(t0); o.stop(t0 + 8.2); });
+}
+setInterval(() => { if (!actx || !P.running || P.paused || !$('melody').checked || !$('music').checked) return; const n = performance.now(); if (n >= nextNote) { melodyNote(); nextNote = n + 5000 + Math.random() * 6000; } }, 500);
+function padRoot(f) { curRoot = f; if (actx) padVoices.forEach(v => v.o.frequency.setTargetAtTime(f * v.mult / 2, actx.currentTime, 2.5)); }
 let beatOn = 1;
 function applyAudio(ph) {
   if (!actx) return; beatOn = ph.beat > 0 ? 1 : 0;
@@ -933,10 +1003,11 @@ function levels(tc) {
   beatGain.gain.setTargetAtTime(beatOn && $('beat').checked ? 1 : 0, t, 0.6);
   noiseGain.gain.setTargetAtTime($('noise').checked ? 0.5 : 0, t, 0.5);
   padBus.gain.setTargetAtTime($('music').checked ? 0.55 : 0, t, 1.5);
+  melBus.gain.setTargetAtTime($('music').checked && $('melody').checked ? 0.5 : 0, t, 1);
 }
 const setDuck = on => { if (actx) duck.gain.setTargetAtTime(on ? 0.45 : 1, actx.currentTime, 0.6); };
 $('vol').oninput = () => { $('volV').textContent = $('vol').value + '%'; levels(0.2); };
-['noise', 'music', 'beat'].forEach(id => $(id).onchange = () => levels());
+['noise', 'music', 'beat', 'melody'].forEach(id => $(id).onchange = () => levels());
 function bell(n, f0) {
   if (!actx) return;
   for (let k = 0; k < (n || 1); k++) { const t0 = actx.currentTime + k * 2.2;
@@ -994,7 +1065,7 @@ const pSurf = surface($('pCv'), { cyr: 0.4, mr: 0.68, visual: () => {
   return { visual: ph.visual, ci: ph.visual === 'chakras' && P.ch >= 0 ? P.ch : ph.tone, st: ph.breath && P.running ? breathAt(ph.breath, pt) : null, active: ph.key === 'chakras' ? P.ch : -1, since: pt, shell: P.running && P.idx > 0 && ph.visual !== 'cocoon' };
 } });
 function openPlayer(r) {
-  P.room = r; P.phases = r.phases; P.idx = -1; P.running = false; P.elapsed = 0;
+  P.room = r; P.phases = r.phases; P.intent = ($('rIntent').value || '').trim() || intentOf(r); $('pIntent').textContent = P.intent; $('pIntent').classList.remove('on'); P.idx = -1; P.running = false; P.elapsed = 0;
   $('player').hidden = false; document.body.style.overflow = 'hidden';
   $('pTtl').textContent = r.name; $('pPhase').textContent = r.name; $('pInstr').textContent = 'Наденьте наушники и сядьте удобно. Сессия начнётся с кокона.';
   $('pEye').textContent = 'Сессия · ' + mins(sum(r.phases)); $('pTime').textContent = fmt(sum(r.phases)); $('pProg').style.width = '0';
@@ -1005,7 +1076,8 @@ function enter(i) {
   P.idx = i; P.start = P.elapsed; P.ch = -1; P.lastLabel = '';
   const ph = P.phases[i]; $('pPhase').textContent = ph.name; $('pInstr').textContent = ph.text; applyAudio(ph);
   if (i > 0) bell(1, CH[ph.tone].tone);
-  setTimeout(() => { if (P.running && !P.paused && P.idx === i) guide(ph.key, ph.say); }, i > 0 ? 2600 : 900);
+  const lines = i === 2 && P.intent ? ['Помните, зачем вы здесь.', P.intent + '.', ...ph.say] : ph.say;
+  setTimeout(() => { if (P.running && !P.paused && P.idx === i) guide(ph.key, lines); }, i > 0 ? 2600 : 900);
 }
 function chakra(k) {
   P.ch = k; const c = CH[k]; $('pPhase').textContent = c.n; $('pInstr').textContent = c.where[0].toUpperCase() + c.where.slice(1) + '. Мысленно звучит «' + c.bija + '».';
@@ -1024,7 +1096,7 @@ function stop(done) {
   if (!P.running) return; P.running = false; P.paused = false; sayTok++; if (synth) synth.cancel(); levels(done ? 5 : 0.6);
   if (done) { bell(3, 220); $('pPhase').textContent = 'Сессия завершена'; $('pInstr').textContent = 'Посидите минуту с закрытыми глазами. Заметьте, что изменилось.'; }
   else { $('pPhase').textContent = P.room ? P.room.name : ''; $('pInstr').textContent = 'Можно начать снова, когда будете готовы.'; }
-  $('pIco').innerHTML = '<path d="M8 5.5v13l11-6.5z"/>'; $('pProg').style.width = '0'; P.idx = -1;
+  $('pIco').innerHTML = '<path d="M8 5.5v13l11-6.5z"/>'; $('pProg').style.width = '0'; P.idx = -1; $('pIntent').classList.remove('on');
   try { P.wake && P.wake.release(); } catch (e) {} P.wake = null; poke();
 }
 $('pPlay').onclick = play; $('pStop').onclick = () => stop(); $('pClose').onclick = closePlayer;
@@ -1046,6 +1118,8 @@ function frame(now) {
       if (ph.key === 'chakras' && pt > 4) { const k = Math.min(6, Math.floor((pt - 4) / 30)); if (k !== P.ch) chakra(k); }
       const st = ph.breath ? breathAt(ph.breath, pt) : null;
       if (st && ph.cue && st.label !== P.lastLabel) { if (P.lastLabel && st.label !== 'Пауза' && $('vBreath').checked && !playRec(st.label === 'Вдох' ? 'inhale' : 'exhale') && synth && !synth.speaking) speak([st.label], { rate: 0.7, gap: 0 }); P.lastLabel = st.label; }
+      const inMain = P.idx >= 2 && P.idx < P.phases.length - 1, el = P.elapsed - P.phases.slice(0, 2).reduce((a, p) => a + p.dur, 0);
+      $('pIntent').classList.toggle('on', inMain && (el % 75) < 9);
       $('pEye').textContent = 'Шаг ' + (P.idx + 1) + ' из ' + P.phases.length + ' · ' + fmt(ph.dur - pt);
       $('pTime').textContent = fmt(tot - P.elapsed); $('pProg').style.width = (P.elapsed / tot * 100).toFixed(2) + '%';
     }
