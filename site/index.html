@@ -30,6 +30,10 @@
   color-scheme: light;
 }
 [hidden] { display: none !important; }
+#siteNet { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+main, .footer, .stats, .marquee { position: relative; z-index: 1; }
+.stats { background: rgba(255,253,249,.82); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.footer { background: rgba(255,253,249,.85); }
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 92px; }
 body { margin: 0; color: var(--ink); font-family: var(--ff); font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased;
@@ -345,6 +349,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .marquee__track { animation: none; } .room, .btn, .drawer, .pui, .play, .mood { transition: none; } }
 </style>
 
+<canvas id="siteNet" aria-hidden="true"></canvas>
 <header class="header" id="nav">
   <div class="container">
     <a class="logo" href="#top" aria-label="Дорога к себе — на главную"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="17" stroke="#dcbd86" stroke-width="1"/><path d="M20 5l3.2 11.8L35 20l-11.8 3.2L20 35l-3.2-11.8L5 20l11.8-3.2z" stroke="#dcbd86" stroke-width="1.1" stroke-linejoin="round"/><circle cx="20" cy="20" r="3" fill="#dcbd86"/></svg>ДОРОГА К СЕБЕ</a>
@@ -503,7 +508,6 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
 
 <main id="catalog" hidden>
   <section class="lhero">
-    <canvas id="catNet"></canvas>
     <div class="container">
       <nav class="crumbs" aria-label="Путь"><a href="#top">Главная</a><span>Пространства</span></nav>
       <h1 class="display">Все <em>пространства.</em></h1>
@@ -1160,23 +1164,83 @@ function drawShutters(t, st, open) { // blinders part to reveal a wider world
     const glow = g.createLinearGradient(edge, 0, edge + sd * -m * 0.08, 0); glow.addColorStop(0, 'rgba(231,194,125,.18)'); glow.addColorStop(1, 'rgba(231,194,125,0)'); g.fillStyle = glow; g.fillRect(Math.min(edge, edge - sd * m * 0.08), 0, m * 0.08, H);
   });
 }
-const FLY = Array.from({ length: 420 }, (_, i) => ({ x: (Math.random() - 0.5) * 2.4, y: (Math.random() - 0.5) * 2.4, z: Math.random(), c: i % 9 === 0 ? [255, 214, 150] : i % 7 === 0 ? [170, 200, 255] : [245, 240, 255] }));
-const FLYY = Array.from({ length: 6 }, (_, i) => ({ x: (i % 2 ? 1 : -1) * (0.35 + Math.random() * 0.5), y: (Math.random() - 0.5) * 0.9, z: i / 6, k: Math.floor(Math.random() * 12) }));
-function drawFlight(t, st) { // a slow flight through deep space; stars and the odd yantra drift past
-  const m = M(), x0 = cx(), y0 = cy(), f = Math.max(W, H) * 0.42, sp = reduce ? 0 : 0.022 + (st ? 0.006 * st.b : 0);
+// ---- cinematic space flight: volumetric nebulae, distant galaxies, streaking stars, near-camera dust
+const NEB_PAL = [[[255, 90, 80], [150, 60, 255]], [[255, 150, 60], [255, 80, 140]], [[255, 200, 90], [255, 120, 60]], [[60, 220, 160], [50, 130, 255]], [[60, 150, 255], [120, 240, 255]], [[120, 80, 255], [255, 90, 190]], [[200, 120, 255], [255, 210, 140]]];
+function vnoise(seed) {
+  const N = 64, L = new Float32Array(N * N); let q = seed * 7919 % 233280; for (let i = 0; i < N * N; i++) { q = (q * 9301 + 49297) % 233280; L[i] = q / 233280; }
+  const at = (x, y) => L[(((y % N) + N) % N) * N + (((x % N) + N) % N)];
+  return (x, y) => { const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi, u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf), a = at(xi, yi), b = at(xi + 1, yi), c = at(xi, yi + 1), d = at(xi + 1, yi + 1); return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v; };
+}
+const SPR = {};
+function nebula(pi, v) {
+  const key = pi + ':' + v; if (SPR[key]) return SPR[key];
+  const S = 192, cv = document.createElement('canvas'); cv.width = cv.height = S; const x = cv.getContext('2d'), im = x.createImageData(S, S), n = vnoise(pi * 13 + v * 5 + 1), n2 = vnoise(pi * 3 + v + 99), [c1, c2] = NEB_PAL[pi];
+  for (let jj = 0; jj < S; jj++) for (let ii = 0; ii < S; ii++) {
+    const u = ii / S * 5, w = jj / S * 5; let f = 0, a = 0.5, fr = 1; for (let o = 0; o < 5; o++) { f += a * n(u * fr, w * fr); fr *= 2.03; a *= 0.5; }
+    const mix = n2(u * 0.6 + 2, w * 0.6 + 4), dx = ii / S - 0.5, dy = jj / S - 0.5, fall = Math.max(0, 1 - Math.sqrt(dx * dx + dy * dy) * 2);
+    const dens = Math.pow(Math.max(0, f - 0.32) / 0.68, 1.5) * fall * fall, k = (ii + jj * S) * 4;
+    im.data[k] = c1[0] + (c2[0] - c1[0]) * mix; im.data[k + 1] = c1[1] + (c2[1] - c1[1]) * mix; im.data[k + 2] = c1[2] + (c2[2] - c1[2]) * mix; im.data[k + 3] = Math.min(255, dens * 330);
+  }
+  x.putImageData(im, 0, 0); return (SPR[key] = cv);
+}
+function galaxy(v) {
+  const key = 'g' + v; if (SPR[key]) return SPR[key];
+  const S = 192, cv = document.createElement('canvas'); cv.width = cv.height = S; const x = cv.getContext('2d'), c = S / 2;
+  x.globalCompositeOperation = 'lighter';
+  const core = x.createRadialGradient(c, c, 0, c, c, S * 0.18); core.addColorStop(0, 'rgba(255,240,210,.95)'); core.addColorStop(1, 'rgba(255,200,140,0)'); x.fillStyle = core; x.fillRect(0, 0, S, S);
+  for (let i = 0; i < 2600; i++) { const arm = i % 2, r = Math.pow(Math.random(), 0.7) * S * 0.46, th = r / (S * 0.46) * 4.2 + arm * Math.PI + (Math.random() - 0.5) * 0.7;
+    const px = c + Math.cos(th) * r, py = c + Math.sin(th) * r * 0.42, near = r / (S * 0.46);
+    x.fillStyle = 'rgba(' + Math.round(255 - 110 * near) + ',' + Math.round(220 - 40 * near) + ',' + Math.round(170 + 85 * near) + ',' + (0.5 * (1 - near * 0.6)) + ')'; x.fillRect(px, py, 1.1, 1.1); }
+  return (SPR[key] = cv);
+}
+const FL = {
+  stars: Array.from({ length: 560 }, (_, i) => ({ x: (Math.random() - 0.5) * 3.2, y: (Math.random() - 0.5) * 3.2, z: Math.random(), tw: 0.5 + Math.random() * 2, c: i % 11 === 0 ? [255, 210, 150] : i % 7 === 0 ? [160, 195, 255] : [248, 244, 255] })),
+  clouds: Array.from({ length: 10 }, (_, i) => ({ x: (Math.random() - 0.5) * 2.2, y: (Math.random() - 0.5) * 1.6, z: i / 10, s: 0.7 + Math.random() * 0.9, rot: Math.random() * TAU, p: i % 3, v: i % 2 })),
+  gals: Array.from({ length: 3 }, (_, i) => ({ x: (i - 1) * 1.1 + (Math.random() - 0.5) * 0.4, y: (Math.random() - 0.5) * 1.2, z: i / 3 + 0.15, rot: Math.random() * TAU })),
+  dust: Array.from({ length: 12 }, () => ({ x: (Math.random() - 0.5) * 2.6, y: (Math.random() - 0.5) * 2.6, z: Math.random() }))
+};
+const frac = v => ((v % 1) + 1) % 1;
+const FLC = document.createElement('canvas'), FLX = FLC.getContext('2d');
+function drawFlight(t, st, o) { // rendered at half resolution, then composited: softer, cinematic, and four times cheaper
+  const gW = W, gH = H, gg = g, w2 = Math.max(2, Math.round(W / 2)), h2 = Math.max(2, Math.round(H / 2));
+  if (FLC.width !== w2 || FLC.height !== h2) { FLC.width = w2; FLC.height = h2; }
+  FLX.setTransform(1, 0, 0, 1, 0, 0); FLX.globalCompositeOperation = 'source-over'; FLX.clearRect(0, 0, w2, h2);
+  g = FLX; W = w2; H = h2; flightCore(t, st, o || {}, 0.5);
+  g = gg; W = gW; H = gH; g.globalCompositeOperation = 'lighter'; g.drawImage(FLC, 0, 0, W, H); g.globalCompositeOperation = 'source-over';
+}
+function flightCore(t, st, o, k) { const ci = o.ci != null ? o.ci : 5, phase = reduce ? 0 : (o.phase != null ? o.phase : t * 0.018), spd = o.speed != null ? o.speed : 0.018, fade = o.alpha != null ? o.alpha : 1;
+  const x0 = W / 2, y0 = H * (o.cy != null ? o.cy : 0.48), F = Math.max(W, H) * 0.55, pals = [ci, (ci + 3) % 7, (ci + 5) % 7];
   g.globalCompositeOperation = 'lighter';
-  const core = g.createRadialGradient(x0, y0, 0, x0, y0, m * 0.35); core.addColorStop(0, 'rgba(255,236,200,.12)'); core.addColorStop(1, 'rgba(255,236,200,0)'); g.fillStyle = core; g.fillRect(0, 0, W, H);
-  for (const s of FLY) {
-    const z = 0.03 + ((((s.z - t * sp) % 1) + 1) % 1) * 0.97, z2 = Math.min(1, z + 0.02);
-    const X = x0 + s.x / z * f * 0.5, Y = y0 + s.y / z * f * 0.5; if (X < -20 || X > W + 20 || Y < -20 || Y > H + 20) continue;
-    const X2 = x0 + s.x / z2 * f * 0.5, Y2 = y0 + s.y / z2 * f * 0.5, a = Math.min(1, (1 - z) * 1.3) * (z < 0.08 ? z / 0.08 : 1);
-    g.strokeStyle = rgba(s.c, 0.85 * a); g.lineWidth = Math.min(2.6, 0.5 / z * 0.6); g.beginPath(); g.moveTo(X2, Y2); g.lineTo(X, Y); g.stroke();
+  const core = g.createRadialGradient(x0, y0, 0, x0, y0, F * 0.5); core.addColorStop(0, rgba(NEB_PAL[ci][1], 0.14 * fade)); core.addColorStop(1, rgba(NEB_PAL[ci][1], 0)); g.fillStyle = core; g.fillRect(0, 0, W, H);
+  const cl = FL.clouds.map(c => ({ c, z: 0.04 + frac(c.z - phase * 0.55) * 0.96 })).sort((a, b) => b.z - a.z);
+  for (const { c, z } of cl) {
+    const a = Math.min(1, (1 - z) / 0.3) * Math.min(1, (z - 0.04) / 0.22) * 0.5 * fade; if (a <= 0.01) continue;
+    const sz = Math.min(c.s * F * 1.2 / (z + 0.25), Math.max(W, H) * 2.4), X = x0 + c.x / (z + 0.25) * F * 0.5, Y = y0 + c.y / (z + 0.25) * F * 0.5;
+    g.save(); g.globalAlpha = a; g.translate(X, Y); g.rotate(c.rot + t * 0.01); g.drawImage(nebula(pals[c.p], c.v), -sz / 2, -sz / 2, sz, sz); g.restore();
   }
-  for (const y of FLYY) {
-    const z = 0.12 + ((((y.z - t * sp * 0.5) % 1) + 1) % 1) * 0.88, X = x0 + y.x / z * f * 0.5, Y = y0 + y.y / z * f * 0.5, sz = m * 0.05 / z, a = Math.min(1, (1 - z) * 1.4) * Math.min(1, (z - 0.12) / 0.1);
-    if (sz < m * 1.2) drawYantra(g, X, Y, sz, y.k, false, t * 0.04, 0.5 * a);
+  for (const gx of FL.gals) {
+    const z = 0.08 + frac(gx.z - phase * 0.35) * 0.92, a = Math.min(1, (1 - z) / 0.25) * Math.min(1, (z - 0.08) / 0.12) * 0.75 * fade; if (a <= 0.01) continue;
+    const sz = F * 0.22 / z, X = x0 + gx.x / z * F * 0.5, Y = y0 + gx.y / z * F * 0.5;
+    g.save(); g.globalAlpha = a; g.translate(X, Y); g.rotate(gx.rot); g.drawImage(galaxy(FL.gals.indexOf(gx)), -sz / 2, -sz / 2, sz, sz); g.restore();
   }
-  g.globalCompositeOperation = 'source-over';
+  const streak = Math.min(0.25, spd * 1.4), buckets = new Map(), glows = [];
+  for (const s of FL.stars) {
+    const z = 0.02 + frac(s.z - phase) * 0.98, X = x0 + s.x / z * F * 0.5, Y = y0 + s.y / z * F * 0.5; if (X < -30 || X > W + 30 || Y < -30 || Y > H + 30) continue;
+    const z2 = Math.min(1, z + streak), X2 = x0 + s.x / z2 * F * 0.5, Y2 = y0 + s.y / z2 * F * 0.5;
+    const a = Math.min(1, (1 - z) * 1.4) * Math.min(1, z / 0.05) * (0.75 + 0.25 * Math.sin(t * s.tw + s.x * 9)) * fade, w = Math.min(3.2, 0.35 / z) * k * 2;
+    const key = s.c.join() + '|' + Math.min(3, Math.round(a * 3)) + '|' + Math.min(3, Math.round(w)); let b = buckets.get(key);
+    if (!b) buckets.set(key, b = { c: s.c, a: Math.round(a * 3) / 3, w: Math.max(0.6, Math.round(w)), pts: [] });
+    b.pts.push(X2, Y2, X + 0.01, Y); if (w > 2.2) glows.push(X, Y, w, s.c, a);
+  }
+  g.lineCap = 'round';
+  for (const b of buckets.values()) { if (b.a <= 0) continue; g.strokeStyle = rgba(b.c, 0.9 * b.a); g.lineWidth = b.w; g.beginPath(); for (let q = 0; q < b.pts.length; q += 4) { g.moveTo(b.pts[q], b.pts[q + 1]); g.lineTo(b.pts[q + 2], b.pts[q + 3]); } g.stroke(); }
+  for (let q = 0; q < glows.length; q += 5) { g.fillStyle = rgba(glows[q + 3], 0.18 * glows[q + 4]); g.beginPath(); g.arc(glows[q], glows[q + 1], glows[q + 2] * 2.4, 0, TAU); g.fill(); }
+  for (const d of FL.dust) {
+    const z = 0.04 + frac(d.z - phase * 1.2) * 0.5, X = x0 + d.x / z * F * 0.5, Y = y0 + d.y / z * F * 0.5, r = 0.006 * F / z, a = Math.min(1, (0.54 - z) / 0.2) * Math.min(1, (z - 0.04) / 0.05) * 0.08 * fade;
+    if (a <= 0 || X < -r || X > W + r || Y < -r || Y > H + r) continue;
+    const h = g.createRadialGradient(X, Y, 0, X, Y, r); h.addColorStop(0, rgba(NEB_PAL[ci][0], a)); h.addColorStop(1, rgba(NEB_PAL[ci][0], 0)); g.fillStyle = h; g.beginPath(); g.arc(X, Y, r, 0, TAU); g.fill();
+  }
+  g.globalCompositeOperation = 'source-over'; g.lineCap = 'butt';
 }
 const CLOUDS = Array.from({ length: 9 }, (_, i) => ({ y: 0.15 + i * 0.09, s: 0.004 + (i % 3) * 0.003, r: 0.12 + (i % 4) * 0.05, o: Math.random() }));
 function drawSilence(t, st) { // thoughts as clouds drifting across a still sky
@@ -1227,6 +1291,9 @@ function scene(visual, t, o) {
   const hue = CH[o.ci != null ? o.ci : 5].c;
   sky(t, hue);
   const st = o.st || null;
+  if (o.flightBg && visual !== 'flight') drawFlight(t, st, o.flightBg);
+  const zoomed = o.zoom != null && o.zoom !== 1;
+  if (zoomed) { g.save(); g.translate(cx(), cy()); g.scale(o.zoom, o.zoom); g.translate(-cx(), -cy()); }
   switch (visual) {
     case 'eye': drawEye(t, st); break;
     case 'chakras': drawChakras(t, st, o.active != null ? o.active : -1, 1); break;
@@ -1240,7 +1307,7 @@ function scene(visual, t, o) {
     case 'purpose': drawPurpose(t, st); break;
     case 'silence': drawSilence(t, st); break;
     case 'urge': drawUrge(t, st); break;
-    case 'flight': drawFlight(t, st); break;
+    case 'flight': drawFlight(t, st, Object.assign({ ci: o.ci }, o.flightBg || {})); break;
     case 'release': drawRelease(t); break;
     case 'heart': drawHeart(t, st); break;
     case 'bond': drawBond(t, st); break;
@@ -1251,6 +1318,7 @@ function scene(visual, t, o) {
     case 'dark': drawDark(t, o.since || 0); break;
     default: drawSphere(st, t, o.ci);
   }
+  if (zoomed) g.restore();
   if (o.shell) { const m = M(); g.globalCompositeOperation = 'lighter'; shell(t, st, visual === 'dark' ? 0.25 : 0.55, m * 0.34, m * 0.4); }
   vignette();
 }
@@ -1296,7 +1364,7 @@ $('moods').innerHTML = MOODS.map(([t, s, id]) => '<a class="mood" href="#room-' 
 const names = ROOMS.map(r => '<span>' + r.name + '</span>').join('');
 $('marquee').innerHTML = names + names;
 $('footRooms').innerHTML = ROOMS.slice(0, 7).map(r => '<li><a href="#room-' + r.id + '">' + r.name + '</a></li>').join('') + '<li><a href="#prostranstva">Все пространства →</a></li>';
-surface($('heroCv'), { cyr: 0.45, mr: 0.9, cxr: 0.68, visual: { visual: 'stars', ci: 1 } });
+surface($('heroCv'), { cyr: 0.45, mr: 0.9, cxr: 0.68, still: true, visual: { visual: 'stars', ci: 1 } });
 
 // ---- yantra network (plexus): yantras and star points drift, joined by threads; the pointer pulls threads and scatters nodes
 function makeNet(canvas, host, light) {
@@ -1311,7 +1379,7 @@ function makeNet(canvas, host, light) {
   };
   new ResizeObserver(N.fit).observe(canvas); N.fit();
   host.addEventListener('pointermove', e => { const r = canvas.getBoundingClientRect(); N.px = e.clientX - r.left; N.py = e.clientY - r.top; });
-  host.addEventListener('pointerleave', () => { N.px = N.py = -1e4; });
+  (host === window ? document.documentElement : host).addEventListener('pointerleave', () => { N.px = N.py = -1e4; });
   host.addEventListener('pointerdown', e => { if (e.target.closest('a, button, input')) return; const r = canvas.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top; N.rip.push({ x, y, t: performance.now() / 1000 });
     N.nodes.forEach(o => { const dx = o.x - x, dy = o.y - y, d = Math.hypot(dx, dy) || 1; if (d < 340 * N.u) { const f = (1 - d / (340 * N.u)) * 520; o.vx += dx / d * f; o.vy += dy / d * f; } }); });
   N.tick = t => {
@@ -1333,7 +1401,7 @@ function makeNet(canvas, host, light) {
     }
     if (N.px > -1e3) for (const o of N.nodes) { const d = Math.hypot(o.x - N.px, o.y - N.py); if (d < R * 1.35) { c.strokeStyle = L ? 'rgba(176,132,74,' + (1 - d / (R * 1.35)) * 0.55 + ')' : 'rgba(228,203,163,' + (1 - d / (R * 1.35)) * 0.6 + ')'; c.beginPath(); c.moveTo(N.px, N.py); c.lineTo(o.x, o.y); c.stroke(); } }
     for (const o of N.nodes) {
-      if (o.yan) drawYantra(c, o.x, o.y, o.s * N.u * (L ? 1.35 : 1), o.k, L, o.rot, L ? 0.9 : 0.9);
+      if (o.yan) drawYantra(c, o.x, o.y, o.s * N.u * (L ? 1.2 : 1), o.k, L, o.rot, L ? 0.6 : 0.9);
       else { c.fillStyle = L ? 'rgba(150,110,58,.75)' : 'rgba(240,234,255,.9)'; c.beginPath(); c.arc(o.x, o.y, o.s, 0, TAU); c.fill(); }
     }
     N.rip = N.rip.filter(rp => t - rp.t < 1.4);
@@ -1341,7 +1409,7 @@ function makeNet(canvas, host, light) {
   };
   return N;
 }
-const NETS = [makeNet($('heroNet'), $('top'), false), makeNet($('catNet'), $('catalog'), true)];
+const NETS = [makeNet($('heroNet'), $('top'), false), makeNet($('siteNet'), window, true)];
 
 // ======================= journal =======================
 const SRC = {
@@ -1356,6 +1424,14 @@ const SRC = {
   wade: 'Wade и соавт. (2014). Journal of Consulting and Clinical Psychology — мета-анализ программ прощения',
   fred: 'Fredrickson и соавт. (2008). Journal of Personality and Social Psychology — медитация любящей доброты',
   brooks: 'Brooks (2014). Journal of Experimental Psychology: General — волнение как энергия',
+  goyal: 'Goyal и соавт. (2014). JAMA Internal Medicine — мета-анализ 47 исследований медитации, 3515 участников',
+  holzel: 'Hölzel и соавт. (2011). Psychiatry Research: Neuroimaging — изменения серого вещества после 8-недельной программы осознанности',
+  black: 'Black и соавт. (2015). JAMA Internal Medicine — осознанность и качество сна у взрослых старшего возраста',
+  pearson: 'Pearson и соавт. (2015). Trends in Cognitive Sciences — как работает мысленное воображение',
+  king: 'King (2001). Personality and Social Psychology Bulletin — упражнение «лучшее возможное я»',
+  emmons: 'Emmons, McCullough (2003). Journal of Personality and Social Psychology — благодарность и благополучие',
+  wiseman: 'Wiseman (2003). «Фактор удачи» — исследования людей, считающих себя везучими',
+  hofmann: 'Hofmann и соавт. (2012). Cognitive Therapy and Research — обзор 269 мета-анализов когнитивно-поведенческой терапии',
   mbsr: 'Khoury и соавт. (2015). Journal of Psychosomatic Research — мета-анализ программ снижения стресса на основе осознанности'
 };
 const JOURNAL = [
@@ -1368,12 +1444,44 @@ const JOURNAL = [
 <h2>Зачем я это делаю</h2>
 <p>Я знаю, каково это — жить в шуме и не понимать, чего ты хочешь на самом деле. И знаю, что из этого есть дорога. Я собрал в «Дороге к себе» то, что прошло проверку моей жизнью и подтверждается исследованиями, чтобы каждый мог начать свой путь — с пятнадцати минут в день.</p>
 <div class="todo">Черновик по вашим словам. Проверьте цифры в квадратных скобках и детали, которые хотите оставить или убрать.</div>`, src: [] },
-  { id: 'team', cat: 'Кто ведёт практики', title: 'Люди за «Дорогой к себе»', read: '3 минуты',
-    lead: 'Программу создают люди, которые сами прошли через трудное и много лет работают с собой и другими.',
-    body: `<h2>Автор</h2><p>Основатель программы. Прошёл путь от зависимостей к трезвой, наполненной жизни: [10] лет без алкоголя, [12] лет без сигарет. Предприниматель, отец двоих детей, занимается боксом. Много лет практикует медитацию и работу с сознанием, прошёл обучение и посвящения у мастеров.</p>
-<h2>Элен</h2><p>[Роль и опыт Элен: например, специалист по работе с травмой, сколько лет практикует, где училась.] Вместе мы отбираем практики и следим, чтобы они были бережными и безопасными.</p>
-<div class="todo">Пришлите для Элен: роль, образование, опыт и фото — оформлю красиво. Если у мастера можно упомянуть имя — тоже.</div>
-<h2>Наш принцип</h2><p>Мы оставляем только то, что помогает на практике и находит подтверждение в исследованиях. А где наука пока молчит — так и говорим.</p>`, src: [] },
+  { id: 'brain', cat: 'Наука', title: 'Что медитация делает с мозгом', read: '4 минуты',
+    lead: 'Регулярная практика меняет не только настроение. Она меняет то, как работает мозг.',
+    body: `<p>Нейробиологи изучают медитацию уже несколько десятилетий — с помощью томографии и записи мозговых волн.</p>
+<div class="fact">После <b>восьминедельной программы осознанности</b> у участников нашли изменения плотности серого вещества в зонах, связанных с памятью, обучением и регуляцией эмоций, — по сравнению с контрольной группой.</div>
+<p>У опытных практиков, проведших в медитации тысячи часов, во время практики фиксировали высокоамплитудную синхронную гамма-активность — паттерн, связанный с собранным вниманием.</p>
+<p>Вывод простой: мозг пластичен, и спокойствие — это навык, который тренируется, как мышца. Регулярность важнее длительности.</p>`, src: ['holzel', 'lutz'] },
+  { id: 'mindfulness', cat: 'Наука', title: 'Осознанность против стресса: большой обзор', read: '4 минуты',
+    lead: 'Одна из самых изученных практик в мире — и одна из основ «Дороги к себе».',
+    body: `<p>Осознанность — это умение замечать мысли и ощущения, не вовлекаясь в них. Именно этому учит пространство «Тишина ума»: вы — небо, мысли — облака.</p>
+<div class="fact">Мета-анализ в журнале JAMA Internal Medicine: <b>47 исследований, 3515 участников</b>. Программы медитации дали умеренное улучшение при тревоге, подавленности и боли.</div>
+<p>Программы снижения стресса на основе осознанности, созданные Джоном Кабат-Зинном, применяются в больницах и компаниях по всему миру. Обзоры показывают заметное снижение стресса у здоровых людей.</p>
+<p>Медитация — не замена лечению, а ежедневная гигиена ума: как чистка зубов, только для мыслей.</p>`, src: ['goyal', 'mbsr'] },
+  { id: 'sleep', cat: 'Наука', title: 'Сон без мыслей по кругу', read: '3 минуты',
+    lead: 'Каждый третий плохо спит. Чаще всего мешает не тело, а ум, который не может остановиться.',
+    body: `<p>Мысли по кругу — главный враг засыпания. Практики осознанности учат отпускать их, а не спорить с ними.</p>
+<div class="fact">В рандомизированном исследовании с участием взрослых старшего возраста с нарушениями сна <b>программа осознанности улучшила качество сна сильнее</b>, чем занятия по гигиене сна.</div>
+<p>Йога-нидра и медленное дыхание дополнительно снижают возбуждение нервной системы — поэтому вечерние пространства начинаются с замедления дыхания и тяжести в теле.</p>`, src: ['black', 'nidra', 'goessl'] },
+  { id: 'imagery', cat: 'Наука', title: 'Почему работают образы: кокон, свет и будущее «я»', read: '4 минуты',
+    lead: 'Мозг реагирует на ярко представленный образ почти как на реальность. Этим можно пользоваться бережно.',
+    body: `<p>Исследования мысленного воображения показывают: когда мы ярко представляем что-то, включаются многие из тех же областей мозга, что и при настоящем восприятии.</p>
+<p>Поэтому образ золотого кокона даёт ощущение защищённости, а свет, льющийся сверху, помогает телу расслабиться. В психотерапии давно используют образ «безопасного места» — по тому же принципу.</p>
+<div class="fact">Упражнение <b>«лучшее возможное я»</b> — представить себя в будущем, где всё сложилось, — в исследованиях повышало настроение и оптимизм. На нём построено пространство «Предназначение».</div>
+<p>Важно: образы не заменяют действий. Они дают состояние, из которого действовать легче.</p>`, src: ['pearson', 'king'] },
+  { id: 'beliefs', cat: 'Наука', title: 'Как снимаются шоры: убеждения и маленькие шаги', read: '4 минуты',
+    lead: '«Неудобно», «не получится», «это не для меня» — не факты, а привычки думать. Их можно проверить и заменить.',
+    body: `<p>Когнитивная терапия, созданная Аароном Беком, учит замечать автоматические мысли и проверять их на правду: это факт или привычка? откуда она? всегда ли это так?</p>
+<div class="fact">Обзор <b>269 мета-анализов</b> показал: когнитивно-поведенческий подход — один из самых надёжно подтверждённых методов работы с тревогой и стрессом.</div>
+<p>Сильнее всего убеждение меняет не спор, а опыт: маленький реальный шаг — звонок, вопрос, письмо. Поэтому пространство «Снять шоры» заканчивается выбором одного шага на завтра.</p>`, src: ['hofmann'] },
+  { id: 'gratitude', cat: 'Наука', title: 'Благодарность, удача и изобилие — без магии', read: '4 минуты',
+    lead: 'Деньги и удача не приходят сами. Но внимание и состояние меняют то, что мы замечаем и делаем.',
+    body: `<p>В классическом исследовании люди, которые каждую неделю записывали, за что благодарны, через несколько недель оценивали свою жизнь лучше и чаще занимались спортом, чем те, кто записывал неприятности.</p>
+<p>Психолог Ричард Уайзман годами изучал людей, которые считают себя везучими. Главное отличие — они чаще замечают возможности, открыты новому и легче знакомятся с людьми.</p>
+<div class="fact">Поэтому в пространствах «Изобилие» и «Удача» есть <b>благодарность, намерение и конкретный первый шаг</b>. Мы честно говорим: это работает через внимание и действия, а не через «притяжение».</div>`, src: ['emmons', 'wiseman'] },
+  { id: 'excitement', cat: 'Наука', title: 'Волнение перед важным — это энергия', read: '3 минуты',
+    lead: 'Пытаться «успокоиться» перед выступлением часто не работает. Есть способ лучше.',
+    body: `<p>Волнение и радостное возбуждение для тела почти одинаковы: пульс, дыхание, энергия. Разница — в том, как мы это называем.</p>
+<div class="fact">В экспериментах фраза <b>«я взволнован — это энергия»</b> перед пением, публичной речью и задачами по математике улучшала результаты по сравнению с попыткой успокоиться.</div>
+<p>Пространство «Перед важным событием» соединяет этот приём с мысленной репетицией и главной мыслью: что бы ни случилось, с вами всё в порядке.</p>`, src: ['brooks'] },
   { id: 'why', cat: 'Подход', title: 'Почему мы выбрали именно эти практики', read: '5 минут',
     lead: 'Каждая практика прошла два фильтра: она работает в нашей жизни и опирается на исследования или многовековую традицию.',
     body: `<p>Мы не придумывали практики с нуля. Мы взяли то, что изучено лучше всего, и соединили с образами из йоги и медитативных традиций — потому что образы помогают погрузиться глубже.</p>
@@ -1415,7 +1523,7 @@ const JOURNAL = [
 ];
 const jCard = (j, feat) => '<a class="jcard card' + (feat ? ' feature' : '') + '" href="#j-' + j.id + '"><span class="jcat">' + j.cat + '</span><h3>' + j.title + '</h3><p>' + j.lead + '</p><div class="jmeta"><span>' + j.read + '</span><span>Читать ' + ARROW + '</span></div></a>';
 $('jGrid').innerHTML = JOURNAL.map(j => jCard(j, j.feature)).join('');
-$('jTeaser').innerHTML = ['author', 'breath', 'habits'].map(id => jCard(JOURNAL.find(j => j.id === id))).join('');
+$('jTeaser').innerHTML = ['author', 'mindfulness', 'habits'].map(id => jCard(JOURNAL.find(j => j.id === id))).join('');
 function showArticle(id) {
   const j = JOURNAL.find(x => x.id === id); if (!j) return show('journal');
   show('article'); const i = JOURNAL.indexOf(j), nx = JOURNAL[(i + 1) % JOURNAL.length];
@@ -1425,7 +1533,12 @@ function showArticle(id) {
   scrollTo(0, 0);
 }
 let curRoom = ROOMS[0];
-const roomSurf = surface($('roomCv'), { cyr: 0.46, mr: 0.66, cxr: 0.7, visual: () => ({ visual: curRoom.main[0].visual === 'silence' && curRoom.id === 'purpose' ? 'purpose' : curRoom.main[0].visual, ci: curRoom.ci, active: curRoom.id === 'chakras' ? 5 : undefined }) });
+const roomSurf = surface($('roomCv'), { cyr: 0.46, mr: 0.66, cxr: 0.7, visual: () => {
+  const t = performance.now() / 1000, d = Math.max(0, t - (curRoom.enterT || t)), boost = Math.exp(-d / 1.6);
+  return { visual: curRoom.main[0].visual === 'silence' && curRoom.id === 'purpose' ? 'purpose' : curRoom.main[0].visual, ci: curRoom.ci, active: curRoom.id === 'chakras' ? 5 : undefined,
+    zoom: 0.35 + 0.65 * (1 - Math.exp(-d / 1.3)) + 0.03 * Math.sin(t * 0.2),
+    flightBg: { ci: curRoom.ci, phase: 0.014 * d + 0.42 * 1.6 * (1 - boost), speed: 0.014 + 0.42 * boost, cy: 0.5 } };
+} });
 
 // hero video slot: the woman in red stands between the back and front chakra layers
 const HERO_VIDEO = '';   // e.g. 'media/hero.mp4': a looping clip on pure black; screen blending drops the black into the cosmos
@@ -1433,7 +1546,7 @@ if (HERO_VIDEO) { const v = $('heroVid'); v.src = HERO_VIDEO; v.hidden = false; 
 
 function showRoom(id) {
   const r = ROOMS.find(x => x.id === id); if (!r) return showHome();
-  curRoom = r; show('roomPage');
+  curRoom = r; r.enterT = performance.now() / 1000; show('roomPage');
   const idx = ROOMS.indexOf(r);
   $('rNum').textContent = 'Пространство ' + String(idx + 1).padStart(2, '0') + ' · ' + CATS[CAT[r.id]];
   $('rCrumb').textContent = r.name;
@@ -1593,7 +1706,7 @@ const P = { room: null, phases: [], running: false, paused: false, elapsed: 0, l
 const pSurf = surface($('pCv'), { cyr: 0.4, mr: 0.68, visual: () => {
   if (!P.room) return { visual: 'eye' };
   const ph = P.phases[Math.max(0, P.idx)], pt = P.elapsed - P.start;
-  return { visual: ph.visual, ci: ph.visual === 'chakras' && P.ch >= 0 ? P.ch : ph.tone, st: ph.breath && P.running ? breathAt(ph.breath, pt) : null, active: ph.key === 'chakras' ? P.ch : -1, since: pt, open: ph.open && P.running ? ph.open[0] + (ph.open[1] - ph.open[0]) * ease(Math.min(1, pt / ph.dur)) : undefined, shell: P.running && P.idx > 0 && ph.visual !== 'cocoon' && ph.visual !== 'shutters' };
+  return { flightBg: { ci: ph.tone, phase: P.elapsed * 0.009, speed: 0.009, alpha: ph.visual === 'dark' ? 0.25 : 0.75 }, visual: ph.visual, ci: ph.visual === 'chakras' && P.ch >= 0 ? P.ch : ph.tone, st: ph.breath && P.running ? breathAt(ph.breath, pt) : null, active: ph.key === 'chakras' ? P.ch : -1, since: pt, open: ph.open && P.running ? ph.open[0] + (ph.open[1] - ph.open[0]) * ease(Math.min(1, pt / ph.dur)) : undefined, shell: P.running && P.idx > 0 && ph.visual !== 'cocoon' && ph.visual !== 'shutters' };
 } });
 function openPlayer(r) {
   P.room = r; P.phases = r.phases; P.intent = ($('rIntent').value || '').trim() || intentOf(r); $('pIntent').textContent = P.intent; $('pIntent').classList.remove('on'); P.idx = -1; P.running = false; P.elapsed = 0;
@@ -1659,11 +1772,11 @@ function frame(now) {
   }
   P.last = now;
   const t = now / 1000, inPlayer = !$('player').hidden;
-  if (!inPlayer) NETS.forEach(n => { if (visible(n.canvas)) n.tick(t); });
+  if (!inPlayer) NETS.forEach(n => { if (n.canvas.id === 'siteNet' || visible(n.canvas)) n.tick(t); });
   for (const s of surfaces) {
     if (inPlayer ? s !== pSurf : s === pSurf) continue;
     if (!visible(s.canvas)) continue;
-    if (reduce && !s.dirty && s !== pSurf) continue;
+    if ((reduce || s.still) && !s.dirty && s !== pSurf) continue;
     paint(s, t); s.dirty = false;
   }
   requestAnimationFrame(frame);
