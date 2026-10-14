@@ -1009,7 +1009,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
         <li><b>Стороны и акцепт.</b> Настоящий документ — публичная оферта (ст. 435, п. 2 ст. 437 ГК РФ). Регистрация на сайте и/или оплата означают полное принятие условий (п. 3 ст. 438 ГК РФ). Изменения публикуются не позднее чем за 10 дней; для уже оплаченного периода действуют прежние условия.</li>
         <li><b>Возраст.</b> Сервис предназначен для лиц старше 18 лет (18+).</li>
         <li><b>Предмет.</b> Исполнитель предоставляет доступ к аудиовизуальным практикам, статьям и персональным астрологическим отчётам. Это информационно-развлекательные и wellness-услуги, не медицинские и не психологические.</li>
-        <li><b>Бесплатная и платная части.</b> Бесплатно после регистрации: практика «Очищение», базовая часть Карты жизни, дневник. Без регистрации практики недоступны. Платно: подписка (месяц или год) на все пространства и курсы; отдельный курс — доступ на 30 дней; полная Карта жизни; прогноз на год; ректификация. Отдельные пространства навсегда не продаются. Цены указываются на сайте до оплаты, в рублях — для России, с налогами — для Великобритании и ЕС.</li>
+        <li><b>Бесплатная и платная части.</b> Бесплатно после регистрации: практика «Очищение», базовая часть Карты жизни, дневник. Без регистрации практики недоступны. Платно: подписка (месяц или год) на все пространства и курсы; отдельный курс — доступ на 30 дней; полная Карта жизни; прогноз на год; ректификация. Отдельные пространства навсегда не продаются, кроме «Аджны»: она не входит в подписку и курсы, открывается отдельной покупкой навсегда и только после 7 практик на полном уровне. Цены указываются на сайте до оплаты, в рублях — для России, с налогами — для Великобритании и ЕС.</li>
         <li><b>Подписка.</b> Подписка продлевается автоматически на тот же срок по той же цене, пока вы её не отмените. Отдельное согласие на автопродление даётся при оплате. Мы напоминаем о списании заранее (для годовой подписки — за 7–30 дней). Отключить продление можно в личном кабинете в один-два клика; доступ сохраняется до конца оплаченного периода. Об изменении цены сообщаем за 30 дней.</li>
         <li><b>Персональные отчёты.</b> Отчёт формируется автоматически по данным, которые вы ввели. За точность данных рождения отвечаете вы. Пересчёт по исправленным данным в течение 30 дней — бесплатно.</li>
         <li><b>Обязанности пользователя.</b> Перед практикой ознакомиться с предупреждением о безопасности; не использовать практики за рулём, при работе с техникой и в воде; прекратить практику при ухудшении самочувствия.</li>
@@ -1266,7 +1266,7 @@ const ROOMS = [
     note: '<b>Основа:</b> визуализация + резонансное дыхание. Доказанный эффект — снижение стресса и мышечного напряжения.',
     main: [
       R(120, 'Светлый поток', 'cleanse', 'Над головой источник чистого света. Он льётся вниз, как тёплый водопад.', ['Представьте над головой источник чистого света.', 'Он льётся вниз, как тёплый водопад.', 'Через макушку, лицо, горло, плечи.', 'Всё тяжёлое смывается и уходит в землю.']),
-      R(120, 'Тело', 'cleanse', 'Свет проходит через грудь, живот, руки и ноги. Всё лишнее уходит вниз.', ['Свет проходит через грудь и живот.', 'Через руки, до кончиков пальцев.', 'Через ноги, до самых стоп.', 'Всё, что вам больше не нужно, уходит вниз и растворяется.']),
+      R(120, 'Сквозь тело', 'cleanse', 'Свет проходит через грудь, живот, руки и ноги. Всё лишнее уходит вниз.', ['Свет проходит через грудь и живот.', 'Через руки, до кончиков пальцев.', 'Через ноги, до самых стоп.', 'Всё, что вам больше не нужно, уходит вниз и растворяется.']),
       R(90, 'Мысли', 'cleanse', 'Свет проходит через мысли. Чужие слова и заботы дня уходят на выдохе.', ['Теперь свет проходит через мысли.', 'Чужие слова, новости, заботы дня.', 'Просто отпускайте их на выдохе.']),
       R(90, 'Чистота', 'flight', 'Вы чистые и лёгкие. Кокон сияет ровным золотым светом.', ['Вы чистые и лёгкие.', 'Кокон сияет ровным золотым светом.', 'Побудьте в этой тишине.'], { beat: 6 })
     ] },
@@ -1284,8 +1284,8 @@ const ROOMS = [
     note: '<b>Основа:</b> резонансное дыхание (давление, пульс, вариабельность ритма сердца) и бодискан. <b>Не заменяет лечение.</b>',
     main: [
       R(120, 'Сердце', 'health', 'Внимание в центре груди. Мягкий зелёный свет бьётся в ритме дыхания.', ['Положите внимание в центр груди.', 'Представьте там мягкий зелёный свет.', 'Он пульсирует спокойно, в ритме вашего дыхания.']),
-      R(180, 'Тело', 'health', 'Свет растекается туда, где есть усталость или напряжение. Дышите туда.', ['Этот свет растекается по телу.', 'Туда, где есть усталость или напряжение.', 'Задержитесь там вниманием. Просто дышите туда.', 'С каждым выдохом напряжение мягче.']),
-      R(120, 'Благодарность', 'health', 'Поблагодарите своё тело: сердце, лёгкие, ноги.', ['Поблагодарите своё тело.', 'Сердце, которое бьётся без отдыха.', 'Лёгкие, которые дышат за вас.', 'Ноги, которые носят вас каждый день.'], { beat: 6 })
+      R(180, 'Дыхание в усталость', 'health', 'Свет растекается туда, где есть усталость или напряжение. Дышите туда.', ['Этот свет растекается по телу.', 'Туда, где есть усталость или напряжение.', 'Задержитесь там вниманием. Просто дышите туда.', 'С каждым выдохом напряжение мягче.']),
+      R(120, 'Тепло и тяжесть', 'health', 'Руки и ноги тяжёлые и тёплые. Тело отдыхает и восстанавливается.', ['Почувствуйте вес своих рук. Они тяжёлые и тёплые.', 'Ноги тяжёлые и тёплые.', 'Тепло разливается в животе.', 'Тело отдыхает. Оно умеет восстанавливаться само.'], { beat: 6 })
     ] },
   { id: 'abundance', name: 'Изобилие', ci: 2, tag: 'Благодарность, денежная цель и первый шаг к ней.', ev: ['t-b', 'Работает через внимание'],
     whyT: 'Деньги приходят через действия', why: 'Сначала благодарность за то, что уже есть: она переключает внимание с нехватки на возможности. Потом золотой поток, а в конце — конкретная цель и первый шаг на завтра. Так образ превращается в поступок.',
@@ -1296,12 +1296,12 @@ const ROOMS = [
       R(150, 'Намерение', 'abundance', 'Ваша цель: сколько и к какому сроку. День, когда она достигнута. И первый шаг завтра.', ['Подумайте о своей денежной цели. Сколько и к какому сроку.', 'Представьте день, когда она уже достигнута.', 'Что вы видите? Что чувствуете?', 'И какой первый шаг вы сделаете завтра?'], { beat: 10 })
     ] },
   { id: 'luck', name: 'Удача', ci: 5, tag: 'Замечать возможности, которые раньше проходили мимо.', ev: ['t-b', 'Работает через внимание'],
-    whyT: 'Удача любит внимательных', why: 'Исследования показывают: люди, которые считают себя везучими, просто чаще замечают шансы. Эта практика тренирует открытость: звёзды-возможности соединяются в ваш узор.',
+    whyT: 'Удача любит внимательных', why: 'Исследования показывают: люди, которые считают себя везучими, просто чаще замечают шансы. Эта практика тренирует открытость: звёзды-возможности соединяются в ваш узор, а в конце вы выбираете одно маленькое изменение привычного маршрута — так у случая появляется шанс.',
     note: '<b>Основа:</b> работы Ричарда Уайзмана о «везучих» людях: удача связана с открытостью и вниманием к случайностям.',
     main: [
       R(120, 'Небо', 'luck', 'Над вами ночное небо. Каждая звезда — возможность.', ['Представьте над собой ночное небо.', 'Каждая звезда — возможность.', 'Вы замечаете их всё больше.']),
       R(150, 'Узор', 'luck', 'Звёзды соединяются в линии: люди, встречи, случайности.', ['Звёзды соединяются в линии.', 'Люди, встречи, случайности складываются в узор.', 'Вы на своём месте и в своё время.']),
-      R(120, 'Готовность', 'luck', 'Про себя: я замечаю возможности. Я открываюсь новому.', ['Повторите про себя: я замечаю возможности.', 'Я открываюсь новому.', 'Удача приходит к тем, кто готов.'], { beat: 10 })
+      R(120, 'Новый маршрут', 'luck', 'Выберите одно маленькое изменение на завтра: другая дорога, новый человек, новое место.', ['Выберите одно маленькое изменение на завтра.', 'Другая дорога. Новый человек. Место, где вы не были.', 'Новое даёт случаю шанс найти вас.'], { beat: 10 })
     ] },
   { id: 'purpose', name: 'Предназначение', ci: 5, tag: 'Услышать себя настоящего под слоем ролей.', ev: ['t-a', 'Позитивная психология'],
     whyT: 'Под ролями — вы', why: 'Работа, семья, обязанности: роли заглушают собственное желание. Здесь вы снимаете их по одной, встречаете себя через пять лет и задаёте один вопрос. Ответ стоит записать сразу после сессии.',
@@ -1382,10 +1382,10 @@ const ROOMS = [
       R(90, 'Принятие', 'heart', 'Вы уже достаточно хороши. И вы растёте — шаг за шагом.', ['Вы живой человек, со своими сильными сторонами и ошибками.', 'Вы уже достаточно хороши.', 'И вы растёте, шаг за шагом.'])
     ] },
   { id: 'relations', name: 'Отношения и близость', ci: 1, tag: 'Тепло к близким, понимание вместо обид.', ev: ['t-a', 'Любящая доброта · подтверждено'],
-    whyT: 'Близость начинается с тепла внутри', why: 'Медитация любящей доброты — одна из самых изученных практик. Вы по очереди посылаете тепло себе, близкому человеку, партнёру и тому, с кем непросто. Постепенно растёт чувство связи и терпение, и это заметно в разговорах и дома.',
+    whyT: 'Близость начинается с тепла внутри', why: 'Медитация любящей доброты — одна из самых изученных практик. Сначала вы принимаете тепло от того, кто к вам добр, затем по очереди посылаете его близкому человеку, партнёру и тому, с кем непросто. Постепенно растёт чувство связи и терпение, и это заметно в разговорах и дома.',
     note: '<b>Основа:</b> медитация любящей доброты (метта). Исследования: больше позитивных эмоций и чувства связи с людьми (Б. Фредриксон, 2008).',
     main: [
-      R(90, 'Себе', 'bond', 'Пусть я буду в безопасности. Пусть мне будет спокойно.', ['Начнём с себя.', 'Пусть я буду в безопасности.', 'Пусть мне будет спокойно.', 'Пусть у меня будет радость.']),
+      R(90, 'Принять тепло', 'bond', 'Вспомните человека, рядом с которым вам спокойно. Примите его тепло.', ['Вспомните человека, рядом с которым вам было спокойно и безопасно.', 'Почувствуйте его доброе отношение к вам.', 'Просто примите это тепло. Ничего не нужно делать взамен.']),
       R(120, 'Близкому', 'bond', 'Человек, которого вы любите. Пожелайте ему тепла.', ['Представьте человека, которого вы любите.', 'Его лицо, его улыбку.', 'Пусть ты будешь в безопасности.', 'Пусть тебе будет спокойно.', 'Пусть у тебя будет радость.']),
       R(120, 'Партнёру', 'bond', 'Между вами тёплая нить света. Пусть нам будет легко друг с другом.', ['Вспомните человека, с которым хотите больше близости.', 'Представьте между вами тёплую нить света.', 'Пусть нам будет легко друг с другом.', 'Пусть мы слышим друг друга.'], { beat: 6 }),
       R(120, 'Тому, с кем непросто', 'bond', 'Насколько получится, пожелайте и ему того же.', ['Теперь человек, с которым непросто.', 'Насколько получится, пожелайте ему того же.', 'Пусть и тебе будет спокойно.', 'Это не для него. Это для вашего сердца.'], { beat: 6 }),
@@ -1396,7 +1396,7 @@ const ROOMS = [
     note: '<b>Основа:</b> осознанное питание (программа MB-EAT, Дж. Кристеллер): меньше приступов переедания в исследованиях. При расстройствах пищевого поведения — вместе со специалистом.',
     main: [
       R(90, 'Тело сейчас', 'health', 'Есть ли сейчас голод? Сильный или лёгкий? Или это усталость?', ['Прислушайтесь к животу.', 'Есть ли там голод? Сильный или лёгкий?', 'А может, это усталость или тревога?']),
-      R(150, 'Волна тяги', 'urge', 'Момент, когда тянет к еде без голода. Тяга поднимается и спадает.', ['Вспомните момент, когда тянет к еде без голода.', 'Что вы чувствуете в этот момент?', 'Пусть тяга поднимется, как волна.', 'И спадёт. Вы просто наблюдаете.'], { beat: 8 }),
+      R(150, 'Голод или чувство', 'urge', 'Шкала голода от 1 до 10 и четыре вопроса: я голоден? злюсь? одинок? устал?', ['Оцените свой голод от одного до десяти.', 'Где вы его чувствуете: в животе или в голове?', 'Теперь четыре вопроса.', 'Я злюсь? Мне одиноко? Я устал?', 'Если да — телу нужна не еда, а отдых, разговор или пауза.']),
       R(120, 'Чего хочется на самом деле', 'health', 'Отдыха? Тепла? Поддержки? Как дать себе это без еды?', ['Спросите себя: чего я на самом деле хочу?', 'Отдыха? Тепла? Поддержки?', 'Как можно дать себе это без еды?'], { beat: 6 }),
       R(90, 'Насыщение', 'health', 'Вы едите медленно, чувствуете вкус и замечаете, когда достаточно.', ['Представьте следующий приём пищи.', 'Вы едите медленно и чувствуете вкус.', 'И замечаете момент, когда уже достаточно.'], { beat: 6 })
     ] },
@@ -1433,17 +1433,17 @@ const MODE_RU = { major: 'светлый мажор', minor: 'мягкий ми�
 const SOUND = {
   cleanse:   { beats: [8, 7, 6], carrier: 180, breath: 'long',      mode: 'suspended', tempo: [9, 14], noise: 'pink',  goal: 'отпустить напряжение' },
   energy:    { beats: [10, 12, 14], carrier: 240, breath: 'lift',   mode: 'major',     tempo: [3, 5],  noise: 'white', goal: 'бодрость без суеты' },
-  health:    { beats: [8, 6, 6], carrier: 190, breath: 'resonance', mode: 'suspended', tempo: [8, 12], noise: 'pink',  goal: 'восстановление' },
+  health:    { beats: [9, 8, 6], carrier: 195, breath: 'resonance', mode: 'suspended', tempo: [8, 12], noise: 'pink',  goal: 'восстановление' },
   blinders:  { beats: [10, 10, 12, 12, 14], carrier: 220, breath: 'calm', mode: 'lydian', tempo: [5, 8],  noise: 'pink',  goal: 'ясность и смелость' },
   abundance: { beats: [10, 10, 12], carrier: 230, breath: 'heart',  mode: 'major',     tempo: [4, 7],  noise: 'pink',  goal: 'открытость возможностям' },
-  luck:      { beats: [10, 12, 10], carrier: 230, breath: 'heart',  mode: 'lydian',    tempo: [4, 7],  noise: 'pink',  goal: 'внимательность к шансам' },
+  luck:      { beats: [11, 12, 10], carrier: 250, breath: 'calm',   mode: 'lydian',    tempo: [5, 8],  noise: 'white', goal: 'внимательность к шансам' },
   purpose:   { beats: [6, 6, 8], carrier: 200, breath: 'resonance', mode: 'lydian',    tempo: [7, 11], noise: 'pink',  goal: 'услышать себя' },
   silence:   { beats: [6, 5, 4], carrier: 160, breath: 'long',      mode: 'suspended', tempo: [12, 18], noise: 'brown', goal: 'тишина ума и сон' },
   breathe:   { beats: [8, 6, 6], carrier: 180, breath: null,        mode: 'suspended', tempo: [10, 15], noise: 'brown', goal: 'снять стресс' },
   event:     { beats: [10, 12, 10], carrier: 220, breath: 'box',    mode: 'dorian',    tempo: [5, 8],  noise: 'pink',  goal: 'собранность' },
   release:   { beats: [6, 6, 5], carrier: 170, breath: 'long',      mode: 'minor',     tempo: [9, 14], noise: 'brown', goal: 'отпустить и простить' },
   selflove:  { beats: [8, 8, 7], carrier: 190, breath: 'heart',     mode: 'major',     tempo: [7, 11], noise: 'pink',  goal: 'тепло к себе' },
-  relations: { beats: [8, 8, 7], carrier: 190, breath: 'heart',     mode: 'dorian',    tempo: [7, 11], noise: 'pink',  goal: 'тепло к другим' },
+  relations: { beats: [9, 8, 8, 7, 7], carrier: 205, breath: 'calm', mode: 'dorian',    tempo: [6, 10], noise: 'pink',  goal: 'тепло к другим' },
   food:      { beats: [8, 7, 7], carrier: 190, breath: 'calm',      mode: 'suspended', tempo: [8, 12], noise: 'pink',  goal: 'слышать тело' },
   ajna:      { beats: [10, 7, 6], carrier: 210, breath: 'resonance', mode: 'lydian',   tempo: [8, 13], noise: 'pink',  goal: 'внимание в одной точке' },
   chakras:   { beats: [7, 8, 9, 10, 11, 12, 6], carrier: 200, breath: 'resonance', mode: 'major', tempo: [6, 10], noise: 'pink', goal: 'целостность' },
@@ -1453,21 +1453,21 @@ const SOUND = {
 const TARGET = {
   cleanse:   { ch: [6, 3, 0], m: ['Насколько вы сейчас напряжены?', 'спокойно', 'очень напряжён(а)', -1, 'напряжение'] },
   energy:    { ch: [0, 2],    m: ['Сколько у вас сейчас сил?', 'нет сил', 'много сил', 1, 'энергия'] },
-  health:    { ch: [3, 2],    m: ['Как вы чувствуете своё тело?', 'тяжело', 'легко', 1, 'самочувствие'] },
+  health:    { ch: [3, 0],    m: ['Как вы чувствуете своё тело?', 'тяжело', 'легко', 1, 'самочувствие'] },
   blinders:  { ch: [5, 4],    m: ['Насколько вы уверены, что можете сделать свой шаг?', 'не уверен(а)', 'уверен(а)', 1, 'уверенность'] },
   abundance: { ch: [2, 3],    m: ['Насколько вы видите свои возможности?', 'не вижу', 'вижу ясно', 1, 'ощущение возможностей'] },
   luck:      { ch: [2, 5],    m: ['Насколько вы открыты новому?', 'закрыт(а)', 'открыт(а)', 1, 'открытость'] },
-  purpose:   { ch: [5, 6],    m: ['Насколько ясно вы понимаете, чего хотите?', 'туман', 'ясно', 1, 'ясность'] },
+  purpose:   { ch: [6, 4],    m: ['Насколько ясно вы понимаете, чего хотите?', 'туман', 'ясно', 1, 'ясность'] },
   silence:   { ch: [5, 6],    m: ['Сколько сейчас шума в голове?', 'тихо', 'очень шумно', -1, 'шум в голове'] },
   breathe:   { ch: [3, 4],    m: ['Насколько вам сейчас тревожно?', 'спокойно', 'очень тревожно', -1, 'тревога'] },
   event:     { ch: [2, 4],    m: ['Насколько вы спокойны перед событием?', 'очень волнуюсь', 'спокоен(на)', 1, 'спокойствие'] },
   release:   { ch: [3, 1],    m: ['Насколько тяжело у вас на душе?', 'легко', 'очень тяжело', -1, 'тяжесть'] },
   selflove:  { ch: [3],       m: ['Насколько тепло вы сейчас к себе относитесь?', 'холодно', 'тепло', 1, 'тепло к себе'] },
-  relations: { ch: [3, 4],    m: ['Насколько вы открыты к близости?', 'закрыт(а)', 'открыт(а)', 1, 'открытость'] },
+  relations: { ch: [3, 4, 1],    m: ['Насколько вы открыты к близости?', 'закрыт(а)', 'открыт(а)', 1, 'открытость'] },
   food:      { ch: [2, 1],    m: ['Насколько сильно сейчас желание поесть «на эмоциях»?', 'нет', 'очень сильно', -1, 'тяга к еде'] },
   ajna:      { ch: [5],       m: ['Насколько вы сосредоточены?', 'рассеян(а)', 'собран(а)', 1, 'сосредоточенность'] },
   chakras:   { ch: [0, 1, 2, 3, 4, 5, 6], m: ['Насколько вы чувствуете себя цельным(ой)?', 'разобран(а)', 'цельно', 1, 'цельность'] },
-  habits:    { ch: [0, 2],    m: ['Насколько сильна сейчас тяга?', 'нет', 'очень сильная', -1, 'тяга'] }
+  habits:    { ch: [0, 1],    m: ['Насколько сильна сейчас тяга?', 'нет', 'очень сильная', -1, 'тяга'] }
 };
 const CH_ACC = ['в основание позвоночника', 'в низ живота', 'в солнечное сплетение', 'в центр груди', 'в горло', 'в точку между бровей', 'на макушку'];
 const results = id => { try { return JSON.parse(store.get('res-' + id) || '[]'); } catch (e) { return []; } };
@@ -1477,7 +1477,7 @@ function setPhases(r) { const sp = SOUND[r.id]; r.main.forEach((s, i) => { s.key
     if (sp && s.beat !== 0 && !s.beatFixed) s.beat = sp.beats[Math.min(i, sp.beats.length - 1)];
     if (sp && sp.breath && s.breath === 'resonance') s.breath = sp.breath; }); r.phases = [COCOON, BREATHE, ...r.main, RETURN]; }
 function setHabit(r, k) { r.habit = k; r.main = habitMain(k); setPhases(r); }
-const ORDER = ['cleanse', 'energy', 'health', 'blinders', 'abundance', 'luck', 'purpose', 'silence', 'breathe', 'event', 'release', 'selflove', 'relations', 'food', 'ajna', 'chakras', 'habits'];
+const ORDER = ['cleanse', 'energy', 'health', 'blinders', 'abundance', 'luck', 'purpose', 'silence', 'breathe', 'event', 'release', 'selflove', 'relations', 'food', 'chakras', 'habits', 'ajna'];
 ROOMS.sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id));
 ROOMS.forEach(r => { r.color = CH[r.ci].c; if (r.id === 'habits') setHabit(r, store.get('ajna-habit') in HABITS ? store.get('ajna-habit') : 'smoke'); else setPhases(r); });
 const intentOf = r => store.get('ajna-intent-' + r.id + (r.habit ? '-' + r.habit : '')) || (r.habit ? HABITS[r.habit].intent : INTENT[r.id]);
@@ -2167,7 +2167,7 @@ FEATURED.forEach(id => { const r = ROOMS.find(x => x.id === id); $('featGrid').a
 const catCards = ROOMS.map(r => { const a = card(r, !!r.wide); if (r.pro) a.dataset.pro = '1'; $('roomGrid').appendChild(a); return a; });
 function filterCat(c) {
   [...$('filters').children].forEach(b => b.setAttribute('aria-pressed', b.dataset.c === c));
-  catCards.forEach(a => { const r = ROOMS.find(x => x.id === a.dataset.id); a.hidden = (c !== 'all' && CAT[r.id] !== c) || (r.pro && !isPro()); a.classList.toggle('wide', c === 'all' && !!r.wide); a._surf.dirty = true; });
+  catCards.forEach(a => { const r = ROOMS.find(x => x.id === a.dataset.id); a.hidden = c !== 'all' && CAT[r.id] !== c; a.classList.toggle('wide', c === 'all' && !!r.wide); a._surf.dirty = true; });
 }
 $('filters').innerHTML = Object.entries(CATS).map(([k, v]) => '<button type="button" data-c="' + k + '" aria-pressed="' + (k === 'all') + '">' + v + '</button>').join('');
 $('filters').addEventListener('click', e => { const b = e.target.closest('button[data-c]'); if (b) filterCat(b.dataset.c); });
@@ -2641,7 +2641,7 @@ function levelUI(r) {
   const [bn, bp] = $('rLevel').children; bn.querySelector('em').textContent = mins(shortDur); bp.querySelector('em').textContent = mins(sum(full));
   bn.setAttribute('aria-checked', cur === 'new'); bp.setAttribute('aria-checked', cur === 'pro');
   const locked = r.pro && !isPro(); $('rLock').hidden = !locked; $('rStart').disabled = locked; $('rStart').style.opacity = locked ? 0.45 : '';
-  if (locked) $('rLock').textContent = 'Пространство для практикующих. Откроется, когда вы выберете полный формат и пройдёте 7 практик (сейчас: ' + Math.min(7, practiceCount()) + ' из 7).';
+  if (locked) $('rLock').textContent = 'Пространство для практикующих. Открывается отдельно (' + PRICE_AJNA.toLocaleString('ru') + ' ₽, навсегда, в подписку не входит), когда вы выберете полный формат и пройдёте 7 практик (сейчас: ' + Math.min(7, practiceCount()) + ' из 7).';
 }
 $('rLevel').addEventListener('click', e => { const b = e.target.closest('button[data-l]'); if (!b) return; store.set('level', b.dataset.l); levelUI(curRoom); });
 function openPlayer(r) {
@@ -2692,7 +2692,8 @@ const ENT = () => { const e = J('ent', { courses: [], subUntil: 0 }); e.sub = OW
 const courseOwned = (E, id) => E.courses.some(c => c.id === id);
 const FREE_ROOMS = ['cleanse'];
 const PRICE_SUB = 490, PRICE_SUB_Y = 2990, PRICE_COURSE = 990, DAY_MS = 864e5;
-const canPlay = r => FREE_ROOMS.includes(r.id) || ENT().sub || ENT().courses.some(c => (COURSES.find(x => x.id === c.id) || { days: [] }).days.includes(r.id));
+const PRICE_AJNA = 2990;
+const canPlay = r => r.pro ? (OWNER() || !!J('ent', {}).ajna) : FREE_ROOMS.includes(r.id) || ENT().sub || ENT().courses.some(c => (COURSES.find(x => x.id === c.id) || { days: [] }).days.includes(r.id));
 // universal diary questions + the space's own metric
 const QBASE = { mood: ['Настроение', 'плохое', 'отличное', 1], anx: ['Тревога / напряжение', 'спокойно', 'очень сильно', -1], energy: ['Энергия в теле', 'нет сил', 'много сил', 1] };
 const qsFor = r => { const tg = TARGET[r.id], out = [['own', tg.m[0], tg.m[1], tg.m[2], tg.m[3], tg.m[4]]];
@@ -2749,19 +2750,20 @@ const grant = f => { const e = J('ent', { courses: [], subUntil: 0 }); e.courses
 const addSub = days => e => { e.subUntil = Math.max(Date.now(), e.subUntil || 0) + days * DAY_MS; };
 const addCourse = id => e => { e.courses = (e.courses || []).filter(c => c.id !== id && c.until > Date.now()); e.courses.push({ id, until: Date.now() + 30 * DAY_MS }); };
 const SUB_OPTS = [{ t: 'Подписка на месяц', d: 'Все пространства, все курсы, полная аналитика дневника', p: PRICE_SUB + ' ₽/мес', best: true, go: () => grant(addSub(30)) }, { t: 'Подписка на год', d: 'То же, выгоднее на 49%', p: PRICE_SUB_Y.toLocaleString('ru') + ' ₽/год', go: () => grant(addSub(365)) }];
+const buyAjna = () => openBuy('Аджна · отдельный доступ', [{ t: 'Аджна навсегда', d: 'Не входит в подписку и курсы. Для тех, кто прошёл 7 практик на полном уровне', p: PRICE_AJNA.toLocaleString('ru') + ' ₽', best: true, go: () => grant(e => e.ajna = true) }]);
 const buyRoom = r => { const cs = COURSES.filter(c => c.days.includes(r.id)).slice(0, 2);
   openBuy('Пространство «' + r.name + '»', SUB_OPTS.concat(cs.map(c => ({ t: 'Курс «' + c.name + '»', d: 'Включает это пространство · доступ к курсу на 30 дней', p: PRICE_COURSE + ' ₽', go: () => grant(addCourse(c.id)) })))); };
 function accUI() { const a = ACC(); $('hAcc').querySelector('span').textContent = a ? a.name : 'Войти'; $('hAcc').classList.toggle('in', !!a); if (typeof curRoom !== 'undefined' && curPage === 'roomPage') roomLock(curRoom); }
 $('hAcc').onclick = e => { if (!ACC()) { e.preventDefault(); openAuth(() => { location.hash = '#kabinet'; }); } };
 function refreshLocks() { document.querySelectorAll('#roomGrid .room, #featGrid .room').forEach(a => { const r = ROOMS.find(x => x.id === a.dataset.id); if (!r) return; const lk = !canPlay(r); a.classList.toggle('locked', lk);
   let b = a.querySelector('.lockb'); if (!b) { b = document.createElement('span'); b.className = 'lockb'; a.querySelector('.art2').appendChild(b); }
-  b.innerHTML = lk ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg>По подписке' : FREE_ROOMS.includes(r.id) ? 'Бесплатно' : 'Открыто'; b.classList.toggle('free', !lk); });
+  b.innerHTML = lk ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg>По подписке' : FREE_ROOMS.includes(r.id) ? 'Бесплатно' : 'Открыто'; if (lk && r.pro) b.lastChild.textContent = 'Отдельный доступ'; b.classList.toggle('free', !lk); });
   if (curPage === 'roomPage' && curRoom) roomLock(curRoom); }
-function roomLock(r) { const lk = !canPlay(r) && !r.pro; const st = $('rStart');
+function roomLock(r) { const lk = !canPlay(r); const st = $('rStart');
   if (!ACC() && !lk) { st.innerHTML = 'Зарегистрироваться и начать <svg class="ico" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3v10l8-5z"/></svg>'; st.dataset.locked = ''; return; }
-  st.innerHTML = lk ? '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg> Открыть по подписке · ' + PRICE_SUB + ' ₽/мес' : 'Начать сеанс <svg class="ico" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3v10l8-5z"/></svg>';
+  st.innerHTML = lk ? '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg> ' + (r.pro ? 'Отдельный доступ · ' + PRICE_AJNA.toLocaleString('ru') + ' ₽ навсегда' : 'Открыть по подписке · ' + PRICE_SUB + ' ₽/мес') : 'Начать сеанс <svg class="ico" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3v10l8-5z"/></svg>';
   st.dataset.locked = lk ? '1' : ''; }
-$('rStart').onclick = () => { if (!ACC()) return openAuth(() => $('rStart').click(), 'Зарегистрируйтесь бесплатно, чтобы начать практику. «Очищение» — бесплатно, а дневник сохранит ваш результат.'); if ($('rStart').dataset.locked) return buyRoom(curRoom); openPlayer(curRoom); };
+$('rStart').onclick = () => { if (!ACC()) return openAuth(() => $('rStart').click(), 'Зарегистрируйтесь бесплатно, чтобы начать практику. «Очищение» — бесплатно, а дневник сохранит ваш результат.'); if ($('rStart').dataset.locked) return curRoom.pro ? buyAjna() : buyRoom(curRoom); openPlayer(curRoom); };
 
 // ---------- cabinet ----------
 let cabTab = 'today';
@@ -2816,7 +2818,7 @@ function renderCabinet() {
         + (own ? (act ? '<a class="btn btn--gold btn--sm" href="#room-' + c.days[pr] + '">День ' + (pr + 1) + ': начать</a>' : '<button class="btn btn--gold btn--sm" data-course="' + c.id + '">Начать курс</button>') : '<button class="btn btn--line btn--sm" data-buyc="' + c.id + '"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg> ' + PRICE_COURSE + ' ₽ на 30 дней или по подписке</button>') + (until && !E.sub ? '<small class="cab-empty">Доступ к курсу до ' + new Date(until).toLocaleDateString('ru') + '</small>' : '') + '</div>'; }).join('') + '</div>';
   }
   if (cabTab === 'spaces') {
-    h += '<div class="cab-grid cab-grid--s">' + ROOMS.filter(r => !r.pro || isPro()).map(r => { const ok = canPlay(r), res = results(r.id);
+    h += '<div class="cab-grid cab-grid--s">' + ROOMS.map(r => { const ok = canPlay(r), res = results(r.id);
       return '<a class="cab-card sp' + (ok ? '' : ' sp--lock') + '" href="#room-' + r.id + '"><span class="eyebrow">' + (ok ? (FREE_ROOMS.includes(r.id) ? 'Бесплатно' : 'Открыто') : '🔒 по подписке') + '</span><b>' + r.name + '</b><small>' + (res.length ? res.length + ' сеанс. · ' + TARGET[r.id].m[4] : r.tag) + '</small></a>'; }).join('') + '</div>';
   }
   if (cabTab === 'map') {
@@ -2825,7 +2827,7 @@ function renderCabinet() {
       : '<div class="cab-card"><span class="eyebrow">Карта жизни</span><h3>Карта ещё не построена</h3><p>Профиль, тема года и практики для вас — бесплатно.</p><a class="btn btn--astro" href="#karta">Построить карту ' + ARROW + '</a></div>';
   }
   if (cabTab === 'plan') {
-    h += '<div class="cab-card"><span class="eyebrow">Ваш доступ</span><ul class="plan"><li class="ok">Очищение · профиль карты · дневник (записи и базовая статистика)</li><li class="' + (E.sub ? 'ok' : '') + '">Подписка: все пространства, курсы, полная аналитика дневника' + (E.sub ? ' — до ' + new Date(J('ent', {}).subUntil).toLocaleDateString('ru') : '') + '</li><li class="' + (E.courses.length ? 'ok' : '') + '">Курсы (доступ на 30 дней): ' + (E.courses.length ? E.courses.map(c => (COURSES.find(x => x.id === c.id) || {}).name + ' — до ' + new Date(c.until).toLocaleDateString('ru')).join('; ') : 'нет') + '</li><li class="' + (has('full') ? 'ok' : '') + '">Полная карта жизни</li></ul>'
+    h += '<div class="cab-card"><span class="eyebrow">Ваш доступ</span><ul class="plan"><li class="ok">Очищение · профиль карты · дневник (записи и базовая статистика)</li><li class="' + (E.sub ? 'ok' : '') + '">Подписка: все пространства, курсы, полная аналитика дневника' + (E.sub ? ' — до ' + new Date(J('ent', {}).subUntil).toLocaleDateString('ru') : '') + '</li><li class="' + (E.courses.length ? 'ok' : '') + '">Курсы (доступ на 30 дней): ' + (E.courses.length ? E.courses.map(c => (COURSES.find(x => x.id === c.id) || {}).name + ' — до ' + new Date(c.until).toLocaleDateString('ru')).join('; ') : 'нет') + '</li><li class="' + (has('full') ? 'ok' : '') + '">Полная карта жизни</li><li class="' + (canPlay(ROOMS.find(x => x.pro)) ? 'ok' : '') + '">Аджна — отдельный доступ навсегда (в подписку не входит)</li></ul>'
       + (E.sub ? '<button class="ghost" data-unsub>Отменить подписку</button>' : '<button class="btn btn--gold" data-sub>Подписка ' + PRICE_SUB + ' ₽/мес</button>') + '</div>'
       + '<div class="cab-card cab-test"><span class="eyebrow">Тестовый режим · посмотреть как пользователь</span><div class="cab-row"><button class="btn btn--line btn--sm" data-demo="free">Бесплатный пользователь</button><button class="btn btn--line btn--sm" data-demo="all">Всё оплачено</button><button class="ghost" data-demo="out">Выйти из кабинета</button></div></div>';
   }
@@ -2838,7 +2840,7 @@ function renderCabinet() {
   B.querySelectorAll('[data-buymap]').forEach(b => b.onclick = () => openBuy('Карта для близкого человека', [{ t: 'Базовая карта', d: 'Профиль, тема года, практики', p: '990 ₽', go: () => store.set('karta_extra', '1') }, { t: 'Полная карта', d: 'Все разделы и прогноз', p: '1 990 ₽', best: true, go: () => store.set('karta_extra', '1') }]));
   B.querySelectorAll('[data-unsub]').forEach(b => b.onclick = () => { grant(e => e.subUntil = 0); renderCabinet(); refreshLocks(); });
   B.querySelectorAll('[data-demo]').forEach(b => b.onclick = () => { const m = b.dataset.demo;
-    if (m === 'free') { SJ('ent', { courses: [], subUntil: 0 }); store.set('karta_unlock', ''); } if (m === 'all') { SJ('ent', { courses: [], subUntil: Date.now() + 30 * DAY_MS }); store.set('karta_unlock', ',all'); } if (m === 'out') { store.set('acct', 'null'); accUI(); }
+    if (m === 'free') { SJ('ent', { courses: [], subUntil: 0, ajna: false }); store.set('karta_unlock', ''); } if (m === 'all') { SJ('ent', { courses: [], subUntil: Date.now() + 30 * DAY_MS, ajna: true }); store.set('karta_unlock', ',all'); } if (m === 'out') { store.set('acct', 'null'); accUI(); }
     renderCabinet(); refreshLocks(); });
   const gf = $('gForm'); if (gf) gf.onsubmit = e => { e.preventDefault(); const G = J('goals', []); G.unshift({ t: $('gT').value.trim(), s: $('gS').value, d: $('gD').value || null, ms: [], acts: [], t0: Date.now() }); if (G[0].t) SJ('goals', G); renderCabinet(); };
   B.querySelectorAll('.gadd').forEach(f => f.onsubmit = e => { e.preventDefault(); const v = f.querySelector('input').value.trim(); if (!v) return; const G = J('goals', []), g = G[+f.dataset.g]; if (f.dataset.kind === 'ms') g.ms.push({ t: v, d: false }); else g.acts.push({ t: Date.now(), x: v }); SJ('goals', G); renderCabinet(); });
