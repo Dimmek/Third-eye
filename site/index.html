@@ -111,7 +111,7 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 .stats .container { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .stat { padding: 38px 24px; border-left: 1px solid var(--line); display: grid; gap: 6px; }
 .stat:first-child { border-left: 0; padding-left: 0; }
-.stat b { font-family: var(--ff-serif); font-weight: 400; font-size: clamp(44px, 4.6vw, 64px); line-height: 1; color: var(--gold); }
+.stat b { font-family: var(--ff-serif); font-variant-numeric: lining-nums; font-feature-settings: "lnum" 1; font-weight: 400; font-size: clamp(44px, 4.6vw, 64px); line-height: 1; color: var(--gold); }
 .stat span { font-size: 14px; color: var(--mute); }
 @media (max-width: 800px) { .stats .container { grid-template-columns: 1fr 1fr; } .stat { border-left: 0; padding-left: 0; border-top: 1px solid var(--line); } .stat:nth-child(-n+2) { border-top: 0; } }
 .marquee { background: linear-gradient(90deg, #e9d7b4, #f4e7cd 50%, #e9d7b4); color: var(--ink-2); overflow: hidden; white-space: nowrap; border-bottom: 1px solid var(--line); }
@@ -348,14 +348,14 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
 <header class="header" id="nav">
   <div class="container">
     <a class="logo" href="#top" aria-label="Дорога к себе — на главную"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="17" stroke="#dcbd86" stroke-width="1"/><path d="M20 5l3.2 11.8L35 20l-11.8 3.2L20 35l-3.2-11.8L5 20l11.8-3.2z" stroke="#dcbd86" stroke-width="1.1" stroke-linejoin="round"/><circle cx="20" cy="20" r="3" fill="#dcbd86"/></svg>ДОРОГА К СЕБЕ</a>
-    <nav class="nav" aria-label="Главное меню"><a href="#kabinety" data-r="kabinety">Кабинеты</a><a href="#zhurnal" data-r="zhurnal">Журнал</a><a href="#benefits">Что вы получите</a><a href="#how">Как проходит сеанс</a></nav>
+    <nav class="nav" aria-label="Главное меню"><a href="#prostranstva" data-r="prostranstva">Пространства</a><a href="#zhurnal" data-r="zhurnal">Журнал</a><a href="#benefits">Что вы получите</a><a href="#how">Как проходит сеанс</a></nav>
     <div class="hright">
-      <a class="btn btn--gold btn--sm" href="#kabinety">Выбрать практику <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+      <a class="btn btn--gold btn--sm" href="#prostranstva">Выбрать практику <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
       <button class="burger" id="burger" type="button" aria-label="Меню"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h14M3 14h14"/></svg></button>
     </div>
   </div>
 </header>
-<div class="mnav" id="mnav" hidden><a href="#kabinety">Кабинеты</a><a href="#zhurnal">Журнал</a><a href="#benefits">Что вы получите</a><a href="#how">Как проходит сеанс</a><a href="#faq">Вопросы</a><a class="btn btn--gold" href="#kabinety">Выбрать практику</a></div>
+<div class="mnav" id="mnav" hidden><a href="#prostranstva">Пространства</a><a href="#zhurnal">Журнал</a><a href="#benefits">Что вы получите</a><a href="#how">Как проходит сеанс</a><a href="#faq">Вопросы</a><a class="btn btn--gold" href="#prostranstva">Выбрать практику</a></div>
 
 <main id="home">
   <section class="hero dark" id="top">
@@ -364,23 +364,23 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     <canvas id="heroNet"></canvas>
     <div class="container">
       <div class="hero__inner">
-        <span class="eyebrow dot">Пространство медитации</span>
+        <span class="eyebrow dot">17 пространств медитации</span>
         <h1 class="display">Здесь шум <em>стихает.</em></h1>
         <p class="lead">Пятнадцать минут — и вы спокойнее, яснее и ближе к себе. Голос ведёт, музыка поддерживает, вам остаётся только слушать.</p>
         <div class="hero__cta">
-          <a class="btn btn--gold" href="#kabinety">Выбрать практику <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+          <a class="btn btn--gold" href="#prostranstva">Выбрать практику <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
           <a class="btn btn--line" href="#how">Как проходит сеанс</a>
         </div>
-        <div class="hero__meta"><span>17 практик</span><span>Мягкий женский голос</span><span>Музыка и ритмы покоя</span></div>
+        <div class="hero__meta"><span>Засыпать без мыслей по кругу</span><span>Меньше тревоги и раздражения</span><span>Свобода от того, что держит</span></div>
       </div>
     </div>
   </section>
 
   <div class="stats"><div class="container">
-    <div class="stat"><b>17</b><span>практик под разные состояния</span></div>
-    <div class="stat"><b>15</b><span>минут — и вы другой человек</span></div>
-    <div class="stat"><b>1</b><span>кнопка: нажали и слушаете</span></div>
-    <div class="stat"><b>0</b><span>опыта медитации нужно, чтобы начать</span></div>
+    <div class="stat"><b>17</b><span>пространств — под любое ваше состояние</span></div>
+    <div class="stat"><b>15</b><span>минут, чтобы выдохнуть и прийти в себя</span></div>
+    <div class="stat"><b>0</b><span>опыта нужно — голос ведёт каждый шаг</span></div>
+    <div class="stat"><b>24/7</b><span>тишина рядом, когда она нужна</span></div>
   </div></div>
   <div class="marquee" aria-hidden="true"><div class="marquee__track" id="marquee"></div></div>
 
@@ -409,8 +409,8 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
 
   <section class="section" id="featured">
     <div class="container">
-      <div class="shead"><div><span class="eyebrow">Кабинеты</span><h2 class="h2">У каждой практики — <em>своё пространство.</em></h2></div>
-        <a class="btn btn--line" href="#kabinety">Все кабинеты <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
+      <div class="shead"><div><span class="eyebrow">Пространства</span><h2 class="h2">Семнадцать пространств, <em>где становится легче.</em></h2></div>
+        <a class="btn btn--line" href="#prostranstva">Все пространства <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
       <div class="rooms" id="featGrid"></div>
     </div>
   </section>
@@ -474,7 +474,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
 
   <section class="cta-band"><div class="container">
     <div><h2 class="h2">Начните с <em>очищения.</em></h2><p>Двенадцать минут, чтобы сбросить день и освободить место для нового.</p></div>
-    <a class="btn btn--ink" href="#room-cleanse">Войти в кабинет <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    <a class="btn btn--ink" href="#room-cleanse">Войти в пространство <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
   </div></section>
 </main>
 
@@ -505,9 +505,9 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
   <section class="lhero">
     <canvas id="catNet"></canvas>
     <div class="container">
-      <nav class="crumbs" aria-label="Путь"><a href="#top">Главная</a><span>Кабинеты</span></nav>
-      <h1 class="display">Все <em>кабинеты.</em></h1>
-      <p class="lead">Семнадцать практик — у каждой своё пространство, своя музыка и свой путь. Выберите то, что откликается сегодня.</p>
+      <nav class="crumbs" aria-label="Путь"><a href="#top">Главная</a><span>Пространства</span></nav>
+      <h1 class="display">Все <em>пространства.</em></h1>
+      <p class="lead">Семнадцать пространств — у каждого своя атмосфера, музыка и свой путь. Выберите то, что откликается сегодня.</p>
     </div>
   </section>
   <section class="section" style="padding-top:20px">
@@ -522,7 +522,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
   <section class="phero rhero dark">
     <canvas id="roomCv"></canvas>
     <div class="container">
-      <nav class="crumbs" aria-label="Путь"><a href="#top">Главная</a><a href="#kabinety"><span>Кабинеты</span></a><span id="rCrumb"></span></nav>
+      <nav class="crumbs" aria-label="Путь"><a href="#top">Главная</a><a href="#prostranstva"><span>Пространства</span></a><span id="rCrumb"></span></nav>
       <span class="eyebrow" id="rNum"></span>
       <h1 class="display" id="rName"></h1>
       <p class="lead" id="rTag"></p>
@@ -542,7 +542,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
 <footer class="footer"><div class="container">
   <div><a class="logo" href="#top" style="color:var(--ink)"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="17" stroke="#b0844a" stroke-width="1"/><path d="M20 5l3.2 11.8L35 20l-11.8 3.2L20 35l-3.2-11.8L5 20l11.8-3.2z" stroke="#b0844a" stroke-width="1.1" stroke-linejoin="round"/><circle cx="20" cy="20" r="3" fill="#b0844a"/></svg>ДОРОГА К СЕБЕ</a>
     <p class="about">Пространство медитации. Пятнадцать минут, чтобы выдохнуть, услышать себя и вернуться в день спокойнее.</p></div>
-  <div><h4>Кабинеты</h4><ul id="footRooms"></ul></div>
+  <div><h4>Пространства</h4><ul id="footRooms"></ul></div>
   <div><h4>Проект</h4><ul><li><a href="#benefits">Что вы получите</a></li><li><a href="#how">Как проходит сеанс</a></li><li><a href="#path">Ваш путь</a></li><li><a href="#zhurnal">Журнал</a></li><li><a href="#faq">Вопросы</a></li></ul></div>
   <div class="bottom"><span>© Дорога к себе</span><span>Слушайте в наушниках · практика не заменяет лечение</span></div>
 </div></footer>
@@ -1295,7 +1295,7 @@ const MOODS = [['Устал после работы', 'Выключить вну
 $('moods').innerHTML = MOODS.map(([t, s, id]) => '<a class="mood" href="#room-' + id + '"><span><b>' + t + '</b><small>' + s + '</small></span>' + ARROW + '</a>').join('');
 const names = ROOMS.map(r => '<span>' + r.name + '</span>').join('');
 $('marquee').innerHTML = names + names;
-$('footRooms').innerHTML = ROOMS.slice(0, 7).map(r => '<li><a href="#room-' + r.id + '">' + r.name + '</a></li>').join('') + '<li><a href="#kabinety">Все кабинеты →</a></li>';
+$('footRooms').innerHTML = ROOMS.slice(0, 7).map(r => '<li><a href="#room-' + r.id + '">' + r.name + '</a></li>').join('') + '<li><a href="#prostranstva">Все пространства →</a></li>';
 surface($('heroCv'), { cyr: 0.45, mr: 0.9, cxr: 0.68, visual: { visual: 'stars', ci: 1 } });
 
 // ---- yantra network (plexus): yantras and star points drift, joined by threads; the pointer pulls threads and scatters nodes
@@ -1383,7 +1383,7 @@ const JOURNAL = [
 <p>Чакры, золотой кокон, третий глаз — образы из йоги и тантры. Их действие «на тонком плане» наука не измеряла, и мы честно об этом говорим. Зато измерено другое: такие образы углубляют расслабление и дают ощущение защищённости.</p>
 <h2>Чего мы не обещаем</h2>
 <p>Мгновенных чудес, исцеления болезней и денег «просто так». Практика — это шаги. Один сеанс даёт передышку, регулярные — меняют реакции, сон, отношения и решения.</p>
-<div class="fact">У каждого кабинета на сайте есть метка: <b>подтверждено</b>, <b>работает через внимание</b> или <b>традиция</b> — чтобы вы всегда знали, на что опирается практика.</div>`, src: ['goessl', 'mbsr', 'nidra', 'garcia'] },
+<div class="fact">У каждого пространства на сайте есть метка: <b>подтверждено</b>, <b>работает через внимание</b> или <b>традиция</b> — чтобы вы всегда знали, на что опирается практика.</div>`, src: ['goessl', 'mbsr', 'nidra', 'garcia'] },
   { id: 'breath', cat: 'Наука', title: 'Дыхание: самый быстрый путь к спокойствию', read: '4 минуты',
     lead: 'Дыхание работает само, но им можно управлять. А через него — пульсом, напряжением и настроением.',
     body: `<p>Когда мы дышим медленно, примерно 5–6 раз в минуту, ритм сердца и дыхания входит в резонанс. Нервная система переключается с режима «бей или беги» на режим отдыха.</p>
@@ -1435,7 +1435,7 @@ function showRoom(id) {
   const r = ROOMS.find(x => x.id === id); if (!r) return showHome();
   curRoom = r; show('roomPage');
   const idx = ROOMS.indexOf(r);
-  $('rNum').textContent = 'Кабинет ' + String(idx + 1).padStart(2, '0') + ' · ' + CATS[CAT[r.id]];
+  $('rNum').textContent = 'Пространство ' + String(idx + 1).padStart(2, '0') + ' · ' + CATS[CAT[r.id]];
   $('rCrumb').textContent = r.name;
   $('rName').textContent = r.name; $('rTag').textContent = r.tag;
   $('rChips').innerHTML = '<span class="chip">' + mins(sum(r.phases)) + '</span><span class="chip">' + r.ev[1] + '</span><span class="chip">Наушники</span>';
@@ -1445,7 +1445,7 @@ function showRoom(id) {
   $('rWhyT').textContent = r.whyT; $('rWhy').textContent = r.why; $('rNote').innerHTML = r.note;
   $('rSteps').innerHTML = r.phases.map(p => '<li style="color:' + rgba(CH[p.tone].c, 1) + '"><i></i><div><b>' + p.name + (p.beat ? '<em class="hz">' + (p.beat >= 8 ? 'α ' : 'θ ') + p.beat + ' Гц</em>' : '') + '</b><small>' + p.text + '</small></div><span class="d">' + fmt(p.dur) + '</span></li>').join('');
   const prev = ROOMS[(idx + ROOMS.length - 1) % ROOMS.length], next = ROOMS[(idx + 1) % ROOMS.length];
-  $('rNav').innerHTML = '<a href="#room-' + prev.id + '"><span class="eyebrow">← Предыдущий кабинет</span><b>' + prev.name + '</b></a><a href="#room-' + next.id + '"><span class="eyebrow">Следующий кабинет →</span><b>' + next.name + '</b></a>';
+  $('rNav').innerHTML = '<a href="#room-' + prev.id + '"><span class="eyebrow">← Предыдущее пространство</span><b>' + prev.name + '</b></a><a href="#room-' + next.id + '"><span class="eyebrow">Следующее пространство →</span><b>' + next.name + '</b></a>';
   document.title = 'Аджна';
   scrollTo(0, 0);
 }
@@ -1457,14 +1457,14 @@ function markPractice() { let days = []; try { days = JSON.parse(store.get('ajna
 const plural = (n, a, b, c) => { const m10 = n % 10, m100 = n % 100; return m10 === 1 && m100 !== 11 ? a : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? b : c; };
 function renderStreak() { const n = streakDays(); $('streak').textContent = n ? 'Вы практикуете ' + n + ' ' + plural(n, 'день', 'дня', 'дней') + ' подряд' : 'Первая сессия — первый шаг.'; }
 renderStreak();
-function show(page) { ['home', 'catalog', 'roomPage', 'journal', 'article'].forEach(id => $(id).hidden = id !== page); setTimeout(solidHeader, 0); document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('on', (a.dataset.r === 'kabinety' && (page === 'catalog' || page === 'roomPage')) || (a.dataset.r === 'zhurnal' && (page === 'journal' || page === 'article')))); $('mnav').hidden = true; }
+function show(page) { ['home', 'catalog', 'roomPage', 'journal', 'article'].forEach(id => $(id).hidden = id !== page); setTimeout(solidHeader, 0); document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('on', (a.dataset.r === 'prostranstva' && (page === 'catalog' || page === 'roomPage')) || (a.dataset.r === 'zhurnal' && (page === 'journal' || page === 'article')))); $('mnav').hidden = true; }
 function showHome(anchor) {
   show('home');
   if (anchor) { const el = $(anchor); if (el) setTimeout(() => el.scrollIntoView(), 0); } else scrollTo(0, 0);
 }
 function route() {
   const h = location.hash.slice(1);
-  if (h === 'kabinety') { show('catalog'); scrollTo(0, 0); }
+  if (h === 'prostranstva') { show('catalog'); scrollTo(0, 0); }
   else if (h === 'zhurnal') { show('journal'); scrollTo(0, 0); }
   else if (h.startsWith('j-')) showArticle(h.slice(2));
   else if (h.startsWith('room-')) showRoom(h.slice(5));
