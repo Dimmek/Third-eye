@@ -357,6 +357,13 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
 .article .abody blockquote { margin: 10px 0; padding: 6px 0 6px 26px; border-left: 2px solid var(--gold); font-family: var(--ff-serif); font-style: italic; font-size: 26px; line-height: 1.35; color: var(--ink); }
 .article .abody .fact { padding: 22px 24px; border-radius: var(--r); background: var(--white); border: 1px solid var(--line); box-shadow: var(--shadow); font-size: 16px; }
 .article .abody .fact b { color: var(--gold-d); }
+.article .abody ul, .article .abody ol { margin: 0; padding-left: 22px; display: grid; gap: 10px; }
+.article .abody a { color: var(--gold-d); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(176,132,74,.4); }
+.article .abody .refs { margin-top: 18px; padding-top: 26px; border-top: 1px solid var(--line); font-size: 14.5px; line-height: 1.55; color: var(--ink-3, #6b6458); }
+.article .abody .refs h2 { font-size: 20px; margin: 0 0 14px; }
+.article .abody .refs ol { gap: 8px; }
+.article .abody .refs a { word-break: break-word; }
+.aprog { position: fixed; left: 0; top: 0; height: 2px; width: 0; z-index: 30; background: linear-gradient(90deg, #d2a866, var(--gold)); transition: width .1s linear; }
 .article .abody .todo { padding: 14px 18px; border-radius: 12px; background: #fff4dc; border: 1px dashed var(--gold); font-size: 15px; color: var(--ink-2); }
 .article .abody ul { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; }
 .article .sources { margin-top: 40px; padding-top: 26px; border-top: 1px solid var(--line); font-size: 14px; color: var(--mute); display: grid; gap: 8px; }
@@ -1665,11 +1672,21 @@ const JOURNAL = [
 const jCard = (j, feat) => '<a class="jcard card' + (feat ? ' feature' : '') + '" href="#j-' + j.id + '"><span class="jcat">' + j.cat + '</span><h3>' + j.title + '</h3><p>' + j.lead + '</p><div class="jmeta"><span>' + j.read + '</span><span>Читать ' + ARROW + '</span></div></a>';
 $('jGrid').innerHTML = JOURNAL.map(j => jCard(j, j.feature)).join('');
 $('jTeaser').innerHTML = ['author', 'mindfulness', 'habits'].map(id => jCard(JOURNAL.find(j => j.id === id))).join('');
+const longCache = {};
+const readTime = html => { const n = html.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length, m = Math.max(1, Math.round(n / 170)); return m + ' ' + (m % 10 === 1 && m % 100 !== 11 ? 'минута' : m % 10 >= 2 && m % 10 <= 4 && (m % 100 < 10 || m % 100 >= 20) ? 'минуты' : 'минут') + ' чтения'; };
+async function loadLong(j) {
+  if (longCache[j.id]) return longCache[j.id];
+  try { const r = await fetch('journal/' + j.id + '.html'); if (!r.ok) return null; const t = await r.text(), meta = k => (t.match(new RegExp('<!--\\s*' + k + ':\\s*([\\s\\S]*?)-->')) || [])[1];
+    return (longCache[j.id] = { title: (meta('title') || '').trim(), lead: (meta('lead') || '').trim(), body: t.replace(/<!--[\s\S]*?-->/g, '').replace(/<a href="http/g, '<a target="_blank" rel="noopener" href="http') }); } catch (e) { return null; }
+}
+const aProg = document.createElement('div'); aProg.className = 'aprog'; document.body.appendChild(aProg);
+addEventListener('scroll', () => { const on = location.hash.startsWith('#j-'), h = document.documentElement.scrollHeight - innerHeight; aProg.style.width = on && h > 0 ? (scrollY / h * 100) + '%' : '0'; }, { passive: true });
 function showArticle(id) {
   const j = JOURNAL.find(x => x.id === id); if (!j) return show('journal');
   show('article'); const i = JOURNAL.indexOf(j), nx = JOURNAL[(i + 1) % JOURNAL.length];
-  $('aCat').textContent = j.cat + ' · ' + j.read; $('aTitle').textContent = j.title; $('aLead').textContent = j.lead; $('aBody').innerHTML = j.body;
-  $('aSrc').innerHTML = j.src.length ? '<b style="color:var(--ink)">Источники</b>' + j.src.map(k => '<span>' + SRC[k] + '</span>').join('') : '';
+  const fill = (title, lead, body, src) => { $('aCat').textContent = j.cat + ' · ' + readTime(body); $('aTitle').textContent = title; $('aLead').textContent = lead; $('aBody').innerHTML = body; $('aSrc').innerHTML = src; };
+  fill(j.title, j.lead, j.body, j.src.length ? '<b style="color:var(--ink)">Источники</b>' + j.src.map(k => '<span>' + SRC[k] + '</span>').join('') : '');
+  if (j.long) loadLong(j).then(L => { if (L && location.hash === '#j-' + id) fill(L.title || j.title, L.lead || j.lead, L.body, ''); });
   $('aNav').innerHTML = '<a class="card" href="#zhurnal"><span class="eyebrow">← Журнал</span><b>Все статьи</b></a><a class="card" href="#j-' + nx.id + '"><span class="eyebrow">Дальше →</span><b>' + nx.title + '</b></a>';
   scrollTo(0, 0);
 }
