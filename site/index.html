@@ -136,6 +136,7 @@ section.block { padding-block: 120px; }
 .safety li { padding-left: 18px; border-left: 1px solid rgba(196,32,63,.6); font-size: .93rem; }
 @media (max-width: 800px) { .safety { grid-template-columns: 1fr; gap: 30px; } .safety ul { grid-template-columns: 1fr; } }
 
+.streak { margin: 40px 0 0; font-family: var(--f-accent); font-style: italic; font-size: 1.5rem; color: var(--gold); }
 .cta-band { text-align: center; padding-block: 120px; display: grid; justify-items: center; gap: 26px; }
 footer { border-top: 1px solid var(--line); }
 footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; padding-block: 36px; font-size: .82rem; }
@@ -147,7 +148,8 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 .rhero .wrap { position: relative; z-index: 1; padding-block: 140px 70px; width: 100%; display: grid; gap: 20px; }
 .back { display: inline-flex; gap: 10px; align-items: center; font-size: .85rem; color: #cfc8da; }
 .back:hover { color: var(--ivory); }
-.rhero h1 { font-size: clamp(3rem, 8vw, 6.4rem); line-height: 1; }
+.rhero h1 { font-size: clamp(3rem, 6.6vw, 5.8rem); line-height: 1.02; text-shadow: 0 0 40px rgba(2,1,6,.8); }
+@media (min-width: 901px) { .rhero h1, .rhero .lead { max-width: 52%; } }
 .chips { display: flex; flex-wrap: wrap; gap: 10px; }
 .chip { border: 1px solid rgba(243,237,228,.2); border-radius: 999px; padding: 8px 14px; font-size: .8rem; color: var(--ivory); background: rgba(7,6,12,.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 .habit { display: grid; gap: 10px; }
@@ -247,8 +249,8 @@ input[type=range] { width: 100%; accent-color: var(--crimson); }
   </section>
 
   <div class="facts"><div class="wrap">
-    <div class="fact"><b>10</b><span>кабинетов под разные задачи</span></div>
-    <div class="fact"><b>11–14</b><span>минут одна сессия</span></div>
+    <div class="fact"><b>17</b><span>кабинетов под разные задачи</span></div>
+    <div class="fact"><b>11–16</b><span>минут одна сессия</span></div>
     <div class="fact"><b>2 м</b><span>золотой кокон в начале каждой практики</span></div>
     <div class="fact"><b>5,5</b><span>вдохов в минуту — резонансное дыхание</span></div>
   </div></div>
@@ -275,6 +277,22 @@ input[type=range] { width: 100%; accent-color: var(--crimson); }
         <div class="step"><span class="n">03</span><h3>Практика</h3><p>Визуализация кабинета: очищение, энергия, здоровье, изобилие, предназначение. Голос ведёт, музыка поддерживает.</p></div>
         <div class="step"><span class="n">04</span><h3>Возвращение</h3><p>Мягкий выход: опора, движение, открытые глаза. Кокон остаётся с вами.</p></div>
       </div>
+    </div>
+  </section>
+
+  <section class="block" id="path" style="padding-top:20px">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="eyebrow">Путь</span><h2>Перемены приходят <em class="acc">шаг за шагом</em></h2></div>
+        <p class="lead">Одна сессия даёт передышку. Регулярная практика меняет то, как вы реагируете, думаете и живёте. Так растёт любой навык — и этот тоже.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><span class="n">1</span><h3>Сегодня</h3><p>Тише в голове, ровнее дыхание. Уже это немало.</p></div>
+        <div class="step"><span class="n">7</span><h3>Неделя</h3><p>Легче возвращаться в спокойствие. Тяга и тревога слабее.</p></div>
+        <div class="step"><span class="n">30</span><h3>Месяц</h3><p>Новые реакции становятся привычными. Перемены видны в делах и отношениях.</p></div>
+        <div class="step"><span class="n">∞</span><h3>Дальше</h3><p>Бывают дни, когда не получается. Это часть пути. Вы просто возвращаетесь.</p></div>
+      </div>
+      <p class="streak" id="streak"></p>
     </div>
   </section>
 
@@ -501,6 +519,70 @@ const ROOMS = [
       R(216, 'Семь чакр', 'chakras', 'Внимание поднимается от основания позвоночника к макушке. Полминуты на каждую.', ['Теперь пройдём по чакрам.', 'Снизу вверх.'], { key: 'chakras' }),
       R(90, 'Единство', 'mandala', 'Все семь чакр светятся вместе. Побудьте в этом целом.', ['Все семь центров светятся вместе.', 'Побудьте в этом целом.'], { beat: 6 })
     ] },
+  { id: 'blinders', name: 'Снять шоры', ci: 5, wide: true, tag: 'Увидеть больше возможностей, чем позволяет старая призма.', ev: ['t-a', 'Работа с убеждениями'],
+    whyT: 'Мир шире, чем нас учили', why: 'С детства нам надевают шоры: «так не принято», «это не для нас», «неудобно попросить». Мы смотрим на мир через узкую щель и принимаем её за весь мир. Здесь вы находите одно своё ограничивающее убеждение, проверяете его на правду, примеряете новое и делаете один маленький смелый шаг. Шоры снимаются постепенно: каждый шаг открывает ещё немного.',
+    note: '<b>Основа:</b> когнитивная терапия (А. Бек): найти убеждение и проверить его на факты. Поведенческие эксперименты: маленький реальный шаг меняет убеждение сильнее, чем рассуждения.',
+    main: [
+      R(90, 'Узкая щель', 'shutters', 'Какая мысль вас останавливает: «неудобно», «не получится», «не для меня»?', ['Вспомните, что вы давно хотите сделать, но откладываете.', 'Позвонить. Попросить. Начать.', 'Какая мысль вас останавливает?', 'Неудобно? Не получится? Не для меня?'], { beat: 10, open: [0.06, 0.1] }),
+      R(150, 'Проверка', 'shutters', 'Это факт или привычка так думать? Откуда эта мысль? Всегда ли она правда?', ['Посмотрите на эту мысль со стороны.', 'Это факт? Или просто привычка так думать?', 'Откуда она? Кто вам так говорил?', 'Всегда ли это правда?'], { beat: 8, open: [0.1, 0.22] }),
+      R(150, 'Шире', 'shutters', 'Шоры раздвигаются. Видно больше: людей, путей, возможностей.', ['Представьте, что шоры по бокам медленно раздвигаются.', 'Становится видно больше.', 'Люди, которые готовы помочь.', 'Пути, которых вы раньше не замечали.', 'Мир шире, чем вам казалось.'], { beat: 6, open: [0.22, 0.95] }),
+      R(120, 'Новая мысль', 'purpose', 'Найдите мысль чуть смелее старой. Не идеальную — просто смелее.', ['Найдите новую мысль. Чуть смелее старой.', 'Например: я имею право спросить.', 'Или: попробовать — это уже шаг.', 'Повторите её про себя несколько раз.'], { beat: 6 }),
+      R(90, 'Один шаг', 'purpose', 'Один маленький шаг сегодня или завтра: звонок, письмо, вопрос.', ['Выберите один маленький шаг.', 'Сегодня или завтра.', 'Один звонок. Одно письмо. Один вопрос.', 'Шаг за шагом мир становится шире.'], { beat: 10 })
+    ] },
+  { id: 'breathe', name: 'Дыхание: снять стресс', ci: 4, tag: 'Три техники дыхания, когда напряжение уже на пределе.', ev: ['t-a', 'Стресс · подтверждено'],
+    whyT: 'Самый быстрый путь к покою', why: 'Дыхание работает само, но им можно управлять. Длинный выдох включает систему отдыха. Здесь три техники по очереди: двойной вдох с длинным выдохом, квадрат и резонансное дыхание. Их можно взять с собой в любой трудный момент.',
+    note: '<b>Основа:</b> «циклический вздох»: 5 минут в день улучшали настроение сильнее, чем медитация осознанности (Balban и соавт., 2023). Резонансное дыхание: мета-анализ по стрессу и тревоге.',
+    main: [
+      R(150, 'Циклический вздох', 'breath', 'Два вдоха носом подряд и длинный медленный выдох ртом.', ['Два вдоха носом подряд.', 'Второй — короткий, добирающий.', 'И длинный медленный выдох ртом.'], { breath: 'sigh', cue: true, beat: 10 }),
+      R(120, 'Квадрат', 'breath', 'Вдох на четыре, пауза, выдох на четыре, пауза.', ['Теперь квадрат.', 'Вдох на четыре. Пауза. Выдох на четыре. Пауза.'], { breath: 'box', cue: true, beat: 10 }),
+      R(150, 'Резонанс', 'breath', 'Пять с половиной вдохов в минуту. Мягко, животом.', ['И самое мягкое дыхание.', 'Вдох и выдох одинаковые.', 'Тело отдыхает.'], { cue: true, beat: 8 })
+    ] },
+  { id: 'event', name: 'Перед важным событием', ci: 2, tag: 'Встреча, экзамен, выступление: спокойствие и опора внутри.', ev: ['t-a', 'Волнение · исследования'],
+    whyT: 'Спокойствие при любом исходе', why: 'Волнение перед важным — это энергия. Здесь вы проживаете событие в воображении, находите опору и заранее разрешаете себе неидеальный день. Когда не нужно быть безупречным, говорить и действовать становится легче.',
+    note: '<b>Основа:</b> мысленная репетиция (спорт, медицина, сцена) и переосмысление волнения как энергии: в эксперименте фраза «я взволнован, это энергия» улучшала выступления (А. Брукс, 2014).',
+    main: [
+      R(90, 'Волнение — это энергия', 'abundance', 'Сердце бьётся чаще — тело готовится. Это энергия, она поможет.', ['Заметьте волнение в теле.', 'Сердце бьётся чаще. Это тело готовится.', 'Скажите себе: это энергия. Она мне поможет.'], { beat: 10 }),
+      R(150, 'Репетиция', 'purpose', 'Проживите событие от начала до конца. Спина прямая, голос ровный.', ['Представьте место, где это будет.', 'Вы входите. Спина прямая, дыхание ровное.', 'Вы говорите спокойно и ясно.', 'Вас слышат.'], { beat: 10 }),
+      R(120, 'Если что-то пойдёт не так', 'cocoon', 'Сбились, забыли слово? Пауза, вдох — и вы спокойно продолжаете.', ['А теперь представьте, что что-то пошло не так.', 'Вы сбились или забыли слово.', 'Вы делаете паузу. Вдох.', 'И спокойно продолжаете.', 'С вами всё в порядке. При любом исходе.'], { beat: 8 }),
+      R(90, 'Опора', 'abundance', 'Вы уже прошли многое, чтобы оказаться здесь. Опора внутри вас.', ['Вспомните, сколько вы уже прошли.', 'Ваша опора внутри вас.', 'Что бы ни случилось, вы остаётесь собой.'], { beat: 10 })
+    ] },
+  { id: 'release', name: 'Отпускание и прощение', ci: 6, tag: 'Отпустить обиду, человека, ситуацию — и стать легче.', ev: ['t-a', 'Прощение · исследования'],
+    whyT: 'Прощение — подарок себе', why: 'Простить не значит оправдать. Это значит перестать носить груз, который давно мешает. Здесь вы бережно смотрите на то, что держит, находите в этом урок и отпускаете — настолько, насколько готовы сегодня. Иногда к одной истории возвращаются несколько раз, и это нормально.',
+    note: '<b>Основа:</b> модели прощения в психологии (Р. Энрайт, Ф. Ласкин): в контролируемых исследованиях меньше гнева, тревоги и стресса. Отпускание — процесс, а не одно событие.',
+    main: [
+      R(90, 'Что держит', 'release', 'Человек или ситуация, которые до сих пор отзываются тяжестью.', ['Вспомните человека или ситуацию, которые до сих пор отзываются тяжестью.', 'Где эта тяжесть в теле?', 'Просто заметьте её. Решать ничего не нужно.'], { beat: 8 }),
+      R(150, 'Взгляд шире', 'release', 'Что тогда происходило с вами? И, возможно, с другим человеком?', ['Посмотрите на ту ситуацию шире.', 'Что тогда чувствовали вы?', 'Что, возможно, чувствовал другой человек?', 'Это не оправдание. Это просто взгляд шире.'], { beat: 6 }),
+      R(120, 'Урок', 'release', 'Что эта история дала вам? Чему научила?', ['Что эта история дала вам?', 'Чему вы научились?', 'Поблагодарите себя за то, что прошли через это.'], { beat: 6 }),
+      R(150, 'Отпустить', 'release', 'Тяжесть становится фонариком и на выдохе поднимается в небо.', ['Представьте, что тяжесть превращается в светящийся фонарик.', 'На выдохе он поднимается в небо.', 'Всё выше и выше.', 'Отпустите настолько, насколько готовы сегодня.', 'Этого достаточно.'], { beat: 6 })
+    ] },
+  { id: 'selflove', name: 'Любовь к себе', ci: 0, tag: 'Стать себе другом, а не строгим судьёй.', ev: ['t-a', 'Сочувствие к себе · подтверждено'],
+    whyT: 'Говорите с собой, как с близким', why: 'Внутренний критик громкий, но не всегда прав. Доброе отношение к себе — навык: так говорят с другом, которому трудно. Чем чаще вы так говорите с собой, тем тише критик и тем больше сил идти дальше.',
+    note: '<b>Основа:</b> сочувствие к себе (К. Нефф, К. Гермер). Мета-анализы: меньше тревоги, депрессии и самокритики, больше устойчивости.',
+    main: [
+      R(90, 'Рука на сердце', 'heart', 'Ладонь на центре груди. Тепло своей руки.', ['Положите ладонь на центр груди.', 'Почувствуйте тепло своей руки.', 'Просто побудьте так.']),
+      R(150, 'Внутренний голос', 'heart', 'Как вы говорите с собой в трудный момент? А что сказали бы другу?', ['Вспомните недавний момент, когда вы себя ругали.', 'Какими словами?', 'А что бы вы сказали близкому другу на вашем месте?', 'Скажите это себе. Тем же тоном.'], { beat: 6 }),
+      R(150, 'Слова тепла', 'heart', 'Мне сейчас непросто. Так бывает у всех. Пусть я буду к себе добрее.', ['Мне сейчас непросто.', 'Так бывает у всех людей.', 'Пусть я буду к себе добрее.', 'Пусть я принимаю себя целиком.'], { beat: 6 }),
+      R(90, 'Принятие', 'heart', 'Вы уже достаточно хороши. И вы растёте — шаг за шагом.', ['Вы живой человек, со своими сильными сторонами и ошибками.', 'Вы уже достаточно хороши.', 'И вы растёте, шаг за шагом.'])
+    ] },
+  { id: 'relations', name: 'Отношения и близость', ci: 1, tag: 'Тепло к близким, понимание вместо обид.', ev: ['t-a', 'Любящая доброта · подтверждено'],
+    whyT: 'Близость начинается с тепла внутри', why: 'Медитация любящей доброты — одна из самых изученных практик. Вы по очереди посылаете тепло себе, близкому человеку, партнёру и тому, с кем непросто. Постепенно растёт чувство связи и терпение, и это заметно в разговорах и дома.',
+    note: '<b>Основа:</b> медитация любящей доброты (метта). Исследования: больше позитивных эмоций и чувства связи с людьми (Б. Фредриксон, 2008).',
+    main: [
+      R(90, 'Себе', 'bond', 'Пусть я буду в безопасности. Пусть мне будет спокойно.', ['Начнём с себя.', 'Пусть я буду в безопасности.', 'Пусть мне будет спокойно.', 'Пусть у меня будет радость.']),
+      R(120, 'Близкому', 'bond', 'Человек, которого вы любите. Пожелайте ему тепла.', ['Представьте человека, которого вы любите.', 'Его лицо, его улыбку.', 'Пусть ты будешь в безопасности.', 'Пусть тебе будет спокойно.', 'Пусть у тебя будет радость.']),
+      R(120, 'Партнёру', 'bond', 'Между вами тёплая нить света. Пусть нам будет легко друг с другом.', ['Вспомните человека, с которым хотите больше близости.', 'Представьте между вами тёплую нить света.', 'Пусть нам будет легко друг с другом.', 'Пусть мы слышим друг друга.'], { beat: 6 }),
+      R(120, 'Тому, с кем непросто', 'bond', 'Насколько получится, пожелайте и ему того же.', ['Теперь человек, с которым непросто.', 'Насколько получится, пожелайте ему того же.', 'Пусть и тебе будет спокойно.', 'Это не для него. Это для вашего сердца.'], { beat: 6 }),
+      R(60, 'Всем', 'bond', 'Тепло расходится кругами ко всем людям.', ['Пусть тепло расходится дальше.', 'Ко всем людям вокруг.', 'Пусть всем будет спокойно.'])
+    ] },
+  { id: 'food', name: 'Пищевое поведение', ci: 2, tag: 'Отличать голод тела от голода эмоций.', ev: ['t-a', 'Осознанное питание · исследования'],
+    whyT: 'Голод тела и голод эмоций', why: 'Часто мы едим не от голода, а от усталости, скуки или тревоги. Здесь вы учитесь отличать одно от другого, пережидать тягу и снова слышать сигнал насыщения. Без запретов и диет — через внимание.',
+    note: '<b>Основа:</b> осознанное питание (программа MB-EAT, Дж. Кристеллер): меньше приступов переедания в исследованиях. При расстройствах пищевого поведения — вместе со специалистом.',
+    main: [
+      R(90, 'Тело сейчас', 'health', 'Есть ли сейчас голод? Сильный или лёгкий? Или это усталость?', ['Прислушайтесь к животу.', 'Есть ли там голод? Сильный или лёгкий?', 'А может, это усталость или тревога?']),
+      R(150, 'Волна тяги', 'urge', 'Момент, когда тянет к еде без голода. Тяга поднимается и спадает.', ['Вспомните момент, когда тянет к еде без голода.', 'Что вы чувствуете в этот момент?', 'Пусть тяга поднимется, как волна.', 'И спадёт. Вы просто наблюдаете.'], { beat: 8 }),
+      R(120, 'Чего хочется на самом деле', 'health', 'Отдыха? Тепла? Поддержки? Как дать себе это без еды?', ['Спросите себя: чего я на самом деле хочу?', 'Отдыха? Тепла? Поддержки?', 'Как можно дать себе это без еды?'], { beat: 6 }),
+      R(90, 'Насыщение', 'health', 'Вы едите медленно, чувствуете вкус и замечаете, когда достаточно.', ['Представьте следующий приём пищи.', 'Вы едите медленно и чувствуете вкус.', 'И замечаете момент, когда уже достаточно.'], { beat: 6 })
+    ] },
   { id: 'habits', name: 'Свобода от привычки', ci: 3, wide: true, tag: 'Курение, алкоголь, сладкое, телефон: пережить тягу и не сорваться.', ev: ['t-a', 'Тяга и срывы · подтверждено'],
     whyT: 'Тяга — это волна', why: 'Тяга не длится вечно: она поднимается, достигает пика и спадает за несколько минут. Здесь вы учитесь не бороться и не поддаваться, а наблюдать её, как сёрфер волну. Потом — пауза выбора и образ себя свободного. Выберите свою привычку перед началом.',
     note: '<b>Основа:</b> «сёрфинг тяги» из программы профилактики срывов на основе осознанности. Исследования: при отказе от курения через 17 недель не курили 31% группы осознанности против 6% в стандартной программе (Brewer, 2011); через год меньше срывов по алкоголю и веществам (Bowen, 2014). <b>При алкогольной зависимости резкий отказ бывает опасен — сначала к врачу.</b> Практика дополняет лечение и не заменяет его.',
@@ -522,14 +604,16 @@ function habitMain(k) {
     R(60, 'Якорь', 'urge', 'Когда потянет: три медленных выдоха и это чувство свободы.', ['Когда потянет, сделайте три медленных выдоха.', 'И вспомните это чувство.'], { key: key(5), beat: 10 })
   ];
 }
-const INTENT = { cleanse: 'Я отпускаю всё лишнее', energy: 'Сила возвращается ко мне', health: 'Моё тело в покое и заботе', abundance: 'Я вижу возможности и действую', luck: 'Я замечаю свои шансы', purpose: 'Я слышу себя', silence: 'Мой ум спокоен', ajna: 'Внимание в одной точке', chakras: 'Я целый' };
+const INTENT = { cleanse: 'Я отпускаю всё лишнее', energy: 'Сила возвращается ко мне', health: 'Моё тело в покое и заботе', abundance: 'Я вижу возможности и действую', luck: 'Я замечаю свои шансы', purpose: 'Я слышу себя', silence: 'Мой ум спокоен', ajna: 'Внимание в одной точке', chakras: 'Я целый', blinders: 'Мир шире, чем мне казалось', breathe: 'С каждым выдохом мне спокойнее', event: 'Внутри меня спокойствие при любом исходе', release: 'Я отпускаю то, что тяжело нести', selflove: 'Я на своей стороне', relations: 'В моём сердце есть место для тепла', food: 'Я слышу своё тело' };
 const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
 function setPhases(r) { r.main.forEach((s, i) => { s.key = s.key || r.id + '-' + (i + 1); s.tone = r.ci; }); r.phases = [COCOON, BREATHE, ...r.main, RETURN]; }
 function setHabit(r, k) { r.habit = k; r.main = habitMain(k); setPhases(r); }
+const ORDER = ['cleanse', 'energy', 'health', 'blinders', 'abundance', 'luck', 'purpose', 'silence', 'breathe', 'event', 'release', 'selflove', 'relations', 'food', 'ajna', 'chakras', 'habits'];
+ROOMS.sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id));
 ROOMS.forEach(r => { r.color = CH[r.ci].c; if (r.id === 'habits') setHabit(r, store.get('ajna-habit') in HABITS ? store.get('ajna-habit') : 'smoke'); else setPhases(r); });
 const intentOf = r => store.get('ajna-intent-' + r.id + (r.habit ? '-' + r.habit : '')) || (r.habit ? HABITS[r.habit].intent : INTENT[r.id]);
 
-const BREATH = { resonance: [5.45, 0, 5.45, 0], calm: [4, 0, 6, 0] };
+const BREATH = { resonance: [5.45, 0, 5.45, 0], calm: [4, 0, 6, 0], box: [4, 4, 4, 4], sigh: [3, 0, 6, 0] };
 const fmt = s => { s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
 const mins = s => Math.round(s / 60) + ' мин';
 const sum = ph => ph.reduce((a, p) => a + p.dur, 0);
@@ -551,9 +635,11 @@ const parts = Array.from({ length: 90 }, (_, i) => ({ a: Math.random() * TAU, d:
 const ease = x => (1 - Math.cos(Math.PI * x)) / 2;
 function breathAt(key, t) {
   const p = BREATH[key], cyc = p[0] + p[1] + p[2] + p[3]; let x = t % cyc;
-  if (x < p[0]) return { b: ease(x / p[0]), label: 'Вдох', left: p[0] - x, dur: p[0] }; x -= p[0] + p[1];
-  if (x < p[2]) return { b: 1 - ease(x / p[2]), label: 'Выдох', left: p[2] - x, dur: p[2] };
-  return { b: 0, label: 'Пауза', left: 0, dur: 1 };
+  if (key === 'sigh' && x < 3) return x < 2 ? { b: 0.8 * ease(x / 2), label: 'Вдох', left: 2 - x, dur: 2 } : { b: 0.8 + 0.2 * ease(x - 2), label: 'Ещё вдох', left: 3 - x, dur: 1 };
+  if (x < p[0]) return { b: ease(x / p[0]), label: 'Вдох', left: p[0] - x, dur: p[0] }; x -= p[0];
+  if (x < p[1]) return { b: 1, label: 'Пауза', left: p[1] - x, dur: p[1] }; x -= p[1];
+  if (x < p[2]) return { b: 1 - ease(x / p[2]), label: 'Выдох', left: p[2] - x, dur: p[2] }; x -= p[2];
+  return { b: 0, label: 'Пауза', left: p[3] - x, dur: p[3] || 1 };
 }
 
 function sky(t, hue) {
@@ -708,7 +794,7 @@ function drawSphere(st, t, hueIdx) {
   for (let i = 0; i < 49; i++) { const a = i / 49 * TAU - Math.PI / 2, R1 = r1 + m * 0.03, R2 = R1 + (i % 7 ? m * 0.008 : m * 0.02);
     g.strokeStyle = rgba(CH[Math.floor(i / 7)].c, i % 7 ? 0.35 : 0.8); g.lineWidth = 1; g.beginPath(); g.moveTo(x + Math.cos(a) * R1, y + Math.sin(a) * R1); g.lineTo(x + Math.cos(a) * R2, y + Math.sin(a) * R2); g.stroke(); }
   g.strokeStyle = 'rgba(255,255,255,.75)'; g.lineWidth = 1.5; g.beginPath(); g.arc(x, y, r, 0, TAU); g.stroke();
-  if (st && st.label !== 'Пауза') {
+  if (st) {
     const prog = 1 - st.left / st.dur, arc = g.createConicGradient ? g.createConicGradient(-Math.PI / 2, x, y) : null;
     if (arc) { CH.forEach((cc, i) => arc.addColorStop(i / 7, rgba(cc.c, 1))); arc.addColorStop(1, rgba(CH[0].c, 1)); }
     g.strokeStyle = arc || 'rgba(231,194,125,.9)'; g.lineWidth = 2.5; g.beginPath(); g.arc(x, y, r1 + m * 0.03, -Math.PI / 2, -Math.PI / 2 + TAU * Math.max(0, Math.min(1, prog))); g.stroke();
@@ -811,6 +897,50 @@ function drawUrge(t, st) { // the craving as a wave: it rises, peaks and falls; 
   const h = g.createRadialGradient(sx, sy, 0, sx, sy, m * (0.06 + 0.02 * b)); h.addColorStop(0, 'rgba(255,255,255,.95)'); h.addColorStop(0.3, 'rgba(120,230,200,.5)'); h.addColorStop(1, 'rgba(46,194,126,0)');
   g.fillStyle = h; g.beginPath(); g.arc(sx, sy, m * 0.08, 0, TAU); g.fill();
 }
+const LANTERNS = Array.from({ length: 16 }, (_, i) => ({ x: 0.15 + Math.random() * 0.7, o: Math.random(), s: 0.025 + Math.random() * 0.02, r: 0.6 + Math.random() * 0.6 }));
+function drawRelease(t) { // lanterns of light rising and fading
+  const m = M();
+  g.globalCompositeOperation = 'lighter';
+  const hz = g.createLinearGradient(0, H * 0.7, 0, H); hz.addColorStop(0, 'rgba(199,125,255,0)'); hz.addColorStop(1, 'rgba(199,125,255,.12)'); g.fillStyle = hz; g.fillRect(0, H * 0.7, W, H * 0.3);
+  LANTERNS.forEach((l, i) => {
+    const k = reduce ? l.o : (l.o + t * l.s) % 1, y = H * (1.05 - k * 1.15), x = l.x * W + Math.sin(t * 0.3 + i) * m * 0.02, r = m * 0.022 * l.r * (1 - k * 0.6), a = Math.sin(Math.PI * k);
+    const h = g.createRadialGradient(x, y, 0, x, y, r * 4); h.addColorStop(0, 'rgba(255,214,150,' + 0.8 * a + ')'); h.addColorStop(0.3, 'rgba(247,127,0,' + 0.35 * a + ')'); h.addColorStop(1, 'rgba(247,127,0,0)');
+    g.fillStyle = h; g.beginPath(); g.arc(x, y, r * 4, 0, TAU); g.fill();
+    g.fillStyle = 'rgba(255,240,210,' + 0.9 * a + ')'; g.beginPath(); g.ellipse(x, y, r * 0.6, r * 0.85, 0, 0, TAU); g.fill();
+  });
+}
+function heartPath(x, y, s) { g.beginPath(); g.moveTo(x, y + s * 0.35); g.bezierCurveTo(x - s * 1.1, y - s * 0.35, x - s * 0.55, y - s * 1.05, x, y - s * 0.5); g.bezierCurveTo(x + s * 0.55, y - s * 1.05, x + s * 1.1, y - s * 0.35, x, y + s * 0.35); g.closePath(); }
+function drawHeart(t, st) { // a rose heart-light breathing outward
+  const m = M(), x = cx(), y = cy(), b = st ? st.b : 0.5 + 0.5 * Math.sin(t * 0.6);
+  g.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < 5; i++) { const k = reduce ? i / 5 : ((t * 0.07 + i / 5) % 1); g.strokeStyle = 'rgba(255,120,150,' + 0.35 * (1 - k) + ')'; g.lineWidth = 1.2; heartPath(x, y + m * 0.04, m * (0.1 + 0.4 * k)); g.stroke(); }
+  const h = g.createRadialGradient(x, y, 0, x, y, m * (0.2 + 0.06 * b)); h.addColorStop(0, 'rgba(255,235,240,.9)'); h.addColorStop(0.35, 'rgba(229,56,90,.45)'); h.addColorStop(1, 'rgba(229,56,90,0)');
+  g.fillStyle = h; g.beginPath(); g.arc(x, y, m * 0.26, 0, TAU); g.fill();
+  g.strokeStyle = 'rgba(231,194,125,.9)'; g.lineWidth = 1.6; heartPath(x, y + m * 0.04, m * (0.1 + 0.02 * b)); g.stroke();
+}
+function drawBond(t, st) { // two lights joined by a living thread
+  const m = M(), y = cy(), b = st ? st.b : 0.5, d = m * 0.26, x1 = cx() - d, x2 = cx() + d, bob = reduce ? 0 : Math.sin(t * 0.5) * m * 0.015;
+  g.globalCompositeOperation = 'lighter';
+  for (let k = 0; k < 5; k++) { g.strokeStyle = k % 2 ? 'rgba(247,127,0,.35)' : 'rgba(255,190,200,.4)'; g.lineWidth = k ? 1 : 1.8; g.beginPath();
+    for (let i = 0; i <= 60; i++) { const u = i / 60, xx = x1 + (x2 - x1) * u, yy = y + Math.sin(u * Math.PI) * Math.sin(t * 0.8 + k * 1.3 + u * 6) * m * 0.03 * (1 + k * 0.3) + (bob * (1 - 2 * u)); i ? g.lineTo(xx, yy) : g.moveTo(xx, yy); } g.stroke(); }
+  for (let i = 0; i < 18; i++) { const u = reduce ? i / 18 : ((t * 0.08 + i / 18) % 1), dir = i % 2, uu = dir ? u : 1 - u, xx = x1 + (x2 - x1) * uu, yy = y + Math.sin(uu * Math.PI) * Math.sin(t * 0.8 + uu * 6) * m * 0.03;
+    g.fillStyle = 'rgba(255,230,210,' + 0.7 * Math.sin(Math.PI * u) + ')'; g.beginPath(); g.arc(xx, yy, 1.6, 0, TAU); g.fill(); }
+  [[x1, y + bob, [247, 127, 0]], [x2, y - bob, [229, 90, 140]]].forEach(([x, yy, c]) => { const h = g.createRadialGradient(x, yy, 0, x, yy, m * (0.1 + 0.03 * b)); h.addColorStop(0, 'rgba(255,250,240,.95)'); h.addColorStop(0.3, rgba(c, 0.55)); h.addColorStop(1, rgba(c, 0)); g.fillStyle = h; g.beginPath(); g.arc(x, yy, m * 0.14, 0, TAU); g.fill(); });
+}
+function drawShutters(t, st, open) { // blinders part to reveal a wider world
+  const m = M(), o = open != null ? open : 0.25 + 0.25 * (0.5 + 0.5 * Math.sin(t * 0.25)), gap = W * (0.03 + 0.97 * o) / 2;
+  drawLuck(t, st);
+  g.globalCompositeOperation = 'lighter';
+  const hz = cy() + m * 0.25, hg = g.createLinearGradient(0, hz - m * 0.15, 0, hz + 1); hg.addColorStop(0, 'rgba(242,207,134,0)'); hg.addColorStop(1, 'rgba(242,207,134,.25)'); g.fillStyle = hg; g.fillRect(0, hz - m * 0.15, W, m * 0.15);
+  g.globalCompositeOperation = 'source-over';
+  [-1, 1].forEach(sd => {
+    const edge = cx() + sd * gap, x0 = sd < 0 ? 0 : edge, w = sd < 0 ? edge : W - edge;
+    const pg = g.createLinearGradient(edge, 0, edge - sd * W * 0.3, 0); pg.addColorStop(0, '#0d0a14'); pg.addColorStop(1, '#030207');
+    g.fillStyle = pg; g.fillRect(x0, 0, Math.max(0, w), H);
+    g.strokeStyle = 'rgba(231,194,125,.55)'; g.lineWidth = 1.2; g.beginPath(); g.moveTo(edge, 0); g.lineTo(edge, H); g.stroke();
+    const glow = g.createLinearGradient(edge, 0, edge + sd * -m * 0.08, 0); glow.addColorStop(0, 'rgba(231,194,125,.18)'); glow.addColorStop(1, 'rgba(231,194,125,0)'); g.fillStyle = glow; g.fillRect(Math.min(edge, edge - sd * m * 0.08), 0, m * 0.08, H);
+  });
+}
 const CLOUDS = Array.from({ length: 9 }, (_, i) => ({ y: 0.15 + i * 0.09, s: 0.004 + (i % 3) * 0.003, r: 0.12 + (i % 4) * 0.05, o: Math.random() }));
 function drawSilence(t, st) { // thoughts as clouds drifting across a still sky
   const m = M(), b = st ? st.b : 0.5;
@@ -873,6 +1003,10 @@ function scene(visual, t, o) {
     case 'purpose': drawPurpose(t, st); break;
     case 'silence': drawSilence(t, st); break;
     case 'urge': drawUrge(t, st); break;
+    case 'release': drawRelease(t); break;
+    case 'heart': drawHeart(t, st); break;
+    case 'bond': drawBond(t, st); break;
+    case 'shutters': drawShutters(t, st, o.open); break;
     case 'network': drawNetwork(t); break;
     case 'hero': drawHero(t); break;
     case 'dark': drawDark(t, o.since || 0); break;
@@ -935,6 +1069,12 @@ function showRoom(id) {
 }
 $('rHabit').addEventListener('click', e => { const b = e.target.closest('button[data-h]'); if (!b) return; setHabit(curRoom, b.dataset.h); store.set('ajna-habit', b.dataset.h); const y = scrollY; showRoom(curRoom.id); scrollTo(0, y); });
 $('rIntent').addEventListener('input', () => store.set('ajna-intent-' + curRoom.id + (curRoom.habit ? '-' + curRoom.habit : ''), $('rIntent').value.trim()));
+const dayKey = d => d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+function streakDays() { let days = []; try { days = JSON.parse(store.get('ajna-days') || '[]'); } catch (e) {} const set = new Set(days); let n = 0; const d = new Date(); if (!set.has(dayKey(d))) d.setDate(d.getDate() - 1); while (set.has(dayKey(d))) { n++; d.setDate(d.getDate() - 1); } return n; }
+function markPractice() { let days = []; try { days = JSON.parse(store.get('ajna-days') || '[]'); } catch (e) {} const k = dayKey(new Date()); if (!days.includes(k)) { days.push(k); store.set('ajna-days', JSON.stringify(days.slice(-400))); } renderStreak(); }
+const plural = (n, a, b, c) => { const m10 = n % 10, m100 = n % 100; return m10 === 1 && m100 !== 11 ? a : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? b : c; };
+function renderStreak() { const n = streakDays(); $('streak').textContent = n ? 'Вы практикуете ' + n + ' ' + plural(n, 'день', 'дня', 'дней') + ' подряд' : 'Первая сессия — первый шаг.'; }
+renderStreak();
 function showHome(anchor) {
   $('home').hidden = false; $('roomPage').hidden = true;
   if (anchor) { const el = $(anchor); if (el) setTimeout(() => el.scrollIntoView(), 0); } else scrollTo(0, 0);
@@ -1062,7 +1202,7 @@ const P = { room: null, phases: [], running: false, paused: false, elapsed: 0, l
 const pSurf = surface($('pCv'), { cyr: 0.4, mr: 0.68, visual: () => {
   if (!P.room) return { visual: 'eye' };
   const ph = P.phases[Math.max(0, P.idx)], pt = P.elapsed - P.start;
-  return { visual: ph.visual, ci: ph.visual === 'chakras' && P.ch >= 0 ? P.ch : ph.tone, st: ph.breath && P.running ? breathAt(ph.breath, pt) : null, active: ph.key === 'chakras' ? P.ch : -1, since: pt, shell: P.running && P.idx > 0 && ph.visual !== 'cocoon' };
+  return { visual: ph.visual, ci: ph.visual === 'chakras' && P.ch >= 0 ? P.ch : ph.tone, st: ph.breath && P.running ? breathAt(ph.breath, pt) : null, active: ph.key === 'chakras' ? P.ch : -1, since: pt, open: ph.open && P.running ? ph.open[0] + (ph.open[1] - ph.open[0]) * ease(Math.min(1, pt / ph.dur)) : undefined, shell: P.running && P.idx > 0 && ph.visual !== 'cocoon' && ph.visual !== 'shutters' };
 } });
 function openPlayer(r) {
   P.room = r; P.phases = r.phases; P.intent = ($('rIntent').value || '').trim() || intentOf(r); $('pIntent').textContent = P.intent; $('pIntent').classList.remove('on'); P.idx = -1; P.running = false; P.elapsed = 0;
@@ -1094,7 +1234,8 @@ async function play() {
 }
 function stop(done) {
   if (!P.running) return; P.running = false; P.paused = false; sayTok++; if (synth) synth.cancel(); levels(done ? 5 : 0.6);
-  if (done) { bell(3, 220); $('pPhase').textContent = 'Сессия завершена'; $('pInstr').textContent = 'Посидите минуту с закрытыми глазами. Заметьте, что изменилось.'; }
+  if (P.elapsed > 240) markPractice();
+  if (done) { bell(3, 220); $('pPhase').textContent = 'Сессия завершена'; $('pInstr').textContent = 'Посидите минуту с закрытыми глазами. Заметьте, что изменилось. Каждая практика — ещё один шаг.'; }
   else { $('pPhase').textContent = P.room ? P.room.name : ''; $('pInstr').textContent = 'Можно начать снова, когда будете готовы.'; }
   $('pIco').innerHTML = '<path d="M8 5.5v13l11-6.5z"/>'; $('pProg').style.width = '0'; P.idx = -1; $('pIntent').classList.remove('on');
   try { P.wake && P.wake.release(); } catch (e) {} P.wake = null; poke();
@@ -1117,7 +1258,7 @@ function frame(now) {
       const ph = P.phases[P.idx], pt = P.elapsed - P.start, tot = sum(P.phases);
       if (ph.key === 'chakras' && pt > 4) { const k = Math.min(6, Math.floor((pt - 4) / 30)); if (k !== P.ch) chakra(k); }
       const st = ph.breath ? breathAt(ph.breath, pt) : null;
-      if (st && ph.cue && st.label !== P.lastLabel) { if (P.lastLabel && st.label !== 'Пауза' && $('vBreath').checked && !playRec(st.label === 'Вдох' ? 'inhale' : 'exhale') && synth && !synth.speaking) speak([st.label], { rate: 0.7, gap: 0 }); P.lastLabel = st.label; }
+      if (st && ph.cue && st.label !== P.lastLabel) { if (P.lastLabel && st.label !== 'Пауза' && $('vBreath').checked && !playRec({ 'Вдох': 'inhale', 'Выдох': 'exhale' }[st.label] || '') && synth && !synth.speaking) speak([st.label], { rate: 0.7, gap: 0 }); P.lastLabel = st.label; }
       const inMain = P.idx >= 2 && P.idx < P.phases.length - 1, el = P.elapsed - P.phases.slice(0, 2).reduce((a, p) => a + p.dur, 0);
       $('pIntent').classList.toggle('on', inMain && (el % 75) < 9);
       $('pEye').textContent = 'Шаг ' + (P.idx + 1) + ' из ' + P.phases.length + ' · ' + fmt(ph.dur - pt);

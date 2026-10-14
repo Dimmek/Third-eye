@@ -1,6 +1,6 @@
 # Сайт «Аджна»
 
-`index.html` — весь сайт: главная, 10 кабинетов (`#room-habits`, `#room-cleanse`, `#room-energy`, `#room-health`, `#room-abundance`, `#room-luck`, `#room-purpose`, `#room-silence`, `#room-ajna`, `#room-chakras`), плеер.
+`index.html` — весь сайт: главная, 17 кабинетов (в т.ч. `#room-blinders`, `#room-breathe`, `#room-event`, `#room-release`, `#room-selflove`, `#room-relations`, `#room-food`, `#room-habits`, `#room-cleanse`, `#room-energy`, `#room-health`, `#room-abundance`, `#room-luck`, `#room-purpose`, `#room-silence`, `#room-ajna`, `#room-chakras`), плеер.
 
 Каждая сессия: **Кокон (1:40) → Дыхание (2:00) → практика кабинета → Возвращение (1:00)**.
 
@@ -23,7 +23,7 @@
 
 ## Живой женский голос
 
-Тексты всех 61 фрагмента: `voice/script.md` (ключ = имя файла).
+Тексты всех фрагментов: `voice/script.md` (ключ = имя файла).
 
 1. Сгенерировать каждый фрагмент → `voice/<ключ>.mp3`.
 2. Положить `voice/manifest.json` со списком ключей, например `["cocoon","breath","return","cleanse-1",…,"inhale","exhale"]`.
