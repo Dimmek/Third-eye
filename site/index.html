@@ -282,6 +282,7 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 .nextnav a:hover { border-color: var(--gold-l); transform: translateY(-3px); }
 .nextnav a:last-child { text-align: right; }
 .nextnav .eyebrow { margin: 0; }
+@media (max-width: 640px) { .nextnav { grid-template-columns: 1fr; gap: 12px; } .nextnav a { padding: 22px; } .nextnav a:last-child { text-align: left; } .nextnav .eyebrow { white-space: normal; } }
 .nextnav .eyebrow::before { display: none; }
 .nextnav b { font-size: 24px; font-weight: 600; letter-spacing: -.02em; }
 
@@ -394,6 +395,9 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 .pvis { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; mix-blend-mode: screen; opacity: 0; transition: opacity 2s ease; }
 .rlevel { display: inline-flex; border: 1px solid rgba(246,241,232,.25); border-radius: 999px; padding: 3px; justify-self: start; } .rlevel button { padding: 9px 16px; border-radius: 999px; font-size: 14px; color: #d6d1c8; } .rlevel button[aria-pressed=true] { background: rgba(220,189,134,.18); color: #fff; box-shadow: inset 0 0 0 1px var(--gold-l); }
 .rlock { color: #e7ddcc; font-size: 15px; max-width: 52ch; padding: 12px 16px; border-left: 2px solid var(--gold-l); background: rgba(255,255,255,.04); }
+.way { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; } @media (max-width: 860px) { .way { grid-template-columns: 1fr; } }
+.way li { display: grid; gap: 12px; align-content: start; padding: 28px 26px; border-radius: var(--r-lg); background: var(--white); border: 1px solid var(--line); box-shadow: var(--shadow); }
+.way__n { font-family: var(--ff-serif); font-size: 44px; line-height: 1; color: var(--gold); font-variant-numeric: lining-nums; } .way h3 { font-size: 22px; letter-spacing: -.01em; color: var(--ink); } .way p { color: var(--ink-2); } .way a { color: var(--gold-d); font-weight: 600; display: inline-flex; gap: 8px; align-items: center; }
 .pfly { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; mix-blend-mode: screen; opacity: 0; transition: opacity 2.5s ease; }
 .warpv { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; mix-blend-mode: screen; opacity: 0; transition: opacity .9s ease; }
 .warpv.on { opacity: 1; } .warpv.off { opacity: 0; transition-duration: 1.6s; }
@@ -623,12 +627,12 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     <canvas id="heroNet"></canvas>
     <div class="container">
       <div class="hero__inner">
-        <span class="eyebrow dot">17 пространств медитации</span>
+        <span class="eyebrow dot">Медитации и карта жизни</span>
         <h1 class="display">Здесь шум <em>стихает.</em></h1>
-        <p class="lead">Пятнадцать минут — и вы спокойнее, яснее и ближе к себе. Голос ведёт, музыка поддерживает, вам остаётся только слушать.</p>
+        <p class="lead">Узнайте по своей карте жизни, где вы сейчас и что вам нужно. Затем пятнадцать минут практики — и вы спокойнее, яснее и ближе к себе. Голос ведёт, вам остаётся только слушать.</p>
         <div class="hero__cta">
           <a class="btn btn--gold" href="#prostranstva">Выбрать практику <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
-          <a class="btn btn--line" href="#how">Как проходит сеанс</a>
+          <a class="btn btn--line" href="#karta">Построить карту жизни</a>
         </div>
         <div class="hero__meta"><span>Засыпать без мыслей по кругу</span><span>Меньше тревоги и раздражения</span><span>Свобода от того, что держит</span></div>
       </div>
@@ -639,9 +643,21 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     <div class="stat"><b>17</b><span>пространств — под любое ваше состояние</span></div>
     <div class="stat"><b>15</b><span>минут, чтобы выдохнуть и прийти в себя</span></div>
     <div class="stat"><b>0</b><span>опыта нужно — голос ведёт каждый шаг</span></div>
-    <div class="stat"><b>24/7</b><span>тишина рядом, когда она нужна</span></div>
+    <div class="stat"><b>1</b><span>минута — и ваша карта жизни готова</span></div>
   </div></div>
   <div class="marquee" aria-hidden="true"><div class="marquee__track" id="marquee"></div></div>
+
+  <section class="section" id="way">
+    <div class="container">
+      <div class="shead"><div><span class="eyebrow">Как это устроено</span><h2 class="h2">Два инструмента — <em>один путь.</em></h2></div>
+        <p class="lead">Карта жизни показывает, где вы сейчас и какая тема у вашего периода. Практики помогают пройти этот путь спокойно и осознанно — каждый день по пятнадцать минут.</p></div>
+      <ol class="way">
+        <li><span class="way__n">01</span><h3>Узнайте себя</h3><p>Введите дату, время и место рождения. Через минуту — ваша карта: сильные стороны, тема года, влияния сейчас. Профиль бесплатно.</p><a href="#karta">Построить карту <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></li>
+        <li><span class="way__n">02</span><h3>Выберите практику</h3><p>Карта подскажет три пространства под ваш период. Или выберите по самочувствию: тревога, усталость, важное событие, привычка.</p><a href="#prostranstva">17 пространств <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></li>
+        <li><span class="way__n">03</span><h3>Идите своим путём</h3><p>Короткие практики для начала, полные — когда освоитесь. Карта показывает периоды на год вперёд, практики дают опору в каждом из них.</p><a href="#how">Как проходит сеанс <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></li>
+      </ol>
+    </div>
+  </section>
 
   <section class="section" id="start">
     <div class="container">
@@ -674,16 +690,6 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     </div>
   </section>
 
-  <section class="section kteaser dark" id="kartaTeaser">
-    <div class="container">
-      <div class="kteaser__txt"><span class="eyebrow">Карта жизни</span><h2 class="h2">Ваш путь, <em>рассчитанный по звёздам.</em></h2>
-        <p>Дата, время и место рождения — и через минуту вы видите свою карту: сильные стороны, тему этого года, влияния планет сейчас и три практики, которые нужны именно вам.</p>
-        <ul><li>Расчёт по астрономическим эфемеридам, с точностью до минуты дуги</li><li>Профиль и тема года — бесплатно</li><li>Полная карта и прогноз на 12 месяцев — по желанию</li></ul>
-        <a class="btn btn--gold" href="#karta">Построить мою карту <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
-      <figure class="kteaser__art"><canvas id="kTeaserCv" aria-label="Небо сейчас"></canvas><figcaption>Небо над Москвой прямо сейчас</figcaption></figure>
-    </div>
-  </section>
-
   <section class="section section--alt" id="how">
     <div class="container">
       <div class="shead"><div><span class="eyebrow">Как проходит сеанс</span><h2 class="h2">Вы просто слушаете. <em>Остальное происходит само.</em></h2></div>
@@ -694,6 +700,16 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
         <div class="step card"><span class="n">03</span><h3>Сеанс</h3><p>Вы внутри своей практики. Образы, музыка и голос ведут к тому, ради чего вы пришли.</p></div>
         <div class="step card"><span class="n">04</span><h3>Возвращение</h3><p>Мягкий выход. Остаются лёгкость, ясность и ощущение, что вы снова на своей стороне.</p></div>
       </div>
+    </div>
+  </section>
+
+  <section class="section kteaser dark" id="kartaTeaser">
+    <div class="container">
+      <div class="kteaser__txt"><span class="eyebrow">Карта жизни</span><h2 class="h2">Ваш путь, <em>рассчитанный по звёздам.</em></h2>
+        <p>Дата, время и место рождения — и через минуту вы видите свою карту: сильные стороны, тему этого года, влияния планет сейчас и три практики, которые нужны именно вам.</p>
+        <ul><li>Расчёт по астрономическим эфемеридам, с точностью до минуты дуги</li><li>Профиль и тема года — бесплатно</li><li>Полная карта и прогноз на 12 месяцев — по желанию</li></ul>
+        <a class="btn btn--gold" href="#karta">Построить мою карту <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
+      <figure class="kteaser__art"><canvas id="kTeaserCv" aria-label="Небо сейчас"></canvas><figcaption>Небо над Москвой прямо сейчас</figcaption></figure>
     </div>
   </section>
 
@@ -723,6 +739,9 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     <div class="container split">
       <div><span class="eyebrow">Вопросы</span><h2 class="h2">Коротко <em>о главном.</em></h2></div>
       <div class="faq">
+        <details><summary>Что такое карта жизни и как её считают?<i></i></summary><p>По дате, времени и месту рождения сайт рассчитывает положение планет по астрономическим эфемеридам — с точностью до минуты дуги. Затем карта описывает ваши сильные стороны, тему года, периоды и подбирает практики. Профиль и тема года — бесплатно.</p></details>
+        <details><summary>Карта — это предсказание судьбы?<i></i></summary><p>Нет. Положения планет точны, а толкования — традиция и язык для размышления о себе. Карта описывает темы и периоды, а не события. Что произойдёт, зависит от ваших решений и обстоятельств. <a href="#j-fate">Подробнее в журнале</a>.</p></details>
+        <details><summary>Что если я не знаю время рождения?<i></i></summary><p>Карту всё равно можно построить: планеты и периоды будут верными, а Асцендент и дома — нет. Точное время помогает восстановить ректификация по событиям вашей жизни.</p></details>
         <details><summary>Мне нужен опыт медитации?<i></i></summary><p>Нет. Голос ведёт каждый шаг: что представить, как дышать, когда открыть глаза. Достаточно наушников и пятнадцати спокойных минут.</p></details>
         <details><summary>Как часто практиковать?<i></i></summary><p>Лучше понемногу, но регулярно: один сеанс в день или через день. Эффект накапливается, и первые перемены обычно заметны через одну–две недели.</p></details>
         <details><summary>Что такое золотой кокон?<i></i></summary><p>Это ваше защищённое пространство в начале каждого сеанса. Когда внутри есть ощущение безопасности, ум перестаёт ждать угрозу и погружение идёт глубже.</p></details>
@@ -1990,11 +2009,10 @@ const JOURNAL = [
     lead: 'Эта программа выросла не из книг, а из жизни. Из пути, который я прошёл сам — от зависимостей и хаоса к семье, делу и спокойной силе.',
     body: `<p>Было время, когда я много пил, курил, употреблял наркотики и жил так, что сейчас вспоминать об этом непросто. Снаружи это выглядело как свобода. Внутри был постоянный шум — и ни минуты тишины, чтобы услышать себя.</p>
 <p>Выход начался не с подвига, а с маленьких шагов. Я пробовал разные практики, проходил посвящения, учился у мастеров. Что-то не работало. Что-то работало удивительно хорошо — и именно это я оставлял себе.</p>
-<blockquote>Сегодня я не пью уже [10] лет и не курю [12] лет. Это не про запреты. Это про то, что внутри наконец стало тихо.</blockquote>
+<blockquote>Сегодня я больше десяти лет не пью и не курю. Это не про запреты. Это про то, что внутри наконец стало тихо.</blockquote>
 <p>Сейчас у меня своё дело, которое я развиваю, семья и двое детей. Я тренируюсь — бокс помогает держать голову ясной, мотоцикл даёт ощущение дороги. Практики остались со мной каждый день: не как ритуал, а как способ вернуться к себе, когда мир становится слишком громким.</p>
 <h2>Зачем я это делаю</h2>
-<p>Я знаю, каково это — жить в шуме и не понимать, чего ты хочешь на самом деле. И знаю, что из этого есть дорога. Я собрал в «Дороге к себе» то, что прошло проверку моей жизнью и подтверждается исследованиями, чтобы каждый мог начать свой путь — с пятнадцати минут в день.</p>
-<div class="todo">Черновик по вашим словам. Проверьте цифры в квадратных скобках и детали, которые хотите оставить или убрать.</div>`, src: [] },
+<p>Я знаю, каково это — жить в шуме и не понимать, чего ты хочешь на самом деле. И знаю, что из этого есть дорога. Я собрал в «Дороге к себе» то, что прошло проверку моей жизнью и подтверждается исследованиями, чтобы каждый мог начать свой путь — с пятнадцати минут в день.</p>`, src: [] },
   { id: 'astro-science', cat: 'Карта жизни', title: 'Астрология и наука: что проверяли и что получилось', read: '13 минут', long: true,
     lead: 'Астрологию проверяли десятки лет — двойными слепыми тестами, тысячами «близнецов по времени», большими медицинскими базами. Рассказываем честно, что нашли, что не нашли, где спор до сих пор не закрыт и почему карта всё равно может быть полезной — если понимать, чем она является, а чем нет.',
     body: '<p>' + 'Астрологию проверяли десятки лет — двойными слепыми тестами, тысячами «близнецов по времени», большими медицинскими базами. Рассказываем честно, что нашли, что не нашли, где спор до сих пор не закрыт и почему карта всё равно может быть полезной — если понимать, чем она является, а чем нет.' + '</p>', src: [] },
