@@ -106,6 +106,8 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
   -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 22%, #000 82%, transparent 100%), linear-gradient(to top, transparent 0%, #000 18%); -webkit-mask-composite: source-in;
   mask-image: linear-gradient(to right, transparent 0%, #000 22%, #000 82%, transparent 100%), linear-gradient(to top, transparent 0%, #000 18%); mask-composite: intersect; }
 .art video, .art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.art.art--wide { inset: 0; right: 0; aspect-ratio: auto; -webkit-mask-image: none; mask-image: none; } .art--wide video { object-position: 62% 50%; }
+@media (max-width: 960px) { .art.art--wide { inset: 0; top: 0; left: 0; height: auto; transform: none; } .art--wide video { object-position: 60% 30%; } }
 .hero::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(90deg, rgba(2,1,6,.92) 0%, rgba(2,1,6,.55) 34%, rgba(2,1,6,0) 56%), linear-gradient(to top, rgba(2,1,6,.9) 0%, rgba(2,1,6,0) 20%); }
 .hero .container { position: relative; z-index: 5; padding-block: 130px 110px; pointer-events: none; }
 .hero .container a, .hero .container button { pointer-events: auto; }
@@ -322,6 +324,13 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 .kteaser__txt p { color: #cfc6b8; font-size: 18px; max-width: 54ch; }
 .kteaser__txt ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; color: #e7ddcc; }
 .kteaser__txt li::before { content: "✦"; color: var(--gold-l); margin-right: 10px; }
+.kteaser .container.kinside { margin-top: clamp(40px, 5vw, 64px); display: grid; grid-template-columns: 1fr; gap: 18px; align-items: start; }
+.kinside__h { font-size: 22px; color: #f6f1e8; letter-spacing: -.01em; }
+.kinside__g { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; } @media (max-width: 1000px) { .kinside__g { grid-template-columns: repeat(2, minmax(0, 1fr)); } } @media (max-width: 560px) { .kinside__g { grid-template-columns: 1fr; } }
+.kinside__g div { display: grid; gap: 6px; align-content: start; padding: 18px; border-radius: 14px; background: rgba(255,255,255,.04); border: 1px solid rgba(220,189,134,.2); }
+.kinside__g b { color: #f6f1e8; font-size: 16px; } .kinside__g span { color: #b9b0a2; font-size: 14px; line-height: 1.5; }
+.kinside__g em { justify-self: start; font-style: normal; font-family: var(--ff, 'Inter Tight', sans-serif); font-weight: 600; font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; border: 1px solid rgba(220,189,134,.5); color: var(--gold-l); } .kinside__g em.f { border-color: rgba(120,210,170,.6); color: #8fe0bd; }
+.kinside__note { color: #a89f90; font-size: 14px; max-width: 80ch; } .kinside__note a { color: var(--gold-l); }
 .kteaser__art { margin: 0; display: grid; gap: 12px; } .kteaser__art canvas { width: 100%; aspect-ratio: 1; display: block; } .kteaser__art figcaption { text-align: center; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: #a89f90; }
 @media (max-width: 860px) { .kteaser .container { grid-template-columns: 1fr; } .kteaser__art { max-width: 420px; margin: 0 auto; width: 100%; } }
 .khero, .khead { background: radial-gradient(900px 600px at 80% 20%, rgba(120,80,180,.32), transparent 60%), radial-gradient(700px 500px at 0% 100%, rgba(176,132,74,.16), transparent 60%), var(--night); color: var(--on-dark); position: relative; z-index: 1; }
@@ -392,6 +401,11 @@ em { font-family: var(--ff-serif); font-style: italic; font-weight: 400; letter-
 .kprice { display: flex; flex-direction: column; align-items: flex-start; } .kprice p { flex: 1; } .kprice__n { font-family: var(--ff-serif); font-size: 40px; font-weight: 500; line-height: 1; color: var(--ink); }
 .kprice--best { border-color: var(--gold); box-shadow: 0 30px 60px -30px rgba(143,106,56,.45); }
 .krect { grid-template-columns: 1fr auto; align-items: center; gap: 20px; } @media (max-width: 700px) { .krect { grid-template-columns: 1fr; justify-items: start; } }
+.pcoc { position: absolute; left: 50%; top: 40%; height: min(74vh, 118vw); aspect-ratio: 3 / 4; transform: translate(-50%, -50%) scale(.96); opacity: 0; pointer-events: none; transition: opacity 2.2s ease;
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 58%, transparent 100%); mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 58%, transparent 100%); }
+.pcoc.on { opacity: 1; animation: cocbreath 11s ease-in-out infinite; } @keyframes cocbreath { 0%,100% { transform: translate(-50%, -50%) scale(.96); filter: brightness(.95) saturate(1); } 50% { transform: translate(-50%, -50%) scale(1.02); filter: brightness(1.12) saturate(1.1); } }
+@media (prefers-reduced-motion: reduce) { .pcoc.on { animation: none; transform: translate(-50%, -50%); } }
+.player.soft .pcoc { opacity: .15; }
 .pvis { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; mix-blend-mode: screen; opacity: 0; transition: opacity 2s ease; }
 .rlevel { display: inline-flex; border: 1px solid rgba(246,241,232,.25); border-radius: 999px; padding: 3px; justify-self: start; } .rlevel button { padding: 9px 16px; border-radius: 999px; font-size: 14px; color: #d6d1c8; } .rlevel button[aria-pressed=true] { background: rgba(220,189,134,.18); color: #fff; box-shadow: inset 0 0 0 1px var(--gold-l); }
 .rlock { color: #e7ddcc; font-size: 15px; max-width: 52ch; padding: 12px 16px; border-left: 2px solid var(--gold-l); background: rgba(255,255,255,.04); }
@@ -623,7 +637,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
 <main id="home">
   <section class="hero dark" id="top">
     <canvas id="heroCv"></canvas>
-    <div class="art" id="art"><video id="heroVid" src="media/hero.mp4" poster="media/hero-poster.jpg" muted loop playsinline autoplay preload="auto"></video></div>
+    <div class="art art--wide" id="art"><video id="heroVid" poster="media/hero2-poster.jpg" muted loop playsinline autoplay preload="auto"></video></div>
     <canvas id="heroNet"></canvas>
     <div class="container">
       <div class="hero__inner">
@@ -632,7 +646,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
         <p class="lead">Узнайте по своей карте жизни, где вы сейчас и что вам нужно. Затем пятнадцать минут практики — и вы спокойнее, яснее и ближе к себе. Голос ведёт, вам остаётся только слушать.</p>
         <div class="hero__cta">
           <a class="btn btn--gold" href="#prostranstva">Выбрать практику <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
-          <a class="btn btn--line" href="#karta">Построить карту жизни</a>
+          <a class="btn btn--line" href="#karta">Построить карту жизни <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
         </div>
         <div class="hero__meta"><span>Засыпать без мыслей по кругу</span><span>Меньше тревоги и раздражения</span><span>Свобода от того, что держит</span></div>
       </div>
@@ -659,9 +673,33 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     </div>
   </section>
 
+  <section class="section kteaser dark" id="kartaTeaser">
+    <div class="container">
+      <div class="kteaser__txt"><span class="eyebrow">Карта жизни</span><h2 class="h2">Ваш путь, <em>рассчитанный по звёздам.</em></h2>
+        <p>Дата, время и место рождения — и через минуту вы видите свою карту: сильные стороны, тему этого года, влияния планет сейчас и три практики, которые нужны именно вам.</p>
+        <ul><li>Расчёт по астрономическим эфемеридам, с точностью до минуты дуги</li><li>Профиль и тема года — бесплатно</li><li>Полная карта и прогноз на 12 месяцев — по желанию</li></ul>
+        <a class="btn btn--gold" href="#karta">Построить мою карту <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
+      <figure class="kteaser__art"><canvas id="kTeaserCv" aria-label="Небо сейчас"></canvas><figcaption>Небо над Москвой прямо сейчас</figcaption></figure>
+    </div>
+    <div class="container kinside">
+      <h3 class="kinside__h">Что внутри карты</h3>
+      <div class="kinside__g">
+        <div><b>Сейчас</b><span>Тема этого года, влияния планет, что делать в ближайшие 3 месяца</span><em class="f">Бесплатно</em></div>
+        <div><b>Профиль</b><span>Солнце, Луна, Асцендент, сильные стороны, баланс стихий, круг карты</span><em class="f">Бесплатно</em></div>
+        <div><b>Практики для вас</b><span>Три пространства под ваш период и характер</span><em class="f">Бесплатно</em></div>
+        <div><b>Призвание</b><span>8 направлений со шкалами самореализации и денег и первым шагом</span><em>Полная</em></div>
+        <div><b>Деньги</b><span>Потенциал, источники, благоприятные годы, ограничения и ключи</span><em>Полная</em></div>
+        <div><b>Самочувствие и семья</b><span>Зоны внимания и режим, энергия по годам, отношения и дом</span><em>Полная</em></div>
+        <div><b>Где жить</b><span>10 точек силы по всему миру и линии планет на карте мира</span><em>Полная</em></div>
+        <div><b>Маршрут на 12 лет</b><span>Год за годом: карьера, деньги, семья, здоровье и ваш устав из 10 правил</span><em>Полная</em></div>
+      </div>
+      <p class="kinside__note">Положения планет рассчитываются по астрономическим эфемеридам. Толкования — традиция и язык для размышления о себе, а не предсказание событий. <a href="#j-map-howto">Как пользоваться картой</a></p>
+    </div>
+  </section>
+
   <section class="section" id="start">
     <div class="container">
-      <div class="shead"><div><span class="eyebrow">С чего начать</span><h2 class="h2">Как вы <em>сегодня?</em></h2></div>
+      <div class="shead"><div><span class="eyebrow">Практики · с чего начать</span><h2 class="h2">Как вы <em>сегодня?</em></h2></div>
         <p class="lead">Выберите, что ближе, — и мы откроем практику, которая поможет именно сейчас.</p></div>
       <div class="moods" id="moods"></div>
     </div>
@@ -700,16 +738,6 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
         <div class="step card"><span class="n">03</span><h3>Сеанс</h3><p>Вы внутри своей практики. Образы, музыка и голос ведут к тому, ради чего вы пришли.</p></div>
         <div class="step card"><span class="n">04</span><h3>Возвращение</h3><p>Мягкий выход. Остаются лёгкость, ясность и ощущение, что вы снова на своей стороне.</p></div>
       </div>
-    </div>
-  </section>
-
-  <section class="section kteaser dark" id="kartaTeaser">
-    <div class="container">
-      <div class="kteaser__txt"><span class="eyebrow">Карта жизни</span><h2 class="h2">Ваш путь, <em>рассчитанный по звёздам.</em></h2>
-        <p>Дата, время и место рождения — и через минуту вы видите свою карту: сильные стороны, тему этого года, влияния планет сейчас и три практики, которые нужны именно вам.</p>
-        <ul><li>Расчёт по астрономическим эфемеридам, с точностью до минуты дуги</li><li>Профиль и тема года — бесплатно</li><li>Полная карта и прогноз на 12 месяцев — по желанию</li></ul>
-        <a class="btn btn--gold" href="#karta">Построить мою карту <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
-      <figure class="kteaser__art"><canvas id="kTeaserCv" aria-label="Небо сейчас"></canvas><figcaption>Небо над Москвой прямо сейчас</figcaption></figure>
     </div>
   </section>
 
@@ -974,6 +1002,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
 <div class="player" id="player" hidden>
   <canvas id="pCv"></canvas>
   <video class="pfly" id="pFly" muted loop playsinline preload="none" aria-hidden="true"></video>
+  <img class="pcoc" id="pCoc" src="img/cocoon.webp" alt="" aria-hidden="true">
   <video class="pvis" id="pVis" muted loop playsinline preload="none" aria-hidden="true"></video>
   <div class="pintent" id="pIntent" aria-live="off"></div>
   <div class="pui">
@@ -2134,6 +2163,7 @@ const roomSurf = surface($('roomCv'), { cyr: 0.46, mr: 0.66, cxr: 0.7, visual: (
 } });
 
 // hero video slot: the woman in red stands between the back and front chakra layers
+(() => { const v = $('heroVid'), h264 = v.canPlayType('video/mp4; codecs="avc1.42E01E"'); v.src = !h264 ? 'media/hero2.webm' : innerWidth < 760 ? 'media/hero2-m.mp4' : 'media/hero2.mp4'; v.play().catch(() => {}); })();
 const HERO_VIDEO = '';   // e.g. 'media/hero.mp4': a looping clip on pure black; screen blending drops the black into the cosmos
 if (HERO_VIDEO) { const v = $('heroVid'); v.src = HERO_VIDEO; v.hidden = false; v.play().catch(() => {}); }
 
@@ -2179,6 +2209,7 @@ function showHome(anchor) {
 // cinematic clips per visual (media/v/<visual>.mp4, listed in media/v/manifest.json); a clip replaces the drawn centrepiece
 let VMAN = []; fetch('media/v/manifest.json').then(r => r.ok ? r.json() : []).then(j => { VMAN = Array.isArray(j) ? j : []; }).catch(() => {});
 function vis(ph) {
+  const ci = $('pCoc'); if (ci) ci.classList.toggle('on', !!(ph && ph.visual === 'cocoon' && !VMAN.includes('cocoon')));
   const v = $('pVis'); if (!v) return; const want = ph && !reduce && !$('player').classList.contains('soft') && VMAN.includes(ph.visual) ? ph.visual : null;
   if (!want) { v.style.opacity = 0; P.vid = null; setTimeout(() => { if (!P.vid) v.pause(); }, 2100); return; }
   if (P.vid === want) return; P.vid = want; v.style.opacity = 0;
@@ -2358,7 +2389,7 @@ const P = { room: null, phases: [], running: false, paused: false, elapsed: 0, l
 const pSurf = surface($('pCv'), { cyr: 0.4, mr: 0.68, visual: () => {
   if (!P.room) return { visual: 'eye' };
   const ph = P.phases[Math.max(0, P.idx)], pt = P.elapsed - P.start;
-  return { flightBg: { ci: ph.tone, phase: P.elapsed * 0.009, speed: 0.009, alpha: ph.visual === 'dark' ? 0.25 : 0.75 }, visual: P.vid === ph.visual ? 'none' : ph.visual, ci: ph.visual === 'chakras' && P.ch >= 0 ? P.ch : ph.tone, st: ph.breath && P.running ? breathAt(ph.breath, pt) : null, active: ph.key === 'chakras' ? P.ch : -1, since: pt, open: ph.open && P.running ? ph.open[0] + (ph.open[1] - ph.open[0]) * ease(Math.min(1, pt / ph.dur)) : undefined, shell: P.running && P.idx > 0 && ph.visual !== 'cocoon' && ph.visual !== 'shutters' };
+  return { flightBg: { ci: ph.tone, phase: P.elapsed * 0.009, speed: 0.009, alpha: ph.visual === 'dark' ? 0.25 : 0.75 }, visual: P.vid === ph.visual || (ph.visual === 'cocoon' && !VMAN.includes('cocoon')) ? 'none' : ph.visual, ci: ph.visual === 'chakras' && P.ch >= 0 ? P.ch : ph.tone, st: ph.breath && P.running ? breathAt(ph.breath, pt) : null, active: ph.key === 'chakras' ? P.ch : -1, since: pt, open: ph.open && P.running ? ph.open[0] + (ph.open[1] - ph.open[0]) * ease(Math.min(1, pt / ph.dur)) : undefined, shell: P.running && P.idx > 0 && ph.visual !== 'cocoon' && ph.visual !== 'shutters' };
 } });
 function phasesFor(r) {
   if (LEVEL() !== 'new') return r.phases;
