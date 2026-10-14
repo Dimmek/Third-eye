@@ -112,7 +112,7 @@ function drawWheel(cv, ch) {
 
 // ---------- разметка ----------
 // ---------- полная карта: вид ----------
-const has = k => { const u = st.get('karta_unlock') || ''; return u.includes('all') || u.includes(k); };
+const has = k => { const u = st.get('karta_unlock') || ''; return (window.OWNER && window.OWNER()) || u.includes('all') || u.includes(k); };
 const RU_P = { sun: 'Солнце', moon: 'Луна', mercury: 'Меркурий', venus: 'Венера', mars: 'Марс', jupiter: 'Юпитер', saturn: 'Сатурн', uranus: 'Уран', neptune: 'Нептун', pluto: 'Плутон', node: 'Северный узел', asc: 'Асцендент', mc: 'MC', ic: 'IC', dsc: 'Десцендент', ketu: 'Кету', rahu: 'Раху', fortune: 'Колесо Фортуны' };
 const RU_PG = { sun: 'Солнца', moon: 'Луны', mercury: 'Меркурия', venus: 'Венеры', mars: 'Марса', jupiter: 'Юпитера', saturn: 'Сатурна', uranus: 'Урана', neptune: 'Нептуна', pluto: 'Плутона', ketu: 'Кету', rahu: 'Раху' };
 const GL = { sun: '☉', moon: '☽', mercury: '☿', venus: '♀', mars: '♂', jupiter: '♃', saturn: '♄', uranus: '♅', neptune: '♆', pluto: '♇', node: '☊', fortune: '⊗', asc: 'AC', mc: 'MC' };
@@ -502,7 +502,7 @@ function initForm() {
     if (isNaN(lat) || isNaN(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180) return err.textContent = 'Проверьте координаты.';
     const gEl = document.querySelector('input[name=kGender]:checked'); if (!gEl) return err.textContent = 'Выберите оформление карты: женское или мужское.';
     const acct = (() => { try { return JSON.parse(st.get('acct')); } catch (e) { return null; } })(), prev = (() => { try { return JSON.parse(st.get('karta_input')); } catch (e) { return null; } })();
-    if (acct && prev && (prev.date !== date || (prev.time || '') !== time || prev.place !== (place || prev.place))) {
+    if (acct && prev && !(window.OWNER && window.OWNER()) && (prev.date !== date || (prev.time || '') !== time || prev.place !== (place || prev.place))) {
       const edits = +(st.get('karta_edits') || 0), fresh = acct && Date.now() - (+st.get('karta_t0') || Date.now()) < 7 * 864e5;
       if (st.get('karta_extra') === '1') st.set('karta_extra', '0');
       else if (edits < 1 && fresh) st.set('karta_edits', edits + 1);

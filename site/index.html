@@ -1423,6 +1423,9 @@ function habitMain(k) {
 }
 const INTENT = { cleanse: 'Я отпускаю всё лишнее', energy: 'Сила возвращается ко мне', health: 'Моё тело в покое и заботе', abundance: 'Я вижу возможности и действую', luck: 'Я замечаю свои шансы', purpose: 'Я слышу себя', silence: 'Мой ум спокоен', ajna: 'Внимание в одной точке', chakras: 'Я целый', blinders: 'Мир шире, чем мне казалось', breathe: 'С каждым выдохом мне спокойнее', event: 'Внутри меня спокойствие при любом исходе', release: 'Я отпускаю то, что тяжело нести', selflove: 'Я на своей стороне', relations: 'В моём сердце есть место для тепла', food: 'Я слышу своё тело' };
 const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+// Owner preview before launch: everything is open; ?owner=0 or the corner switch shows the client view
+(() => { const q = new URLSearchParams(location.search).get('owner'); if (q === '0' || q === '1') store.set('owner', q); })();
+const OWNER = window.OWNER = () => store.get('owner') !== '0';
 // Each space has its own sound signature: binaural rhythm, carrier, breathing pattern, musical mode and tempo, noise colour.
 // Rhythm bands follow the EEG convention (θ 4–8 deep rest and imagery, α 8–12 calm wakefulness, low β 12–15 alert calm).
 const MODES = { major: [0, 2, 4, 7, 9, 12, 14, 16, 19], minor: [0, 3, 5, 7, 10, 12, 15, 17, 19], lydian: [0, 2, 4, 6, 7, 11, 12, 14, 16], dorian: [0, 2, 3, 7, 9, 12, 14, 15, 19], suspended: [0, 2, 5, 7, 10, 12, 14, 17, 19] };
@@ -1488,7 +1491,7 @@ const fmt = s => { s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + ':
 const mins = s => Math.round(s / 60) + ' мин';
 const LEVEL = () => store.get('level') || 'new';
 const practiceCount = () => { try { return JSON.parse(store.get('ajna-days') || '[]').length; } catch (e) { return 0; } };
-const isPro = () => LEVEL() === 'pro' && practiceCount() >= 7;
+const isPro = () => OWNER() || (LEVEL() === 'pro' && practiceCount() >= 7);
 const sum = ph => ph.reduce((a, p) => a + p.dur, 0);
 
 // script for voice recording (keys = file names)
@@ -2684,8 +2687,8 @@ window.__skipSession = () => { P.elapsed += 1e5; };
 // ======================= account, access, diary, goals, courses (test mode: stored in this browser) =======================
 const J = (k, d) => { try { const v = JSON.parse(store.get(k)); return v == null ? d : v; } catch (e) { return d; } };
 const SJ = (k, v) => store.set(k, JSON.stringify(v));
-const ACC = () => J('acct', null);
-const ENT = () => { const e = J('ent', { courses: [], subUntil: 0 }); e.sub = e.subUntil > Date.now(); e.courses = (e.courses || []).filter(c => c && c.until > Date.now()); return e; };
+const ACC = () => J('acct', null) || (OWNER() ? { name: 'Владелец', email: 'owner@preview' } : null);
+const ENT = () => { const e = J('ent', { courses: [], subUntil: 0 }); e.sub = OWNER() || e.subUntil > Date.now(); e.courses = (e.courses || []).filter(c => c && c.until > Date.now()); return e; };
 const courseOwned = (E, id) => E.courses.some(c => c.id === id);
 const FREE_ROOMS = ['cleanse'];
 const PRICE_SUB = 490, PRICE_SUB_Y = 2990, PRICE_COURSE = 990, DAY_MS = 864e5;
@@ -2843,7 +2846,7 @@ function renderCabinet() {
   B.querySelectorAll('.gdel').forEach(b => b.onclick = () => { const G = J('goals', []); G.splice(+b.dataset.g, 1); SJ('goals', G); renderCabinet(); });
 }
 $('cabTabs').addEventListener('click', e => { const b = e.target.closest('button[data-t]'); if (!b) return; cabTab = b.dataset.t; renderCabinet(); });
-const has = k => { const u = store.get('karta_unlock') || ''; return u.includes('all') || u.includes(k); };
+const has = k => { const u = store.get('karta_unlock') || ''; return OWNER() || u.includes('all') || u.includes(k); };
 $('pPlay').onclick = () => P.running ? play() : safety(play); $('pStop').onclick = () => stop(); $('pClose').onclick = closePlayer;
 $('pSet').onclick = () => $('drawer').classList.add('open'); $('dClose').onclick = () => $('drawer').classList.remove('open');
 $('pFs').onclick = () => { try { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(() => {}); } catch (e) {} };
@@ -2885,3 +2888,6 @@ function frame(now) {
 accUI(); refreshLocks(); route(); requestAnimationFrame(frame);
 })();
 </script>
+<button type="button" id="ownerSw" class="owner-sw"></button>
+<style>.owner-sw{position:fixed;left:12px;bottom:12px;z-index:90;font:600 12px/1 var(--ff,system-ui);padding:9px 13px;border-radius:999px;border:1px solid rgba(220,189,134,.5);background:rgba(14,11,18,.85);color:#dcbd86;backdrop-filter:blur(8px);cursor:pointer}.owner-sw.off{color:#cfc6b8;border-color:rgba(255,255,255,.2)}@media(max-width:760px){.owner-sw{bottom:84px}}</style>
+<script>(function(){var b=document.getElementById('ownerSw');function on(){try{return localStorage.getItem('owner')!=='0'}catch(e){return true}}b.textContent=on()?'Владелец · всё открыто':'Вид клиента · вернуть всё';b.className='owner-sw'+(on()?'':' off');b.title=on()?'Нажмите, чтобы посмотреть сайт глазами клиента (с замками)':'Нажмите, чтобы снова открыть всё';b.onclick=function(){try{localStorage.setItem('owner',on()?'0':'1')}catch(e){}location.reload()};})();</script>
