@@ -4,16 +4,22 @@
 
 Каждая сессия: **Кокон (1:40) → Дыхание (2:00) → практика кабинета → Возвращение (1:00)**.
 
-## Фото ведущей (арка на главной)
+## Видео на заставке: женщина в красном
 
-1. Сгенерировать или снять портрет 3:4, минимум 1200×1600.
-2. Прислать файл — он публикуется рядом со страницей как `img/hero.jpg`, в коде `HERO_PHOTO = 'img/hero.jpg'`.
+Слот: `HERO_VIDEO = 'media/hero.mp4'` в `index.html`. Видео встраивается с режимом наложения «screen»: чёрный фон исчезает, остаётся фигура, чакры летают за ней и перед ней.
 
-Промпт для генерации (Midjourney / ChatGPT / Krea):
+Требования к ролику:
+- **Абсолютно чёрный фон** (#000), без звёзд и пола: космос рисует сайт.
+- Вертикаль 9:16 или 4:5, 1080×1920, 6–10 с, бесшовный цикл.
+- MP4 (H.264), до 12 МБ.
 
-> Editorial photo, a calm woman in her early 30s in a long deep-red silk dress, sitting in a dark velvet armchair, wearing large over-ear headphones, eyes closed, serene face, soft violet and gold rim light, dark cosmic background with faint glowing chakra symbols, cinematic, shallow depth of field, 85mm, luxury wellness brand aesthetic, vertical 3:4
+Промпт для видео (Kling 2.x / Runway Gen-4 / Veo / Sora):
 
-Если используете фото реального человека — нужно его письменное согласие на использование.
+> A beautiful woman in her early 30s standing still on a pure black background, wearing a long flowing deep-red silk gown that ripples and billows gently in a slow wind, large over-ear headphones, eyes closed, serene face, arms relaxed, soft warm rim light from behind in gold and violet, the dress fabric catching light, cinematic, ultra-detailed, 4K, shallow depth of field, full body, centered, seamless loop, slow motion, no background elements, pure black void
+
+Сначала сделать кадр (Midjourney / ChatGPT image) с тем же описанием, потом «оживить» его в видео (image-to-video) — так лицо и платье получаются стабильнее.
+
+Если это реальный человек или похожесть на реального человека — нужно его согласие.
 
 ## Живой женский голос
 

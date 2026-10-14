@@ -55,8 +55,13 @@ em.acc { font-family: var(--f-accent); font-style: italic; font-weight: 300; col
 @media (max-width: 420px) { .nav .btn { display: none; } }
 
 /* ---------- hero */
-.hero { position: relative; min-height: 100vh; min-height: 100svh; display: flex; align-items: center; overflow: hidden; }
+.hero { position: relative; min-height: 100vh; min-height: 100svh; display: flex; align-items: center; overflow: hidden; background: #020106; }
 .hero > canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero .hero-front { z-index: 2; pointer-events: none; }
+.hero-vid { position: absolute; z-index: 1; right: 2vw; bottom: 0; height: 100%; max-width: 62%; object-fit: contain; object-position: bottom; mix-blend-mode: screen; pointer-events: none; }
+.hero .wrap { z-index: 3; }
+.stagecol { min-height: 1px; }
+@media (max-width: 900px) { .hero { align-items: end; } .hero-vid { right: auto; left: 50%; transform: translateX(-50%); top: 70px; bottom: auto; height: 58%; max-width: 100%; object-position: top; } .stagecol { display: none; } .hero .wrap { padding-top: 52vh !important; } }
 .hero .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 60px; align-items: center; padding-block: 130px 90px; width: 100%; }
 .hero h1 { font-size: clamp(2.8rem, 6.6vw, 5.6rem); line-height: 1.02; margin: 22px 0 26px; }
 .hero h1 em { font-family: var(--f-accent); font-style: italic; font-weight: 300; color: var(--gold); }
@@ -212,6 +217,8 @@ input[type=range] { width: 100%; accent-color: var(--crimson); }
 <main id="home">
   <section class="hero" id="top">
     <canvas id="heroCv"></canvas>
+    <video id="heroVid" class="hero-vid" muted loop playsinline preload="auto" hidden></video>
+    <canvas id="heroFront" class="hero-front"></canvas>
     <div class="wrap">
       <div>
         <span class="eyebrow">Пространство медитации</span>
@@ -222,11 +229,7 @@ input[type=range] { width: 100%; accent-color: var(--crimson); }
           <a class="btn line" href="#how" data-home>Как это работает</a>
         </div>
       </div>
-      <figure class="arch" id="arch" style="margin:0">
-        <canvas id="archCv"></canvas>
-        <img id="archImg" alt="Ведущая медитации в красном платье в кресле, в наушниках" hidden>
-        <figcaption class="cap"><b>Голос Аджны</b><span>ведёт вас</span></figcaption>
-      </figure>
+      <div class="stagecol" aria-hidden="true"></div>
     </div>
     <div class="scroll-hint">Листайте</div>
   </section>
@@ -500,8 +503,8 @@ window.AJNA_SCRIPT = () => {
 };
 
 // ======================= drawing =======================
-let g = null, W = 0, H = 0, CYR = 0.39, MR = 0.68;
-const cx = () => W / 2, cy = () => H * CYR, M = () => Math.min(W, H * MR);
+let g = null, W = 0, H = 0, CYR = 0.39, MR = 0.68, CXR = 0.5;
+const cx = () => W * CXR, cy = () => H * CYR, M = () => Math.min(W, H * MR);
 const stars = Array.from({ length: 180 }, () => ({ x: Math.random(), y: Math.random(), r: Math.random() * 1.2 + 0.25, ph: Math.random() * TAU, sp: 0.15 + Math.random() * 0.3 }));
 const parts = Array.from({ length: 90 }, (_, i) => ({ a: Math.random() * TAU, d: Math.random(), s: 0.5 + Math.random(), x: Math.random(), c: i % 7 }));
 const ease = x => (1 - Math.cos(Math.PI * x)) / 2;
@@ -513,13 +516,13 @@ function breathAt(key, t) {
 }
 
 function sky(t, hue) {
-  g.globalCompositeOperation = 'source-over'; g.fillStyle = '#07060c'; g.fillRect(0, 0, W, H);
+  g.globalCompositeOperation = 'source-over'; g.fillStyle = '#020106'; g.fillRect(0, 0, W, H);
   g.globalCompositeOperation = 'lighter';
   const d = reduce ? 0 : t * 0.02;
-  [[0.2 + Math.sin(d) * 0.05, 0.3, [106, 76, 255], 0.2], [0.82, 0.25 + Math.cos(d) * 0.05, [196, 32, 63], 0.13], [0.62, 0.8, [58, 134, 255], 0.1], [0.15, 0.85, [199, 125, 255], 0.08]].forEach(([x, y, c, a]) => {
+  [[0.2 + Math.sin(d) * 0.05, 0.3, [106, 76, 255], 0.09], [0.82, 0.25 + Math.cos(d) * 0.05, [196, 32, 63], 0.07], [0.62, 0.8, [58, 134, 255], 0.05], [0.15, 0.85, [199, 125, 255], 0.04]].forEach(([x, y, c, a]) => {
     const r = Math.max(W, H) * 0.6, gr = g.createRadialGradient(x * W, y * H, 0, x * W, y * H, r); gr.addColorStop(0, rgba(c, a)); gr.addColorStop(1, rgba(c, 0)); g.fillStyle = gr; g.fillRect(0, 0, W, H);
   });
-  const core = g.createRadialGradient(cx(), cy(), 0, cx(), cy(), M() * 0.75); core.addColorStop(0, rgba(hue, 0.24)); core.addColorStop(1, rgba(hue, 0)); g.fillStyle = core; g.fillRect(0, 0, W, H);
+  const core = g.createRadialGradient(cx(), cy(), 0, cx(), cy(), M() * 0.75); core.addColorStop(0, rgba(hue, 0.16)); core.addColorStop(1, rgba(hue, 0)); g.fillStyle = core; g.fillRect(0, 0, W, H);
   for (const s of stars) { const a = 0.22 + 0.35 * (0.5 + 0.5 * Math.sin(t * s.sp + s.ph)); g.fillStyle = 'rgba(240,232,255,' + a + ')'; g.fillRect(s.x * W, s.y * H, s.r, s.r); }
 }
 function vignette() {
@@ -527,7 +530,50 @@ function vignette() {
   const v = g.createRadialGradient(cx(), H * 0.45, Math.min(W, H) * 0.35, cx(), H * 0.45, Math.max(W, H) * 0.85);
   v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(4,2,10,.72)'); g.fillStyle = v; g.fillRect(0, 0, W, H);
 }
+// Traditional chakra yantras as fine line art, rasterised once at high resolution
+const GOLD = '#e7c27d';
+function petalRing(n, r1, r2, col, op, rot0) {
+  const w = n === 2 ? 34 : r1 * Math.sin(Math.PI / n) * 0.98, mid = r1 + (r2 - r1) * 0.55, out = [];
+  for (let i = 0; i < n; i++) {
+    const deg = (i / n) * 360 + (rot0 || 0);
+    out.push('<g transform="rotate(' + deg.toFixed(2) + ')"><path d="M' + r1 + ' ' + (-w) + ' Q' + mid + ' ' + (-w * 1.55) + ' ' + r2 + ' 0 Q' + mid + ' ' + (w * 1.55) + ' ' + r1 + ' ' + w + ' Z" fill="url(#pf)" stroke="' + col + '" stroke-width="' + (n > 30 ? 0.55 : 1.1) + '" stroke-opacity="' + op + '"/>' +
+      (n <= 16 ? '<path d="M' + (r1 + 3) + ' 0 L' + (r2 - 6) + ' 0" stroke="' + GOLD + '" stroke-width=".5" stroke-opacity=".55"/>' : '') + '</g>');
+  }
+  return out.join('');
+}
+const tri = (r, up) => { const p = [0, 1, 2].map(k => { const a = (up ? -90 : 90) + k * 120; return (r * Math.cos(a * Math.PI / 180)).toFixed(2) + ',' + (r * Math.sin(a * Math.PI / 180)).toFixed(2); }); return p.join(' '); };
+function yantraSVG(i) {
+  const c = CH[i].c, col = 'rgb(' + c.join(',') + ')';
+  let petals = '', inner = '', r1 = 44;
+  if (i === 6) { petals = petalRing(48, 40, 96, col, 0.8, 0) + petalRing(32, 40, 80, GOLD, 0.7, 5.6) + petalRing(20, 40, 64, col, 0.9, 9); }
+  else if (i === 5) { petals = '<g transform="rotate(0)">' + petalRing(2, 40, 98, col, 0.95, 0) + '</g>'; }
+  else petals = petalRing(CH[i].petals, r1, 94, col, 0.95, -90);
+  const ring = '<circle r="' + (i === 6 ? 38 : r1) + '" fill="#05030c" fill-opacity=".55" stroke="' + GOLD + '" stroke-width="1.2"/><circle r="' + ((i === 6 ? 38 : r1) - 4) + '" fill="none" stroke="' + col + '" stroke-width=".7" stroke-opacity=".9"/>';
+  const R = r1 - 8;
+  if (i === 0) inner = '<rect x="' + (-R * 0.7) + '" y="' + (-R * 0.7) + '" width="' + (R * 1.4) + '" height="' + (R * 1.4) + '" fill="none" stroke="#fcd34d" stroke-width="1.1"/><polygon points="' + tri(R * 0.62, false) + '" fill="' + col + '" fill-opacity=".18" stroke="' + col + '" stroke-width="1.1"/>';
+  if (i === 1) inner = '<path d="M' + (-R * 0.72) + ' -4 A' + (R * 0.72) + ' ' + (R * 0.72) + ' 0 0 0 ' + (R * 0.72) + ' -4 A' + (R * 0.78) + ' ' + (R * 0.5) + ' 0 0 1 ' + (-R * 0.72) + ' -4 Z" fill="#e8eefc" fill-opacity=".3" stroke="#e8eefc" stroke-width="1"/>';
+  if (i === 2) inner = '<polygon points="' + tri(R * 0.8, false) + '" fill="' + col + '" fill-opacity=".2" stroke="' + col + '" stroke-width="1.2"/><polygon points="' + tri(R * 0.55, false) + '" fill="none" stroke="' + GOLD + '" stroke-width=".6"/>';
+  if (i === 3) inner = '<polygon points="' + tri(R * 0.85, true) + '" fill="none" stroke="' + col + '" stroke-width="1.1"/><polygon points="' + tri(R * 0.85, false) + '" fill="none" stroke="' + col + '" stroke-width="1.1"/><circle r="' + (R * 0.28) + '" fill="none" stroke="' + GOLD + '" stroke-width=".7"/>';
+  if (i === 4) inner = '<polygon points="' + tri(R * 0.85, false) + '" fill="none" stroke="' + col + '" stroke-width="1.1"/><circle r="' + (R * 0.38) + '" fill="#e8eefc" fill-opacity=".22" stroke="#e8eefc" stroke-width=".9"/>';
+  if (i === 5) inner = '<polygon points="' + tri(R * 0.8, false) + '" fill="none" stroke="' + GOLD + '" stroke-width="1"/><path d="M' + (-R * 0.35) + ' ' + (-R * 0.55) + ' A' + (R * 0.4) + ' ' + (R * 0.4) + ' 0 0 0 ' + (R * 0.35) + ' ' + (-R * 0.55) + '" fill="none" stroke="#e8eefc" stroke-width=".9"/>';
+  if (i === 6) inner = '<circle r="22" fill="#e8eefc" fill-opacity=".14" stroke="#e8eefc" stroke-width=".8"/><polygon points="' + tri(18, false) + '" fill="none" stroke="' + GOLD + '" stroke-width=".8"/>';
+  const dots = '<circle r="' + (i === 5 ? 99 : 97) + '" fill="none" stroke="' + GOLD + '" stroke-width=".8" stroke-dasharray=".6 3.2" stroke-linecap="round" stroke-opacity=".7"/>';
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-102 -102 204 204" width="512" height="512"><defs><radialGradient id="pf" cx="0" cy="0" r="100" gradientUnits="userSpaceOnUse"><stop offset=".35" stop-color="' + col + '" stop-opacity=".55"/><stop offset="1" stop-color="' + col + '" stop-opacity=".06"/></radialGradient></defs>' +
+    dots + petals + ring + inner + '<circle r="2.6" fill="#fff6dc"/></svg>';
+}
+const YANTRA = CH.map((_, i) => { const im = new Image(), cv = document.createElement('canvas'); cv.width = cv.height = 512; const y = { cv, ready: false };
+  im.onload = () => { cv.getContext('2d').drawImage(im, 0, 0, 512, 512); y.ready = true; surfaces.forEach(s => s.dirty = true); };
+  im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(yantraSVG(i)); return y; });
+const PET2I = { 4: 0, 6: 1, 10: 2, 12: 3, 16: 4, 2: 5, 1000: 6 };
 function lotus(x, y, r, c, petals, glow, rot) {
+  const yi = YANTRA[PET2I[petals]];
+  if (yi && yi.ready) {
+    g.globalCompositeOperation = 'lighter';
+    const hr = r * (1.6 + glow * 1.4), h = g.createRadialGradient(x, y, 0, x, y, hr); h.addColorStop(0, rgba(c, 0.18 + glow * 0.3)); h.addColorStop(1, rgba(c, 0));
+    g.fillStyle = h; g.beginPath(); g.arc(x, y, hr, 0, TAU); g.fill();
+    const sz = r * 3.8; g.save(); g.translate(x, y); g.rotate(rot || 0); g.globalAlpha = 0.6 + 0.4 * glow; g.drawImage(yi.cv, -sz / 2, -sz / 2, sz, sz); g.restore(); g.globalAlpha = 1;
+    return;
+  }
   g.globalCompositeOperation = 'lighter';
   const hr = r * (2.4 + glow * 1.6), h = g.createRadialGradient(x, y, 0, x, y, hr); h.addColorStop(0, rgba(c, 0.32 + glow * 0.4)); h.addColorStop(1, rgba(c, 0));
   g.fillStyle = h; g.beginPath(); g.arc(x, y, hr, 0, TAU); g.fill();
@@ -608,7 +654,7 @@ function drawEye(t, st) {
   g.strokeStyle = 'rgba(231,194,125,.85)'; g.lineWidth = 1.6; eyePath(); g.stroke();
   g.globalCompositeOperation = 'lighter';
   const bd = g.createRadialGradient(x, y, 0, x, y, Rr * 0.12); bd.addColorStop(0, 'rgba(255,240,200,1)'); bd.addColorStop(1, 'rgba(242,207,134,0)'); g.fillStyle = bd; g.beginPath(); g.arc(x, y, Rr * 0.12, 0, TAU); g.fill();
-  CH.forEach((c, i) => { const a = i / 7 * TAU - Math.PI / 2 + spin * 0.4; lotus(x + Math.cos(a) * Rr * 2.05, y + Math.sin(a) * Rr * 2.05, m * 0.014, c.c, Math.min(c.petals, 16), 0.3, 0); });
+  CH.forEach((c, i) => { const a = i / 7 * TAU - Math.PI / 2 + spin * 0.4; lotus(x + Math.cos(a) * Rr * 2.05, y + Math.sin(a) * Rr * 2.05, m * 0.014, c.c, c.petals, 0.3, 0); });
 }
 function drawSphere(st, t, hueIdx) {
   const m = M(), x = cx(), y = cy(), b = st ? st.b : 0.5 + 0.5 * Math.sin(t * 0.55), r0 = m * 0.085, r1 = m * 0.22, r = r0 + (r1 - r0) * b;
@@ -726,7 +772,28 @@ function drawNetwork(t) { // floating chakra glyphs linked like a constellation 
   g.globalCompositeOperation = 'lighter'; const lim = Math.max(W, H) * 0.28;
   for (let i = 0; i < P.length; i++) for (let j = i + 1; j < P.length; j++) { const d = Math.hypot(P[i].x - P[j].x, P[i].y - P[j].y); if (d > lim) continue;
     g.strokeStyle = 'rgba(220,205,255,' + 0.18 * (1 - d / lim) + ')'; g.lineWidth = 1; g.beginPath(); g.moveTo(P[i].x, P[i].y); g.lineTo(P[j].x, P[j].y); g.stroke(); }
-  P.forEach((p, i) => lotus(p.x, p.y, Math.min(W, H) * 0.018 * p.r, CH[p.c].c, Math.min(CH[p.c].petals, 16), 0.25, reduce ? 0 : t * 0.04 * (i % 2 ? 1 : -1)));
+  P.forEach((p, i) => lotus(p.x, p.y, Math.min(W, H) * 0.018 * p.r, CH[p.c].c, CH[p.c].petals, 0.25, reduce ? 0 : t * 0.04 * (i % 2 ? 1 : -1)));
+}
+function heroGeo() { const wide = W > 900; return wide ? { x: W * 0.7, y: H * 0.52, R: Math.min(W * 0.2, H * 0.32) } : { x: W / 2, y: H * 0.3, R: Math.min(W * 0.4, H * 0.21) }; }
+function heroOrbit(t, front) {
+  const G = heroGeo(), sp = reduce ? 0 : t * 0.09;
+  const items = CH.map((c, i) => { const a = sp + i * TAU / 7, depth = Math.sin(a); return { c, i, a, depth, x: G.x + Math.cos(a) * G.R * 1.3, y: G.y + depth * G.R * 0.38 - G.R * 0.1 }; });
+  items.filter(o => front ? o.depth >= 0 : o.depth < 0).sort((a, b) => a.depth - b.depth).forEach(o => {
+    const k = (o.depth + 1) / 2, r = G.R * (0.075 + 0.07 * k);
+    lotus(o.x, o.y, r, o.c.c, o.c.petals, 0.25 + 0.6 * k, reduce ? 0 : t * 0.05 * (o.i % 2 ? 1 : -1));
+  });
+}
+function drawHero(t) {
+  const G = heroGeo(), spin = reduce ? 0 : t * 0.025;
+  g.globalCompositeOperation = 'lighter';
+  const halo = g.createRadialGradient(G.x, G.y, 0, G.x, G.y, G.R * 1.6); halo.addColorStop(0, 'rgba(196,32,63,.16)'); halo.addColorStop(0.5, 'rgba(106,76,255,.08)'); halo.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = halo; g.beginPath(); g.arc(G.x, G.y, G.R * 1.6, 0, TAU); g.fill();
+  [1.12, 1.3, 1.55].forEach((k, i) => { g.strokeStyle = 'rgba(231,194,125,' + (0.16 - i * 0.04) + ')'; g.lineWidth = 1; g.setLineDash(i === 1 ? [1, 6] : []); g.beginPath(); g.arc(G.x, G.y, G.R * k, 0, TAU); g.stroke(); });
+  g.setLineDash([]);
+  lotus(G.x, G.y, G.R * 0.5, CH[6].c, 1000, 0.12, spin);
+  lotus(G.x, G.y - G.R * 0.02, G.R * 0.15, CH[5].c, 2, 0.6, 0);
+  heroOrbit(t, false);
+  if (W <= 900) { const fade = g.createLinearGradient(0, H * 0.45, 0, H); fade.addColorStop(0, 'rgba(2,1,6,0)'); fade.addColorStop(1, 'rgba(2,1,6,.92)'); g.globalCompositeOperation = 'source-over'; g.fillStyle = fade; g.fillRect(0, H * 0.45, W, H * 0.55); }
 }
 function drawDark(t, since) {
   g.globalCompositeOperation = 'source-over'; g.fillStyle = 'rgba(3,2,8,' + Math.min(0.94, since / 5) + ')'; g.fillRect(0, 0, W, H);
@@ -735,6 +802,7 @@ function drawDark(t, since) {
 }
 function scene(visual, t, o) {
   o = o || {};
+  if (visual === 'heroFront') { g.globalCompositeOperation = 'source-over'; g.clearRect(0, 0, W, H); heroOrbit(t, true); return; }
   const hue = CH[o.ci != null ? o.ci : 5].c;
   sky(t, hue);
   const st = o.st || null;
@@ -751,6 +819,7 @@ function scene(visual, t, o) {
     case 'purpose': drawPurpose(t, st); break;
     case 'silence': drawSilence(t, st); break;
     case 'network': drawNetwork(t); break;
+    case 'hero': drawHero(t); break;
     case 'dark': drawDark(t, o.since || 0); break;
     default: drawSphere(st, t, o.ci);
   }
@@ -767,7 +836,7 @@ function surface(canvas, opts) {
 }
 function paint(s, t) {
   if (!s.w || !s.h) return;
-  g = s.ctx; W = s.w; H = s.h; CYR = s.cyr; MR = s.mr;
+  g = s.ctx; W = s.w; H = s.h; CYR = s.cyr; MR = s.mr; CXR = s.cxr && s.w > 900 ? s.cxr : 0.5;
   const v = typeof s.visual === 'function' ? s.visual() : s.visual;
   scene(v.visual, t, v);
 }
@@ -783,14 +852,14 @@ ROOMS.forEach((r, i) => {
   const main = r.main[0];
   surface(a.querySelector('canvas'), { cyr: 0.5, mr: 1.15, visual: { visual: main.visual === 'silence' && r.id === 'purpose' ? 'purpose' : main.visual, ci: r.ci, active: r.id === 'chakras' ? 5 : undefined } });
 });
-surface($('heroCv'), { cyr: 0.5, mr: 0.9, visual: { visual: 'network', ci: 5 } });
-surface($('archCv'), { cyr: 0.42, mr: 0.95, visual: { visual: 'eye', ci: 5 } });
+surface($('heroCv'), { cyr: 0.5, mr: 0.9, visual: { visual: 'hero', ci: 6 } });
+surface($('heroFront'), { cyr: 0.5, mr: 0.9, visual: { visual: 'heroFront' } });
 let curRoom = ROOMS[0];
-const roomSurf = surface($('roomCv'), { cyr: 0.36, mr: 0.75, visual: () => ({ visual: curRoom.main[0].visual === 'silence' && curRoom.id === 'purpose' ? 'purpose' : curRoom.main[0].visual, ci: curRoom.ci, active: curRoom.id === 'chakras' ? 5 : undefined }) });
+const roomSurf = surface($('roomCv'), { cyr: 0.46, mr: 0.66, cxr: 0.7, visual: () => ({ visual: curRoom.main[0].visual === 'silence' && curRoom.id === 'purpose' ? 'purpose' : curRoom.main[0].visual, ci: curRoom.ci, active: curRoom.id === 'chakras' ? 5 : undefined }) });
 
-// portrait slot: a photo replaces the live eye in the arch
-const HERO_PHOTO = '';   // set to e.g. 'img/hero.jpg' once the portrait is published with the page
-if (HERO_PHOTO) { const im = $('archImg'); im.onload = () => { im.hidden = false; $('archCv').hidden = true; }; im.src = HERO_PHOTO; }
+// hero video slot: the woman in red stands between the back and front chakra layers
+const HERO_VIDEO = '';   // e.g. 'media/hero.mp4': a looping clip on pure black; screen blending drops the black into the cosmos
+if (HERO_VIDEO) { const v = $('heroVid'); v.src = HERO_VIDEO; v.hidden = false; v.play().catch(() => {}); }
 
 function showRoom(id) {
   const r = ROOMS.find(x => x.id === id); if (!r) return showHome();
