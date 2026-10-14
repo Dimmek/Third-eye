@@ -1,0 +1,996 @@
+<title>Аджна</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant+Garamond:ital,wght@1,300;1,400&family=Manrope:wght@300;400;500;600&display=swap">
+<style>
+/* Layout: editorial luxury site. Full-bleed cosmic hero with an arched portrait frame, then a rhythm of wide sections; each meditation is its own "cabinet" page with a live visual and a full-screen player. Single dark world by design. */
+:root {
+  --night: #07060c;
+  --ink: #0e0c17;
+  --ink-2: #15121f;
+  --line: rgba(243,237,228,.09);
+  --ivory: #f3ede4;
+  --mute: #9d97ab;
+  --crimson: #c4203f;   /* the red dress: primary action */
+  --gold: #e7c27d;
+  --c1: #e5383b; --c2: #f77f00; --c3: #fcbf49; --c4: #2ec27e; --c5: #3a86ff; --c6: #6a4cff; --c7: #c77dff;
+  --f-display: "Prata", "Iowan Old Style", Georgia, serif;
+  --f-accent: "Cormorant Garamond", Georgia, serif;
+  --f-body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --gut: max(20px, env(safe-area-inset-left, 0px));
+  --gut-r: max(20px, env(safe-area-inset-right, 0px));
+  color-scheme: dark;
+}
+[hidden] { display: none !important; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--night); color: var(--mute); font-family: var(--f-body); font-size: 16px; line-height: 1.65; margin: 0; font-weight: 400; -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: var(--gut); padding-right: var(--gut-r); }
+.eyebrow { font-size: .7rem; letter-spacing: .32em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 400; color: var(--ivory); margin: 0; text-wrap: balance; letter-spacing: -.005em; }
+h2 { font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.12; }
+.lead { font-size: 1.12rem; color: #c8c1d3; max-width: 56ch; font-weight: 300; }
+em.acc { font-family: var(--f-accent); font-style: italic; font-weight: 300; color: var(--gold); font-size: 1.12em; }
+.btn { display: inline-flex; align-items: center; gap: 12px; padding: 16px 28px; border-radius: 999px; font-weight: 500; font-size: .95rem; letter-spacing: .02em; transition: transform .3s, box-shadow .3s, background .3s, border-color .3s; }
+.btn.red { background: var(--crimson); color: #fff; box-shadow: 0 10px 40px rgba(196,32,63,.35); }
+.btn.red:hover { transform: translateY(-2px); box-shadow: 0 14px 50px rgba(196,32,63,.5); }
+.btn.line { border: 1px solid rgba(243,237,228,.25); color: var(--ivory); }
+.btn.line:hover { border-color: var(--gold); }
+.btn svg { width: 16px; height: 16px; }
+
+/* ---------- nav */
+.nav { position: fixed; z-index: 20; top: 0; left: 0; right: 0; padding-top: env(safe-area-inset-top, 0px); transition: background .4s, border-color .4s; border-bottom: 1px solid transparent; }
+.nav.solid { background: rgba(7,6,12,.82); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-color: var(--line); }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: 76px; }
+.logo { display: flex; align-items: center; gap: 12px; color: var(--ivory); font-family: var(--f-display); font-size: 1.3rem; letter-spacing: .38em; }
+.logo svg { width: 30px; height: 30px; }
+.links { display: flex; gap: 34px; font-size: .88rem; color: #cfc8da; }
+.links a:hover { color: var(--ivory); }
+.nav .btn { padding: 11px 20px; font-size: .85rem; }
+@media (max-width: 900px) { .links { display: none; } }
+@media (max-width: 420px) { .nav .btn { display: none; } }
+
+/* ---------- hero */
+.hero { position: relative; min-height: 100vh; min-height: 100svh; display: flex; align-items: center; overflow: hidden; }
+.hero > canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 60px; align-items: center; padding-block: 130px 90px; width: 100%; }
+.hero h1 { font-size: clamp(2.8rem, 6.6vw, 5.6rem); line-height: 1.02; margin: 22px 0 26px; }
+.hero h1 em { font-family: var(--f-accent); font-style: italic; font-weight: 300; color: var(--gold); }
+.hero .cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
+.arch { position: relative; aspect-ratio: 3 / 4; max-width: 100%; width: min(460px, 100%); justify-self: end; border-radius: 999px 999px 26px 26px; overflow: hidden; border: 1px solid rgba(231,194,125,.35); background: var(--ink); box-shadow: 0 40px 120px rgba(106,76,255,.25), inset 0 0 0 8px rgba(7,6,12,.6); }
+.arch canvas, .arch img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.arch .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px; background: linear-gradient(to top, rgba(7,6,12,.9), transparent); display: flex; justify-content: space-between; align-items: end; gap: 10px; }
+.arch .cap b { font-family: var(--f-accent); font-style: italic; font-weight: 300; font-size: 1.4rem; color: var(--ivory); }
+.arch .cap span { font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+@media (max-width: 900px) { .hero .wrap { grid-template-columns: minmax(0, 1fr); gap: 40px; padding-block: 110px 60px; } .arch { justify-self: center; width: min(360px, 100%); } }
+.scroll-hint { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); font-size: .68rem; letter-spacing: .3em; text-transform: uppercase; color: var(--mute); }
+
+/* ---------- facts */
+.facts { border-block: 1px solid var(--line); background: var(--ink); }
+.facts .wrap { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.fact { padding: 34px 24px; border-left: 1px solid var(--line); display: grid; gap: 4px; }
+.fact:first-child { border-left: 0; padding-left: 0; }
+.fact b { font-family: var(--f-display); font-weight: 400; font-size: 2.2rem; color: var(--ivory); line-height: 1.1; font-variant-numeric: lining-nums; }
+.fact span { font-size: .88rem; }
+@media (max-width: 800px) { .facts .wrap { grid-template-columns: 1fr 1fr; } .fact { border-left: 0; padding-left: 0; border-top: 1px solid var(--line); } .fact:nth-child(-n+2) { border-top: 0; } }
+
+section.block { padding-block: 120px; }
+.head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: end; margin-bottom: 60px; }
+.head .eyebrow { display: block; margin-bottom: 18px; }
+@media (max-width: 800px) { .head { grid-template-columns: 1fr; gap: 18px; } section.block { padding-block: 80px; } }
+
+/* ---------- rooms grid */
+.rooms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+@media (max-width: 1000px) { .rooms { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 620px) { .rooms { grid-template-columns: minmax(0, 1fr); } }
+.room { position: relative; display: grid; grid-template-rows: auto 1fr; border-radius: 22px; overflow: hidden; background: var(--ink); border: 1px solid var(--line); transition: transform .5s cubic-bezier(.2,.7,.2,1), border-color .4s, box-shadow .5s; min-width: 0; }
+.room:hover { transform: translateY(-6px); border-color: color-mix(in srgb, var(--rc) 60%, transparent); box-shadow: 0 30px 80px color-mix(in srgb, var(--rc) 22%, transparent); }
+.room .art { position: relative; aspect-ratio: 16 / 11; max-width: 100%; }
+.room .art canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.room .num { position: absolute; top: 16px; left: 18px; font-family: var(--f-display); color: var(--ivory); font-size: .9rem; letter-spacing: .1em; opacity: .85; }
+.room .tag { position: absolute; top: 14px; right: 14px; font-size: .66rem; letter-spacing: .14em; text-transform: uppercase; padding: 6px 10px; border-radius: 999px; background: rgba(7,6,12,.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: var(--ivory); border: 1px solid var(--line); }
+.tag.t-a::before, .tag.t-b::before, .tag.t-c::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 7px; vertical-align: 1px; }
+.tag.t-a::before { background: #3ddc97; } .tag.t-b::before { background: #fcbf49; } .tag.t-c::before { background: #c77dff; }
+.room .body { padding: 24px 24px 26px; display: grid; gap: 10px; align-content: start; }
+.room h3 { font-size: 1.6rem; }
+.room p { margin: 0; font-size: .93rem; }
+.room .meta { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: .8rem; color: var(--ivory); }
+.room .meta span:last-child { color: var(--rc); filter: brightness(1.3); letter-spacing: .08em; }
+
+/* ---------- process */
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); }
+.step { padding: 34px 28px 0 0; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.step .n { font-family: var(--f-display); font-size: 3.2rem; line-height: 1; background: linear-gradient(135deg, var(--gold), #fff3d6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.step h3 { font-size: 1.35rem; }
+.step p { margin: 0; font-size: .93rem; }
+@media (max-width: 900px) { .steps { grid-template-columns: 1fr 1fr; row-gap: 30px; } }
+@media (max-width: 520px) { .steps { grid-template-columns: 1fr; } }
+
+/* ---------- mission */
+.mission { position: relative; overflow: hidden; background: radial-gradient(80% 120% at 80% 50%, rgba(196,32,63,.22), transparent 60%), radial-gradient(70% 100% at 10% 20%, rgba(106,76,255,.2), transparent 60%), var(--ink); border-block: 1px solid var(--line); }
+.mission .wrap { padding-block: 130px; display: grid; gap: 34px; }
+.mission blockquote { margin: 0; font-family: var(--f-display); color: var(--ivory); font-size: clamp(1.8rem, 3.6vw, 3rem); line-height: 1.25; max-width: 24ch; text-wrap: balance; }
+.mission blockquote em { font-family: var(--f-accent); font-style: italic; font-weight: 300; color: var(--gold); }
+.mission p { max-width: 60ch; margin: 0; font-size: 1.05rem; color: #c8c1d3; }
+
+/* ---------- honesty */
+.cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+@media (max-width: 900px) { .cols { grid-template-columns: minmax(0, 1fr); } }
+.col { padding: 32px; border-radius: 22px; border: 1px solid var(--line); background: var(--ink); display: grid; gap: 14px; align-content: start; min-width: 0; }
+.col h3 { font-size: 1.4rem; display: flex; align-items: center; gap: 12px; }
+.col h3 i { width: 10px; height: 10px; border-radius: 50%; }
+.col ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; font-size: .93rem; }
+.col li b { color: var(--ivory); font-weight: 500; }
+
+.safety { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 60px; }
+.safety ul { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 18px 30px; }
+.safety li { padding-left: 18px; border-left: 1px solid rgba(196,32,63,.6); font-size: .93rem; }
+@media (max-width: 800px) { .safety { grid-template-columns: 1fr; gap: 30px; } .safety ul { grid-template-columns: 1fr; } }
+
+.cta-band { text-align: center; padding-block: 120px; display: grid; justify-items: center; gap: 26px; }
+footer { border-top: 1px solid var(--line); }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; padding-block: 36px; font-size: .82rem; }
+
+/* ---------- room page */
+.rhero { position: relative; min-height: 88vh; display: flex; align-items: end; overflow: hidden; }
+.rhero > canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.rhero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, var(--night) 4%, rgba(7,6,12,.55) 40%, rgba(7,6,12,0) 70%); pointer-events: none; }
+.rhero .wrap { position: relative; z-index: 1; padding-block: 140px 70px; width: 100%; display: grid; gap: 20px; }
+.back { display: inline-flex; gap: 10px; align-items: center; font-size: .85rem; color: #cfc8da; }
+.back:hover { color: var(--ivory); }
+.rhero h1 { font-size: clamp(3rem, 8vw, 6.4rem); line-height: 1; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { border: 1px solid rgba(243,237,228,.2); border-radius: 999px; padding: 8px 14px; font-size: .8rem; color: var(--ivory); background: rgba(7,6,12,.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.rgrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 70px; padding-block: 90px; }
+@media (max-width: 900px) { .rgrid { grid-template-columns: minmax(0, 1fr); gap: 50px; padding-block: 60px; } }
+.timeline { list-style: none; margin: 0; padding: 0; display: grid; }
+.timeline li { display: grid; grid-template-columns: 26px 1fr auto; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line); align-items: start; }
+.timeline li i { width: 10px; height: 10px; border-radius: 50%; margin-top: 8px; box-shadow: 0 0 12px currentColor; background: currentColor; }
+.timeline b { color: var(--ivory); font-weight: 500; display: block; }
+.timeline span.d { font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--ivory); }
+.timeline small { font-size: .88rem; }
+.note-box { margin-top: 28px; padding: 22px 24px; border-radius: 18px; border: 1px solid var(--line); background: var(--ink); font-size: .92rem; }
+.note-box b { color: var(--ivory); font-weight: 500; }
+.nextnav { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; padding-bottom: 100px; }
+.nextnav a { padding: 28px; border-radius: 20px; border: 1px solid var(--line); background: var(--ink); display: grid; gap: 6px; transition: border-color .3s; min-width: 0; }
+.nextnav a:hover { border-color: var(--gold); }
+.nextnav a:last-child { text-align: right; }
+.nextnav b { font-family: var(--f-display); font-weight: 400; font-size: 1.4rem; color: var(--ivory); }
+
+/* ---------- player */
+.player { position: fixed; inset: 0; z-index: 40; background: var(--night); }
+.player canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.pui { position: absolute; inset: 0; display: grid; grid-template-rows: auto 1fr auto; transition: opacity 1.4s; padding-left: var(--gut); padding-right: var(--gut-r); padding-top: calc(16px + env(safe-area-inset-top, 0px)); padding-bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
+.player.calm .pui { opacity: .1; }
+.ptop { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.ptop .ttl { display: flex; align-items: center; gap: 12px; color: var(--ivory); font-size: .85rem; letter-spacing: .14em; text-transform: uppercase; }
+.icon { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(243,237,228,.18); display: grid; place-items: center; color: var(--ivory); background: rgba(7,6,12,.35); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: border-color .3s; }
+.icon:hover { border-color: var(--gold); }
+.icon svg { width: 18px; height: 18px; }
+.tools { display: flex; gap: 10px; }
+.pbottom { display: grid; justify-items: center; gap: 12px; text-align: center; }
+.pphase { font-family: var(--f-accent); font-style: italic; font-weight: 300; font-size: clamp(2rem, 4.4vw, 3rem); color: var(--ivory); line-height: 1.1; margin: 0; text-shadow: 0 0 30px rgba(0,0,0,.6); }
+.pinstr { max-width: 48ch; color: #ddd5e8; font-size: 1rem; min-height: 3.2em; margin: 0; text-shadow: 0 1px 14px rgba(7,6,12,.95); }
+.track { width: min(460px, 82vw); height: 2px; background: rgba(243,237,228,.12); position: relative; border-radius: 2px; overflow: hidden; }
+.track i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: linear-gradient(90deg, var(--c1), var(--c2), var(--c3), var(--c4), var(--c5), var(--c6), var(--c7)); }
+.pctl { display: flex; align-items: center; gap: 22px; }
+.play { width: 78px; height: 78px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: radial-gradient(circle at 35% 30%, #ff6f86, var(--crimson) 55%, #7a0f25); box-shadow: 0 0 0 1px rgba(255,180,190,.5), 0 0 50px rgba(196,32,63,.55); transition: transform .3s; }
+.play:hover { transform: scale(1.05); }
+.play svg { width: 24px; height: 24px; }
+.ptime { font-size: .8rem; letter-spacing: .12em; font-variant-numeric: tabular-nums; min-width: 3.4em; color: var(--ivory); }
+
+.drawer { position: fixed; z-index: 50; top: 0; right: 0; bottom: 0; width: min(400px, 100%); background: rgba(14,12,23,.86); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-left: 1px solid var(--line);
+  transform: translateX(102%); transition: transform .6s cubic-bezier(.2,.7,.2,1); overflow-y: auto; padding: calc(24px + env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px)) 30px 24px; display: grid; gap: 28px; align-content: start; }
+.drawer.open { transform: none; }
+.dhead { display: flex; justify-content: space-between; align-items: center; }
+.dhead h2 { font-size: 1.7rem; }
+.sect { display: grid; gap: 10px; }
+.sect .eyebrow { font-size: .64rem; }
+select { font: inherit; font-size: .9rem; width: 100%; background: var(--night); color: var(--ivory); border: 1px solid var(--line); border-radius: 12px; padding: 11px 12px; }
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: .92rem; color: #d6cfe0; cursor: pointer; }
+.check input { accent-color: var(--crimson); margin-top: 6px; }
+input[type=range] { width: 100%; accent-color: var(--crimson); }
+.row { display: flex; justify-content: space-between; font-size: .8rem; font-variant-numeric: tabular-nums; }
+.small { font-size: .82rem; margin: 0; }
+.ghost { border: 1px solid rgba(243,237,228,.22); border-radius: 999px; padding: 10px 18px; font-size: .88rem; color: var(--ivory); justify-self: start; }
+.ghost:hover { border-color: var(--gold); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .room, .btn, .drawer, .pui, .play { transition: none; } }
+</style>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="logo" href="#top" data-home><svg viewBox="0 0 40 40" fill="none"><path d="M3 20c5-8 11-12 17-12s12 4 17 12c-5 8-11 12-17 12S8 28 3 20Z" stroke="#e7c27d" stroke-width="1.2"/><circle cx="20" cy="20" r="6.5" fill="url(#lg)"/><circle cx="20" cy="20" r="1.6" fill="#fff4d6"/><defs><radialGradient id="lg"><stop offset="0" stop-color="#c77dff"/><stop offset="1" stop-color="#3a1d9e"/></radialGradient></defs></svg>АДЖНА</a>
+    <nav class="links" aria-label="Разделы"><a href="#rooms" data-home>Кабинеты</a><a href="#how" data-home>Как проходит сессия</a><a href="#science" data-home>Наука</a><a href="#safety" data-home>Безопасность</a></nav>
+    <a class="btn red" href="#room-cleanse">Начать практику</a>
+  </div>
+</header>
+
+<main id="home">
+  <section class="hero" id="top">
+    <canvas id="heroCv"></canvas>
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Пространство медитации</span>
+        <h1>Здесь шум <em>стихает</em></h1>
+        <p class="lead">Мы создали Аджну, чтобы после долгого дня у вас было место, где можно выдохнуть, почувствовать себя целым и не одиноким. Пятнадцать минут — и вы снова слышите себя.</p>
+        <div class="cta">
+          <a class="btn red" href="#rooms" data-home>Выбрать кабинет <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+          <a class="btn line" href="#how" data-home>Как это работает</a>
+        </div>
+      </div>
+      <figure class="arch" id="arch" style="margin:0">
+        <canvas id="archCv"></canvas>
+        <img id="archImg" alt="Ведущая медитации в красном платье в кресле, в наушниках" hidden>
+        <figcaption class="cap"><b>Голос Аджны</b><span>ведёт вас</span></figcaption>
+      </figure>
+    </div>
+    <div class="scroll-hint">Листайте</div>
+  </section>
+
+  <div class="facts"><div class="wrap">
+    <div class="fact"><b>9</b><span>кабинетов под разные задачи</span></div>
+    <div class="fact"><b>11–14</b><span>минут одна сессия</span></div>
+    <div class="fact"><b>2 м</b><span>золотой кокон в начале каждой практики</span></div>
+    <div class="fact"><b>5,5</b><span>вдохов в минуту — резонансное дыхание</span></div>
+  </div></div>
+
+  <section class="block" id="rooms">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="eyebrow">Кабинеты</span><h2>Одна практика — <em class="acc">одна задача</em></h2></div>
+        <p class="lead">Пришли с работы — включите тишину ума. Хотите силы — жизненную энергию. Начните с очищения, дальше по самочувствию.</p>
+      </div>
+      <div class="rooms" id="roomGrid"></div>
+    </div>
+  </section>
+
+  <section class="block" id="how" style="padding-top:20px">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="eyebrow">Как проходит сессия</span><h2>Четыре шага, <em class="acc">всегда в этом порядке</em></h2></div>
+        <p class="lead">Сначала защита и опора, потом дыхание. Только после этого — сама практика. Так ум успевает успокоиться.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><span class="n">01</span><h3>Кокон</h3><p>Золотой кокон на два метра вокруг вас. На выдохе вы посылаете в него свет из сердца, и он становится плотным.</p></div>
+        <div class="step"><span class="n">02</span><h3>Дыхание</h3><p>Две минуты в резонансном темпе, 5,5 вдохов в минуту. Сердце и дыхание входят в общий ритм.</p></div>
+        <div class="step"><span class="n">03</span><h3>Практика</h3><p>Визуализация кабинета: очищение, энергия, здоровье, изобилие, предназначение. Голос ведёт, музыка поддерживает.</p></div>
+        <div class="step"><span class="n">04</span><h3>Возвращение</h3><p>Мягкий выход: опора, движение, открытые глаза. Кокон остаётся с вами.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mission">
+    <div class="wrap">
+      <span class="eyebrow">Зачем мы это сделали</span>
+      <blockquote>Мы живём в постоянном шуме. Аджна — это пятнадцать минут, когда <em>никто ничего от вас не хочет.</em></blockquote>
+      <p>Новости, чаты, чужие ожидания. Внимание раздёргано, и своё желание уже не отличить от навязанного. Здесь его можно услышать снова: в тишине, в безопасности, в своём темпе.</p>
+    </div>
+  </section>
+
+  <section class="block" id="science">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="eyebrow">Наука и честность</span><h2>Что подтверждено, <em class="acc">а что нет</em></h2></div>
+        <p class="lead">У каждого кабинета есть метка. Мы не обещаем чудес — мы показываем, на что опирается практика.</p>
+      </div>
+      <div class="cols">
+        <div class="col"><h3><i style="background:#3ddc97"></i>Подтверждено</h3><ul>
+          <li><b>Резонансное дыхание</b> снижает стресс и тревогу: мета-анализ 24 исследований, эффект сильный.</li>
+          <li><b>Йога-нидра и бодискан</b>: 73 исследования, стресс, тревога и сон.</li>
+          <li><b>Бинауральные ритмы</b>: средний эффект на внимание и тревогу.</li></ul></div>
+        <div class="col"><h3><i style="background:#fcbf49"></i>Работает через вас</h3><ul>
+          <li><b>Изобилие и удача</b>: благодарность и намерение меняют внимание и поступки. Деньги приходят через действия.</li>
+          <li><b>Предназначение</b>: упражнение «лучшее возможное я» проверено в исследованиях позитивной психологии.</li></ul></div>
+        <div class="col"><h3><i style="background:#c77dff"></i>Традиция</h3><ul>
+          <li><b>Чакры, кокон, третий глаз</b> — образы из йоги и тантры. Их действие на тонком плане наукой не измерено.</li>
+          <li>Подтверждено другое: такие образы углубляют расслабление и дают чувство защищённости.</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="safety" style="padding-top:20px">
+    <div class="wrap safety">
+      <div><span class="eyebrow">Безопасность</span><h2 style="margin-top:18px">Бережно <em class="acc">к себе</em></h2></div>
+      <ul>
+        <li>Не практикуйте при эпилепсии, психозах, после травм головы без согласования с врачом.</li>
+        <li>Не слушайте за рулём и во время работы, которая требует внимания.</li>
+        <li>Громкость — на грани слышимости. Гудит в ушах — убавьте или выключите ритм.</li>
+        <li>Кружится голова — дышите свободно. Тревожно — откройте глаза, пройдитесь.</li>
+        <li>Практика не заменяет лечение. Если что-то болит — к врачу.</li>
+        <li>После сессии посидите минуту, прежде чем вставать.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="mission"><div class="wrap cta-band">
+    <span class="eyebrow">Первый шаг</span>
+    <h2>Начните с <em class="acc">очищения</em></h2>
+    <p class="lead" style="margin:0 auto">Двенадцать минут. Наушники, тишина, удобное кресло.</p>
+    <a class="btn red" href="#room-cleanse">Войти в кабинет</a>
+  </div></section>
+</main>
+
+<main id="roomPage" hidden>
+  <section class="rhero">
+    <canvas id="roomCv"></canvas>
+    <div class="wrap">
+      <a class="back" href="#rooms" data-home><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 8H3M7 4 3 8l4 4"/></svg>Все кабинеты</a>
+      <span class="eyebrow" id="rNum"></span>
+      <h1 id="rName"></h1>
+      <p class="lead" id="rTag"></p>
+      <div class="chips" id="rChips"></div>
+      <div><button class="btn red" id="rStart" type="button">Начать сессию <svg viewBox="0 0 16 16" fill="currentColor"><path d="M5 3v10l8-5z"/></svg></button></div>
+    </div>
+  </section>
+  <div class="wrap rgrid">
+    <div><span class="eyebrow">Для чего</span><h2 style="margin:18px 0 22px" id="rWhyT"></h2><p class="lead" id="rWhy"></p><div class="note-box" id="rNote"></div></div>
+    <div><span class="eyebrow">Что вас ждёт</span><ol class="timeline" id="rSteps" style="margin-top:18px"></ol></div>
+  </div>
+  <div class="wrap nextnav" id="rNav"></div>
+</main>
+
+<footer><div class="wrap"><span>© Аджна · пространство медитации</span><span>Наушники обязательны · практика не заменяет лечение</span></div></footer>
+
+<div class="player" id="player" hidden>
+  <canvas id="pCv"></canvas>
+  <div class="pui">
+    <div class="ptop">
+      <button class="icon" id="pClose" type="button" aria-label="Выйти из сессии"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <div class="ttl" id="pTtl"></div>
+      <div class="tools">
+        <button class="icon" id="pFs" type="button" aria-label="Во весь экран"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+        <button class="icon" id="pSet" type="button" aria-label="Звук и голос"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
+      </div>
+    </div>
+    <div></div>
+    <div class="pbottom">
+      <div class="eyebrow" id="pEye"></div>
+      <h2 class="pphase" id="pPhase"></h2>
+      <p class="pinstr" id="pInstr"></p>
+      <div class="track"><i id="pProg"></i></div>
+      <div class="pctl">
+        <button class="icon" id="pStop" type="button" aria-label="Сначала"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12a8 8 0 1 0 2.3-5.7M4 4v3h3"/></svg></button>
+        <button class="play" id="pPlay" type="button" aria-label="Начать"><svg id="pIco" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></button>
+        <span class="ptime" id="pTime"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<aside class="drawer" id="drawer" aria-label="Звук и голос">
+  <div class="dhead"><h2>Звук и голос</h2><button class="icon" id="dClose" type="button" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="sect"><span class="eyebrow">Женский голос</span>
+    <select id="voiceSel" aria-label="Голос"></select>
+    <button class="ghost" id="testVoice" type="button">Послушать</button>
+    <label class="check"><input type="checkbox" id="vInstr" checked> Голос ведёт по сессии</label>
+    <label class="check"><input type="checkbox" id="vBreath"> Подсказывать «вдох» и «выдох»</label>
+    <p class="small" id="voiceNote"></p></div>
+  <div class="sect"><span class="eyebrow">Звук</span>
+    <input type="range" id="vol" min="0" max="100" value="30" aria-label="Громкость">
+    <div class="row"><span>Громкость</span><span id="volV">30%</span></div>
+    <label class="check"><input type="checkbox" id="music" checked> Тихая музыка</label>
+    <label class="check"><input type="checkbox" id="beat" checked> Бинауральный ритм</label>
+    <label class="check"><input type="checkbox" id="noise"> Мягкий шум</label>
+    <p class="small">Бинауральный ритм слышен только в стереонаушниках.</p></div>
+</aside>
+
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const TAU = Math.PI * 2;
+const rgba = (c, a) => 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')';
+
+// ======================= content =======================
+const CH = [
+  { n: 'Муладхара',    where: 'основание позвоночника', bija: 'ЛАМ', c: [229,56,59],  petals: 4,    tone: 130.81, say: ['Муладхара.', 'Основание позвоночника.', 'Тёплый красный свет. Вы на земле, вы в безопасности.'] },
+  { n: 'Свадхистхана', where: 'низ живота',             bija: 'ВАМ', c: [247,127,0],  petals: 6,    tone: 146.83, say: ['Свадхистхана.', 'Низ живота.', 'Оранжевый свет. Мягкий и текучий, как вода.'] },
+  { n: 'Манипура',     where: 'солнечное сплетение',    bija: 'РАМ', c: [252,191,73], petals: 10,   tone: 164.81, say: ['Манипура.', 'Солнечное сплетение.', 'Золотое солнце. Ваша сила и воля.'] },
+  { n: 'Анахата',      where: 'центр груди',            bija: 'ЯМ',  c: [46,194,126], petals: 12,   tone: 174.61, say: ['Анахата.', 'Центр груди.', 'Зелёный свет. Сердце раскрывается.'] },
+  { n: 'Вишуддха',     where: 'горло',                  bija: 'ХАМ', c: [58,134,255], petals: 16,   tone: 196.00, say: ['Вишуддха.', 'Горло.', 'Голубой свет. Ясность и правда.'] },
+  { n: 'Аджна',        where: 'между бровей',           bija: 'ОМ',  c: [106,76,255], petals: 2,    tone: 220.00, say: ['Аджна.', 'Точка между бровей.', 'Глубокий синий свет. Третий глаз.'] },
+  { n: 'Сахасрара',    where: 'макушка',                bija: 'тишина', c: [199,125,255], petals: 1000, tone: 246.94, say: ['Сахасрара.', 'Макушка.', 'Фиолетовый, почти белый свет. Тишина.'] }
+];
+
+const COCOON = { key: 'cocoon', name: 'Кокон', dur: 100, visual: 'cocoon', breath: 'calm', beat: 8, tone: 3,
+  text: 'Золотой кокон на два метра вокруг вас. На вдохе свет собирается в сердце, на выдохе уходит в кокон. Он становится плотным и защищает со всех сторон.',
+  say: ['Устройтесь удобно. Спина ровная, плечи мягкие.', 'Представьте вокруг себя кокон золотого света.', 'Примерно два метра во все стороны от вас.', 'На вдохе набирайте свет в сердце.', 'На выдохе отправляйте его из сердца в кокон.', 'С каждым выдохом он плотнее и ярче.', 'Он защищает вас со всех сторон. Сверху, снизу, спереди и сзади.', 'Всё лишнее может выйти наружу. Внутрь проходит только свет.'] };
+const BREATHE = { key: 'breath', name: 'Дыхание', dur: 120, visual: 'breath', breath: 'resonance', beat: 10, tone: 3, cue: true,
+  text: 'Вдох пять с половиной секунд, выдох столько же. Животом, мягко, без усилия.',
+  say: ['Теперь дышите вместе со сферой.', 'Вдох и выдох одинаковые, мягкие.', 'Кокон остаётся вокруг вас.'] };
+const RETURN = { key: 'return', name: 'Возвращение', dur: 60, visual: 'breath', breath: 'calm', beat: 10, tone: 0, cue: true,
+  text: 'Глубокий вдох. Почувствуйте опору. Пошевелите пальцами. Кокон остаётся с вами.',
+  say: ['Сделайте глубокий вдох.', 'Почувствуйте опору под собой.', 'Кокон остаётся с вами.', 'Пошевелите пальцами. И когда будете готовы, откройте глаза.'] };
+
+const R = (dur, name, visual, text, say, extra) => Object.assign({ dur, name, visual, text, say, breath: 'resonance', beat: 8 }, extra || {});
+const ROOMS = [
+  { id: 'cleanse', name: 'Очищение', ci: 4, tag: 'Смыть день: чужие слова, новости, напряжение.', ev: ['t-a', 'Расслабление · подтверждено'],
+    whyT: 'Сначала — освободить место', why: 'За день на нас оседает много чужого: разговоры, новости, тревоги. Поток света сверху смывает это слой за слоем: тело, затем мысли. После очищения любая другая практика идёт глубже.',
+    note: '<b>Основа:</b> визуализация + резонансное дыхание. Доказанный эффект — снижение стресса и мышечного напряжения.',
+    main: [
+      R(120, 'Светлый поток', 'cleanse', 'Над головой источник чистого света. Он льётся вниз, как тёплый водопад.', ['Представьте над головой источник чистого света.', 'Он льётся вниз, как тёплый водопад.', 'Через макушку, лицо, горло, плечи.', 'Всё тяжёлое смывается и уходит в землю.']),
+      R(120, 'Тело', 'cleanse', 'Свет проходит через грудь, живот, руки и ноги. Всё лишнее уходит вниз.', ['Свет проходит через грудь и живот.', 'Через руки, до кончиков пальцев.', 'Через ноги, до самых стоп.', 'Всё, что вам больше не нужно, уходит вниз и растворяется.']),
+      R(90, 'Мысли', 'cleanse', 'Свет проходит через мысли. Чужие слова и заботы дня уходят на выдохе.', ['Теперь свет проходит через мысли.', 'Чужие слова, новости, заботы дня.', 'Просто отпускайте их на выдохе.']),
+      R(90, 'Чистота', 'mandala', 'Вы чистые и лёгкие. Кокон сияет ровным золотым светом.', ['Вы чистые и лёгкие.', 'Кокон сияет ровным золотым светом.', 'Побудьте в этой тишине.'], { beat: 6 })
+    ] },
+  { id: 'energy', name: 'Жизненная энергия', ci: 0, tag: 'Поднять силу от корня до макушки.', ev: ['t-c', 'Традиция · визуализация'],
+    whyT: 'Сила, которая всегда с вами', why: 'Внимание поднимается по позвоночнику от корня к макушке, и вместе с ним — ощущение тепла и силы. Хорошо утром или после тяжёлого дня, когда сил нет совсем.',
+    note: '<b>Основа:</b> работа с чакрами из традиции йоги. Ощущение бодрости — через дыхание и внимание к телу.',
+    main: [
+      R(90, 'Корень', 'energy', 'Внимание в основании позвоночника. Там тёплая красная точка, ваша опора.', ['Направьте внимание в основание позвоночника.', 'Там тёплая красная точка. Ваша опора.', 'С каждым вдохом она разгорается.'], { beat: 10 }),
+      R(150, 'Подъём', 'energy', 'На вдохе энергия поднимается по позвоночнику. На выдохе растекается по телу.', ['На вдохе энергия поднимается вверх по позвоночнику.', 'Живот. Солнечное сплетение. Сердце.', 'Горло. Точка между бровей. Макушка.', 'На выдохе она растекается по всему телу.'], { beat: 10 }),
+      R(120, 'Солнце', 'abundance', 'В солнечном сплетении золотое солнце. Оно греет изнутри.', ['Представьте в солнечном сплетении золотое солнце.', 'Оно греет изнутри.', 'Это ваша сила. Она всегда с вами.'], { beat: 10 }),
+      R(90, 'Наполнение', 'energy', 'Всё тело наполнено тёплым светом. Вы полны сил.', ['Всё тело наполнено тёплым светом.', 'Руки, ноги, лицо.', 'Вы полны сил.'], { beat: 10 })
+    ] },
+  { id: 'health', name: 'Здоровье', ci: 3, tag: 'Тепло и покой в каждую клетку тела.', ev: ['t-a', 'Дыхание и пульс · подтверждено'],
+    whyT: 'Телу нужен отдых, а не борьба', why: 'Медленное дыхание в резонансном темпе снижает давление и пульс, а внимание к телу снимает накопленное напряжение. Финал — благодарность телу, которое работает на вас без выходных.',
+    note: '<b>Основа:</b> резонансное дыхание (давление, пульс, вариабельность ритма сердца) и бодискан. <b>Не заменяет лечение.</b>',
+    main: [
+      R(120, 'Сердце', 'health', 'Внимание в центре груди. Мягкий зелёный свет бьётся в ритме дыхания.', ['Положите внимание в центр груди.', 'Представьте там мягкий зелёный свет.', 'Он пульсирует спокойно, в ритме вашего дыхания.']),
+      R(180, 'Тело', 'health', 'Свет растекается туда, где есть усталость или напряжение. Дышите туда.', ['Этот свет растекается по телу.', 'Туда, где есть усталость или напряжение.', 'Задержитесь там вниманием. Просто дышите туда.', 'С каждым выдохом напряжение мягче.']),
+      R(120, 'Благодарность', 'health', 'Поблагодарите своё тело: сердце, лёгкие, ноги.', ['Поблагодарите своё тело.', 'Сердце, которое бьётся без отдыха.', 'Лёгкие, которые дышат за вас.', 'Ноги, которые носят вас каждый день.'], { beat: 6 })
+    ] },
+  { id: 'abundance', name: 'Изобилие', ci: 2, tag: 'Благодарность, денежная цель и первый шаг к ней.', ev: ['t-b', 'Работает через внимание'],
+    whyT: 'Деньги приходят через действия', why: 'Сначала благодарность за то, что уже есть: она переключает внимание с нехватки на возможности. Потом золотой поток, а в конце — конкретная цель и первый шаг на завтра. Так образ превращается в поступок.',
+    note: '<b>Основа:</b> благодарность и мысленный образ цели вместе с планом шагов (исследования мотивации). Прямого «притяжения» денег мы не обещаем.',
+    main: [
+      R(120, 'Благодарность', 'abundance', 'Вспомните три вещи, которые у вас уже есть. Почувствуйте за них благодарность.', ['Вспомните три вещи, которые у вас уже есть.', 'Почувствуйте за них благодарность.', 'Изобилие начинается с того, что вы замечаете.']),
+      R(150, 'Поток', 'abundance', 'Золотой поток входит в кокон и наполняет солнечное сплетение.', ['Представьте золотой поток, который приходит к вам.', 'Он входит в кокон и наполняет солнечное сплетение.', 'Вы открыты новым возможностям.'], { beat: 10 }),
+      R(150, 'Намерение', 'abundance', 'Ваша цель: сколько и к какому сроку. День, когда она достигнута. И первый шаг завтра.', ['Подумайте о своей денежной цели. Сколько и к какому сроку.', 'Представьте день, когда она уже достигнута.', 'Что вы видите? Что чувствуете?', 'И какой первый шаг вы сделаете завтра?'], { beat: 10 })
+    ] },
+  { id: 'luck', name: 'Удача', ci: 5, tag: 'Замечать возможности, которые раньше проходили мимо.', ev: ['t-b', 'Работает через внимание'],
+    whyT: 'Удача любит внимательных', why: 'Исследования показывают: люди, которые считают себя везучими, просто чаще замечают шансы. Эта практика тренирует открытость: звёзды-возможности соединяются в ваш узор.',
+    note: '<b>Основа:</b> работы Ричарда Уайзмана о «везучих» людях: удача связана с открытостью и вниманием к случайностям.',
+    main: [
+      R(120, 'Небо', 'luck', 'Над вами ночное небо. Каждая звезда — возможность.', ['Представьте над собой ночное небо.', 'Каждая звезда — возможность.', 'Вы замечаете их всё больше.']),
+      R(150, 'Узор', 'luck', 'Звёзды соединяются в линии: люди, встречи, случайности.', ['Звёзды соединяются в линии.', 'Люди, встречи, случайности складываются в узор.', 'Вы на своём месте и в своё время.']),
+      R(120, 'Готовность', 'luck', 'Про себя: я замечаю возможности. Я открываюсь новому.', ['Повторите про себя: я замечаю возможности.', 'Я открываюсь новому.', 'Удача приходит к тем, кто готов.'], { beat: 10 })
+    ] },
+  { id: 'purpose', name: 'Предназначение', ci: 5, tag: 'Услышать себя настоящего под слоем ролей.', ev: ['t-a', 'Позитивная психология'],
+    whyT: 'Под ролями — вы', why: 'Работа, семья, обязанности: роли заглушают собственное желание. Здесь вы снимаете их по одной, встречаете себя через пять лет и задаёте один вопрос. Ответ стоит записать сразу после сессии.',
+    note: '<b>Основа:</b> упражнение «лучшее возможное я» (Laura King, 2001) и прояснение ценностей из терапии принятия и ответственности.',
+    main: [
+      R(90, 'Без ролей', 'silence', 'Отпустите роли: работа, дом, обязанности. Останьтесь просто собой.', ['Отпустите все роли. Работа, дом, обязанности.', 'Останьтесь просто собой.']),
+      R(180, 'Вы через пять лет', 'purpose', 'Всё сложилось так, как вы хотели. Где вы? Чем заняты? Кто рядом?', ['Представьте себя через пять лет.', 'Всё сложилось так, как вы хотели.', 'Где вы? Чем вы заняты?', 'Кто рядом с вами?'], { beat: 6 }),
+      R(150, 'Вопрос', 'purpose', 'Что для меня по-настоящему важно? Не ищите ответ, просто слушайте.', ['Спросите себя: что для меня по-настоящему важно?', 'Не ищите ответ. Просто слушайте.', 'Первое, что придёт, запомните.'], { beat: 6 }),
+      R(60, 'Ответ', 'purpose', 'Поблагодарите себя. После сессии запишите ответ.', ['Поблагодарите себя за этот ответ.', 'После сессии запишите его.'])
+    ] },
+  { id: 'silence', name: 'Тишина ума', ci: 4, tag: 'После работы: выключить внутренний шум.', ev: ['t-a', 'Внимание и стресс · подтверждено'],
+    whyT: 'Вы — небо, а не облака', why: 'Самая короткая дорога к покою: не бороться с мыслями, а смотреть, как они проплывают. Классическая практика осознанности, которая лучше всего изучена наукой.',
+    note: '<b>Основа:</b> медитация осознанности (MBSR, Джон Кабат-Зинн): снижение стресса и тревоги в сотнях исследований.',
+    main: [
+      R(90, 'Шум', 'silence', 'Заметьте все мысли, которые сейчас есть. Не спорьте с ними.', ['Заметьте все мысли, которые сейчас есть.', 'Не спорьте с ними.']),
+      R(150, 'Облака', 'silence', 'Мысли — облака. Они приходят и уходят. Вы — небо.', ['Представьте, что мысли — это облака.', 'Они приходят и уходят.', 'Вы — небо. Спокойное и большое.'], { beat: 6 }),
+      R(180, 'Паузы', 'mandala', 'Между мыслями есть паузы. Побудьте в них.', ['Между мыслями есть паузы.', 'Побудьте в них.', 'Ничего не нужно делать.'], { beat: 6 })
+    ] },
+  { id: 'ajna', name: 'Третий глаз', ci: 5, tag: 'Тратака: взгляд в одну точку и внутренний свет.', ev: ['t-b', 'Внимание · малые исследования'],
+    whyT: 'Внимание в одной точке', why: 'Классическая тратака: неподвижный взгляд в золотую точку третьего глаза, затем образ с закрытыми глазами. Тренирует концентрацию и внутреннее видение.',
+    note: '<b>Основа:</b> тратака из «Хатха-йога-прадипики». Небольшие исследования: рост внимания и рабочей памяти. При болезнях глаз этап взгляда пропустите.',
+    main: [
+      R(180, 'Взгляд', 'eye', 'Смотрите в золотую точку в центре зрачка. Моргайте реже, без напряжения.', ['Посмотрите в центр третьего глаза.', 'Там золотая точка. Оставайтесь с ней.', 'Моргайте реже. Без напряжения.'], { breath: null, beat: 10 }),
+      R(90, 'Внутренний свет', 'dark', 'Закройте глаза. Удерживайте образ между бровей.', ['Теперь закройте глаза.', 'Образ остался внутри. Между бровей.', 'Просто смотрите на него.'], { breath: null, beat: 6 }),
+      R(120, 'Тишина', 'mandala', 'Глаза закрыты. Мысли приходят и уходят.', ['Отпустите дыхание.', 'Ничего не нужно делать.', 'Просто будьте здесь.'], { beat: 6 })
+    ] },
+  { id: 'chakras', name: 'Семь чакр', ci: 6, tag: 'Путь снизу вверх: от опоры к тишине.', ev: ['t-c', 'Традиция · визуализация'],
+    whyT: 'Вся энергетическая вертикаль', why: 'По полминуты на каждую чакру: цвет, место в теле, звук. Внимание проходит от основания позвоночника к макушке и собирает тело в одно целое.',
+    note: '<b>Основа:</b> система чакр из тантры и хатха-йоги. Число лепестков и биджа-мантры — по классическим текстам.',
+    main: [
+      R(216, 'Семь чакр', 'chakras', 'Внимание поднимается от основания позвоночника к макушке. Полминуты на каждую.', ['Теперь пройдём по чакрам.', 'Снизу вверх.'], { key: 'chakras' }),
+      R(90, 'Единство', 'mandala', 'Все семь чакр светятся вместе. Побудьте в этом целом.', ['Все семь центров светятся вместе.', 'Побудьте в этом целом.'], { beat: 6 })
+    ] }
+];
+ROOMS.forEach(r => { r.color = CH[r.ci].c; r.main.forEach((s, i) => { s.key = s.key || r.id + '-' + (i + 1); s.tone = r.ci; }); r.phases = [COCOON, BREATHE, ...r.main, RETURN]; });
+
+const BREATH = { resonance: [5.45, 0, 5.45, 0], calm: [4, 0, 6, 0] };
+const fmt = s => { s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+const mins = s => Math.round(s / 60) + ' мин';
+const sum = ph => ph.reduce((a, p) => a + p.dur, 0);
+
+// script for voice recording (keys = file names)
+window.AJNA_SCRIPT = () => {
+  const out = [['cocoon', COCOON.say], ['breath', BREATHE.say], ['return', RETURN.say]];
+  ROOMS.forEach(r => r.main.forEach(s => out.push([s.key, s.say])));
+  CH.forEach((c, i) => out.push(['c' + (i + 1), c.say]));
+  out.push(['inhale', ['Вдох']], ['exhale', ['Выдох']]);
+  return out;
+};
+
+// ======================= drawing =======================
+let g = null, W = 0, H = 0, CYR = 0.39, MR = 0.68;
+const cx = () => W / 2, cy = () => H * CYR, M = () => Math.min(W, H * MR);
+const stars = Array.from({ length: 180 }, () => ({ x: Math.random(), y: Math.random(), r: Math.random() * 1.2 + 0.25, ph: Math.random() * TAU, sp: 0.15 + Math.random() * 0.3 }));
+const parts = Array.from({ length: 90 }, (_, i) => ({ a: Math.random() * TAU, d: Math.random(), s: 0.5 + Math.random(), x: Math.random(), c: i % 7 }));
+const ease = x => (1 - Math.cos(Math.PI * x)) / 2;
+function breathAt(key, t) {
+  const p = BREATH[key], cyc = p[0] + p[1] + p[2] + p[3]; let x = t % cyc;
+  if (x < p[0]) return { b: ease(x / p[0]), label: 'Вдох', left: p[0] - x, dur: p[0] }; x -= p[0] + p[1];
+  if (x < p[2]) return { b: 1 - ease(x / p[2]), label: 'Выдох', left: p[2] - x, dur: p[2] };
+  return { b: 0, label: 'Пауза', left: 0, dur: 1 };
+}
+
+function sky(t, hue) {
+  g.globalCompositeOperation = 'source-over'; g.fillStyle = '#07060c'; g.fillRect(0, 0, W, H);
+  g.globalCompositeOperation = 'lighter';
+  const d = reduce ? 0 : t * 0.02;
+  [[0.2 + Math.sin(d) * 0.05, 0.3, [106, 76, 255], 0.2], [0.82, 0.25 + Math.cos(d) * 0.05, [196, 32, 63], 0.13], [0.62, 0.8, [58, 134, 255], 0.1], [0.15, 0.85, [199, 125, 255], 0.08]].forEach(([x, y, c, a]) => {
+    const r = Math.max(W, H) * 0.6, gr = g.createRadialGradient(x * W, y * H, 0, x * W, y * H, r); gr.addColorStop(0, rgba(c, a)); gr.addColorStop(1, rgba(c, 0)); g.fillStyle = gr; g.fillRect(0, 0, W, H);
+  });
+  const core = g.createRadialGradient(cx(), cy(), 0, cx(), cy(), M() * 0.75); core.addColorStop(0, rgba(hue, 0.24)); core.addColorStop(1, rgba(hue, 0)); g.fillStyle = core; g.fillRect(0, 0, W, H);
+  for (const s of stars) { const a = 0.22 + 0.35 * (0.5 + 0.5 * Math.sin(t * s.sp + s.ph)); g.fillStyle = 'rgba(240,232,255,' + a + ')'; g.fillRect(s.x * W, s.y * H, s.r, s.r); }
+}
+function vignette() {
+  g.globalCompositeOperation = 'source-over';
+  const v = g.createRadialGradient(cx(), H * 0.45, Math.min(W, H) * 0.35, cx(), H * 0.45, Math.max(W, H) * 0.85);
+  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(4,2,10,.72)'); g.fillStyle = v; g.fillRect(0, 0, W, H);
+}
+function lotus(x, y, r, c, petals, glow, rot) {
+  g.globalCompositeOperation = 'lighter';
+  const hr = r * (2.4 + glow * 1.6), h = g.createRadialGradient(x, y, 0, x, y, hr); h.addColorStop(0, rgba(c, 0.32 + glow * 0.4)); h.addColorStop(1, rgba(c, 0));
+  g.fillStyle = h; g.beginPath(); g.arc(x, y, hr, 0, TAU); g.fill();
+  const layers = petals === 1000 ? [[36, 1], [24, 0.7]] : petals === 2 ? [[2, 1.25]] : [[petals, 1]];
+  layers.forEach(([n, s], li) => {
+    for (let i = 0; i < n; i++) {
+      const a = i / n * TAU + (rot || 0) + li * 0.1 + (petals === 2 ? 0 : -Math.PI / 2);
+      g.save(); g.translate(x, y); g.rotate(a);
+      const pl = r * s * (petals === 2 ? 1.5 : 1.15), pw = petals === 2 ? r * 0.55 : Math.min(r * 0.42, r * 2.6 / Math.sqrt(n));
+      const pg = g.createLinearGradient(r * 0.5, 0, r * 0.5 + pl, 0); pg.addColorStop(0, rgba(c, 0.55 + glow * 0.3)); pg.addColorStop(1, rgba(c, 0.05));
+      g.fillStyle = pg; g.beginPath(); g.moveTo(r * 0.55, 0); g.quadraticCurveTo(r * 0.55 + pl * 0.5, -pw, r * 0.55 + pl, 0); g.quadraticCurveTo(r * 0.55 + pl * 0.5, pw, r * 0.55, 0); g.fill();
+      g.restore();
+    }
+  });
+  const d = g.createRadialGradient(x, y, 0, x, y, r * 0.7); d.addColorStop(0, 'rgba(255,255,255,' + (0.5 + glow * 0.5) + ')'); d.addColorStop(0.35, rgba(c, 0.9)); d.addColorStop(1, rgba(c, 0.15));
+  g.fillStyle = d; g.beginPath(); g.arc(x, y, r * 0.62, 0, TAU); g.fill();
+}
+function axis(scale) { const m = M(), top = cy() - m * 0.36 * scale, bot = cy() + m * 0.33 * scale; return { top, bot, y: i => bot - (bot - top) * i / 6 }; }
+
+function drawChakras(t, st, active, scale) {
+  const m = M(), x = cx(), A = axis(scale), b = st ? st.b : 0.5;
+  g.globalCompositeOperation = 'lighter';
+  const ax = g.createLinearGradient(0, A.bot, 0, A.top); CH.forEach((c, i) => ax.addColorStop(i / 6, rgba(c.c, 0.55)));
+  g.strokeStyle = ax; g.lineWidth = 2; g.beginPath(); g.moveTo(x, A.bot + m * 0.04); g.lineTo(x, A.top - m * 0.04); g.stroke();
+  [1, -1].forEach(s => { g.strokeStyle = 'rgba(220,210,255,.16)'; g.lineWidth = 1; g.beginPath();
+    for (let k = 0; k <= 120; k++) { const yy = A.bot - (A.bot - A.top) * k / 120, xx = x + s * Math.sin(k / 120 * 6 * Math.PI) * m * 0.06 * scale; k ? g.lineTo(xx, yy) : g.moveTo(xx, yy); } g.stroke(); });
+  CH.forEach((c, i) => {
+    const on = active === i ? 1 : active < 0 ? 0.35 + 0.15 * Math.sin(t * 0.6 + i) : 0.12;
+    const r = m * (0.026 + (active === i ? 0.022 * (0.85 + 0.15 * b) : 0)) * scale;
+    lotus(x, A.y(i), r, c.c, c.petals, on, reduce ? 0 : t * 0.05 * (i % 2 ? 1 : -1));
+  });
+  if (active >= 0) { g.globalCompositeOperation = 'source-over'; g.textAlign = 'left'; g.textBaseline = 'middle'; g.fillStyle = rgba(CH[active].c, 0.95);
+    g.font = 'italic 300 ' + Math.round(m * 0.05) + 'px "Cormorant Garamond", Georgia, serif'; g.fillText(CH[active].bija, x + m * 0.11, A.y(active)); }
+}
+function shell(t, st, alpha, rx, ry) {
+  const m = M(), x = cx(), y = cy();
+  for (let k = 0; k < 7; k++) {
+    const wob = reduce ? 0 : Math.sin(t * 0.6 + k) * m * 0.004;
+    g.strokeStyle = k === 3 ? 'rgba(255,226,160,' + 0.8 * alpha + ')' : rgba(CH[k].c, 0.3 * alpha); g.lineWidth = k === 3 ? 2 : 1.1;
+    g.beginPath(); g.ellipse(x, y, rx + (k - 3) * m * 0.008 + wob, ry + (k - 3) * m * 0.01 - wob, 0, 0, TAU); g.stroke();
+  }
+}
+function drawCocoon(t, st) {
+  const m = M(), x = cx(), y = cy(), b = st ? st.b : 0.5, rx = m * (0.22 + 0.015 * b), ry = m * (0.33 + 0.015 * b), A = axis(0.72), hy = A.y(3);
+  g.globalCompositeOperation = 'lighter';
+  const fill = g.createRadialGradient(x, hy, 0, x, y, ry); fill.addColorStop(0, 'rgba(255,226,160,.22)'); fill.addColorStop(0.7, 'rgba(231,194,125,.1)'); fill.addColorStop(1, 'rgba(231,194,125,0)');
+  g.fillStyle = fill; g.beginPath(); g.ellipse(x, y, rx, ry, 0, 0, TAU); g.fill();
+  shell(t, st, 1, rx, ry);
+  // heart -> shell: light travels outward on the exhale
+  const exh = st ? (st.label === 'Выдох' ? 1 : 0.15) : 0.6;
+  for (const p of parts) {
+    const k = reduce ? p.d : (p.d + t * 0.12 * p.s) % 1, px = x + Math.cos(p.a) * rx * k, py = hy + (y - hy) * k + Math.sin(p.a) * ry * k;
+    g.fillStyle = 'rgba(255,230,170,' + (0.75 * (1 - k * 0.6) * exh) + ')'; g.beginPath(); g.arc(px, py, 1.5, 0, TAU); g.fill();
+  }
+  const hg = g.createRadialGradient(x, hy, 0, x, hy, m * (0.05 + 0.03 * b)); hg.addColorStop(0, 'rgba(255,240,200,.9)'); hg.addColorStop(1, 'rgba(46,194,126,0)');
+  g.fillStyle = hg; g.beginPath(); g.arc(x, hy, m * (0.05 + 0.03 * b), 0, TAU); g.fill();
+  drawChakras(t, st, -1, 0.72);
+}
+function drawEye(t, st) {
+  const m = M(), x = cx(), y = cy(), b = st ? st.b : 0.5 + 0.5 * Math.sin(t * 0.5), spin = reduce ? 0 : t * 0.06, Rr = m * 0.17;
+  g.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < 72; i++) { const a = i / 72 * TAU + spin * 0.5, c = CH[i % 7].c, len = Rr * (2.2 + 0.4 * Math.sin(i * 1.7 + t * 0.4));
+    const rg = g.createLinearGradient(x + Math.cos(a) * Rr * 1.1, y + Math.sin(a) * Rr * 1.1, x + Math.cos(a) * len, y + Math.sin(a) * len); rg.addColorStop(0, rgba(c, 0.35)); rg.addColorStop(1, rgba(c, 0));
+    g.strokeStyle = rg; g.lineWidth = 1.2; g.beginPath(); g.moveTo(x + Math.cos(a) * Rr * 1.1, y + Math.sin(a) * Rr * 1.1); g.lineTo(x + Math.cos(a) * len, y + Math.sin(a) * len); g.stroke(); }
+  CH.forEach((c, i) => { g.strokeStyle = rgba(c.c, 0.45); g.lineWidth = 1.2; g.beginPath(); g.arc(x, y, Rr * (1.05 + i * 0.09), 0, TAU); g.stroke(); });
+  [-1, 1].forEach(s => { const pg = g.createLinearGradient(x, y, x + s * Rr * 2.3, y); pg.addColorStop(0, 'rgba(106,76,255,.75)'); pg.addColorStop(0.6, 'rgba(143,124,255,.4)'); pg.addColorStop(1, 'rgba(199,125,255,0)');
+    g.fillStyle = pg; g.beginPath(); g.moveTo(x + s * Rr * 0.7, y); g.bezierCurveTo(x + s * Rr * 1.2, y - Rr * 0.95, x + s * Rr * 2.1, y - Rr * 0.55, x + s * Rr * 2.4, y); g.bezierCurveTo(x + s * Rr * 2.1, y + Rr * 0.55, x + s * Rr * 1.2, y + Rr * 0.95, x + s * Rr * 0.7, y); g.fill(); });
+  const disc = g.createRadialGradient(x, y, 0, x, y, Rr); disc.addColorStop(0, 'rgba(60,40,160,.5)'); disc.addColorStop(1, 'rgba(106,76,255,.25)'); g.fillStyle = disc; g.beginPath(); g.arc(x, y, Rr, 0, TAU); g.fill();
+  g.globalCompositeOperation = 'source-over';
+  const ew = Rr * 0.92, eh = Rr * 0.5, eyePath = () => { g.beginPath(); g.moveTo(x - ew, y); g.quadraticCurveTo(x, y - eh * 1.25, x + ew, y); g.quadraticCurveTo(x, y + eh * 1.25, x - ew, y); g.closePath(); };
+  g.save(); eyePath(); g.fillStyle = 'rgba(14,8,40,.92)'; g.fill(); g.clip();
+  const ir = eh * (0.92 + 0.06 * b), iris = g.createRadialGradient(x, y, ir * 0.2, x, y, ir);
+  iris.addColorStop(0, '#f2cf86'); iris.addColorStop(0.3, '#c77dff'); iris.addColorStop(0.65, '#3a86ff'); iris.addColorStop(1, '#1b0f52'); g.fillStyle = iris; g.beginPath(); g.arc(x, y, ir, 0, TAU); g.fill();
+  g.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < 60; i++) { const a = i / 60 * TAU + spin; g.strokeStyle = rgba(CH[i % 7].c, 0.3); g.lineWidth = 1; g.beginPath(); g.moveTo(x + Math.cos(a) * ir * 0.38, y + Math.sin(a) * ir * 0.38); g.lineTo(x + Math.cos(a) * ir * 0.95, y + Math.sin(a) * ir * 0.95); g.stroke(); }
+  g.globalCompositeOperation = 'source-over'; g.fillStyle = '#05030f'; g.beginPath(); g.arc(x, y, ir * 0.34, 0, TAU); g.fill();
+  g.fillStyle = 'rgba(255,255,255,.75)'; g.beginPath(); g.arc(x - ir * 0.32, y - ir * 0.34, ir * 0.1, 0, TAU); g.fill(); g.restore();
+  g.strokeStyle = 'rgba(231,194,125,.85)'; g.lineWidth = 1.6; eyePath(); g.stroke();
+  g.globalCompositeOperation = 'lighter';
+  const bd = g.createRadialGradient(x, y, 0, x, y, Rr * 0.12); bd.addColorStop(0, 'rgba(255,240,200,1)'); bd.addColorStop(1, 'rgba(242,207,134,0)'); g.fillStyle = bd; g.beginPath(); g.arc(x, y, Rr * 0.12, 0, TAU); g.fill();
+  CH.forEach((c, i) => { const a = i / 7 * TAU - Math.PI / 2 + spin * 0.4; lotus(x + Math.cos(a) * Rr * 2.05, y + Math.sin(a) * Rr * 2.05, m * 0.014, c.c, Math.min(c.petals, 16), 0.3, 0); });
+}
+function drawSphere(st, t, hueIdx) {
+  const m = M(), x = cx(), y = cy(), b = st ? st.b : 0.5 + 0.5 * Math.sin(t * 0.55), r0 = m * 0.085, r1 = m * 0.22, r = r0 + (r1 - r0) * b;
+  const k = hueIdx != null ? hueIdx : (t * 0.03) % 7, c1 = CH[Math.floor(k)].c, c2 = CH[(Math.floor(k) + 1) % 7].c, f = hueIdx != null ? 0 : k % 1, c = [0, 1, 2].map(i => Math.round(c1[i] + (c2[i] - c1[i]) * f));
+  g.globalCompositeOperation = 'lighter';
+  const h = g.createRadialGradient(x, y, 0, x, y, r * 3.2); h.addColorStop(0, rgba(c, 0.3 + 0.2 * b)); h.addColorStop(1, rgba(c, 0)); g.fillStyle = h; g.beginPath(); g.arc(x, y, r * 3.2, 0, TAU); g.fill();
+  const p = g.createRadialGradient(x - r * 0.3, y - r * 0.35, r * 0.05, x, y, r); p.addColorStop(0, 'rgba(255,255,255,.6)'); p.addColorStop(0.45, rgba(c, 0.45)); p.addColorStop(1, rgba(c, 0.08));
+  g.fillStyle = p; g.beginPath(); g.arc(x, y, r, 0, TAU); g.fill();
+  g.globalCompositeOperation = 'source-over';
+  for (let i = 0; i < 49; i++) { const a = i / 49 * TAU - Math.PI / 2, R1 = r1 + m * 0.03, R2 = R1 + (i % 7 ? m * 0.008 : m * 0.02);
+    g.strokeStyle = rgba(CH[Math.floor(i / 7)].c, i % 7 ? 0.35 : 0.8); g.lineWidth = 1; g.beginPath(); g.moveTo(x + Math.cos(a) * R1, y + Math.sin(a) * R1); g.lineTo(x + Math.cos(a) * R2, y + Math.sin(a) * R2); g.stroke(); }
+  g.strokeStyle = 'rgba(255,255,255,.75)'; g.lineWidth = 1.5; g.beginPath(); g.arc(x, y, r, 0, TAU); g.stroke();
+  if (st && st.label !== 'Пауза') {
+    const prog = 1 - st.left / st.dur, arc = g.createConicGradient ? g.createConicGradient(-Math.PI / 2, x, y) : null;
+    if (arc) { CH.forEach((cc, i) => arc.addColorStop(i / 7, rgba(cc.c, 1))); arc.addColorStop(1, rgba(CH[0].c, 1)); }
+    g.strokeStyle = arc || 'rgba(231,194,125,.9)'; g.lineWidth = 2.5; g.beginPath(); g.arc(x, y, r1 + m * 0.03, -Math.PI / 2, -Math.PI / 2 + TAU * Math.max(0, Math.min(1, prog))); g.stroke();
+    g.fillStyle = 'rgba(243,237,228,.95)'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.font = 'italic 300 ' + Math.round(m * 0.06) + 'px "Cormorant Garamond", Georgia, serif'; g.fillText(st.label.toLowerCase(), x, y);
+  }
+}
+function drawMandala(t, st, ci) {
+  const m = M(), x = cx(), y = cy(), b = st ? st.b : 0.5, sc = 0.93 + 0.07 * b, spin = reduce ? 0 : t * TAU / 300, Rr = m * 0.24 * sc;
+  g.globalCompositeOperation = 'lighter';
+  const h = g.createRadialGradient(x, y, 0, x, y, Rr * 1.9); h.addColorStop(0, rgba(CH[ci == null ? 6 : ci].c, 0.18 + 0.1 * b)); h.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = h; g.beginPath(); g.arc(x, y, Rr * 1.9, 0, TAU); g.fill();
+  g.lineWidth = 1.2;
+  for (let i = 0; i < 6; i++) { const a = i / 6 * TAU + spin; g.strokeStyle = rgba(CH[i].c, 0.6); g.beginPath(); g.arc(x + Math.cos(a) * Rr * 0.5, y + Math.sin(a) * Rr * 0.5, Rr * 0.5, 0, TAU); g.stroke(); }
+  for (let i = 0; i < 12; i++) { const a = i / 12 * TAU - spin + Math.PI / 12; g.strokeStyle = rgba(CH[i % 7].c, 0.32); g.beginPath(); g.arc(x + Math.cos(a) * Rr * 0.87, y + Math.sin(a) * Rr * 0.87, Rr * 0.5, 0, TAU); g.stroke(); }
+  for (let i = 0; i < 28; i++) { const a = i / 28 * TAU - spin * 0.5; g.save(); g.translate(x, y); g.rotate(a); g.fillStyle = rgba(CH[i % 7].c, 0.28); g.beginPath(); g.ellipse(0, -Rr * 1.5, Rr * 0.06, Rr * 0.2, 0, 0, TAU); g.fill(); g.restore(); }
+  CH.forEach((c, i) => { g.strokeStyle = rgba(c.c, 0.3); g.beginPath(); g.arc(x, y, Rr * (1.05 + i * 0.045), 0, TAU); g.stroke(); });
+  lotus(x, y, m * 0.03, CH[6].c, 1000, 0.6 + 0.4 * b, spin);
+}
+function drawCleanse(t, st) { // a waterfall of light through the body axis; grey residue sinks away
+  const m = M(), x = cx(), y = cy(), A = axis(0.8), top = A.top - m * 0.25;
+  g.globalCompositeOperation = 'lighter';
+  const col = g.createLinearGradient(0, top, 0, A.bot + m * 0.2); col.addColorStop(0, 'rgba(200,230,255,.5)'); col.addColorStop(0.5, 'rgba(120,190,255,.18)'); col.addColorStop(1, 'rgba(58,134,255,0)');
+  g.fillStyle = col; g.beginPath(); g.moveTo(x - m * 0.03, top); g.lineTo(x + m * 0.03, top); g.lineTo(x + m * 0.14, A.bot + m * 0.2); g.lineTo(x - m * 0.14, A.bot + m * 0.2); g.fill();
+  const src = g.createRadialGradient(x, top, 0, x, top, m * 0.12); src.addColorStop(0, 'rgba(255,255,255,.9)'); src.addColorStop(1, 'rgba(160,210,255,0)'); g.fillStyle = src; g.beginPath(); g.arc(x, top, m * 0.12, 0, TAU); g.fill();
+  for (const p of parts) {
+    const k = reduce ? p.d : (p.d + t * 0.08 * p.s) % 1, py = top + (A.bot + m * 0.3 - top) * k, spread = 0.03 + 0.11 * k, px = x + (p.x - 0.5) * 2 * m * spread;
+    const grey = p.c < 2 && k > 0.55;
+    g.fillStyle = grey ? 'rgba(150,145,160,' + 0.5 * (1 - k) + ')' : 'rgba(210,235,255,' + 0.7 * (1 - k * 0.7) + ')';
+    g.beginPath(); g.arc(px, py, grey ? 2 : 1.4, 0, TAU); g.fill();
+  }
+  drawChakras(t, st, -1, 0.8);
+}
+function drawEnergy(t, st) { // a double helix rising from root to crown
+  const m = M(), x = cx(), A = axis(0.85), b = st ? st.b : 0.5;
+  drawChakras(t, st, -1, 0.85);
+  g.globalCompositeOperation = 'lighter';
+  for (const p of parts) {
+    const k = reduce ? p.d : (p.d + t * 0.07 * p.s) % 1, yy = A.bot - (A.bot - A.top) * k, ang = k * TAU * 3 + p.a, rad = m * (0.05 + 0.06 * b) * (1 - Math.abs(k - 0.5));
+    const ci = Math.min(6, Math.floor(k * 7)), c = CH[ci].c;
+    g.fillStyle = rgba(c, 0.85 * (0.4 + 0.6 * Math.sin(Math.PI * k))); g.beginPath(); g.arc(x + Math.cos(ang) * rad, yy, 1.8, 0, TAU); g.fill();
+  }
+  const root = g.createRadialGradient(x, A.bot, 0, x, A.bot, m * (0.08 + 0.05 * b)); root.addColorStop(0, 'rgba(255,120,100,.6)'); root.addColorStop(1, 'rgba(229,56,59,0)');
+  g.fillStyle = root; g.beginPath(); g.arc(x, A.bot, m * 0.13, 0, TAU); g.fill();
+}
+function drawHealth(t, st) { // a green heart-light breathing outward in soft rings
+  const m = M(), x = cx(), A = axis(0.8), hy = A.y(3), b = st ? st.b : 0.5;
+  g.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < 5; i++) { const k = reduce ? i / 5 : ((t * 0.08 + i / 5) % 1), r = m * (0.06 + 0.42 * k);
+    g.strokeStyle = 'rgba(80,220,160,' + 0.4 * (1 - k) + ')'; g.lineWidth = 1.4; g.beginPath(); g.arc(x, hy, r, 0, TAU); g.stroke(); }
+  const h = g.createRadialGradient(x, hy, 0, x, hy, m * (0.14 + 0.08 * b)); h.addColorStop(0, 'rgba(240,255,235,.95)'); h.addColorStop(0.3, 'rgba(46,194,126,.6)'); h.addColorStop(1, 'rgba(46,194,126,0)');
+  g.fillStyle = h; g.beginPath(); g.arc(x, hy, m * 0.22, 0, TAU); g.fill();
+  drawChakras(t, st, 3, 0.8);
+}
+function drawAbundance(t, st) { // golden sun at the solar plexus; gold streams inward from every side
+  const m = M(), x = cx(), y = cy(), b = st ? st.b : 0.5, spin = reduce ? 0 : t * 0.05;
+  g.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < 48; i++) { const a = i / 48 * TAU + spin, l = m * (0.2 + (i % 2 ? 0.08 : 0.16));
+    const rg = g.createLinearGradient(x, y, x + Math.cos(a) * l, y + Math.sin(a) * l); rg.addColorStop(0, 'rgba(255,214,120,.45)'); rg.addColorStop(1, 'rgba(255,190,80,0)');
+    g.strokeStyle = rg; g.lineWidth = i % 2 ? 1 : 2; g.beginPath(); g.moveTo(x, y); g.lineTo(x + Math.cos(a) * l, y + Math.sin(a) * l); g.stroke(); }
+  for (const p of parts) { const k = reduce ? p.d : (p.d + t * 0.06 * p.s) % 1, r = m * (0.6 - 0.5 * k);
+    g.fillStyle = 'rgba(255,215,130,' + 0.8 * k + ')'; g.beginPath(); g.arc(x + Math.cos(p.a) * r, y + Math.sin(p.a) * r, 1.3 + k, 0, TAU); g.fill(); }
+  const s = g.createRadialGradient(x, y, 0, x, y, m * (0.13 + 0.04 * b)); s.addColorStop(0, 'rgba(255,250,230,1)'); s.addColorStop(0.35, 'rgba(252,191,73,.9)'); s.addColorStop(1, 'rgba(247,127,0,0)');
+  g.fillStyle = s; g.beginPath(); g.arc(x, y, m * 0.2, 0, TAU); g.fill();
+  lotus(x, y, m * 0.05, CH[2].c, 10, 0.8, spin);
+}
+const LUCK = Array.from({ length: 26 }, (_, i) => ({ x: 0.5 + Math.cos(i * 2.4) * (0.08 + (i % 7) * 0.05), y: 0.42 + Math.sin(i * 2.4) * (0.06 + (i % 5) * 0.05), c: i % 7 }));
+function drawLuck(t, st) { // constellations slowly drawing themselves
+  const m = M(), b = st ? st.b : 0.5, prog = reduce ? 1 : (t * 0.05) % 1.4;
+  const P = LUCK.map(s => ({ x: cx() + (s.x - 0.5) * m * 1.5, y: cy() + (s.y - 0.42) * m * 1.2, c: s.c }));
+  g.globalCompositeOperation = 'lighter';
+  for (let i = 1; i < P.length; i++) { const k = Math.max(0, Math.min(1, prog * P.length / 1.0 - i)); if (k <= 0) continue;
+    const a = P[i - 1], c = P[i]; g.strokeStyle = rgba(CH[c.c].c, 0.4); g.lineWidth = 1; g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(a.x + (c.x - a.x) * k, a.y + (c.y - a.y) * k); g.stroke(); }
+  P.forEach((p, i) => { const tw = 0.6 + 0.4 * Math.sin(t * 0.7 + i), r = m * (0.012 + (i % 5 === 0 ? 0.01 : 0)) * (0.9 + 0.2 * b);
+    const h = g.createRadialGradient(p.x, p.y, 0, p.x, p.y, r * 5); h.addColorStop(0, 'rgba(255,255,255,' + tw + ')'); h.addColorStop(0.2, rgba(CH[p.c].c, 0.6 * tw)); h.addColorStop(1, rgba(CH[p.c].c, 0));
+    g.fillStyle = h; g.beginPath(); g.arc(p.x, p.y, r * 5, 0, TAU); g.fill(); });
+}
+function drawPurpose(t, st) { // a path of light toward a rising star
+  const m = M(), x = cx(), b = st ? st.b : 0.5, hz = cy() + m * 0.12, sy = cy() - m * 0.12 - m * 0.04 * b;
+  g.globalCompositeOperation = 'lighter';
+  const hzG = g.createLinearGradient(0, hz - m * 0.2, 0, hz + 2); hzG.addColorStop(0, 'rgba(106,76,255,0)'); hzG.addColorStop(1, 'rgba(199,125,255,.35)'); g.fillStyle = hzG; g.fillRect(0, hz - m * 0.2, W, m * 0.2);
+  g.strokeStyle = 'rgba(231,194,125,.6)'; g.lineWidth = 1; g.beginPath(); g.moveTo(0, hz); g.lineTo(W, hz); g.stroke();
+  const path = g.createLinearGradient(0, H, 0, hz); path.addColorStop(0, 'rgba(231,194,125,.35)'); path.addColorStop(1, 'rgba(255,240,210,.05)');
+  g.fillStyle = path; g.beginPath(); g.moveTo(x - m * 0.4, H); g.lineTo(x + m * 0.4, H); g.lineTo(x + 2, hz); g.lineTo(x - 2, hz); g.fill();
+  for (let i = 0; i < 12; i++) { const k = reduce ? i / 12 : ((t * 0.05 + i / 12) % 1), yy = H - (H - hz) * k, w = m * 0.4 * (1 - k);
+    g.strokeStyle = 'rgba(255,230,180,' + 0.25 * (1 - k) + ')'; g.beginPath(); g.moveTo(x - w, yy); g.lineTo(x + w, yy); g.stroke(); }
+  const s = g.createRadialGradient(x, sy, 0, x, sy, m * 0.16); s.addColorStop(0, 'rgba(255,255,255,1)'); s.addColorStop(0.15, 'rgba(199,125,255,.8)'); s.addColorStop(1, 'rgba(106,76,255,0)');
+  g.fillStyle = s; g.beginPath(); g.arc(x, sy, m * 0.16, 0, TAU); g.fill();
+  for (let i = 0; i < 4; i++) { const a = i * Math.PI / 4 + (reduce ? 0 : t * 0.03), l = m * (i % 2 ? 0.1 : 0.18); g.strokeStyle = 'rgba(255,245,230,.5)'; g.beginPath(); g.moveTo(x - Math.cos(a) * l, sy - Math.sin(a) * l); g.lineTo(x + Math.cos(a) * l, sy + Math.sin(a) * l); g.stroke(); }
+}
+const CLOUDS = Array.from({ length: 9 }, (_, i) => ({ y: 0.15 + i * 0.09, s: 0.004 + (i % 3) * 0.003, r: 0.12 + (i % 4) * 0.05, o: Math.random() }));
+function drawSilence(t, st) { // thoughts as clouds drifting across a still sky
+  const m = M(), b = st ? st.b : 0.5;
+  g.globalCompositeOperation = 'lighter';
+  CLOUDS.forEach((c, i) => { const xx = (((c.o + t * c.s * (reduce ? 0 : 1)) % 1.4) - 0.2) * W, yy = c.y * H, r = c.r * m;
+    const gr = g.createRadialGradient(xx, yy, 0, xx, yy, r); gr.addColorStop(0, 'rgba(180,200,255,.12)'); gr.addColorStop(1, 'rgba(180,200,255,0)'); g.fillStyle = gr; g.beginPath(); g.ellipse(xx, yy, r * 1.6, r * 0.7, 0, 0, TAU); g.fill(); });
+  const h = g.createRadialGradient(cx(), cy(), 0, cx(), cy(), m * (0.08 + 0.03 * b)); h.addColorStop(0, 'rgba(230,240,255,.85)'); h.addColorStop(1, 'rgba(58,134,255,0)');
+  g.fillStyle = h; g.beginPath(); g.arc(cx(), cy(), m * 0.12, 0, TAU); g.fill();
+}
+const NET = Array.from({ length: 16 }, (_, i) => ({ x: Math.random(), y: Math.random(), vx: (Math.random() - 0.5) * 0.01, vy: (Math.random() - 0.5) * 0.01, c: i % 7, r: 0.8 + Math.random() * 0.8 }));
+function drawNetwork(t) { // floating chakra glyphs linked like a constellation (hero)
+  const P = NET.map(n => ({ x: (((n.x + (reduce ? 0 : t * n.vx)) % 1) + 1) % 1 * W, y: (((n.y + (reduce ? 0 : t * n.vy)) % 1) + 1) % 1 * H, c: n.c, r: n.r }));
+  g.globalCompositeOperation = 'lighter'; const lim = Math.max(W, H) * 0.28;
+  for (let i = 0; i < P.length; i++) for (let j = i + 1; j < P.length; j++) { const d = Math.hypot(P[i].x - P[j].x, P[i].y - P[j].y); if (d > lim) continue;
+    g.strokeStyle = 'rgba(220,205,255,' + 0.18 * (1 - d / lim) + ')'; g.lineWidth = 1; g.beginPath(); g.moveTo(P[i].x, P[i].y); g.lineTo(P[j].x, P[j].y); g.stroke(); }
+  P.forEach((p, i) => lotus(p.x, p.y, Math.min(W, H) * 0.018 * p.r, CH[p.c].c, Math.min(CH[p.c].petals, 16), 0.25, reduce ? 0 : t * 0.04 * (i % 2 ? 1 : -1)));
+}
+function drawDark(t, since) {
+  g.globalCompositeOperation = 'source-over'; g.fillStyle = 'rgba(3,2,8,' + Math.min(0.94, since / 5) + ')'; g.fillRect(0, 0, W, H);
+  g.globalCompositeOperation = 'lighter'; const a = 0.14 + 0.05 * Math.sin(t * 0.45), r = M() * 0.06;
+  const h = g.createRadialGradient(cx(), cy(), 0, cx(), cy(), r); h.addColorStop(0, 'rgba(143,124,255,' + a + ')'); h.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = h; g.beginPath(); g.arc(cx(), cy(), r, 0, TAU); g.fill();
+}
+function scene(visual, t, o) {
+  o = o || {};
+  const hue = CH[o.ci != null ? o.ci : 5].c;
+  sky(t, hue);
+  const st = o.st || null;
+  switch (visual) {
+    case 'eye': drawEye(t, st); break;
+    case 'chakras': drawChakras(t, st, o.active != null ? o.active : -1, 1); break;
+    case 'cocoon': drawCocoon(t, st); break;
+    case 'mandala': drawMandala(t, st, o.ci); break;
+    case 'cleanse': drawCleanse(t, st); break;
+    case 'energy': drawEnergy(t, st); break;
+    case 'health': drawHealth(t, st); break;
+    case 'abundance': drawAbundance(t, st); break;
+    case 'luck': drawLuck(t, st); break;
+    case 'purpose': drawPurpose(t, st); break;
+    case 'silence': drawSilence(t, st); break;
+    case 'network': drawNetwork(t); break;
+    case 'dark': drawDark(t, o.since || 0); break;
+    default: drawSphere(st, t, o.ci);
+  }
+  if (o.shell) { const m = M(); g.globalCompositeOperation = 'lighter'; shell(t, st, visual === 'dark' ? 0.25 : 0.55, m * 0.34, m * 0.4); }
+  vignette();
+}
+
+// surfaces: every canvas on screen is a view onto the same scene renderer
+const surfaces = [];
+function surface(canvas, opts) {
+  const s = Object.assign({ canvas, ctx: canvas.getContext('2d'), w: 0, h: 0, cyr: 0.45, mr: 0.9, live: true }, opts);
+  const fit = () => { const r = canvas.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio || 1); s.w = r.width; s.h = r.height; canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr); s.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); s.dirty = true; };
+  new ResizeObserver(fit).observe(canvas); fit(); surfaces.push(s); return s;
+}
+function paint(s, t) {
+  if (!s.w || !s.h) return;
+  g = s.ctx; W = s.w; H = s.h; CYR = s.cyr; MR = s.mr;
+  const v = typeof s.visual === 'function' ? s.visual() : s.visual;
+  scene(v.visual, t, v);
+}
+const visible = el => { const r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight && r.width > 0 && !el.closest('[hidden]'); };
+
+// ======================= pages =======================
+const roomGrid = $('roomGrid');
+ROOMS.forEach((r, i) => {
+  const a = document.createElement('a'); a.className = 'room'; a.href = '#room-' + r.id; a.style.setProperty('--rc', rgba(r.color, 1));
+  a.innerHTML = '<div class="art"><canvas></canvas><span class="num">' + String(i + 1).padStart(2, '0') + '</span><span class="tag ' + r.ev[0] + '">' + r.ev[1].split(' · ')[0] + '</span></div>' +
+    '<div class="body"><h3>' + r.name + '</h3><p>' + r.tag + '</p><div class="meta"><span>' + mins(sum(r.phases)) + '</span><span>Войти →</span></div></div>';
+  roomGrid.appendChild(a);
+  const main = r.main[0];
+  surface(a.querySelector('canvas'), { cyr: 0.5, mr: 1.15, visual: { visual: main.visual === 'silence' && r.id === 'purpose' ? 'purpose' : main.visual, ci: r.ci, active: r.id === 'chakras' ? 5 : undefined } });
+});
+surface($('heroCv'), { cyr: 0.5, mr: 0.9, visual: { visual: 'network', ci: 5 } });
+surface($('archCv'), { cyr: 0.42, mr: 0.95, visual: { visual: 'eye', ci: 5 } });
+let curRoom = ROOMS[0];
+const roomSurf = surface($('roomCv'), { cyr: 0.36, mr: 0.75, visual: () => ({ visual: curRoom.main[0].visual === 'silence' && curRoom.id === 'purpose' ? 'purpose' : curRoom.main[0].visual, ci: curRoom.ci, active: curRoom.id === 'chakras' ? 5 : undefined }) });
+
+// portrait slot: a photo replaces the live eye in the arch
+const HERO_PHOTO = '';   // set to e.g. 'img/hero.jpg' once the portrait is published with the page
+if (HERO_PHOTO) { const im = $('archImg'); im.onload = () => { im.hidden = false; $('archCv').hidden = true; }; im.src = HERO_PHOTO; }
+
+function showRoom(id) {
+  const r = ROOMS.find(x => x.id === id); if (!r) return showHome();
+  curRoom = r; $('home').hidden = true; $('roomPage').hidden = false;
+  const idx = ROOMS.indexOf(r);
+  $('rNum').textContent = 'Кабинет ' + String(idx + 1).padStart(2, '0');
+  $('rName').textContent = r.name; $('rTag').textContent = r.tag;
+  $('rChips').innerHTML = '<span class="chip">' + mins(sum(r.phases)) + '</span><span class="chip">' + r.ev[1] + '</span><span class="chip">Наушники</span>';
+  $('rWhyT').textContent = r.whyT; $('rWhy').textContent = r.why; $('rNote').innerHTML = r.note;
+  $('rSteps').innerHTML = r.phases.map(p => '<li style="color:' + rgba(CH[p.tone].c, 1) + '"><i></i><div><b>' + p.name + '</b><small>' + p.text + '</small></div><span class="d">' + fmt(p.dur) + '</span></li>').join('');
+  const prev = ROOMS[(idx + ROOMS.length - 1) % ROOMS.length], next = ROOMS[(idx + 1) % ROOMS.length];
+  $('rNav').innerHTML = '<a href="#room-' + prev.id + '"><span class="eyebrow">← Предыдущий</span><b>' + prev.name + '</b></a><a href="#room-' + next.id + '"><span class="eyebrow">Следующий →</span><b>' + next.name + '</b></a>';
+  document.title = 'Аджна';
+  scrollTo(0, 0);
+}
+function showHome(anchor) {
+  $('home').hidden = false; $('roomPage').hidden = true;
+  if (anchor) { const el = $(anchor); if (el) setTimeout(() => el.scrollIntoView(), 0); } else scrollTo(0, 0);
+}
+function route() {
+  const h = location.hash.slice(1);
+  if (h.startsWith('room-')) showRoom(h.slice(5));
+  else if (h && $(h) && $('home').contains($(h))) showHome(h);
+  else showHome();
+}
+addEventListener('hashchange', route);
+addEventListener('scroll', () => $('nav').classList.toggle('solid', scrollY > 40), { passive: true });
+$('rStart').onclick = () => openPlayer(curRoom);
+
+// ======================= audio =======================
+let actx = null, master, duck, beatGain, noiseGain, padBus, oscL, oscR, voiceBus, padVoices = [];
+const CARRIER = 200, volGain = () => Math.pow(+$('vol').value / 100, 2) * 0.35;
+function ir(ac, secs) { const len = ac.sampleRate * secs, b = ac.createBuffer(2, len, ac.sampleRate); for (let c = 0; c < 2; c++) { const d = b.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3) * 0.6; } return b; }
+function pink(ac) { const len = ac.sampleRate * 6, buf = ac.createBuffer(2, len, ac.sampleRate);
+  for (let c = 0; c < 2; c++) { const d = buf.getChannelData(c); let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+    for (let i = 0; i < len; i++) { const w = Math.random() * 2 - 1; b0 = 0.99886 * b0 + w * 0.0555179; b1 = 0.99332 * b1 + w * 0.0750759; b2 = 0.969 * b2 + w * 0.153852; b3 = 0.8665 * b3 + w * 0.3104856; b4 = 0.55 * b4 + w * 0.5329522; b5 = -0.7616 * b5 - w * 0.016898; d[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362) * 0.11; b6 = w * 0.115926; } }
+  return buf; }
+function initAudio() {
+  if (actx) return; const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+  actx = new AC();
+  master = actx.createGain(); master.gain.value = 0; master.connect(actx.destination);
+  duck = actx.createGain(); duck.connect(master);
+  const mg = actx.createChannelMerger(2); beatGain = actx.createGain(); mg.connect(beatGain).connect(duck);
+  const gL = actx.createGain(), gR = actx.createGain(); gL.gain.value = gR.gain.value = 0.5;
+  oscL = actx.createOscillator(); oscR = actx.createOscillator(); oscL.frequency.value = CARRIER; oscR.frequency.value = CARRIER + 10;
+  oscL.connect(gL).connect(mg, 0, 0); oscR.connect(gR).connect(mg, 0, 1); oscL.start(); oscR.start();
+  const src = actx.createBufferSource(); src.buffer = pink(actx); src.loop = true; const lp = actx.createBiquadFilter(); lp.frequency.value = 1400;
+  noiseGain = actx.createGain(); noiseGain.gain.value = 0; src.connect(lp).connect(noiseGain).connect(duck); src.start();
+  padBus = actx.createGain(); padBus.gain.value = 0;
+  const pf = actx.createBiquadFilter(); pf.type = 'lowpass'; pf.frequency.value = 900; pf.Q.value = 0.3;
+  const hall = actx.createConvolver(); hall.buffer = ir(actx, 5); const hw = actx.createGain(); hw.gain.value = 0.55;
+  padBus.connect(pf); pf.connect(duck); pf.connect(hall).connect(hw).connect(duck);
+  const lfo = actx.createOscillator(), lg = actx.createGain(); lfo.frequency.value = 0.05; lg.gain.value = 220; lfo.connect(lg).connect(pf.frequency); lfo.start();
+  [1, 1.5, 2, 3].forEach((mult, i) => [-1, 1].forEach(det => {
+    const o = actx.createOscillator(), og = actx.createGain(), pan = actx.createStereoPanner ? actx.createStereoPanner() : null;
+    o.type = i ? 'triangle' : 'sine'; o.detune.value = det * 6; og.gain.value = [0.16, 0.08, 0.06, 0.025][i]; o.frequency.value = 110 * mult; o.connect(og);
+    if (pan) { pan.pan.value = det * 0.5; og.connect(pan).connect(padBus); } else og.connect(padBus); o.start(); padVoices.push({ o, mult }); }));
+  voiceBus = actx.createGain(); const conv = actx.createConvolver(); conv.buffer = ir(actx, 2.4); const wet = actx.createGain(); wet.gain.value = 0.18;
+  voiceBus.connect(actx.destination); voiceBus.connect(conv).connect(wet).connect(actx.destination);
+}
+function padRoot(f) { if (actx) padVoices.forEach(v => v.o.frequency.setTargetAtTime(f * v.mult / 2, actx.currentTime, 2.5)); }
+let beatOn = 1;
+function applyAudio(ph) {
+  if (!actx) return; beatOn = ph.beat > 0 ? 1 : 0;
+  if (beatOn) { oscL.frequency.setTargetAtTime(CARRIER, actx.currentTime, 3); oscR.frequency.setTargetAtTime(CARRIER + ph.beat, actx.currentTime, 3); }
+  padRoot(CH[ph.tone].tone); levels(4);
+}
+function levels(tc) {
+  if (!actx) return; const t = actx.currentTime, on = P.running && !P.paused;
+  master.gain.setTargetAtTime(on ? volGain() : 0, t, tc || 0.4);
+  beatGain.gain.setTargetAtTime(beatOn && $('beat').checked ? 1 : 0, t, 0.6);
+  noiseGain.gain.setTargetAtTime($('noise').checked ? 0.5 : 0, t, 0.5);
+  padBus.gain.setTargetAtTime($('music').checked ? 0.55 : 0, t, 1.5);
+}
+const setDuck = on => { if (actx) duck.gain.setTargetAtTime(on ? 0.45 : 1, actx.currentTime, 0.6); };
+$('vol').oninput = () => { $('volV').textContent = $('vol').value + '%'; levels(0.2); };
+['noise', 'music', 'beat'].forEach(id => $(id).onchange = () => levels());
+function bell(n, f0) {
+  if (!actx) return;
+  for (let k = 0; k < (n || 1); k++) { const t0 = actx.currentTime + k * 2.2;
+    [[1, 0.6], [2, 1], [3, 0.35], [4.5, 0.12]].forEach(([m, a]) => { const o = actx.createOscillator(), gg = actx.createGain(); o.frequency.value = (f0 || 220) * m;
+      gg.gain.setValueAtTime(0, t0); gg.gain.linearRampToValueAtTime(0.12 * a * Math.max(0.35, +$('vol').value / 60), t0 + 0.015); gg.gain.exponentialRampToValueAtTime(0.0001, t0 + 6);
+      o.connect(gg).connect(voiceBus); o.start(t0); o.stop(t0 + 6.1); }); }
+}
+
+// ======================= voice (female only) =======================
+const VOICE_RECORDED = false;   // true once voice/manifest.json and the mp3 files are published with the page
+const recorded = {};
+async function loadRecorded() {
+  if (!actx || loadRecorded.done || !VOICE_RECORDED) return; loadRecorded.done = true;
+  let keys = []; try { const r = await fetch('voice/manifest.json'); if (r.ok) keys = await r.json(); } catch (e) {}
+  await Promise.all(keys.map(async k => { try { const r = await fetch('voice/' + k + '.mp3'); if (r.ok) recorded[k] = await actx.decodeAudioData(await r.arrayBuffer()); } catch (e) {} }));
+}
+function playRec(k) { const b = recorded[k]; if (!b || !actx) return false; const s = actx.createBufferSource(); s.buffer = b; s.connect(voiceBus); setDuck(true); s.onended = () => setDuck(false); s.start(); return true; }
+const synth = window.speechSynthesis;
+const FEMALE = /svetlana|dariya|darya|milena|katya|ekaterina|anna|irina|elena|alena|alyona|yuliya|julia|tatyana|natalia|google\s*рус|google ru|female|женск/i;
+const MALE = /pavel|dmitr|yuri|maxim|denis|ruslan|nikolai|aleksandr|artem|male\b|мужск/i;
+const NATURAL = /natural|online|neural|premium|enhanced|улучш|wavenet/i;
+let voices = [];
+function listVoices() {
+  if (!synth) return;
+  const sc = v => (NATURAL.test(v.name) ? 4 : 0) + (FEMALE.test(v.name) ? 3 : 0) + (v.localService ? 0 : 1);
+  voices = synth.getVoices().filter(v => /^ru/i.test(v.lang) && !MALE.test(v.name)).sort((a, b) => sc(b) - sc(a));
+  const sel = $('voiceSel'), keep = sel.value; sel.innerHTML = '';
+  if (!voices.length) { sel.innerHTML = '<option>Женского русского голоса нет</option>'; sel.disabled = true; }
+  else { sel.disabled = false; voices.forEach((v, i) => { const o = document.createElement('option'); o.value = v.name; o.textContent = (i ? '' : '★ ') + v.name.replace(/^(Microsoft|Google) /, ''); sel.appendChild(o); }); }
+  if (keep && voices.some(v => v.name === keep)) sel.value = keep;
+  $('voiceNote').textContent = !voices.length ? 'На этом устройстве нет женского русского голоса — подсказки идут текстом. Откройте сайт в Microsoft Edge: там есть Svetlana (Natural).'
+    : NATURAL.test(voices[0].name) ? 'Включён естественный нейросетевой женский голос.' : 'Самый живой голос — в Microsoft Edge: «Svetlana Online (Natural)». На iPhone скачайте «Милена (улучшенная)».';
+}
+if (synth) { listVoices(); synth.onvoiceschanged = listVoices; } else $('voiceNote').textContent = 'В этом браузере нет синтеза речи. Подсказки будут текстом.';
+const curVoice = () => voices.find(v => v.name === $('voiceSel').value) || voices[0] || null;
+let sayTok = 0;
+function speak(lines, o) {
+  const v = curVoice(); if (!synth || !v || !lines || !lines.length) return;
+  const tok = ++sayTok, nat = NATURAL.test(v.name); synth.cancel(); let i = 0;
+  const next = () => { if (tok !== sayTok || i >= lines.length) { setDuck(false); return; }
+    const u = new SpeechSynthesisUtterance(lines[i++]); u.lang = v.lang || 'ru-RU'; u.voice = v; u.rate = (o && o.rate) || (nat ? 0.86 : 0.8); u.pitch = nat ? 1 : 1.05; u.volume = 0.85;
+    u.onstart = () => setDuck(true); u.onend = u.onerror = () => setTimeout(next, (o && o.gap) || 1100); synth.speak(u); };
+  next();
+}
+const guide = (key, lines) => { if ($('vInstr').checked && !playRec(key)) speak(lines); };
+$('testVoice').onclick = async () => { initAudio(); if (actx && actx.state === 'suspended') await actx.resume().catch(() => {}); await loadRecorded();
+  if (!playRec('cocoon')) { if (!curVoice()) { $('voiceNote').textContent = 'Женского голоса на этом устройстве нет. Откройте сайт в Microsoft Edge.'; return; } speak(['Устройтесь удобно.', 'Представьте вокруг себя кокон золотого света.']); } };
+$('voiceSel').onchange = () => synth && synth.cancel();
+
+// ======================= player =======================
+const P = { room: null, phases: [], running: false, paused: false, elapsed: 0, last: 0, idx: -1, start: 0, ch: -1, lastLabel: '', wake: null };
+const pSurf = surface($('pCv'), { cyr: 0.4, mr: 0.68, visual: () => {
+  if (!P.room) return { visual: 'eye' };
+  const ph = P.phases[Math.max(0, P.idx)], pt = P.elapsed - P.start;
+  return { visual: ph.visual, ci: ph.visual === 'chakras' && P.ch >= 0 ? P.ch : ph.tone, st: ph.breath && P.running ? breathAt(ph.breath, pt) : null, active: ph.key === 'chakras' ? P.ch : -1, since: pt, shell: P.running && P.idx > 0 && ph.visual !== 'cocoon' };
+} });
+function openPlayer(r) {
+  P.room = r; P.phases = r.phases; P.idx = -1; P.running = false; P.elapsed = 0;
+  $('player').hidden = false; document.body.style.overflow = 'hidden';
+  $('pTtl').textContent = r.name; $('pPhase').textContent = r.name; $('pInstr').textContent = 'Наденьте наушники и сядьте удобно. Сессия начнётся с кокона.';
+  $('pEye').textContent = 'Сессия · ' + mins(sum(r.phases)); $('pTime').textContent = fmt(sum(r.phases)); $('pProg').style.width = '0';
+  $('pIco').innerHTML = '<path d="M8 5.5v13l11-6.5z"/>';
+}
+function closePlayer() { stop(); $('player').hidden = true; document.body.style.overflow = ''; $('drawer').classList.remove('open'); }
+function enter(i) {
+  P.idx = i; P.start = P.elapsed; P.ch = -1; P.lastLabel = '';
+  const ph = P.phases[i]; $('pPhase').textContent = ph.name; $('pInstr').textContent = ph.text; applyAudio(ph);
+  if (i > 0) bell(1, CH[ph.tone].tone);
+  setTimeout(() => { if (P.running && !P.paused && P.idx === i) guide(ph.key, ph.say); }, i > 0 ? 2600 : 900);
+}
+function chakra(k) {
+  P.ch = k; const c = CH[k]; $('pPhase').textContent = c.n; $('pInstr').textContent = c.where[0].toUpperCase() + c.where.slice(1) + '. Мысленно звучит «' + c.bija + '».';
+  padRoot(c.tone); bell(1, c.tone); setTimeout(() => { if (P.running && !P.paused && P.ch === k) guide('c' + (k + 1), c.say); }, k ? 1800 : 6000);
+}
+async function play() {
+  initAudio(); if (actx && actx.state === 'suspended') await actx.resume().catch(() => {});
+  if (!P.running) { await loadRecorded(); P.running = true; P.paused = false; P.elapsed = 0; P.last = performance.now(); enter(0); }
+  else { P.paused = !P.paused; P.last = performance.now(); if (P.paused && synth) synth.cancel(); }
+  $('pIco').innerHTML = P.paused ? '<path d="M8 5.5v13l11-6.5z"/>' : '<rect x="7" y="5.5" width="3.2" height="13" rx="1"/><rect x="13.8" y="5.5" width="3.2" height="13" rx="1"/>';
+  levels(P.paused ? 0.4 : 3);
+  try { if (!P.paused && 'wakeLock' in navigator) P.wake = await navigator.wakeLock.request('screen'); else if (P.wake) { P.wake.release(); P.wake = null; } } catch (e) {}
+  poke();
+}
+function stop(done) {
+  if (!P.running) return; P.running = false; P.paused = false; sayTok++; if (synth) synth.cancel(); levels(done ? 5 : 0.6);
+  if (done) { bell(3, 220); $('pPhase').textContent = 'Сессия завершена'; $('pInstr').textContent = 'Посидите минуту с закрытыми глазами. Заметьте, что изменилось.'; }
+  else { $('pPhase').textContent = P.room ? P.room.name : ''; $('pInstr').textContent = 'Можно начать снова, когда будете готовы.'; }
+  $('pIco').innerHTML = '<path d="M8 5.5v13l11-6.5z"/>'; $('pProg').style.width = '0'; P.idx = -1;
+  try { P.wake && P.wake.release(); } catch (e) {} P.wake = null; poke();
+}
+$('pPlay').onclick = play; $('pStop').onclick = () => stop(); $('pClose').onclick = closePlayer;
+$('pSet').onclick = () => $('drawer').classList.add('open'); $('dClose').onclick = () => $('drawer').classList.remove('open');
+$('pFs').onclick = () => { try { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(() => {}); } catch (e) {} };
+addEventListener('keydown', e => { if (e.key === 'Escape') { if ($('drawer').classList.contains('open')) $('drawer').classList.remove('open'); else if (!$('player').hidden) closePlayer(); } });
+let idleT = 0;
+function poke() { $('player').classList.remove('calm'); clearTimeout(idleT); if (P.running && !P.paused) idleT = setTimeout(() => { if (!$('drawer').classList.contains('open')) $('player').classList.add('calm'); }, 5000); }
+['pointermove', 'pointerdown', 'keydown'].forEach(e => addEventListener(e, poke, { passive: true }));
+
+// ======================= loop =======================
+let stillDone = false;
+function frame(now) {
+  if (P.running && !P.paused) {
+    P.elapsed += Math.min(0.25, (now - P.last) / 1000);
+    if (P.elapsed - P.start >= P.phases[P.idx].dur) { if (P.idx + 1 < P.phases.length) enter(P.idx + 1); else stop(true); }
+    if (P.running) {
+      const ph = P.phases[P.idx], pt = P.elapsed - P.start, tot = sum(P.phases);
+      if (ph.key === 'chakras' && pt > 4) { const k = Math.min(6, Math.floor((pt - 4) / 30)); if (k !== P.ch) chakra(k); }
+      const st = ph.breath ? breathAt(ph.breath, pt) : null;
+      if (st && ph.cue && st.label !== P.lastLabel) { if (P.lastLabel && st.label !== 'Пауза' && $('vBreath').checked && !playRec(st.label === 'Вдох' ? 'inhale' : 'exhale') && synth && !synth.speaking) speak([st.label], { rate: 0.7, gap: 0 }); P.lastLabel = st.label; }
+      $('pEye').textContent = 'Шаг ' + (P.idx + 1) + ' из ' + P.phases.length + ' · ' + fmt(ph.dur - pt);
+      $('pTime').textContent = fmt(tot - P.elapsed); $('pProg').style.width = (P.elapsed / tot * 100).toFixed(2) + '%';
+    }
+  }
+  P.last = now;
+  const t = now / 1000, inPlayer = !$('player').hidden;
+  for (const s of surfaces) {
+    if (inPlayer ? s !== pSurf : s === pSurf) continue;
+    if (!visible(s.canvas)) continue;
+    if (reduce && !s.dirty && s !== pSurf) continue;
+    paint(s, t); s.dirty = false;
+  }
+  requestAnimationFrame(frame);
+}
+route(); requestAnimationFrame(frame);
+})();
+</script>
