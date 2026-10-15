@@ -2457,6 +2457,7 @@ function showRoom(id) {
     const tg = TARGET[r.id], rs = results(r.id).filter(x => x.a != null), avg = rs.length ? rs.reduce((a, x) => a + (x.a - x.b) * tg.m[3], 0) / rs.length : null;
     $('rSound').innerHTML = '<span class="eyebrow">Звучание пространства</span><div class="rsnd">'
       + '<div class="rsnd__w"><small>Центр внимания</small><b>' + tg.ch.slice(0, 3).map(c => CH[c].n).join(' · ') + (tg.ch.length > 3 ? ' и все чакры' : '') + ' — ' + tg.ch.slice(0, 2).map(c => CH[c].where).join(', ') + '</b></div>'
+      + '<div class="rsnd__w"><small>Сольфеджио</small><b>' + (r.sleep ? '174 Гц' : tg.ch.length > 3 ? '396 → 963 Гц, по чакре за раз' : [...new Set(tg.ch.map(c => SOL[c]))].join(' · ') + ' Гц' + (r.bare ? '' : ' · вход и завершение 639 Гц')) + ' — вместе с бинауральным ритмом</b></div>'
       + '<div class="rsnd__w"><small>Результат, который мы измеряем</small><b>' + tg.m[4] + (tg.m[3] > 0 ? ' ↑' : ' ↓') + (avg != null ? ' · ваш средний результат: ' + (avg > 0 ? '+' : '') + avg.toFixed(1) + ' балла за ' + rs.length + ' сеанс' + (rs.length === 1 ? '' : rs.length < 5 ? 'а' : 'ов') : ' · оценка до и после каждого сеанса') + '</b></div>'
       + '<div><small>Ритм</small><b>' + bands + ' ' + rng + '</b></div><div><small>Дыхание</small><b>' + (sp.breath ? BREATH_RU[sp.breath] : 'три техники по очереди') + '</b></div><div><small>Музыка</small><b>' + MODE_RU[sp.mode] + ', ' + (sp.tempo[0] < 5 ? 'живой темп' : sp.tempo[0] > 9 ? 'очень редкие ноты' : 'спокойный темп') + '</b></div><div><small>Задача</small><b>' + sp.goal + '</b></div></div>'; $('rSound').hidden = false; }
   else $('rSound').hidden = true;
@@ -2603,7 +2604,7 @@ function padRoot(f) { curRoot = f; if (actx) padVoices.forEach(v => v.o.frequenc
 let beatOn = 1;
 function applyAudio(ph) {
   if (!actx) return; beatOn = ph.beat > 0 ? 1 : 0;
-  const sp = (P.room && SOUND[P.room.id]) || {}, car = sp.carrier || CARRIER;
+  const sp = (P.room && SOUND[P.room.id]) || {}, car = carrierFor(P.sol) || sp.carrier || CARRIER;
   if (beatOn) { oscL.frequency.setTargetAtTime(car, actx.currentTime, 3); oscR.frequency.setTargetAtTime(car + ph.beat, actx.currentTime, 3); }
   if (window.noiseLP) noiseLP.frequency.setTargetAtTime(sp.noise === 'brown' ? 380 : sp.noise === 'white' ? 6000 : 1600, actx.currentTime, 2);
   padRoot(CH[ph.tone].tone); levels(4);
@@ -2611,6 +2612,17 @@ function applyAudio(ph) {
 let bowlO = null, bowlG = null;
 // solfeggio frequencies by the usual tradition, root → crown
 const SOL = [396, 417, 528, 639, 741, 852, 963];
+// the step's tone: its focus centre; heart (639) for entry, breathing and ending; 174 Hz for sleep; 396 Hz grounding in SOS
+function solFor(ph, i) { const r = P.room, tg = r && TARGET[r.id];
+  if (r && r.sleep) return 174;
+  if (ph.key === 'intent') return tg ? SOL[tg.ch[0]] : 639;
+  if (ph.key === 'cocoon' || ph.key === 'breath' || ph.key === 'return') return 639;
+  if (ph.key === 'chakras') return SOL[0];
+  const named = namedCentre(ph); if (named >= 0) return SOL[named];
+  if (r && r.id === 'sos') return 396;
+  return tg ? SOL[tg.ch[(i - P.m0) % tg.ch.length]] : 639; }
+// binaural carrier = the solfeggio tone moved down by octaves into 120–260 Hz, so both sound in harmony
+const carrierFor = f => { if (!f) return 0; while (f > 260) f /= 2; return f; };
 function bowl(f) { // the focus centre's solfeggio tone (with a soft sub-octave), swelling on each exhale
   if (!actx) return;
   if (!bowlO) { bowlG = actx.createGain(); bowlG.gain.value = 0; bowlG.connect(duck); bowlO = [1, 0.5, 2].map((m, i) => { const o = actx.createOscillator(), g = actx.createGain(); o.type = 'sine'; g.gain.value = [1, 0.35, 0.06][i]; o.connect(g).connect(bowlG); o.start(); return { o, m }; }); }
@@ -2717,7 +2729,7 @@ function openPlayer(r) {
 }
 function closePlayer() { stop(); $('player').hidden = true; document.body.style.overflow = ''; $('drawer').classList.remove('open'); }
 function enter(i) {
-  P.idx = i; P.start = P.elapsed; P.ch = -1; P.fc = -1; P.lastLabel = '';
+  P.idx = i; P.start = P.elapsed; P.ch = -1; P.fc = -1; P.lastLabel = ''; P.sol = solFor(P.phases[i], i);
   const ph = P.phases[i]; setTimeout(() => P.running && P.idx === i && fly(ph), i === 0 ? 2500 : 0); vis(ph); $('pEyes').innerHTML = EYES[eyesOf(ph)][1] + EYES[eyesOf(ph)][0]; $('pPhase').textContent = ph.name; $('pInstr').textContent = ph.text; applyAudio(ph);
   if (i > 0) bell(1, CH[ph.tone].tone);
   const tg = P.room && TARGET[P.room.id], c0 = P.room && !P.room.sleep ? namedCentre(ph) : -1, fc0 = c0 >= 0 ? c0 : tg && !P.room.bare ? tg.ch[0] : -1;
@@ -2727,7 +2739,7 @@ function enter(i) {
   else if (want === 'closed' && P.eyesNow !== 'closed') { P.eyesNow = 'closed'; if (!saysEyes) eyeCue = ['eyes-close', ['А теперь закройте глаза.']]; }
   else if (want === 'open' && P.eyesNow === 'closed') { P.eyesNow = 'open'; if (!saysEyes) eyeCue = ['eyes-open', ['А теперь откройте глаза и смотрите на картинку.']]; }
   const lines = i === P.m0 && P.intent && P.m0 ? ['Помните, зачем вы здесь.', P.intent + '.', ...focus, ...ph.say] : [...focus, ...ph.say];
-  if (tg && i >= P.m0 && i < P.m1) { const named = P.room.sleep ? -1 : namedCentre(ph), c = named >= 0 ? named : P.room.bare ? -1 : tg.ch[(i - P.m0) % tg.ch.length]; P.fc = c; bowl(c >= 0 ? SOL[c] : 0); if (i === P.m0 && c >= 0) $('pInstr').textContent = 'Направьте внутреннее внимание: ' + CH[c].where + '. ' + ph.text; } else bowl(0);
+  if (tg && i >= P.m0 && i < P.m1) { const named = P.room.sleep ? -1 : namedCentre(ph), c = named >= 0 ? named : P.room.bare ? -1 : tg.ch[(i - P.m0) % tg.ch.length]; P.fc = c; if (i === P.m0 && c >= 0) $('pInstr').textContent = 'Направьте внутреннее внимание: ' + CH[c].where + '. ' + ph.text; } bowl(P.sol);
   setTimeout(() => { if (P.running && !P.paused && P.idx === i) guideSeq(eyeCue ? [eyeCue, [ph.key, lines]] : [[ph.key, lines]]); }, i > 0 ? 2600 : 900);
 }
 const CH_WORDS = [[0, /основани|копчик|корн|стоп/], [1, /низ живота|ниже пупка|таз/], [2, /солнечн|под рёбрами/], [3, /груд|сердц/], [4, /горл/], [5, /между бровей|лоб/], [6, /макушк|темя/]];
@@ -2754,7 +2766,7 @@ function cocoonGlow(ph, pt, st) { const img = $('pCoc'), pl = $('player');
   img.style.transform = 'translate(-50%, -50%) scale(' + (0.96 + 0.05 * g * ex).toFixed(4) + ')'; }
 function chakra(k) {
   P.ch = k; const c = CH[k]; $('pPhase').textContent = c.n; $('pInstr').textContent = c.where[0].toUpperCase() + c.where.slice(1) + '. Мысленно звучит «' + c.bija + '».';
-  padRoot(c.tone); bell(1, c.tone); bowl(SOL[k]); setTimeout(() => { if (P.running && !P.paused && P.ch === k) guide('c' + (k + 1), c.say); }, k ? 1800 : 6000);
+  padRoot(c.tone); bell(1, c.tone); P.sol = SOL[k]; bowl(P.sol); applyAudio(P.phases[P.idx]); setTimeout(() => { if (P.running && !P.paused && P.ch === k) guide('c' + (k + 1), c.say); }, k ? 1800 : 6000);
 }
 async function play() {
   initAudio(); if (actx && actx.state === 'suspended') await actx.resume().catch(() => {});
