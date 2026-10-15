@@ -1304,7 +1304,7 @@ const focusLine = c => 'Сосредоточьтесь на ' + ORD_P[c] + ' ч�
 
 
 const SPHERE_STAGES = [
-  [0, ['Посмотрите на золотую сферу.', 'Вы внутри неё.']],
+  [0, ['Смотрите на картинку на экране.', 'Представьте, что вы внутри этой золотой сферы.']],
   [0.15, ['Из космоса к вам спускается мягкий золотой свет.', 'Он входит через макушку и опускается в центр груди — в четвёртую чакру.']],
   [0.42, ['Четвёртая чакра наполняется светом.', 'Тёплым, спокойным, золотым.']],
   [0.5, ['На выдохе свет из четвёртой чакры расходится во все стороны.', 'Он наполняет золотую сферу и уплотняет её.']],
@@ -1314,8 +1314,8 @@ const COCOON = { key: 'cocoon', name: 'Золотая сфера', dur: 180, vis
   text: 'Смотрите на сферу. Золотой свет из космоса входит через макушку в четвёртую чакру. На выдохе он расходится из неё во все стороны, наполняет сферу и уплотняет её — это ваша защита.',
   say: SPHERE_STAGES.flatMap(x => x[1]) };
 const BREATHE = { key: 'breath', name: 'Успокоение', dur: 90, visual: 'breath', breath: 'guide', beat: 10, tone: 3, cue: true, guideBreath: true, eyes: 'any',
-  text: 'Дышите вместе с голосом и шарами: шар растёт — вдох, уменьшается — медленный выдох.',
-  say: ['Сядьте удобно.', 'Спина ровная, плечи опущены.', 'Вдыхайте через нос — на счёт четыре.', 'Выдыхайте через рот — медленно, на счёт шесть.', 'Дышите вместе с моим голосом.'] };
+  text: 'Ноги на полу, спина ровная. Вдох через нос на 4 счёта, выдох через рот на 6. Считайте вместе с голосом: шар растёт — вдох, уменьшается — выдох.',
+  say: ['Сядьте удобно.', 'Поставьте ноги на пол.', 'Спина ровная, плечи опущены, руки спокойно лежат на коленях.', 'Дышим вместе: вдох через нос — на четыре счёта, выдох через рот — на шесть.', 'Считайте вместе со мной.'] };
 const INTENT_PH = { key: 'intent', name: 'Намерение', dur: 30, visual: 'breath', breath: 'calm', beat: 10, tone: 3, eyes: 'open', text: 'Прочитайте намерение и произнесите его про себя.', say: ['Начнём с намерения.', 'Прочитайте его на экране и произнесите про себя.'] };
 const CLEAN = { key: 'clean', name: 'Очищение чакр', dur: 630, visual: 'chakras', breath: 'long', beat: 8, tone: 6, eyes: 'any', seq: 'clean',
   text: 'По одной чакре, снизу вверх: мягкий бело-золотой свет омывает чакру и уносит всё чужое вниз, в землю.', say: ['Теперь сосредоточимся на чакрах.', 'Начнём с первой.'] };
@@ -1619,7 +1619,7 @@ window.AJNA_SCRIPT = () => {
   const out = [['cocoon', COCOON.say], ['breath', BREATHE.say], ['return', RETURN.say]];
   ROOMS.forEach(r => (r.habit ? Object.keys(HABITS).flatMap(habitMain) : r.main).forEach(s => out.push([s.key, s.say])));
   CH.forEach((c, i) => out.push(['c' + (i + 1), c.say]));
-  out.push(['inhale', ['Вдох']], ['exhale', ['Выдох']]);
+  out.push(['inhale', ['Вдох']], ['exhale', ['Выдох']], ['inhale-count', COUNT_IN], ['exhale-count', COUNT_OUT]);
   return out;
 };
 
@@ -2726,6 +2726,9 @@ async function loadRecorded() {
   await Promise.all(keys.map(async k => { try { const r = await fetch('voice/' + g + '/' + k + '.mp3'); if (r.ok && VGENDER === g) recorded[k] = await actx.decodeAudioData(await r.arrayBuffer()); } catch (e) {} }));
 }
 let recUntil = 0;
+const COUNT_IN = ['Вдох', 'два', 'три', 'четыре'], COUNT_OUT = ['Выдох', 'два', 'три', 'четыре', 'пять', 'шесть'], COUNTED = 3;
+const breathKey = (label, ph) => { const k = { 'Вдох': 'inhale', 'Выдох': 'exhale' }[label] || ''; if (!k) return '';
+  if (k === 'inhale') P.breaths = (P.breaths || 0) + 1; return ph.key === 'breath' && P.breaths <= COUNTED && recorded[k + '-count'] ? k + '-count' : k; };
 function playRec(k) { const b = recorded[k]; if (!b || !actx) return false; const s = actx.createBufferSource(); s.buffer = b; s.connect(voiceBus); setDuck(true); s.onended = () => setDuck(false); s.start(); recUntil = actx.currentTime + b.duration; return true; }
 const synth = window.speechSynthesis;
 const FEMALE = /svetlana|dariya|darya|milena|katya|ekaterina|anna|irina|elena|alena|alyona|yuliya|julia|tatyana|natalia|google\s*рус|google ru|female|женск/i;
@@ -2800,7 +2803,7 @@ function openPlayer(r) {
 }
 function closePlayer() { stop(); $('player').hidden = true; document.body.style.overflow = ''; $('drawer').classList.remove('open'); }
 function enter(i) {
-  P.idx = i; P.start = P.elapsed; P.ch = -1; P.fc = -1; P.lastLabel = ''; P.sol = solFor(P.phases[i], i); if (i === 0) drone(P.room && ROOM_HZ[P.room.id] ? ROOM_HZ[P.room.id][0] : 0);
+  P.idx = i; P.start = P.elapsed; P.ch = -1; P.breaths = 0; P.fc = -1; P.lastLabel = ''; P.sol = solFor(P.phases[i], i); if (i === 0) drone(P.room && ROOM_HZ[P.room.id] ? ROOM_HZ[P.room.id][0] : 0);
   const ph = P.phases[i]; setTimeout(() => P.running && P.idx === i && fly(ph), i === 0 ? 2500 : 0); vis(ph); $('pEyes').innerHTML = EYES[eyesOf(ph)][1] + EYES[eyesOf(ph)][0]; $('pPhase').textContent = ph.name; $('pInstr').textContent = ph.text; applyAudio(ph);
   const tg = P.room && TARGET[P.room.id], c0 = P.room && !P.room.sleep ? namedCentre(ph) : -1, fc0 = c0 >= 0 ? c0 : tg && !P.room.bare ? tg.ch[0] : -1;
   const focus = tg && i === P.m0 && fc0 >= 0 && c0 < 0 ? [focusLine(fc0)] : [];
@@ -3114,7 +3117,7 @@ function frame(now) {
       if (actx && breathGain) { const on = st && $('sbreath').checked, lvl = on ? (ph.cue ? 0.42 : 0.2) * (0.06 + 0.94 * st.b) : 0; breathGain.gain.setTargetAtTime(lvl, actx.currentTime, 0.18); breathLP.frequency.setTargetAtTime(280 + 1400 * (st ? st.b : 0), actx.currentTime, 0.18); }
       if (droneG) droneG.gain.setTargetAtTime(drone.on && P.running && !P.paused && $('music').checked ? 0.04 : 0, actx.currentTime, 1.2);
       if (bowlG) bowlG.gain.setTargetAtTime(bowl.on && P.running && !P.paused && $('music').checked ? 0.055 * (0.45 + 0.55 * (st ? 1 - st.b : 0.5)) : 0, actx.currentTime, 0.4);
-      if (st && ph.cue && st.label !== P.lastLabel) { if (P.lastLabel && st.label !== 'Пауза' && ($('vBreath').checked || ph.guideBreath) && !(actx && actx.currentTime < recUntil) && !playRec({ 'Вдох': 'inhale', 'Выдох': 'exhale' }[st.label] || '') && synth && !synth.speaking) speak([st.label], { rate: 0.7, gap: 0 }); P.lastLabel = st.label; }
+      if (st && ph.cue && st.label !== P.lastLabel) { if (P.lastLabel && st.label !== 'Пауза' && ($('vBreath').checked || ph.guideBreath) && !(actx && actx.currentTime < recUntil) && !playRec(breathKey(st.label, ph)) && synth && !synth.speaking) speak([st.label], { rate: 0.7, gap: 0 }); P.lastLabel = st.label; }
       const inMain = P.idx >= P.m0 && P.idx < P.m1, el = P.elapsed - P.phases.slice(0, P.m0).reduce((a, p) => a + p.dur, 0);
       $('pIntent').classList.toggle('big', ph.key === 'intent'); $('pIntent').classList.toggle('on', ph.key === 'intent' || (inMain && (el % 75) < 9));
       focusUI(ph.key === 'chakras' || ph.seq ? P.ch : ph.key === 'cocoon' ? -1 : ph.key === 'intent' ? (TARGET[P.room.id] ? TARGET[P.room.id].ch[0] : -1) : inMain ? P.fc : -1, ph); breathUI(st, ph); cocoonGlow(ph, pt, st); sphereAnim(ph, pt);

@@ -103,7 +103,8 @@ def tidy(x):
     return y
 
 
-def say(lang, g, lines, dst):
+def say(lang, g, lines, dst, grid=0):
+    """grid > 0: every line starts exactly `grid` seconds after the previous one (breath counting)."""
     v = CFG[lang][g]
     settings = dict(CFG['settings'], speed=CFG['speed'][g])
     us = units(lines, lang); out = []
@@ -111,7 +112,8 @@ def say(lang, g, lines, dst):
         body = {'text': text, 'model_id': MODEL, 'voice_settings': settings,
                 'previous_text': ' '.join(t for t, _ in us[max(0, i - 2):i]) or None,
                 'next_text': ' '.join(t for t, _ in us[i + 1:i + 3]) or None}
-        out += [tidy(pcm(req(f'/text-to-speech/{v}?output_format=mp3_44100_128', body).read())), np.zeros(int(pause * SR), np.float32)]
+        x = tidy(pcm(req(f'/text-to-speech/{v}?output_format=mp3_44100_128', body).read()))
+        out += [x[:int(grid * SR)], np.zeros(int(grid * SR) - len(x[:int(grid * SR)]), np.float32)] if grid else [x, np.zeros(int(pause * SR), np.float32)]
     y = np.clip(np.concatenate(out), -32768, 32767).astype(np.int16)
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 's16le', '-ar', str(SR), '-ac', '1', '-i', '-', '-b:a', '128k', dst],
                    input=y.tobytes(), check=True)
@@ -140,7 +142,7 @@ def main():
             continue
         for attempt in range(4):
             try:
-                say(lang, g, frags[k], f); print('ok', lang, g, k); break
+                say(lang, g, frags[k], f, grid=1.0 if k.endswith('-count') else 0); print('ok', lang, g, k); break
             except urllib.error.HTTPError as e:
                 print('err', k, e.code, e.read()[:200]); time.sleep(2 ** (attempt + 1))
     done = sorted(os.path.splitext(n)[0] for n in os.listdir(d) if n.endswith('.mp3'))
