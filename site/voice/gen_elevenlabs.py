@@ -12,9 +12,9 @@
 Пишет <язык>/<голос>/manifest.json со списком готовых ключей.
 
 Как получается медитативная подача:
-  - каждое предложение синтезируется отдельно (с соседними фразами как контекстом интонации)
-    и склеивается с точной паузой: после команды («Сядьте удобно.») 3 с — чтобы успеть её выполнить,
-    между фразами 1,8 с, между предложениями одной фразы 1 с;
+  - каждая строка озвучивается целиком, одним потоком (соседние строки — контекст интонации),
+    и склеивается с точной паузой: после команды («Сядьте поудобнее.») 3 с — чтобы успеть её выполнить,
+    между строками 1,6 с;
   - паузы внутри предложения (запятая, тире) выравниваются (INNER), поэтому у обоих голосов один ритм;
   - ударение в слове «чакра» задано явно (ча́кра).
 """
@@ -29,7 +29,7 @@ MODEL = os.environ.get('ELEVEN_MODEL', 'eleven_multilingual_v2')
 CFG = json.load(open(os.path.join(HERE, 'voices.json'), encoding='utf-8'))
 SCRIPTS = {'ru': 'script.md', 'en': 'script.en.md'}
 SR = 44100
-ACT_PAUSE, LINE_PAUSE, SENT_PAUSE = 3.0, 1.8, 1.0   # an instruction gets time to be done: «Сядьте удобно.» … 3 s
+ACT_PAUSE, LINE_PAUSE = 3.0, 1.6   # an instruction gets time to be done: «Сядьте поудобнее.» … 3 s
 INNER = [(0.5, 0.8), (0.3, 0.5)]   # pauses inside one sentence (dash, comma): (longer than, becomes)
 EN_ACT = r'(?:Sit|Close|Open|Take|Breathe|Feel|Imagine|Picture|Focus|Notice|Remember|Bring|Let|Look|Relax|Place|Rest|Stay|Think|Find|Ask|Say|Thank|Choose|Read|Lie|Count|Repeat|Keep|Allow|Listen|Smile|Direct|Release)'
 
@@ -41,16 +41,19 @@ def is_action(sentence, lang):
 
 
 def units(lines, lang):
-    """Sentences to synthesize one by one, each with the exact pause that follows it."""
+    """What to synthesize in one go, with the exact pause after it. A line is voiced whole, so the
+    intonation flows like speech; it is cut only after an instruction, which gets time to be done."""
     out = []
-    for i, l in enumerate(lines):
+    for l in lines:
         if lang == 'ru':
             l = re.sub(r'([Чч])акр', lambda m: m.group(1) + 'а\u0301кр', l)
-            l = re.sub(r'^(На (?:вдохе|выдохе))\s+', r'\1, ', l)
-        parts = re.split(r'(?<=[.!?…])\s+(?=\S)', l)
-        for j, p in enumerate(parts):
-            last = j == len(parts) - 1
-            out.append([p, ACT_PAUSE if is_action(p, lang) else (LINE_PAUSE if last else SENT_PAUSE)])
+        cur = ''
+        for p in re.split(r'(?<=[.!?…])\s+(?=\S)', l):
+            cur = (cur + ' ' + p).strip()
+            if is_action(p, lang):
+                out.append([cur, ACT_PAUSE]); cur = ''
+        if cur:
+            out.append([cur, LINE_PAUSE])
     if out:
         out[-1][1] = 0
     return out
