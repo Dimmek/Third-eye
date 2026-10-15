@@ -2,7 +2,7 @@
 
 `index.html` — весь сайт: главная, 17 кабинетов (в т.ч. `#room-blinders`, `#room-breathe`, `#room-event`, `#room-release`, `#room-selflove`, `#room-relations`, `#room-food`, `#room-habits`, `#room-cleanse`, `#room-energy`, `#room-health`, `#room-abundance`, `#room-luck`, `#room-purpose`, `#room-silence`, `#room-ajna`, `#room-chakras`), плеер.
 
-Каждая сессия: **окно безопасности → Кокон (2:30, голосом: «Закройте глаза. Представьте…») → Дыхание (2:00) → практика → Возвращение (1:00)**.
+Каждая сессия: **окно безопасности → Золотая сфера (2:30, голосом: «Закройте глаза. Представьте…») → Дыхание (2:00) → практика → Возвращение (1:00)**.
 
 ## Видео на заставке: женщина в красном
 
