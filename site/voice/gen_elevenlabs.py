@@ -5,9 +5,11 @@
   ELEVENLABS_API_KEY   — ключ (обязательно)
   ELEVEN_VOICE_F       — voice_id женского голоса
   ELEVEN_VOICE_M       — voice_id мужского голоса
+  (без них берутся "f"/"m" из voices.json; там же список кандидатов)
 
 Запуск:
   python3 gen_elevenlabs.py --list            # показать доступные голоса
+  python3 gen_elevenlabs.py --samples         # короткий образец каждого кандидата из voices.json
   python3 gen_elevenlabs.py f                 # женский → f/<ключ>.mp3
   python3 gen_elevenlabs.py m cocoon breath   # только выбранные ключи
 
@@ -51,8 +53,16 @@ def main():
         for v in json.load(req('/voices'))['voices']:
             print(v['voice_id'], v['name'], v.get('labels', {}))
         return
+    if '--samples' in sys.argv:  # a short sample of every candidate from voices.json, to choose by ear
+        cfg = json.load(open(os.path.join(HERE, 'voices.json'))); d = os.path.join(HERE, 'samples'); os.makedirs(d, exist_ok=True)
+        text = 'Сядьте удобно. Сделайте медленный вдох. И длинный, спокойный выдох. ' + PAUSE + ' Посмотрите на золотую сферу. Вы внутри неё.'
+        for vid in cfg['candidates']:
+            info = json.load(req('/voices/' + vid)); print(vid, info.get('name'), info.get('labels', {}))
+            r = req('/text-to-speech/' + vid + '?output_format=mp3_44100_128', {'text': text, 'model_id': MODEL, 'voice_settings': SETTINGS})
+            open(os.path.join(d, vid + '.mp3'), 'wb').write(r.read())
+        return
     g = args[0] if args else 'f'
-    voice = os.environ.get('ELEVEN_VOICE_F' if g == 'f' else 'ELEVEN_VOICE_M')
+    voice = os.environ.get('ELEVEN_VOICE_F' if g == 'f' else 'ELEVEN_VOICE_M') or json.load(open(os.path.join(HERE, 'voices.json'))).get(g)
     if not voice:
         sys.exit('Нет voice_id: задайте ELEVEN_VOICE_F / ELEVEN_VOICE_M (см. --list)')
     frags = fragments()
