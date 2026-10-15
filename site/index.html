@@ -1151,7 +1151,6 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
       <h1 class="display" id="rName"></h1>
       <p class="lead" id="rTag"></p>
       <div class="chips" id="rChips"></div>
-      <div class="habit" id="rFreqBox" hidden><span class="eyebrow">Ваша частота</span><div class="hchips" id="rFreq" role="group" aria-label="Частота"></div></div>
       <div class="habit" id="rHabitBox" hidden><span class="eyebrow">Ваша привычка</span><div class="hchips" id="rHabit" role="group" aria-label="Привычка"></div></div>
       <label class="intent"><span class="eyebrow">Ваше намерение</span><input id="rIntent" type="text" maxlength="80" autocomplete="off"></label>
       <div class="rsound" id="rSound" hidden></div>
@@ -1401,10 +1400,35 @@ const ROOMS = [
       R(150, 'Облака', 'silence', 'Мысли — облака. Они приходят и уходят. Вы — небо.', ['Представьте, что мысли — это облака.', 'Они приходят и уходят.', 'Вы — небо. Спокойное и большое.'], { beat: 6 }),
       R(180, 'Паузы', 'flight', 'Между мыслями есть паузы. Побудьте в них.', ['Между мыслями есть паузы.', 'Побудьте в них.', 'Ничего не нужно делать.'], { beat: 6 })
     ] },
-  { id: 'freq', name: 'Частоты', ci: 5, tag: 'Выберите частоту: сон, удача, любовь, интуиция. Звук вместе с бинауральным ритмом.', ev: ['t-c', 'Традиция · звук'],
-    whyT: 'Звук под ваше намерение', why: 'Выберите одну из 19 частот — по своему намерению на сегодня. Сначала короткая настройка дыхания, потом восемь минут с закрытыми глазами: звучит выбранная частота, под ней — мягкий бинауральный ритм, а внимание держится на центре, который с ней связан. В конце — тишина.',
-    note: '<b>Основа:</b> частоты сольфеджио и «ангельские числа» — традиция, научных данных о действии конкретных герц нет. Бинауральные ритмы в исследованиях дают небольшой эффект на расслабление и тревогу. Слушайте в наушниках на тихой, комфортной громкости. При эпилепсии — только после консультации с врачом.',
-    main: [] },
+  { id: 'body', name: 'Тело без напряжения', ci: 0, tag: 'Снять зажимы из мышц: ноги, спина, плечи, лицо. Частота 174 Гц.', ev: ['t-a', 'Мышечное расслабление · подтверждено'],
+    whyT: 'Отпустить то, что тело держит весь день', why: 'Напряжение копится в мышцах незаметно: сжатая челюсть, поднятые плечи, каменная спина. Здесь вы по очереди слегка напрягаете и отпускаете каждую часть тела — так тело само вспоминает, как это: быть мягким. Под всей практикой звучит 174 Гц, самая низкая из частот сольфеджио.',
+    note: '<b>Основа:</b> прогрессивная мышечная релаксация по Джекобсону — один из самых изученных методов снижения напряжения и тревоги. 174 Гц — традиция сольфеджио. <b>При боли и травмах не напрягайте больное место и обратитесь к врачу.</b>',
+    main: [
+      R(120, 'Стопы и ноги', 'health', 'На вдохе слегка напрягите стопы и ноги. На выдохе отпустите полностью.', ['Внимание в стопах и ногах.', 'На вдохе слегка напрягите их. Совсем немного.', 'На выдохе отпустите полностью.', 'Почувствуйте разницу: тепло и мягкость.'], { breath: 'calm' }),
+      R(120, 'Живот и спина', 'health', 'Напрягите живот и спину на вдохе, отпустите на выдохе.', ['Теперь живот и спина.', 'На вдохе слегка напрягите.', 'На выдохе отпустите. Спина становится мягкой.'], { breath: 'calm' }),
+      R(120, 'Руки и плечи', 'health', 'Сожмите кулаки и поднимите плечи на вдохе. На выдохе — плечи вниз, ладони раскрыты.', ['Руки и плечи.', 'На вдохе сожмите кулаки и чуть поднимите плечи.', 'На выдохе плечи опускаются, ладони раскрываются.'], { breath: 'calm' }),
+      R(120, 'Лицо и челюсть', 'health', 'Зажмурьтесь и сожмите зубы на вдохе. На выдохе — лоб гладкий, челюсть свободна.', ['Лицо.', 'На вдохе зажмурьтесь и слегка сожмите зубы.', 'На выдохе лоб разглаживается, челюсть свободна, язык мягкий.'], { breath: 'calm' }),
+      R(150, 'Мягкое тело', 'dark', 'Всё тело тёплое и мягкое. Звук держит покой.', ['Всё тело тёплое и мягкое.', 'Ничего не нужно держать.', 'Просто побудьте в этой мягкости.'], { eyes: 'closed' })
+    ] },
+  { id: 'support', name: 'Поддержка', ci: 3, tag: 'Почувствовать, что вы не одни: опора, тепло и защита. Частота 333 Гц.', ev: ['t-b', 'Чувство поддержки · исследования'],
+    whyT: 'Вы не одни', why: 'Когда кажется, что всё на ваших плечах, тяжело даже простое. Здесь вы чувствуете опору снизу, тёплое присутствие за спиной — ангела-хранителя, предков, Бога или Вселенную, как вам ближе, — и просите о помощи в том, что сейчас важно. Под практикой звучит 333 Гц, по традиции — частота поддержки.',
+    note: '<b>Основа:</b> ощущение поддержки и безопасности снижает реакцию на стресс — это хорошо показано в исследованиях социальной поддержки. 333 Гц — традиция «ангельских чисел»; научных данных о действии частоты нет.',
+    main: [
+      R(120, 'Опора снизу', 'energy', 'Почувствуйте, как вас держит пол и земля под ним. Опора есть всегда.', ['Почувствуйте, как вас держит опора под вами.', 'Пол. Земля под ним.', 'Вас держат. Можно немного отпустить.']),
+      R(150, 'Тепло за спиной', 'heart', 'За спиной — доброе присутствие. Тёплые ладони на плечах. Тот, кто всегда на вашей стороне.', ['Представьте за спиной доброе присутствие.', 'Ангел-хранитель, предки, Бог, Вселенная — как вам ближе.', 'Тёплые ладони мягко ложатся вам на плечи.', 'Тот, кто всегда на вашей стороне.']),
+      R(150, 'Крылья света', 'cocoon', 'Светлые крылья обнимают вашу сферу. Внутри тепло и безопасно.', ['Светлые крылья обнимают вашу сферу.', 'Внутри тепло и безопасно.', 'Вы под защитой.'], { eyes: 'closed' }),
+      R(120, 'Просьба', 'purpose', 'Попросите про себя о помощи в том, что сейчас важно. Просто, своими словами.', ['Попросите о помощи в том, что сейчас важно.', 'Просто. Своими словами.', 'Помощь может прийти через людей, случай или новую мысль.']),
+      R(90, 'Благодарность', 'heart', 'Поблагодарите за поддержку — уже сейчас, заранее.', ['Поблагодарите за поддержку.', 'Уже сейчас. Заранее.'])
+    ] },
+  { id: 'awaken', name: 'Духовное пробуждение', ci: 6, tag: 'Свет над макушкой, тишина и чувство связи с большим, чем вы. Частота 777 Гц.', ev: ['t-b', 'Созерцание · исследования'],
+    whyT: 'Больше, чем мысли', why: 'Вы — не только ваши мысли и роли. Здесь свет над головой соединяет вас с небом и землёй, а потом вы замечаете того, кто наблюдает мысли, — тихое «я есть». В конце — чувство, что вы часть огромного живого мира. Под практикой звучит 777 Гц, по традиции — частота духовного развития.',
+    note: '<b>Основа:</b> созерцательные практики «осознавания осознавания» и переживание благоговения: исследования связывают его с меньшей тревогой и большим чувством связи с миром. 777 Гц — традиция «ангельских чисел».',
+    main: [
+      R(120, 'Свет над головой', 'cleanse', 'Над макушкой сияет мягкий белый свет.', ['Над макушкой сияет мягкий белый свет.', 'Он чистый и спокойный.', 'Просто замечайте его.'], { eyes: 'closed' }),
+      R(180, 'Столб света', 'energy', 'Свет опускается через макушку вдоль позвоночника и уходит в землю. Вы соединяете небо и землю.', ['Свет опускается через макушку.', 'Вдоль позвоночника, вниз, в землю.', 'Вы — столб света между небом и землёй.'], { eyes: 'closed' }),
+      R(180, 'Я есть', 'silence', 'Замечайте того, кто наблюдает мысли. Про себя: «Я есть».', ['Мысли приходят и уходят.', 'Заметьте того, кто их видит.', 'Про себя: я есть.', 'Просто — я есть.'], { eyes: 'closed' }),
+      R(120, 'Часть целого', 'flight', 'Вы часть огромного живого мира. Звёзды, земля, люди — и вы.', ['Почувствуйте: вы часть огромного живого мира.', 'Звёзды. Земля. Люди. И вы.', 'Побудьте в этом.'], { eyes: 'closed' })
+    ] },
   { id: 'ajna', name: 'Аджна', pro: true, noSphere: true, ci: 5, tag: 'Для практикующих: ясность восприятия и понимание себя и мира.', ev: ['t-b', 'Внимание · малые исследования'],
     whyT: 'Видеть яснее, а не «больше других»', why: 'Это пространство не про сверхспособности и не про то, чтобы «открыть третий глаз» и получить преимущество. Его смысл — ясность: замечать тоньше, понимать глубже себя, людей и мир, действовать из спокойного внимания. Классическая тратака — неподвижный взгляд в одну точку, затем внутренний образ с закрытыми глазами — тренирует концентрацию и внутреннее видение. Подходит тем, у кого уже есть опыт регулярных практик.',
     note: '<b>Основа:</b> тратака из «Хатха-йога-прадипики». Небольшие исследования: рост внимания и рабочей памяти. При болезнях глаз этап взгляда пропустите. Открывается после 7 практик в полном формате.',
@@ -1496,35 +1520,6 @@ const HABITS = {
   sugar:   { label: 'Сладкое и переедание', act: 'съесть что-то сладкое', free: 'без лишнего сладкого', obj: 'сладком', intent: 'Я слышу настоящий голод', gain: 'Лёгкость в теле. Ровная энергия весь день.' },
   phone:   { label: 'Телефон и соцсети', act: 'взять телефон и пролистать ленту', free: 'без бесконечной ленты', obj: 'телефоне', intent: 'Моё внимание принадлежит мне', gain: 'Сколько времени появилось. Как тихо в голове.' }
 };
-const FREQS = {
-  '174': { hz: 174, label: 'Мягкость к телу', ch: 0, beat: 6, intent: 'Моё тело расслабляется' },
-  '285': { hz: 285, label: 'Восстановление', ch: 1, beat: 6, intent: 'Моё тело восстанавливается' },
-  '396': { hz: 396, label: 'Освобождение от страха', ch: 0, beat: 7, intent: 'Я отпускаю страх' },
-  '417': { hz: 417, label: 'Отпускание прошлого', ch: 1, beat: 7, intent: 'Я отпускаю прошлое' },
-  '528': { hz: 528, label: 'Любовь', ch: 3, beat: 8, intent: 'Я открываюсь любви' },
-  '639': { hz: 639, label: 'Отношения', ch: 3, beat: 8, intent: 'В моих отношениях тепло' },
-  '741': { hz: 741, label: 'Очищение от чужого', ch: 4, beat: 8, intent: 'Я очищаюсь от чужого' },
-  '852': { hz: 852, label: 'Интуиция', ch: 5, beat: 7, intent: 'Я слышу свою интуицию' },
-  '963': { hz: 963, label: 'Единство · Я есмь', ch: 6, beat: 6, intent: 'Я есмь' },
-  '432': { hz: 432, label: 'Гармония', ch: 3, beat: 8, intent: 'Во мне гармония' },
-  '111': { hz: 111, label: 'Здоровый сон', ch: 6, beat: 4, intent: 'Я легко засыпаю' },
-  '1111': { hz: 1111, label: 'Энергия', ch: 6, beat: 10, intent: 'Энергия наполняет меня' },
-  '222': { hz: 222, label: 'Снятие блоков', ch: 2, beat: 8, intent: 'Я вижу решение' },
-  '333': { hz: 333, label: 'Поддержка', ch: 3, beat: 8, intent: 'Меня поддерживают' },
-  '444': { hz: 444, label: 'Устойчивость', ch: 0, beat: 8, intent: 'Я стою на своих ногах' },
-  '555': { hz: 555, label: 'Дело и достаток', ch: 2, beat: 10, intent: 'Моё дело растёт' },
-  '777': { hz: 777, label: 'Духовное развитие', ch: 5, beat: 7, intent: 'Я расту' },
-  '888': { hz: 888, label: 'Удача', ch: 2, beat: 10, intent: 'Удача на моей стороне' },
-  '999': { hz: 999, label: 'Лучшее в вас', ch: 6, beat: 8, intent: 'Во мне просыпается лучшее' }
-};
-// one frequency session: settle, listen with closed eyes holding attention on the matching centre, silence
-function freqMain(k) { const f = FREQS[k], key = n => 'freq-' + k + '-' + n, w = CH[f.ch].where;
-  return [
-    R(120, 'Настройка', 'breath', 'Сядьте удобно, наушники на ушах. Громкость — тихая и приятная. Дыхание спокойное.', ['Сядьте удобно. Наушники на ушах.', 'Громкость тихая и приятная. Если звук неприятен — убавьте или остановите.', 'Дышите спокойно. Выдох чуть длиннее вдоха.'], { key: key(1), breath: 'calm', beat: f.beat + 2, beatFixed: true, focus: f.ch }),
-    R(480, f.hz + ' Гц · ' + f.label, 'dark', 'Глаза закрыты. Слушайте звук. Внутреннее внимание — ' + w + '. Намерение: «' + f.intent + '».', ['А теперь закройте глаза.', 'Слушайте звук ' + f.hz + ' герц.', 'Направьте внутреннее внимание ' + CH_ACC[f.ch] + '.', 'Ваше намерение: ' + f.intent + '.', 'Ничего не нужно делать. Просто будьте со звуком.'], { key: key(2), beat: f.beat, beatFixed: true, focus: f.ch, eyes: 'closed' }),
-    R(120, 'Тишина', 'flight', 'Звук стихает. Побудьте в этом состоянии.', ['Звук становится тише.', 'Побудьте в этом состоянии.', 'Оно остаётся с вами.'], { key: key(3), beat: Math.max(4, f.beat - 2), beatFixed: true, focus: f.ch, eyes: 'closed' })
-  ]; }
-function setFreq(r, k) { r.freq = k; TARGET.freq.ch = [FREQS[k].ch]; r.main = freqMain(k); setPhases(r); }
 function habitMain(k) {
   const h = HABITS[k], key = n => 'habit-' + k + '-' + n;
   return [
@@ -1535,7 +1530,7 @@ function habitMain(k) {
     R(60, 'Якорь', 'urge', 'Когда потянет: три медленных выдоха и это чувство свободы.', ['Когда потянет, сделайте три медленных выдоха.', 'И вспомните это чувство.'], { key: key(5), beat: 10 })
   ];
 }
-const INTENT = { cleanse: 'Я отпускаю всё лишнее', energy: 'Сила возвращается ко мне', health: 'Моё тело в покое и заботе', abundance: 'Я вижу возможности и действую', luck: 'Я замечаю свои шансы', purpose: 'Я слышу себя', silence: 'Мой ум спокоен', ajna: 'Я развиваю интуицию и раскрываю третий глаз', chakras: 'Я целый', blinders: 'Мир шире, чем мне казалось', breathe: 'С каждым выдохом мне спокойнее', event: 'Внутри меня спокойствие при любом исходе', release: 'Я отпускаю то, что тяжело нести', selflove: 'Я на своей стороне', relations: 'В моём сердце есть место для тепла', freq: 'Я открываюсь любви', sos: 'Я в безопасности, волна пройдёт', sleep: 'Я отдыхаю', food: 'Я слышу своё тело' };
+const INTENT = { cleanse: 'Я отпускаю всё лишнее', energy: 'Сила возвращается ко мне', health: 'Моё тело в покое и заботе', abundance: 'Я вижу возможности и действую', luck: 'Я замечаю свои шансы', purpose: 'Я слышу себя', silence: 'Мой ум спокоен', ajna: 'Я развиваю интуицию и раскрываю третий глаз', chakras: 'Я целый', blinders: 'Мир шире, чем мне казалось', breathe: 'С каждым выдохом мне спокойнее', event: 'Внутри меня спокойствие при любом исходе', release: 'Я отпускаю то, что тяжело нести', selflove: 'Я на своей стороне', relations: 'В моём сердце есть место для тепла', body: 'Моё тело мягкое и спокойное', support: 'Меня поддерживают', awaken: 'Я есть', sos: 'Я в безопасности, волна пройдёт', sleep: 'Я отдыхаю', food: 'Я слышу своё тело' };
 const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
 // Owner preview before launch: everything is open; ?owner=0 or the corner switch shows the client view
 (() => { const q = new URLSearchParams(location.search).get('owner'); if (q === '0' || q === '1') store.set('owner', q); })();
@@ -1544,6 +1539,12 @@ const OWNER = window.OWNER = () => store.get('owner') !== '0';
 // Rhythm bands follow the EEG convention (θ 4–8 deep rest and imagery, α 8–12 calm wakefulness, low β 12–15 alert calm).
 const MODES = { major: [0, 2, 4, 7, 9, 12, 14, 16, 19], minor: [0, 3, 5, 7, 10, 12, 15, 17, 19], lydian: [0, 2, 4, 6, 7, 11, 12, 14, 16], dorian: [0, 2, 3, 7, 9, 12, 14, 15, 19], suspended: [0, 2, 5, 7, 10, 12, 14, 17, 19] };
 const MODE_RU = { major: 'светлый мажор', minor: 'мягкий минор', lydian: 'лидийский лад', dorian: 'дорийский лад', suspended: 'открытый лад' };
+// each space's solfeggio / «angel number» frequency, chosen by meaning — a drone under the whole session
+const ROOM_HZ = { cleanse: [741, 'очищение от чужих программ'], sos: [396, 'освобождение от страха'], energy: [1111, 'целительная энергия'], health: [285, 'восстановление'],
+  blinders: [222, 'снятие блоков, решения'], abundance: [555, 'дело и достаток'], luck: [888, 'удача'], purpose: [999, 'лучшее в вас, цели'], silence: [432, 'гармония'],
+  sleep: [111, 'здоровый сон, лёгкость'], breathe: [432, 'гармония, покой'], event: [444, 'устойчивость, терпение'], release: [417, 'отпускание прошлого'],
+  selflove: [528, 'любовь'], relations: [639, 'хорошие отношения'], food: [528, 'любовь к телу'], chakras: [963, 'единение, настройка «Я есмь»'],
+  habits: [396, 'освобождение от блоков'], body: [174, 'покой в теле'], support: [333, 'поддержка свыше'], awaken: [777, 'духовное пробуждение'], ajna: [852, 'пробуждение интуиции'] };
 const SOUND = {
   cleanse:   { beats: [8, 7, 6], carrier: 180, breath: 'long',      mode: 'suspended', tempo: [9, 14], noise: 'pink',  goal: 'отпустить напряжение' },
   energy:    { beats: [10, 12, 14], carrier: 240, breath: 'lift',   mode: 'major',     tempo: [3, 5],  noise: 'white', goal: 'бодрость без суеты' },
@@ -1559,7 +1560,9 @@ const SOUND = {
   selflove:  { beats: [8, 8, 7], carrier: 190, breath: 'heart',     mode: 'major',     tempo: [7, 11], noise: 'pink',  goal: 'тепло к себе' },
   relations: { beats: [9, 8, 8, 7, 7], carrier: 205, breath: 'calm', mode: 'dorian',    tempo: [6, 10], noise: 'pink',  goal: 'тепло к другим' },
   food:      { beats: [8, 7, 7], carrier: 190, breath: 'calm',      mode: 'suspended', tempo: [8, 12], noise: 'pink',  goal: 'слышать тело' },
-  freq:      { beats: [8, 8, 6], carrier: 200, breath: 'calm', mode: 'suspended', tempo: [10, 16], noise: 'pink', goal: 'звук под ваше намерение' },
+  body:      { beats: [7, 6, 6, 5, 4], carrier: 174, breath: 'calm', mode: 'suspended', tempo: [12, 18], noise: 'brown', goal: 'мягкое тело' },
+  support:   { beats: [8, 8, 7, 7, 6], carrier: 166, breath: 'heart', mode: 'major', tempo: [8, 12], noise: 'pink', goal: 'чувство опоры' },
+  awaken:    { beats: [7, 6, 5, 6], carrier: 194, breath: 'long', mode: 'lydian', tempo: [12, 18], noise: 'pink', goal: 'тишина и связь' },
   sos:       { beats: [10, 9, 8, 7], carrier: 175, breath: 'sigh', mode: 'suspended', tempo: [10, 14], noise: 'pink',  goal: 'остановить волну паники' },
   sleep:     { beats: [6, 5, 4, 3, 3, 2], carrier: 140, breath: 'long', mode: 'suspended', tempo: [16, 24], noise: 'brown', goal: 'мягко уснуть' },
   ajna:      { beats: [10, 7, 6], carrier: 210, breath: 'resonance', mode: 'lydian',   tempo: [8, 13], noise: 'pink',  goal: 'внимание в одной точке' },
@@ -1582,7 +1585,9 @@ const TARGET = {
   selflove:  { ch: [3],       m: ['Насколько тепло вы сейчас к себе относитесь?', 'холодно', 'тепло', 1, 'тепло к себе'] },
   relations: { ch: [3, 4, 1],    m: ['Насколько вы открыты к близости?', 'закрыт(а)', 'открыт(а)', 1, 'открытость'] },
   food:      { ch: [2, 1],    m: ['Насколько сильно сейчас желание поесть «на эмоциях»?', 'нет', 'очень сильно', -1, 'тяга к еде'] },
-  freq:      { ch: [5],       m: ['Насколько вы сейчас в ресурсе?', 'пусто', 'много сил', 1, 'ресурс'] },
+  body:      { ch: [0, 1],    m: ['Насколько напряжено тело?', 'мягкое', 'как камень', -1, 'напряжение тела'] },
+  support:   { ch: [3, 0],    m: ['Насколько вы чувствуете, что вы не одни?', 'совсем один(а)', 'есть опора', 1, 'чувство поддержки'] },
+  awaken:    { ch: [6, 5],    m: ['Насколько вы чувствуете связь с чем-то большим?', 'нет связи', 'сильно', 1, 'чувство связи'] },
   sos:       { ch: [0],       m: ['Насколько сильна тревога или паника прямо сейчас?', 'спокойно', 'очень сильно', -1, 'тревога'] },
   sleep:     { ch: [6, 0],    m: ['Насколько вы готовы ко сну?', 'мысли крутятся', 'глаза закрываются', 1, 'готовность ко сну'] },
   ajna:      { ch: [5],       m: ['Насколько вы сосредоточены?', 'рассеян(а)', 'собран(а)', 1, 'сосредоточенность'] },
@@ -1597,10 +1602,10 @@ function setPhases(r) { const sp = SOUND[r.id]; r.main.forEach((s, i) => { s.key
     if (sp && s.beat !== 0 && !s.beatFixed) s.beat = sp.beats[Math.min(i, sp.beats.length - 1)];
     if (sp && sp.breath && s.breath === 'resonance') s.breath = sp.breath; }); r.phases = r.bare ? [...r.main] : [COCOON, BREATHE, ...r.main].concat(r.noReturn ? [] : [RETURN]); }
 function setHabit(r, k) { r.habit = k; r.main = habitMain(k); setPhases(r); }
-const ORDER = ['cleanse', 'sos', 'energy', 'health', 'blinders', 'abundance', 'luck', 'purpose', 'silence', 'sleep', 'breathe', 'event', 'release', 'selflove', 'relations', 'food', 'chakras', 'habits', 'freq', 'ajna'];
+const ORDER = ['cleanse', 'sos', 'energy', 'health', 'blinders', 'abundance', 'luck', 'purpose', 'silence', 'sleep', 'breathe', 'event', 'release', 'selflove', 'relations', 'food', 'chakras', 'habits', 'body', 'support', 'awaken', 'ajna'];
 ROOMS.sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id));
-ROOMS.forEach(r => { r.color = CH[r.ci].c; if (r.id === 'habits') setHabit(r, store.get('ajna-habit') in HABITS ? store.get('ajna-habit') : 'smoke'); else if (r.id === 'freq') setFreq(r, store.get('freq-pick') in FREQS ? store.get('freq-pick') : '528'); else setPhases(r); });
-const intentOf = r => store.get('ajna-intent-' + r.id + (r.habit ? '-' + r.habit : r.freq ? '-' + r.freq : '')) || (r.habit ? HABITS[r.habit].intent : r.freq ? FREQS[r.freq].intent : INTENT[r.id]);
+ROOMS.forEach(r => { r.color = CH[r.ci].c; if (r.id === 'habits') setHabit(r, store.get('ajna-habit') in HABITS ? store.get('ajna-habit') : 'smoke'); else setPhases(r); });
+const intentOf = r => store.get('ajna-intent-' + r.id + (r.habit ? '-' + r.habit : '')) || (r.habit ? HABITS[r.habit].intent : INTENT[r.id]);
 
 const BREATH = { resonance: [5.45, 0, 5.45, 0], calm: [4, 0, 6, 0], box: [4, 4, 4, 4], sigh: [3, 0, 6, 0], long: [4, 0, 8, 0], lift: [3, 0, 3, 0], heart: [5, 0, 5, 0] };
 const EYES = { open: ['Смотрите на экран', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>'],
@@ -2272,13 +2277,13 @@ const visible = el => { const r = el.getBoundingClientRect(); return r.bottom > 
 
 // ======================= pages =======================
 const CATS = { all: 'Все', state: 'Состояние', heart: 'Сердце и отношения', body: 'Тело', goals: 'Цели и перемены', mind: 'Сознание', habits: 'Привычки' };
-const CAT = { freq: 'mind', sos: 'state', sleep: 'state', silence: 'state', breathe: 'state', event: 'state', cleanse: 'state', health: 'body', food: 'body', energy: 'body', release: 'heart', selflove: 'heart', relations: 'heart', abundance: 'goals', luck: 'goals', purpose: 'goals', blinders: 'goals', ajna: 'mind', chakras: 'mind', habits: 'habits' };
+const CAT = { body: 'body', support: 'heart', awaken: 'mind', sos: 'state', sleep: 'state', silence: 'state', breathe: 'state', event: 'state', cleanse: 'state', health: 'body', food: 'body', energy: 'body', release: 'heart', selflove: 'heart', relations: 'heart', abundance: 'goals', luck: 'goals', purpose: 'goals', blinders: 'goals', ajna: 'mind', chakras: 'mind', habits: 'habits' };
 const ARROW = '<svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg>';
 const roomVisual = r => ({ visual: r.main[0].visual === 'silence' && r.id === 'purpose' ? 'purpose' : r.main[0].visual, ci: r.ci, active: r.id === 'chakras' ? 5 : undefined });
 function card(r, wide) {
   const a = document.createElement('a'); a.className = 'room' + (wide ? ' wide' : ''); a.href = '#room-' + r.id; a.style.setProperty('--rc', rgba(r.color, 1)); a.dataset.id = r.id;
   a.innerHTML = '<div class="art2"><canvas></canvas><span class="num">' + String(ROOMS.indexOf(r) + 1).padStart(2, '0') + '</span><span class="tag ' + r.ev[0] + '">' + r.ev[1].split(' · ')[0] + '</span></div>' +
-    '<div class="body"><h3>' + r.name + '</h3><p>' + r.tag + '</p><div class="meta"><span>' + mins(sum(phasesFor(r))) + '</span><span>Войти ' + ARROW + '</span></div></div>';
+    '<div class="body"><h3>' + r.name + '</h3><p>' + r.tag + '</p><div class="meta"><span>' + mins(sum(phasesFor(r))) + (ROOM_HZ[r.id] ? ' · ' + ROOM_HZ[r.id][0] + ' Гц' : '') + '</span><span>Войти ' + ARROW + '</span></div></div>';
   a._surf = surface(a.querySelector('canvas'), { cyr: 0.5, mr: 1, visual: roomVisual(r) });
   return a;
 }
@@ -2519,13 +2524,12 @@ function showRoom(id) {
     const tg = TARGET[r.id], rs = results(r.id).filter(x => x.a != null), avg = rs.length ? rs.reduce((a, x) => a + (x.a - x.b) * tg.m[3], 0) / rs.length : null;
     $('rSound').innerHTML = '<span class="eyebrow">Звучание пространства</span><div class="rsnd">'
       + '<div class="rsnd__w"><small>Центр внимания</small><b>' + tg.ch.slice(0, 3).map(c => CH[c].n).join(' · ') + (tg.ch.length > 3 ? ' и все чакры' : '') + ' — ' + tg.ch.slice(0, 2).map(c => CH[c].where).join(', ') + '</b></div>'
-      + '<div class="rsnd__w"><small>Частота пространства</small><b>' + (r.freq ? FREQS[r.freq].hz + ' Гц — ' + FREQS[r.freq].label.toLowerCase() + ' (звучит всю практику)' : ROOM_HZ[r.id][0] + ' Гц — ' + ROOM_HZ[r.id][1] + ' (звучит фоном всю практику)') + '</b></div>'
+      + '<div class="rsnd__w"><small>Частота пространства</small><b>' + ROOM_HZ[r.id][0] + ' Гц — ' + ROOM_HZ[r.id][1] + ' (звучит всю практику)</b></div>'
       + '<div class="rsnd__w"><small>Частоты центров</small><b>' + (r.sleep ? 'нет — только частота сна' : tg.ch.length > 3 ? '396 → 963 Гц, по чакре за раз' : [...new Set(tg.ch.map(c => SOL[c]))].join(' · ') + ' Гц' + (r.bare ? '' : ' · вход и завершение 639 Гц')) + ' — вместе с бинауральным ритмом</b></div>'
       + '<div class="rsnd__w"><small>Результат, который мы измеряем</small><b>' + tg.m[4] + (tg.m[3] > 0 ? ' ↑' : ' ↓') + (avg != null ? ' · ваш средний результат: ' + (avg > 0 ? '+' : '') + avg.toFixed(1) + ' балла за ' + rs.length + ' сеанс' + (rs.length === 1 ? '' : rs.length < 5 ? 'а' : 'ов') : ' · оценка до и после каждого сеанса') + '</b></div>'
       + '<div><small>Ритм</small><b>' + bands + ' ' + rng + '</b></div><div><small>Дыхание</small><b>' + (sp.breath ? BREATH_RU[sp.breath] : 'три техники по очереди') + '</b></div><div><small>Музыка</small><b>' + MODE_RU[sp.mode] + ', ' + (sp.tempo[0] < 5 ? 'живой темп' : sp.tempo[0] > 9 ? 'очень редкие ноты' : 'спокойный темп') + '</b></div><div><small>Задача</small><b>' + sp.goal + '</b></div></div>'; $('rSound').hidden = false; }
   else $('rSound').hidden = true;
-  $('rHabitBox').hidden = !r.habit; $('rFreqBox').hidden = !r.freq;
-  if (r.freq) $('rFreq').innerHTML = Object.values(FREQS).map(f => '<button type="button" data-f="' + f.hz + '" aria-pressed="' + (String(f.hz) === r.freq) + '"><b>' + f.hz + '</b> · ' + f.label + '</button>').join('');
+  $('rHabitBox').hidden = !r.habit;
   if (r.habit) $('rHabit').innerHTML = Object.entries(HABITS).map(([k, h]) => '<button type="button" data-h="' + k + '" aria-pressed="' + (k === r.habit) + '">' + h.label + '</button>').join('');
   $('rIntent').value = intentOf(r);
   $('rWhyT').textContent = r.whyT; $('rWhy').textContent = r.why; $('rNote').innerHTML = r.note;
@@ -2536,7 +2540,6 @@ function showRoom(id) {
   document.title = r.name + ' · Дорога к себе';
   scrollTo(0, 0);
 }
-$('rFreq').addEventListener('click', e => { const b = e.target.closest('button[data-f]'); if (!b) return; setFreq(curRoom, b.dataset.f); store.set('freq-pick', b.dataset.f); const y = scrollY; showRoom(curRoom.id); scrollTo(0, y); });
 $('rHabit').addEventListener('click', e => { const b = e.target.closest('button[data-h]'); if (!b) return; setHabit(curRoom, b.dataset.h); store.set('ajna-habit', b.dataset.h); const y = scrollY; showRoom(curRoom.id); scrollTo(0, y); });
 $('rIntent').addEventListener('input', () => store.set('ajna-intent-' + curRoom.id + (curRoom.habit ? '-' + curRoom.habit : ''), $('rIntent').value.trim()));
 const dayKey = d => d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
@@ -2678,7 +2681,6 @@ let bowlO = null, bowlG = null;
 // solfeggio frequencies by the usual tradition, root → crown
 const SOL = [396, 417, 528, 639, 741, 852, 963];
 // each space's own frequency (by the popular solfeggio/«angel numbers» tradition) — a quiet drone under the whole session
-const ROOM_HZ = { cleanse: [741, 'очищение от чужого'], sos: [396, 'освобождение от страха'], energy: [1111, 'энергия'], health: [285, 'восстановление'], blinders: [222, 'снятие блоков, решения'], abundance: [555, 'дело и достаток'], luck: [888, 'удача'], purpose: [999, 'лучшее в вас'], silence: [432, 'гармония'], sleep: [111, 'здоровый сон, лёгкость'], breathe: [333, 'поддержка'], event: [444, 'устойчивость'], release: [417, 'отпускание прошлого'], selflove: [528, 'любовь'], relations: [639, 'хорошие отношения'], food: [174, 'мягкость к телу'], chakras: [963, 'единство, настройка «Я есмь»'], habits: [777, 'пробуждение, развитие'], ajna: [852, 'пробуждение интуиции'] };
 let droneO = null, droneG = null;
 function drone(f) { if (!actx) return;
   if (!droneO) { droneG = actx.createGain(); droneG.gain.value = 0; droneG.connect(duck); droneO = [1, 0.5].map((m, i) => { const o = actx.createOscillator(), g = actx.createGain(); o.type = 'sine'; g.gain.value = [1, 0.4][i]; o.connect(g).connect(droneG); o.start(); return { o, m }; }); }
@@ -2686,7 +2688,6 @@ function drone(f) { if (!actx) return;
 // the step's tone: its focus centre; heart (639) for entry, breathing and ending; 174 Hz for sleep; 396 Hz grounding in SOS
 function solFor(ph, i) { const r = P.room, tg = r && TARGET[r.id];
   if (r && r.sleep) return ROOM_HZ.sleep[0];
-  if (r && r.freq) return FREQS[r.freq].hz;
   if (ph.key === 'intent') return tg ? SOL[tg.ch[0]] : 639;
   if (ph.key === 'cocoon' || ph.key === 'breath' || ph.key === 'return') return 639;
   if (ph.seq) return SOL[0];
@@ -2804,7 +2805,7 @@ function openPlayer(r) {
 }
 function closePlayer() { stop(); $('player').hidden = true; document.body.style.overflow = ''; $('drawer').classList.remove('open'); }
 function enter(i) {
-  P.idx = i; P.start = P.elapsed; P.ch = -1; P.fc = -1; P.lastLabel = ''; P.sol = solFor(P.phases[i], i); if (i === 0) drone(P.room && ROOM_HZ[P.room.id] && !P.room.freq ? ROOM_HZ[P.room.id][0] : 0);
+  P.idx = i; P.start = P.elapsed; P.ch = -1; P.fc = -1; P.lastLabel = ''; P.sol = solFor(P.phases[i], i); if (i === 0) drone(P.room && ROOM_HZ[P.room.id] ? ROOM_HZ[P.room.id][0] : 0);
   const ph = P.phases[i]; setTimeout(() => P.running && P.idx === i && fly(ph), i === 0 ? 2500 : 0); vis(ph); $('pEyes').innerHTML = EYES[eyesOf(ph)][1] + EYES[eyesOf(ph)][0]; $('pPhase').textContent = ph.name; $('pInstr').textContent = ph.text; applyAudio(ph);
   if (i > 0) bell(1, CH[ph.tone].tone);
   const tg = P.room && TARGET[P.room.id], c0 = P.room && !P.room.sleep ? namedCentre(ph) : -1, fc0 = c0 >= 0 ? c0 : tg && !P.room.bare ? tg.ch[0] : -1;
@@ -3110,7 +3111,7 @@ function frame(now) {
       if (ph.stages) sphereStage(pt / ph.dur);
       const st = ph.breath ? breathAt(ph.breath, pt) : null;
       if (actx && breathGain) { const on = st && $('sbreath').checked, lvl = on ? (ph.cue ? 0.42 : 0.2) * (0.06 + 0.94 * st.b) : 0; breathGain.gain.setTargetAtTime(lvl, actx.currentTime, 0.18); breathLP.frequency.setTargetAtTime(280 + 1400 * (st ? st.b : 0), actx.currentTime, 0.18); }
-      if (droneG) droneG.gain.setTargetAtTime(drone.on && P.running && !P.paused && $('music').checked ? 0.022 : 0, actx.currentTime, 1.2);
+      if (droneG) droneG.gain.setTargetAtTime(drone.on && P.running && !P.paused && $('music').checked ? 0.04 : 0, actx.currentTime, 1.2);
       if (bowlG) bowlG.gain.setTargetAtTime(bowl.on && P.running && !P.paused && $('music').checked ? 0.055 * (0.45 + 0.55 * (st ? 1 - st.b : 0.5)) : 0, actx.currentTime, 0.4);
       if (st && ph.cue && st.label !== P.lastLabel) { if (P.lastLabel && st.label !== 'Пауза' && $('vBreath').checked && !playRec({ 'Вдох': 'inhale', 'Выдох': 'exhale' }[st.label] || '') && synth && !synth.speaking) speak([st.label], { rate: 0.7, gap: 0 }); P.lastLabel = st.label; }
       const inMain = P.idx >= P.m0 && P.idx < P.m1, el = P.elapsed - P.phases.slice(0, P.m0).reduce((a, p) => a + p.dur, 0);
