@@ -1315,7 +1315,7 @@ const COCOON = { key: 'cocoon', name: 'Золотая сфера', dur: 180, vis
   say: SPHERE_STAGES.flatMap(x => x[1]) };
 const BREATHE = { key: 'breath', name: 'Успокоение', dur: 90, visual: 'breath', breath: 'guide', beat: 10, tone: 3, cue: true, guideBreath: true, eyes: 'any',
   text: 'Дышите вместе с голосом и шарами: шар растёт — вдох, уменьшается — медленный выдох.',
-  say: ['Сядьте удобно. Спина ровная, плечи опущены.', 'Дышите вместе с моим голосом.'] };
+  say: ['Сядьте удобно.', 'Спина ровная, плечи опущены.', 'Вдыхайте через нос — на счёт четыре.', 'Выдыхайте через рот — медленно, на счёт шесть.', 'Дышите вместе с моим голосом.'] };
 const INTENT_PH = { key: 'intent', name: 'Намерение', dur: 30, visual: 'breath', breath: 'calm', beat: 10, tone: 3, eyes: 'open', text: 'Прочитайте намерение и произнесите его про себя.', say: ['Начнём с намерения.', 'Прочитайте его на экране и произнесите про себя.'] };
 const CLEAN = { key: 'clean', name: 'Очищение чакр', dur: 630, visual: 'chakras', breath: 'long', beat: 8, tone: 6, eyes: 'any', seq: 'clean',
   text: 'По одной чакре, снизу вверх: мягкий бело-золотой свет омывает чакру и уносит всё чужое вниз, в землю.', say: ['Теперь сосредоточимся на чакрах.', 'Начнём с первой.'] };
@@ -2725,7 +2725,8 @@ async function loadRecorded() {
   let keys = []; try { const r = await fetch('voice/' + g + '/manifest.json'); if (r.ok) keys = await r.json(); } catch (e) {}
   await Promise.all(keys.map(async k => { try { const r = await fetch('voice/' + g + '/' + k + '.mp3'); if (r.ok && VGENDER === g) recorded[k] = await actx.decodeAudioData(await r.arrayBuffer()); } catch (e) {} }));
 }
-function playRec(k) { const b = recorded[k]; if (!b || !actx) return false; const s = actx.createBufferSource(); s.buffer = b; s.connect(voiceBus); setDuck(true); s.onended = () => setDuck(false); s.start(); return true; }
+let recUntil = 0;
+function playRec(k) { const b = recorded[k]; if (!b || !actx) return false; const s = actx.createBufferSource(); s.buffer = b; s.connect(voiceBus); setDuck(true); s.onended = () => setDuck(false); s.start(); recUntil = actx.currentTime + b.duration; return true; }
 const synth = window.speechSynthesis;
 const FEMALE = /svetlana|dariya|darya|milena|katya|ekaterina|anna|irina|elena|alena|alyona|yuliya|julia|tatyana|natalia|google\s*рус|google ru|female|женск/i;
 const MALE = /pavel|dmitr|yuri|maxim|denis|ruslan|nikolai|aleksandr|artem|male\b|мужск/i;
@@ -3113,7 +3114,7 @@ function frame(now) {
       if (actx && breathGain) { const on = st && $('sbreath').checked, lvl = on ? (ph.cue ? 0.42 : 0.2) * (0.06 + 0.94 * st.b) : 0; breathGain.gain.setTargetAtTime(lvl, actx.currentTime, 0.18); breathLP.frequency.setTargetAtTime(280 + 1400 * (st ? st.b : 0), actx.currentTime, 0.18); }
       if (droneG) droneG.gain.setTargetAtTime(drone.on && P.running && !P.paused && $('music').checked ? 0.04 : 0, actx.currentTime, 1.2);
       if (bowlG) bowlG.gain.setTargetAtTime(bowl.on && P.running && !P.paused && $('music').checked ? 0.055 * (0.45 + 0.55 * (st ? 1 - st.b : 0.5)) : 0, actx.currentTime, 0.4);
-      if (st && ph.cue && st.label !== P.lastLabel) { if (P.lastLabel && st.label !== 'Пауза' && ($('vBreath').checked || ph.guideBreath) && !playRec({ 'Вдох': 'inhale', 'Выдох': 'exhale' }[st.label] || '') && synth && !synth.speaking) speak([st.label], { rate: 0.7, gap: 0 }); P.lastLabel = st.label; }
+      if (st && ph.cue && st.label !== P.lastLabel) { if (P.lastLabel && st.label !== 'Пауза' && ($('vBreath').checked || ph.guideBreath) && !(actx && actx.currentTime < recUntil) && !playRec({ 'Вдох': 'inhale', 'Выдох': 'exhale' }[st.label] || '') && synth && !synth.speaking) speak([st.label], { rate: 0.7, gap: 0 }); P.lastLabel = st.label; }
       const inMain = P.idx >= P.m0 && P.idx < P.m1, el = P.elapsed - P.phases.slice(0, P.m0).reduce((a, p) => a + p.dur, 0);
       $('pIntent').classList.toggle('big', ph.key === 'intent'); $('pIntent').classList.toggle('on', ph.key === 'intent' || (inMain && (el % 75) < 9));
       focusUI(ph.key === 'chakras' || ph.seq ? P.ch : ph.key === 'cocoon' ? -1 : ph.key === 'intent' ? (TARGET[P.room.id] ? TARGET[P.room.id].ch[0] : -1) : inMain ? P.fc : -1, ph); breathUI(st, ph); cocoonGlow(ph, pt, st); sphereAnim(ph, pt);

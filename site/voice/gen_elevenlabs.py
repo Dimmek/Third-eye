@@ -12,8 +12,10 @@
 Пишет <язык>/<голос>/manifest.json со списком готовых ключей.
 
 Как получается медитативная подача:
-  - смысловые паузы в тексте: между предложениями, после тире и «На выдохе / На вдохе»;
-  - после синтеза все паузы приводятся к одной сетке (PAUSES), поэтому у обоих голосов один ритм;
+  - каждое предложение синтезируется отдельно (с соседними фразами как контекстом интонации)
+    и склеивается с точной паузой: после команды («Сядьте удобно.») 3 с — чтобы успеть её выполнить,
+    между фразами 1,8 с, между предложениями одной фразы 1 с;
+  - паузы внутри предложения (запятая, тире) выравниваются (INNER), поэтому у обоих голосов один ритм;
   - ударение в слове «чакра» задано явно (ча́кра).
 """
 import json, os, re, subprocess, sys, time, urllib.request, urllib.error
@@ -26,26 +28,32 @@ KEY = os.environ.get('ELEVENLABS_API_KEY', '')
 MODEL = os.environ.get('ELEVEN_MODEL', 'eleven_multilingual_v2')
 CFG = json.load(open(os.path.join(HERE, 'voices.json'), encoding='utf-8'))
 SCRIPTS = {'ru': 'script.md', 'en': 'script.en.md'}
-# pause grid after synthesis, seconds: (longer than, becomes)
-PAUSES = [(1.0, 1.6), (0.45, 0.9), (0.18, 0.45)]   # between phrases, between sentences, comma
+SR = 44100
+ACT_PAUSE, LINE_PAUSE, SENT_PAUSE = 3.0, 1.8, 1.0   # an instruction gets time to be done: «Сядьте удобно.» … 3 s
+INNER = [(0.5, 0.8), (0.3, 0.5)]   # pauses inside one sentence (dash, comma): (longer than, becomes)
+EN_ACT = r'(?:Sit|Close|Open|Take|Breathe|Feel|Imagine|Picture|Focus|Notice|Remember|Bring|Let|Look|Relax|Place|Rest|Stay|Think|Find|Ask|Say|Thank|Choose|Read|Lie|Count|Repeat|Keep|Allow|Listen|Smile|Direct|Release)'
 
 
-def br(s):
-    return f' <break time="{s}s" /> '
+def is_action(sentence, lang):
+    w = sentence.split()[0] if sentence.split() else ''
+    return bool(re.match(r'[А-ЯЁ][а-яё]+(?:те|тесь)[,.]?$', w)) or w in ('Вдох.', 'Выдох.') if lang == 'ru' \
+        else bool(re.match(EN_ACT + r'\b', sentence))
 
 
-def prepare(lines, lang):
+def units(lines, lang):
+    """Sentences to synthesize one by one, each with the exact pause that follows it."""
     out = []
-    for l in lines:
+    for i, l in enumerate(lines):
         if lang == 'ru':
-            l = re.sub(r'([Чч])акр', lambda m: m.group(1) + 'а́кр', l)
-            l = re.sub(r'^(На (?:вдохе|выдохе))\s+', r'\1,' + br(0.4), l)
-        else:
-            l = re.sub(r'^(As you (?:breathe in|breathe out|inhale|exhale)),?\s+', r'\1,' + br(0.4), l)
-        l = re.sub(r'\s+—\s+', ' —' + br(0.4), l)
-        l = re.sub(r'([.!?…])\s+(?=\S)', r'\1' + br(0.8), l)
-        out.append(l)
-    return br(1.5).join(out)
+            l = re.sub(r'([Чч])акр', lambda m: m.group(1) + 'а\u0301кр', l)
+            l = re.sub(r'^(На (?:вдохе|выдохе))\s+', r'\1, ', l)
+        parts = re.split(r'(?<=[.!?…])\s+(?=\S)', l)
+        for j, p in enumerate(parts):
+            last = j == len(parts) - 1
+            out.append([p, ACT_PAUSE if is_action(p, lang) else (LINE_PAUSE if last else SENT_PAUSE)])
+    if out:
+        out[-1][1] = 0
+    return out
 
 
 def req(path, body=None):
@@ -65,35 +73,48 @@ def fragments(lang):
     return out
 
 
-def even_pauses(mp3, sr=44100):
-    """Rewrite every inner silence to the PAUSES grid, so both voices breathe the same."""
-    x = np.frombuffer(subprocess.check_output(['ffmpeg', '-v', 'error', '-i', mp3, '-ac', '1', '-ar', str(sr), '-f', 's16le', '-']),
-                      dtype=np.int16).astype(np.float32)
-    hop = sr // 100; n = len(x) // hop
+def pcm(mp3_bytes):
+    return np.frombuffer(subprocess.run(['ffmpeg', '-v', 'error', '-i', '-', '-ac', '1', '-ar', str(SR), '-f', 's16le', '-'],
+                                        input=mp3_bytes, capture_output=True, check=True).stdout, dtype=np.int16).astype(np.float32)
+
+
+def tidy(x):
+    """Trim the edges and bring pauses inside the sentence to INNER, so both voices breathe the same."""
+    hop = SR // 100; n = len(x) // hop
     loud = np.sqrt((x[:n * hop].reshape(n, hop) ** 2).mean(1)) > 0.01 * 32768
-    out, i = [], 0
-    while i < n:
+    if not loud.any():
+        return x[:0]
+    a, b = np.argmax(loud), n - np.argmax(loud[::-1])
+    out, i = [], a
+    while i < b:
         j = i
-        while j < n and loud[j] == loud[i]:
+        while j < b and loud[j] == loud[i]:
             j += 1
         seg = x[i * hop:j * hop]
-        if not loud[i] and 0 < i and j < n:
-            d = (j - i) / 100
-            t = next((v for lim, v in PAUSES if d > lim), d)
-            k = int(t * sr); h = min(len(seg), k) // 2
+        if not loud[i]:
+            d = (j - i) / 100; t = next((v for lim, v in INNER if d > lim), d)
+            k = int(t * SR); h = min(len(seg), k) // 2
             seg = np.concatenate([seg[:h], np.zeros(k - 2 * h, np.float32), seg[len(seg) - h:]])
         out.append(seg); i = j
-    y = np.concatenate(out + [x[n * hop:]]).astype(np.int16)
-    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 's16le', '-ar', str(sr), '-ac', '1', '-i', '-', '-b:a', '128k', mp3],
-                   input=y.tobytes(), check=True)
+    fade = np.linspace(0, 1, SR // 50, dtype=np.float32)
+    y = np.concatenate([x[max(0, a * hop - SR // 20):a * hop] * np.linspace(0, 1, min(SR // 20, a * hop), dtype=np.float32)] + out +
+                       [x[b * hop:b * hop + SR // 10] * np.linspace(1, 0, len(x[b * hop:b * hop + SR // 10]), dtype=np.float32)])
+    y[:len(fade)] *= fade[:len(y)]
+    return y
 
 
 def say(lang, g, lines, dst):
     v = CFG[lang][g]
     settings = dict(CFG['settings'], speed=CFG['speed'][g])
-    audio = req(f'/text-to-speech/{v}?output_format=mp3_44100_128',
-                {'text': prepare(lines, lang), 'model_id': MODEL, 'voice_settings': settings}).read()
-    open(dst, 'wb').write(audio); even_pauses(dst)
+    us = units(lines, lang); out = []
+    for i, (text, pause) in enumerate(us):
+        body = {'text': text, 'model_id': MODEL, 'voice_settings': settings,
+                'previous_text': ' '.join(t for t, _ in us[max(0, i - 2):i]) or None,
+                'next_text': ' '.join(t for t, _ in us[i + 1:i + 3]) or None}
+        out += [tidy(pcm(req(f'/text-to-speech/{v}?output_format=mp3_44100_128', body).read())), np.zeros(int(pause * SR), np.float32)]
+    y = np.clip(np.concatenate(out), -32768, 32767).astype(np.int16)
+    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 's16le', '-ar', str(SR), '-ac', '1', '-i', '-', '-b:a', '128k', dst],
+                   input=y.tobytes(), check=True)
 
 
 def main():
