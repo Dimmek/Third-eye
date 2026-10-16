@@ -830,7 +830,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
   </section>
 
   <div class="stats"><div class="container">
-    <div class="stat"><b>21</b><span>пространство — путь от очищения к переменам</span></div>
+    <div class="stat"><b>22</b><span>пространства — путь от очищения к переменам</span></div>
     <div class="stat"><b>25</b><span>минут в день — полное погружение</span></div>
     <div class="stat"><b>0</b><span>опыта нужно — голос ведёт каждый шаг</span></div>
     <div class="stat"><b>1</b><span>минута — и ваша карта жизни готова</span></div>
@@ -885,7 +885,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     <div class="container">
       <div class="shead"><div><span class="eyebrow">Что вы получите</span><h2 class="h2">Не просто медитации. <em>Своё пространство под каждую задачу.</em></h2></div>
         <p class="lead">Пространство — это целый мир для одной цели: свой образ на экране, своя музыка и частота, своё дыхание и спокойный голос, который ведёт шаг за шагом. Выберите, что нужно сейчас — уснуть, отпустить обиду, набрать сил, — и погрузитесь туда, где именно это и происходит.</p></div>
-      <div class="bnums"><div><b>21</b><span>пространство — под сон, стресс, отношения, деньги, привычки</span></div><div><b>25 / 40 мин</b><span>полное погружение с первого раза</span></div><div><b>до / после</b><span>замер состояния в каждой практике</span></div><div><b>0 ₽</b><span>старт: «Дыхание», «Очищение» и карта жизни</span></div></div>
+      <div class="bnums"><div><b>22</b><span>пространства — под сон, стресс, отношения, самооценку, деньги, привычки</span></div><div><b>25 / 40 мин</b><span>полное погружение с первого раза</span></div><div><b>до / после</b><span>замер состояния в каждой практике</span></div><div><b>0 ₽</b><span>старт: «Дыхание», «Очищение» и карта жизни</span></div></div>
       <div class="benefits">
         <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8"/><path d="M12 4v16M4 12h16" opacity=".5"/><circle cx="12" cy="12" r="2"/></svg></span><h3>Своё пространство под задачу</h3><p>Не «медитация вообще», а место для одной цели. В «Глубоком сне» — медленные волны и тишина, в «Жизненной энергии» — бодрый ритм, в «Отношениях» — тепло и образ близкого человека. Образ, музыка, частота и сценарий собраны под то, что вам нужно сейчас.</p></div>
         <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></span><h3>Голос ведёт за руку</h3><p>Опыт медитации не нужен. Спокойный живой голос подскажет, как сесть, когда вдохнуть и что представить, — и даст время всё сделать. Вам остаётся только слушать и дышать.</p></div>
@@ -1159,7 +1159,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     <div class="container">
       <nav class="crumbs" aria-label="Путь"><a href="#top">Главная</a><span>Пространства</span></nav>
       <h1 class="display">Все <em>пространства.</em></h1>
-      <p class="lead">21 пространство, выстроенное в путь. Старт — дыхание. Потом основа: очищение, наполнение чакр и жизненная энергия. Дальше — трансформация и воплощение желаний. А тишина ума, тело, сон и подготовка к важному событию помогают в любой день.</p>
+      <p class="lead">22 пространства, выстроенные в путь. Старт — дыхание. Потом основа: очищение, наполнение чакр и жизненная энергия. Дальше — трансформация и воплощение желаний. А тишина ума, тело, сон и подготовка к важному событию помогают в любой день.</p>
     </div>
   </section>
   <section class="section" style="padding-top:20px">
@@ -1345,15 +1345,16 @@ const SPHERE_STAGES = [
   [0.32, ['Сверху, из космоса, к вам опускается мягкий золотой свет.', 'Он проходит через макушку и спускается в центр груди, в четвёртую чакру.']],
   [0.47, ['Почувствуйте, как грудь наполняется этим тёплым, спокойным светом.']],
   [0.56, ['А теперь, на выдохе, отпустите свет из груди во все стороны.', 'Он заполняет сферу, и она становится плотнее.']],
-  [0.78, ['С каждым выдохом сфера всё плотнее и ярче.', 'Это ваша защита.']]
+  [0.74, ['С каждым выдохом сфера всё плотнее и ярче.', 'Мысленно попросите светлые высшие силы наполнить и защитить ваше пространство.', 'Это ваша защита.']]
 ];
 const COCOON = { key: 'cocoon', name: 'Золотая сфера', dur: 180, visual: 'cocoon', breath: 'calm', beat: 8, tone: 3, eyes: 'open', stages: true,
-  text: 'Смотрите на сферу. Снизу, через стопы, входит серебристая энергия, поднимается через все чакры и растворяется в космосе. Из космоса опускается золотой свет — в сердце, в четвёртую чакру. На выдохе он расходится во все стороны и наполняет сферу.',
+  text: 'Смотрите на сферу. Снизу, через стопы, входит серебристая энергия, поднимается через все чакры и растворяется в космосе. Из космоса опускается золотой свет — в сердце, в четвёртую чакру. На выдохе он расходится во все стороны и наполняет сферу. Светлые высшие силы наполняют и защищают ваше пространство.',
   say: SPHERE_STAGES.flatMap(x => x[1]) };
 const BREATHE = { key: 'breath', name: 'Успокоение', dur: 90, visual: 'breath', breath: 'guide', beat: 10, tone: 3, cue: true, guideBreath: true, eyes: 'any',
   text: 'Ноги на полу, спина ровная. Вдох носом, медленный выдох ртом. Шар растёт — вдох, уменьшается — выдох.',
   say: ['Сядьте поудобнее.', 'Поставьте стопы на пол.', 'Расслабьтесь. Спина ровная, плечи опущены, руки спокойно лежат на коленях.', 'Вдыхайте носом и медленно выдыхайте ртом.', 'Дышите мягко, не глубже, чем вам удобно.', 'Дышите вместе со мной.'] };
-const INTENT_PH = { key: 'intent', name: 'Намерение', dur: 30, visual: 'breath', breath: 'calm', beat: 10, tone: 3, eyes: 'open', text: 'Прочитайте намерение и произнесите его про себя.', say: ['Давайте начнём с намерения.', 'Прочитайте его на экране и тихо повторите про себя.'] };
+const INTENT_ALL = 'Я открываюсь любым переменам в моей жизни — самым экологичным и наилучшим для меня.';
+const INTENT_PH = { key: 'intent', name: 'Намерение', dur: 45, visual: 'breath', breath: 'calm', beat: 10, tone: 3, eyes: 'open', text: '«' + INTENT_ALL + '» А затем прочитайте намерение вверху и повторите его про себя.', say: ['Давайте начнём с намерения.', 'Мысленно скажите себе: я открываюсь любым переменам в моей жизни, самым экологичным и наилучшим для меня.', 'А теперь прочитайте намерение на экране и тихо повторите его про себя.'] };
 const CLEAN = { key: 'clean', name: 'Очищение чакр', dur: 630, visual: 'chakras', breath: 'long', beat: 8, tone: 6, eyes: 'any', seq: 'clean',
   text: 'По одной чакре, снизу вверх: мягкий бело-золотой свет омывает чакру и уносит всё чужое вниз, в землю.', say: ['Теперь давайте очистим чакры, одну за другой, снизу вверх.', 'Начнём с первой.'] };
 const FILL = { key: 'fill', name: 'Запуск чакр', dur: 280, visual: 'chakras', breath: 'resonance', beat: 8, tone: 3, eyes: 'any', seq: 'fill',
@@ -1368,6 +1369,7 @@ const AFF = {
   energy: ['С каждым вдохом сил становится больше.', 'Энергия свободно течёт через всё твоё тело.', 'Твоя сила просыпается и растёт.', 'Энергии хватает на всё, что для тебя важно.', 'Ты наполняешься жизнью до кончиков пальцев.', 'Твоя энергия ведёт тебя к твоим желаниям.', 'В тебе столько силы, сколько нужно для перемен.', 'Каждое утро ты просыпаешься с новыми силами.'],
   blinders: ['Мир шире, чем казалось.', 'Ты выбираешь, во что верить.', 'Перед тобой открываются новые пути.', 'Смелость растёт в тебе с каждым днём.', 'Каждый шаг расширяет твои возможности.', 'Ты видишь больше, чем раньше.', 'Новое приходит в твою жизнь легко.', 'Тебе по силам гораздо больше, чем казалось раньше.'],
   release: ['С каждым выдохом становится легче.', 'Ты отпускаешь лишнее, и становится легче.', 'Прошлое становится опытом, а ты идёшь дальше.', 'В сердце становится просторнее.', 'Ты выбираешь покой.', 'Ты освобождаешь место для нового.', 'Тепло возвращается в твоё сердце.', 'Ты идёшь дальше налегке.'],
+  worth: ['Твоя ценность с тобой всегда.', 'Ты спокойно занимаешь своё место.', 'Тебя видно и слышно.', 'Твой голос звучит уверенно.', 'Ты позволяешь себе больше.', 'Твои дела и слова имеют вес.', 'Ты опираешься на то, что тебе по-настоящему важно.', 'Ты выбираешь себя спокойно и уверенно.'],
   selflove: ['Ты относишься к себе с теплом.', 'Тебя можно любить просто за то, что ты есть.', 'Твои чувства важны.', 'Ты встречаешь себя с нежностью.', 'С каждым днём ты принимаешь себя всё больше.', 'Ты замечаешь в себе всё больше хорошего.', 'Ты дружишь с собой.', 'Ты делаешь для себя много хорошего.'],
   relations: ['Любовь находит дорогу к тебе.', 'Ты открываешься новым тёплым знакомствам.', 'Рядом с тобой появляются добрые, надёжные люди.', 'Тебя любят просто за то, что ты есть.', 'Любовь приходит в твою жизнь естественно.', 'В твоих отношениях становится больше тепла и понимания.', 'Твоё сердце открывается теплу.', 'Ты встречаешь людей, с которыми легко и радостно.'],
   health: ['Твоё тело знает, как восстанавливаться.', 'Всё тело наполняется покоем.', 'Силы возвращаются к тебе.', 'Ты бережно заботишься о своём теле.', 'С каждым выдохом тело отдыхает глубже.', 'Тело отвечает тебе благодарностью.', 'В тебе прибывают силы и лёгкость.', 'Ты чувствуешь себя всё лучше и лучше.'],
@@ -1551,6 +1553,16 @@ const ROOMS = [
       R(150, 'Слова тепла', 'heart', 'Мне сейчас непросто. Так бывает у всех. Пусть я буду к себе добрее.', ['Мне сейчас непросто.', 'Так бывает у всех людей.', 'Пусть я буду к себе добрее.', 'Пусть я принимаю себя целиком.'], { beat: 6 }),
       R(90, 'Принятие', 'heart', 'Вы уже достаточно хороши. И вы растёте — шаг за шагом.', ['Вы живой человек — со своими сильными сторонами и ошибками.', 'Вы уже достаточно хороши.', 'И вы растёте, шаг за шагом.'])
     ] },
+  { id: 'worth', name: 'Своя ценность', ci: 2, tag: 'Видеть свою ценность без доказательств и спокойно занимать своё место.', ev: ['t-a', 'Ценности и самооценка · исследования'],
+    whyT: 'Ценность, которую доказывать больше незачем', why: 'Мы часто обесцениваем себя: «это мелочь», «любой бы смог», «просто повезло». А потом пытаемся заслужить ценность делами, похвалой, чужим одобрением — и устаём. Здесь вы замечаете, как обесцениваете себя, опираетесь на то, что вам по-настоящему важно, и учитесь спокойно занимать своё место: быть видимым, говорить, позволять себе больше.',
+    note: '<b>Основа:</b> аффирмация ценностей (К. Стил; Дж. Коэн и Д. Шерман, 2014): опора на свои ценности снижает потребность защищаться и доказывать. Самооценка, которая держится на успехе и одобрении, хрупкая и дорого обходится (Дж. Крокер и Л. Парк, 2004). Открытая поза здесь — для ощущения опоры, без обещаний про гормоны.',
+    main: [
+      R(120, 'Заметить', 'purpose', 'Где вы себя обесцениваете? «Это мелочь», «любой бы смог». Просто заметьте.', ['Вспомните недавний момент, когда вы сделали что-то хорошее и тут же сказали себе: это мелочь.', 'Или: любой бы смог. Или: просто повезло.', 'Просто заметьте эту привычку, мягко и спокойно.'], { beat: 8 }),
+      R(150, 'Что для меня важно', 'heart', 'Ваша ценность уже есть: в том, что вам важно, в вашем тепле и опыте. Она с вами всегда.', ['Подумайте о том, что для вас по-настоящему важно. Честность, забота, свобода, любовь, что-то своё.', 'Вспомните, как вы живёте этим каждый день, в простых делах.', 'Это и есть ваша ценность. Она уже есть в вас и остаётся с вами всегда.'], { beat: 8 }),
+      R(150, 'Без доказательств', 'energy', 'Представьте: ваша ценность уже принята — целиком. Можно выдохнуть.', ['Вспомните человека, которому вы всё время что-то доказываете.', 'Представьте, что ваша ценность уже принята, целиком.', 'Почувствуйте, сколько сил освобождается. С выдохом плечи опускаются, дыхание становится свободнее.'], { beat: 10 }),
+      R(150, 'Своё место', 'shutters', 'Плечи расправлены, грудь открыта. Сфера становится шире — вы занимаете больше места.', ['Сядьте чуть выше. Расправьте плечи и мягко раскройте грудь, как вам удобно.', 'Почувствуйте, сколько места занимает ваше тело. Это ваше место.', 'Представьте, что ваша сфера становится шире, и вы спокойно занимаете больше пространства, чем обычно.', 'Вас видно, и это спокойно.'], { beat: 12, open: [0.2, 0.95] }),
+      R(120, 'Быть видимым', 'purpose', 'Где на этой неделе вы позволите себе быть заметнее: сказать, попросить, показать своё?', ['Выберите одно место, где на этой неделе вы позволите себе быть заметнее.', 'Сказать своё мнение. Попросить. Показать свою работу.', 'Представьте, как вы делаете это спокойно, с ощущением своей ценности.'], { beat: 14 })
+    ] },
   { id: 'relations', name: 'Отношения и близость', ci: 1, tag: 'Тепло к близким, понимание вместо обид.', ev: ['t-a', 'Любящая доброта · подтверждено'],
     whyT: 'Близость начинается с тепла внутри', why: 'Медитация любящей доброты — одна из самых изученных практик. Сначала вы принимаете тепло от того, кто к вам добр, затем по очереди посылаете его близкому человеку, партнёру и тому, с кем непросто. Постепенно растёт чувство связи и терпение, и это заметно в разговорах и дома.',
     note: '<b>Основа:</b> медитация любящей доброты (метта). Исследования: больше позитивных эмоций и чувства связи с людьми (Б. Фредриксон, 2008).',
@@ -1591,7 +1603,7 @@ function habitMain(k) {
     R(60, 'Якорь', 'urge', 'Когда потянет: три медленных выдоха и это чувство свободы.', ['Когда потянет, сделайте три медленных выдоха.', 'И вспомните это чувство.'], { key: key(5), beat: 10 })
   ];
 }
-const INTENT = { cleanse: 'Я отпускаю всё лишнее', energy: 'Я активирую второй энергетический центр. Во мне много жизненной энергии. Я реализую свои желания и открываюсь переменам.', health: 'Моё тело в покое и заботе', abundance: 'Я вижу возможности и действую', luck: 'Я замечаю свои шансы', purpose: 'Я слышу себя', silence: 'Мой ум спокоен', ajna: 'Я развиваю интуицию и раскрываю третий глаз', chakras: 'Я целый', blinders: 'Мир шире, чем мне казалось', breathe: 'С каждым выдохом мне спокойнее', event: 'Внутри меня спокойствие при любом исходе', release: 'Я отпускаю то, что тяжело нести', selflove: 'Я на своей стороне', relations: 'В моём сердце есть место для тепла', body: 'Моё тело мягкое и спокойное', support: 'Меня поддерживают', awaken: 'Я есть', sleep: 'Я отдыхаю', food: 'Я слышу своё тело' };
+const INTENT = { cleanse: 'Я отпускаю всё лишнее', energy: 'Я активирую второй энергетический центр. Во мне много жизненной энергии. Я реализую свои желания и открываюсь переменам.', health: 'Моё тело в покое и заботе', abundance: 'Я вижу возможности и действую', luck: 'Я замечаю свои шансы', purpose: 'Я слышу себя', silence: 'Мой ум спокоен', ajna: 'Я развиваю интуицию и раскрываю третий глаз', chakras: 'Я в гармонии с собой', blinders: 'Мир шире, чем мне казалось', breathe: 'С каждым выдохом мне спокойнее', event: 'Внутри меня спокойствие при любом исходе', release: 'Я отпускаю то, что тяжело нести', selflove: 'Я на своей стороне', worth: 'Я вижу свою ценность и спокойно занимаю своё место', relations: 'В моём сердце есть место для тепла', body: 'Моё тело мягкое и спокойное', support: 'Меня поддерживают', awaken: 'Я есть', sleep: 'Я отдыхаю', food: 'Я слышу своё тело' };
 const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
 // Owner preview before launch: everything is open; ?owner=0 or the corner switch shows the client view
 (() => { const q = new URLSearchParams(location.search).get('owner'); if (q === '0' || q === '1') store.set('owner', q); })();
@@ -1604,7 +1616,7 @@ const MODE_RU = { major: 'светлый мажор', minor: 'мягкий ми�
 const ROOM_HZ = { cleanse: [741, 'очищение от чужих программ'], energy: [1111, 'энергия и обновление'], health: [285, 'восстановление'],
   blinders: [222, 'снятие блоков, решения'], abundance: [555, 'дело и достаток'], luck: [888, 'удача'], purpose: [999, 'лучшее в вас, цели'], silence: [432, 'гармония'],
   sleep: [111, 'спокойный сон, лёгкость'], breathe: [432, 'гармония, покой'], event: [444, 'устойчивость, терпение'], release: [417, 'отпускание прошлого'],
-  selflove: [528, 'любовь'], relations: [639, 'хорошие отношения'], food: [528, 'любовь к телу'], chakras: [963, 'единение, настройка «Я есмь»'],
+  selflove: [528, 'любовь'], worth: [396, 'освобождение от страха, уверенность'], relations: [639, 'хорошие отношения'], food: [528, 'любовь к телу'], chakras: [963, 'единение, настройка «Я есмь»'],
   habits: [396, 'освобождение от блоков'], body: [174, 'покой в теле'], support: [333, 'поддержка свыше'], awaken: [777, 'духовное пробуждение'], ajna: [852, 'пробуждение интуиции'] };
 const SOUND = {
   cleanse:   { beats: [8, 7, 6], carrier: 180, breath: 'long',      mode: 'suspended', tempo: [9, 14], noise: 'pink',  goal: 'отпустить напряжение' },
@@ -1618,6 +1630,7 @@ const SOUND = {
   breathe:   { beats: [8, 6, 6], carrier: 180, breath: null,        mode: 'suspended', tempo: [10, 15], noise: 'brown', goal: 'снять стресс' },
   event:     { beats: [10, 12, 14], carrier: 220, breath: 'calm',   mode: 'dorian',    tempo: [5, 8],  noise: 'pink',  goal: 'собранность' },
   release:   { beats: [6, 6, 5], carrier: 170, breath: 'long',      mode: 'minor',     tempo: [9, 14], noise: 'brown', goal: 'отпустить и простить' },
+  worth:     { beats: [8, 8, 10, 12, 14], carrier: 210, breath: 'calm', mode: 'major', tempo: [5, 8], noise: 'pink', goal: 'опора на свою ценность' },
   selflove:  { beats: [8, 8, 7], carrier: 190, breath: 'heart',     mode: 'major',     tempo: [7, 11], noise: 'pink',  goal: 'тепло к себе' },
   relations: { beats: [9, 8, 8, 7, 7], carrier: 205, breath: 'calm', mode: 'dorian',    tempo: [6, 10], noise: 'pink',  goal: 'тепло к другим' },
   food:      { beats: [8, 7, 7], carrier: 190, breath: 'calm',      mode: 'suspended', tempo: [8, 12], noise: 'pink',  goal: 'слышать тело' },
@@ -1642,6 +1655,7 @@ const TARGET = {
   breathe:   { ch: [3, 4],    m: ['Насколько вам сейчас тревожно?', 'спокойно', 'очень тревожно', -1, 'тревога'] },
   event:     { ch: [2, 4],    m: ['Насколько вы спокойны перед событием?', 'очень волнуюсь', 'спокоен(на)', 1, 'спокойствие'] },
   release:   { ch: [3, 1],    m: ['Насколько тяжело у вас на душе?', 'легко', 'очень тяжело', -1, 'тяжесть'] },
+  worth:     { ch: [2, 4],    m: ['Насколько ясно вы ощущаете свою ценность?', 'слабо', 'ясно', 1, 'ощущение своей ценности'] },
   selflove:  { ch: [3],       m: ['Насколько тепло вы сейчас к себе относитесь?', 'холодно', 'тепло', 1, 'тепло к себе'] },
   relations: { ch: [3, 4, 1],    m: ['Насколько вы открыты к близости?', 'закрыт(а)', 'открыт(а)', 1, 'открытость'] },
   food:      { ch: [2, 1],    m: ['Насколько сильно сейчас желание поесть «на эмоциях»?', 'нет', 'очень сильно', -1, 'тяга к еде'] },
@@ -1660,7 +1674,7 @@ function setPhases(r) { const sp = SOUND[r.id]; r.main.forEach((s, i) => { s.key
     if (sp && s.beat !== 0 && !s.beatFixed) s.beat = sp.beats[Math.min(i, sp.beats.length - 1)];
     if (sp && sp.breath && s.breath === 'resonance') s.breath = sp.breath; }); r.phases = r.bare ? [...r.main] : [COCOON, BREATHE, ...r.main].concat(r.noReturn ? [] : [RETURN]); }
 function setHabit(r, k) { r.habit = k; r.main = habitMain(k); setPhases(r); }
-const ORDER = ['cleanse', 'energy', 'health', 'blinders', 'abundance', 'luck', 'purpose', 'silence', 'sleep', 'breathe', 'event', 'release', 'selflove', 'relations', 'food', 'chakras', 'habits', 'body', 'support', 'awaken', 'ajna'];
+const ORDER = ['cleanse', 'energy', 'health', 'blinders', 'abundance', 'luck', 'purpose', 'silence', 'sleep', 'breathe', 'event', 'release', 'selflove', 'worth', 'relations', 'food', 'chakras', 'habits', 'body', 'support', 'awaken', 'ajna'];
 ROOMS.sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id));
 ROOMS.forEach(r => { r.color = CH[r.ci].c; if (r.id === 'habits') setHabit(r, store.get('ajna-habit') in HABITS ? store.get('ajna-habit') : 'smoke'); else setPhases(r); });
 const intentOf = r => store.get('ajna-intent-' + r.id + (r.habit ? '-' + r.habit : '')) || (r.habit ? HABITS[r.habit].intent : INTENT[r.id]);
@@ -1680,7 +1694,7 @@ const sum = ph => ph.reduce((a, p) => a + p.dur, 0);
 const EYES_SAY = { close: ['А теперь мягко закройте глаза.'], open: ['Теперь откройте глаза и посмотрите на картинку.'] };
 // script for voice recording (keys = file names): voice/script.md is exported from here
 window.AJNA_SCRIPT = () => {
-  const out = [['cocoon', COCOON.say], ['breath', BREATHE.say], ['return', RETURN.say], ['intent', INTENT_PH.say], ['clean', CLEAN.say], ['fill', FILL.say], ['tune', TUNE.say], ['eyes-close', EYES_SAY.close], ['eyes-open', EYES_SAY.open]];
+  const out = [['breath', BREATHE.say], ['return', RETURN.say], ['intent', INTENT_PH.say], ['clean', CLEAN.say], ['fill', FILL.say], ['tune', TUNE.say], ['eyes-close', EYES_SAY.close], ['eyes-open', EYES_SAY.open]];
   SPHERE_STAGES.forEach((x, i) => out.push(['cocoon-' + (i + 1), x[1]]));
   Object.entries(AFF).forEach(([k, l]) => l.forEach((x, i) => out.push(['aff-' + k + '-' + (i + 1), [x]])));
   CH.forEach((c, k) => { TUNE_SAY(k).forEach((x, n) => out.push(['tn' + (k + 1) + '-' + (n + 1), x[1]])); CLEAN_SAY(k).forEach((x, n) => out.push(['cl' + (k + 1) + '-' + (n + 1), x[1]])); FILL_SAY(k).forEach((x, n) => out.push(['fl' + (k + 1) + '-' + (n + 1), x[1]])); });
@@ -2339,7 +2353,7 @@ const visible = el => { const r = el.getBoundingClientRect(); return r.bottom > 
 
 // ======================= pages =======================
 const CATS = { all: 'Путь по этапам', state: 'Состояние', heart: 'Сердце и отношения', body: 'Тело', goals: 'Цели и перемены', mind: 'Сознание', habits: 'Привычки' };
-const CAT = { body: 'body', support: 'heart', awaken: 'mind', sleep: 'state', silence: 'state', breathe: 'state', event: 'state', cleanse: 'state', health: 'body', food: 'body', energy: 'body', release: 'heart', selflove: 'heart', relations: 'heart', abundance: 'goals', luck: 'goals', purpose: 'goals', blinders: 'goals', ajna: 'mind', chakras: 'mind', habits: 'habits' };
+const CAT = { body: 'body', support: 'heart', awaken: 'mind', sleep: 'state', silence: 'state', breathe: 'state', event: 'state', cleanse: 'state', health: 'body', food: 'body', energy: 'body', release: 'heart', selflove: 'heart', worth: 'heart', relations: 'heart', abundance: 'goals', luck: 'goals', purpose: 'goals', blinders: 'goals', ajna: 'mind', chakras: 'mind', habits: 'habits' };
 const ARROW = '<svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg>';
 const roomVisual = r => ({ visual: r.main[0].visual === 'silence' && r.id === 'purpose' ? 'purpose' : r.main[0].visual, ci: r.ci, active: r.id === 'chakras' ? 5 : undefined });
 function card(r, wide) {
@@ -2356,7 +2370,7 @@ const PATH = [
   { n: '1', name: 'Очищение', sub: 'Каждый день, от 3 до 10 дней — сколько нужно именно вам.', rooms: ['cleanse'], goal: ['cleanse', 3] },
   { n: '2', name: 'Очищение и наполнение', sub: 'Через день: сегодня очищение, завтра — наполнение всех чакр. Около недели.', rooms: ['chakras'], goal: ['chakras', 3] },
   { n: '3', name: 'Жизненная энергия', sub: 'Наполниться силой. Без неё следующие шаги работают слабо.', rooms: ['energy'], goal: ['energy', 3] },
-  { n: '4', name: 'Трансформация', sub: 'Когда основа пройдена: убеждения, обиды, любовь к себе, отношения, тело и привычки.', rooms: ['blinders', 'release', 'selflove', 'relations', 'health', 'food', 'habits', 'support'] },
+  { n: '4', name: 'Трансформация', sub: 'Когда основа пройдена: убеждения, обиды, любовь к себе, своя ценность, отношения, тело и привычки.', rooms: ['blinders', 'release', 'selflove', 'worth', 'relations', 'health', 'food', 'habits', 'support'] },
   { n: '5', name: 'Воплощение', sub: 'Когда есть энергия и сняты внутренние границы: деньги, удача, предназначение.', rooms: ['abundance', 'luck', 'purpose'] },
   { n: '6', name: 'Для практикующих', sub: 'Глубокие практики сознания — после нескольких недель на пути.', rooms: ['awaken', 'ajna'] },
   { n: '∞', name: 'В любой день', sub: 'Утром, на работе, перед сном — когда нужно снять стресс. Не зависит от этапа.', rooms: ['silence', 'body', 'event', 'sleep'] }
@@ -2391,7 +2405,7 @@ function filterCat(c) {
 $('filters').innerHTML = Object.entries(CATS).map(([k, v]) => '<button type="button" data-c="' + k + '" aria-pressed="' + (k === 'all') + '">' + v + '</button>').join('');
 $('filters').addEventListener('click', e => { const b = e.target.closest('button[data-c]'); if (b) filterCat(b.dataset.c); });
 filterCat('all');
-const MOODS = [['Устал после работы', 'Выключить внутренний шум', 'silence'], ['Тревожно, всё сжато', 'Три техники дыхания', 'breathe'], ['Нет сил', 'Поднять энергию', 'energy'], ['Впереди важное событие', 'Спокойствие при любом исходе', 'event'], ['Обида не отпускает', 'Отпустить и стать легче', 'release'], ['Ругаю себя', 'Стать себе другом', 'selflove'], ['Тянет к привычке', 'Пережить волну тяги', 'habits'], ['Хочу перемен', 'Работа с убеждениями и программами', 'blinders'], ['Не понимаю, чего хочу', 'Услышать себя', 'purpose']];
+const MOODS = [['Усталость после работы', 'Выключить внутренний шум', 'silence'], ['Тревожно, всё сжато', 'Три техники дыхания', 'breathe'], ['Нет сил', 'Поднять энергию', 'energy'], ['Впереди важное событие', 'Спокойствие при любом исходе', 'event'], ['Обида не отпускает', 'Отпустить и стать легче', 'release'], ['Ругаю себя', 'Стать себе другом', 'selflove'], ['Обесцениваю себя', 'Увидеть свою ценность', 'worth'], ['Тянет к привычке', 'Пережить волну тяги', 'habits'], ['Хочу перемен', 'Работа с убеждениями и программами', 'blinders'], ['Не понимаю, чего хочу', 'Услышать себя', 'purpose']];
 $('catMoods').innerHTML = MOODS.map(([t, s, id]) => '<a href="#room-' + id + '"><b>' + t + '</b><small>' + s + ' →</small></a>').join('');
 $('moods').innerHTML = MOODS.map(([t, s, id]) => '<a class="mood" href="#room-' + id + '"><span><b>' + t + '</b><small>' + s + '</small></span>' + ARROW + '</a>').join('');
 const names = ROOMS.filter(r => !r.pro).map(r => '<span>' + r.name + '</span>').join('');
@@ -2791,7 +2805,7 @@ async function bed(f) {
 }
 // space music (ElevenLabs Music, 2-minute seamless loops at −23 LUFS) replaces the synthesised pad and melody;
 // a real singing bowl now and then in the quiet of the main part and three times at the end
-const MUSIC = { heart: ['relations', 'selflove', 'release', 'support'], calm: ['breathe', 'silence', 'body', 'event'], cleanse: ['cleanse', 'chakras'],
+const MUSIC = { heart: ['relations', 'selflove', 'worth', 'release', 'support'], calm: ['breathe', 'silence', 'body', 'event'], cleanse: ['cleanse', 'chakras'],
   power: ['energy', 'abundance', 'luck', 'purpose', 'blinders'], body: ['health', 'food', 'habits'], spirit: ['awaken', 'ajna', 'sleep'] };
 let songG = null, songSrc = null, bowlBuf = null;
 const AFF_ONLY = ['silence'];   // here the quiet voice only brings attention back, no affirmations
@@ -2886,7 +2900,7 @@ async function loadKeys(keys) {
   const one = async k => { try { const r = await fetch(dir + k + '.mp3'); if (r.ok && VGENDER === g) recorded[k] = await actx.decodeAudioData(await r.arrayBuffer()); } catch (e) {} };
   for (let i = 0; i < todo.length; i += 4) await Promise.all(todo.slice(i, i + 4).map(one));   // four at a time, in order
 }
-function dropHeard(i) { const keep = new Set(sessKeys(P.phases.slice(i)).concat(['cocoon'])); Object.keys(recorded).forEach(k => { if (!k.startsWith('aff:') && !keep.has(k)) delete recorded[k]; }); }
+function dropHeard(i) { const keep = new Set(sessKeys(P.phases.slice(i)).concat(['cocoon-1'])); Object.keys(recorded).forEach(k => { if (!k.startsWith('aff:') && !keep.has(k)) delete recorded[k]; }); }
 let recUntil = 0, affBus = null;
 // background affirmations: one phrase every 30–40 s in the main part, each heard about twice a session,
 // never over the guiding voice and not in the first 18 s after it
@@ -2950,8 +2964,8 @@ const guideSeq = parts => { if (!$('vInstr').checked) return;
   if (VOICE_RECORDED && !parts.every(([k]) => recorded[k]) && !parts.waited) { const i = P.idx; parts.waited = true; return loadKeys(parts.map(([k]) => k)).then(() => { if (P.idx === i && P.running) guideSeq(parts); }); }
   if (parts.every(([k]) => recorded[k])) { let t = 0; parts.forEach(([k]) => { setTimeout(() => { if (P.running && !P.paused) playRec(k); }, t * 1000); t += recorded[k].duration + 0.7; }); }
   else speak(parts.flatMap(([, l]) => l)); };
-$('testVoice').onclick = async () => { initAudio(); if (actx && actx.state === 'suspended') await actx.resume().catch(() => {}); await loadKeys(['cocoon']);
-  if (!playRec('cocoon')) { if (!curVoice()) { $('voiceNote').textContent = 'Такого голоса на этом устройстве нет. Откройте сайт в Microsoft Edge.'; return; } speak(['Закройте глаза.', 'Вокруг вас золотая аура. Тёплая и спокойная.']); } };
+$('testVoice').onclick = async () => { initAudio(); if (actx && actx.state === 'suspended') await actx.resume().catch(() => {}); await loadKeys(['cocoon-1']);
+  if (!playRec('cocoon-1')) { if (!curVoice()) { $('voiceNote').textContent = 'Такого голоса на этом устройстве нет. Откройте сайт в Microsoft Edge.'; return; } speak(['Закройте глаза.', 'Вокруг вас золотая аура. Тёплая и спокойная.']); } };
 document.querySelectorAll('#vGender button').forEach(b => { b.classList.toggle('on', b.dataset.g === VGENDER);
   b.onclick = () => { VGENDER = b.dataset.g; store.set('vgender', VGENDER); document.querySelectorAll('#vGender button').forEach(x => x.classList.toggle('on', x === b)); if (synth) { synth.cancel(); listVoices(); } Object.keys(recorded).forEach(k => delete recorded[k]); if (P.running) { loadKeys(sessKeys(P.phases.slice(Math.max(0, P.idx)))); loadAff(P.room && P.room.id); } }; });
 $('voiceSel').onchange = () => synth && synth.cancel();
