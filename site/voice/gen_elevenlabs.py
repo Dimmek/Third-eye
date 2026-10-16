@@ -47,6 +47,7 @@ def units(lines, lang):
     for l in lines:
         if lang == 'ru':
             l = re.sub(r'([Чч])акр', lambda m: m.group(1) + 'а\u0301кр', l)
+        l = re.sub(r'\s+—\s+', ', ', l).replace(': ', ', ')   # dashes and colons make the voice stumble; a comma reads smoothly
         cur = ''
         for p in re.split(r'(?<=[.!?…])\s+(?=\S)', l):
             cur = (cur + ' ' + p).strip()

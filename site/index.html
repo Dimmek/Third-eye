@@ -336,15 +336,27 @@ body:has(.safe:not([hidden])) :is(.totop, .mbar, .owner-sw), body:has(#player:no
 .player.soft .paura { opacity: .2; }
 .porb { position: absolute; z-index: 3; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; pointer-events: none; opacity: 0; transition: opacity .8s, transform 1s;
   background: radial-gradient(circle, #fff 0 18%, var(--oc, #ffd27a) 45%, transparent 72%); box-shadow: 0 0 30px 10px var(--oc, #ffd27a), 0 0 90px 30px var(--oc, #ffd27a); }
-.porb.on { opacity: 1; } .porb.up, .porb.down, .porb.rise { animation: orbtrail .5s ease-in-out infinite alternate; }
+.porb.on { opacity: 1; } .porb.up, .porb.down, .porb.rise { animation: orbtrail 2s ease-in-out infinite alternate; }
 .porb.open { transform: scale(2.6); transition: transform 3s ease-out; }
-.porb.fill { transform: scale(1.4); animation: orbbeat 2.2s ease-in-out infinite; }
+.porb.fill { transform: scale(1.4); animation: orbbeat 7s ease-in-out infinite; }   /* slow, like a calm breath */
 @keyframes orbtrail { to { box-shadow: 0 0 40px 14px var(--oc, #ffd27a), 0 20px 70px 24px var(--oc, #ffd27a); } } @keyframes orbbeat { 50% { transform: scale(1.8); } }
 .prings { position: absolute; z-index: 3; width: 0; height: 0; pointer-events: none; opacity: 0; transition: opacity 1.2s; } .prings.on { opacity: 1; }
-.prings i { position: absolute; left: calc(var(--rr, 200px) * -1); top: calc(var(--rr, 200px) * -1); width: calc(var(--rr, 200px) * 2); height: calc(var(--rr, 200px) * 2); border-radius: 50%; border: 3px solid rgba(255,214,130,.85); box-shadow: 0 0 30px rgba(255,200,110,.8), inset 0 0 30px rgba(255,200,110,.5); transform: scale(0); opacity: 0; animation: ringout 4.5s ease-out infinite; }
-.prings i:nth-child(2) { animation-delay: 1.5s; } .prings i:nth-child(3) { animation-delay: 3s; }
+.prings i { position: absolute; left: calc(var(--rr, 200px) * -1); top: calc(var(--rr, 200px) * -1); width: calc(var(--rr, 200px) * 2); height: calc(var(--rr, 200px) * 2); border-radius: 50%; border: 3px solid rgba(255,214,130,.85); box-shadow: 0 0 30px rgba(255,200,110,.8), inset 0 0 30px rgba(255,200,110,.5); transform: scale(0); opacity: 0; animation: ringout 9s ease-out infinite; }
+.prings i:nth-child(2) { animation-delay: 3s; } .prings i:nth-child(3) { animation-delay: 6s; }
 @keyframes ringout { 0% { transform: scale(.05); opacity: 1; } 100% { transform: scale(1); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .prings i, .porb { animation: none !important; } }
+.pbeam { position: absolute; z-index: 2; width: 6px; margin-left: -3px; border-radius: 3px; pointer-events: none; opacity: 0; transition: opacity 1.2s, transform 3.5s ease-out, filter 3.5s; }
+.pbeam.on { opacity: 1; }
+.pbeam.up { background: linear-gradient(to top, rgba(225,232,246,.95), rgba(225,232,246,.6) 75%, rgba(225,232,246,0)); box-shadow: 0 0 18px 4px rgba(210,222,245,.45); }
+.pbeam.down { background: linear-gradient(to bottom, rgba(255,214,130,0), rgba(255,214,130,.85) 22%, rgba(255,222,150,.95)); box-shadow: 0 0 22px 6px rgba(255,200,110,.4); }
+.pbeam.gone { opacity: 0; transform: translateY(-60px) scaleX(3); filter: blur(8px); transition: opacity 3.5s ease-out, transform 3.5s ease-out, filter 3.5s; }
+.pbeam.down::after { content: ''; position: absolute; top: 0; bottom: 0; left: -16px; right: -16px;
+  background-image: radial-gradient(circle, rgba(255,226,150,.95) 0 1.3px, transparent 1.8px), radial-gradient(circle, rgba(255,244,205,.85) 0 1px, transparent 1.5px);
+  background-size: 22px 36px, 32px 52px; background-position: 4px 0, 15px 18px; animation: sparkfall 3.2s linear infinite;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 85%, transparent); mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 85%, transparent); }
+@keyframes sparkfall { to { background-position: 4px 36px, 15px 70px; } }
+@media (prefers-reduced-motion: reduce) { .pbeam.down::after { animation: none; } }
+.player.soft .pbeam { opacity: 0 !important; }
 .pfocus { position: absolute; z-index: 3; width: 0; height: 0; pointer-events: none; opacity: 0; transition: opacity 1s, left .8s, top .8s; }
 .pfocus.on { opacity: 1; }
 .pfocus i { position: absolute; left: -20px; top: -20px; width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--fc, #fff); background: radial-gradient(circle, rgba(255,255,255,.9) 0 12%, transparent 45%); box-shadow: 0 0 26px var(--fc, #fff), 0 0 60px var(--fc, #fff), inset 0 0 14px var(--fc, #fff); animation: fhold 6s ease-in-out infinite; }
@@ -372,7 +384,7 @@ body:has(.safe:not([hidden])) :is(.totop, .mbar, .owner-sw), body:has(#player:no
 .icon:hover { border-color: var(--gold-l); }
 .icon svg { width: 18px; height: 18px; }
 .tools { display: flex; gap: 10px; }
-.pbottom { display: grid; justify-items: center; gap: 12px; text-align: center; }
+.pbottom { position: relative; z-index: 5; display: grid; justify-items: center; gap: 12px; text-align: center; }   /* text always above the sphere's glow */
 .pbottom .eyebrow { margin: 0; }
 .pbottom .eyebrow::before { display: none; }
 .peyes { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; border: 1px solid rgba(220,189,134,.35); background: rgba(6,5,11,.45); font-size: 13px; color: var(--gold-l); }
@@ -1196,7 +1208,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
   <video class="pfly" id="pFly" muted loop playsinline preload="none" aria-hidden="true"></video>
   <img class="pcoc" id="pCoc" src="img/cocoon.webp" alt="" aria-hidden="true">
   <div class="paura" id="pAura" aria-hidden="true"></div>
-  <div class="prings" id="pRings" aria-hidden="true"><i></i><i></i><i></i></div><div class="porb" id="pOrb" aria-hidden="true"></div>
+  <div class="prings" id="pRings" aria-hidden="true"><i></i><i></i><i></i></div><div class="pbeam" id="pBeam" aria-hidden="true"></div><div class="porb" id="pOrb" aria-hidden="true"></div>
   <video class="pvis" id="pVis" muted loop playsinline preload="none" aria-hidden="true"></video>
   <div class="pintent" id="pIntent" aria-live="off"></div>
   <div class="pfocus" id="pFocus" aria-hidden="true"><i></i><span></span></div>
@@ -1323,13 +1335,14 @@ const focusLine = c => 'Перенесите внимание на ' + ORD_A[c] 
 
 const SPHERE_STAGES = [
   [0, ['Посмотрите на картинку на экране.', 'Представьте, что вы внутри этой золотой сферы и она окружает вас со всех сторон.']],
-  [0.15, ['Сверху, из космоса, к вам опускается мягкий золотой свет.', 'Он проходит через макушку и спускается в центр груди, в четвёртую чакру.']],
-  [0.42, ['Почувствуйте, как грудь наполняется этим тёплым, спокойным светом.']],
-  [0.5, ['А теперь, на выдохе, отпустите свет из груди во все стороны.', 'Он заполняет сферу, и она становится плотнее.']],
+  [0.14, ['Серебристая энергия поднимается от основания позвоночника, через все чакры, выше макушки, и мягко растворяется в космосе.']],
+  [0.32, ['Сверху, из космоса, к вам опускается мягкий золотой свет.', 'Он проходит через макушку и спускается в центр груди, в четвёртую чакру.']],
+  [0.47, ['Почувствуйте, как грудь наполняется этим тёплым, спокойным светом.']],
+  [0.56, ['А теперь, на выдохе, отпустите свет из груди во все стороны.', 'Он заполняет сферу, и она становится плотнее.']],
   [0.78, ['С каждым выдохом сфера всё плотнее и ярче.', 'Это ваша защита.']]
 ];
 const COCOON = { key: 'cocoon', name: 'Золотая сфера', dur: 180, visual: 'cocoon', breath: 'calm', beat: 8, tone: 3, eyes: 'open', stages: true,
-  text: 'Смотрите на сферу. Золотой свет из космоса входит через макушку в четвёртую чакру. На выдохе он расходится из неё во все стороны, наполняет сферу и уплотняет её — это ваша защита.',
+  text: 'Смотрите на сферу. Серебристая энергия поднимается снизу вверх и растворяется в космосе. Из космоса опускается золотой свет — в сердце, в четвёртую чакру. На выдохе он расходится во все стороны и наполняет сферу.',
   say: SPHERE_STAGES.flatMap(x => x[1]) };
 const BREATHE = { key: 'breath', name: 'Успокоение', dur: 90, visual: 'breath', breath: 'guide', beat: 10, tone: 3, cue: true, guideBreath: true, eyes: 'any',
   text: 'Ноги на полу, спина ровная. Вдох носом, медленный выдох ртом. Шар растёт — вдох, уменьшается — выдох.',
@@ -1340,9 +1353,9 @@ const CLEAN = { key: 'clean', name: 'Очищение чакр', dur: 630, visua
 const FILL = { key: 'fill', name: 'Запуск чакр', dur: 280, visual: 'chakras', breath: 'resonance', beat: 8, tone: 3, eyes: 'any', seq: 'fill',
   text: 'По одной чакре, снизу вверх: чакра наполняется своим цветом, запускается и начинает работать в одном ритме с остальными.', say: ['Теперь наполним чакры и запустим их, по одной, снизу вверх.', 'Каждая чакра, которую вы запускаете, подхватывает общий ритм и работает вместе с остальными.'] };
 // every other space: a short tune-up of all chakras at once, so the session is about the space itself
-const TUNE = { key: 'tune', name: 'Настройка чакр', dur: 120, visual: 'chakras', breath: 'resonance', beat: 8, tone: 3, eyes: 'any',
-  text: 'Бело-золотой свет проходит через все семь чакр: очищает их, наполняет цветом и выравнивает в общий ритм.',
-  say: ['Теперь коротко настроим чакры.', 'Сверху, через макушку, опускается мягкий бело-золотой свет.', 'Он проходит через все семь чакр, от макушки до копчика, и мягко очищает их.', 'Каждая чакра наполняется своим цветом, и все они начинают светиться вместе, в одном ритме.', 'Побудьте в этом ощущении. Дальше — ваша практика.'] };
+const TUNE = { key: 'tune', name: 'Чакры', dur: 216, visual: 'chakras', breath: 'resonance', beat: 8, tone: 3, eyes: 'closed', seq: 'tune',
+  text: 'Глаза закрыты. Чакра за чакрой, снизу вверх: золотой свет омывает её, тяжёлое уходит вниз, в землю, чакра входит в общий ритм.',
+  say: ['А теперь мягко закройте глаза.', 'Пройдём по чакрам, снизу вверх. Из космоса в каждую из них опускается золотой свет.'] };
 // quiet affirmations in the silences of goal-oriented spaces: warm, in the present, about movement, never denying anything
 const AFF = {
   common: ['Ты заслуживаешь всего самого хорошего.', 'Ты хороший человек, и это видно.', 'В тебе много тепла и света.', 'У тебя получается — шаг за шагом.', 'Всё, что тебе нужно, уже есть внутри тебя.', 'Ты идёшь своим путём, и он ведёт тебя туда, куда нужно.', 'Жизнь поддерживает тебя.', 'Ты можешь доверять себе.'],
@@ -1662,7 +1675,7 @@ window.AJNA_SCRIPT = () => {
   const out = [['cocoon', COCOON.say], ['breath', BREATHE.say], ['return', RETURN.say], ['intent', INTENT_PH.say], ['clean', CLEAN.say], ['fill', FILL.say], ['tune', TUNE.say], ['eyes-close', EYES_SAY.close], ['eyes-open', EYES_SAY.open]];
   SPHERE_STAGES.forEach((x, i) => out.push(['cocoon-' + (i + 1), x[1]]));
   Object.entries(AFF).forEach(([k, l]) => l.forEach((x, i) => out.push(['aff-' + k + '-' + (i + 1), [x]])));
-  CH.forEach((c, k) => { CLEAN_SAY(k).forEach((x, n) => out.push(['cl' + (k + 1) + '-' + (n + 1), x[1]])); FILL_SAY(k).forEach((x, n) => out.push(['fl' + (k + 1) + '-' + (n + 1), x[1]])); });
+  CH.forEach((c, k) => { TUNE_SAY(k).forEach((x, n) => out.push(['tn' + (k + 1) + '-' + (n + 1), x[1]])); CLEAN_SAY(k).forEach((x, n) => out.push(['cl' + (k + 1) + '-' + (n + 1), x[1]])); FILL_SAY(k).forEach((x, n) => out.push(['fl' + (k + 1) + '-' + (n + 1), x[1]])); });
   ROOMS.forEach(r => (r.habit ? Object.keys(HABITS).flatMap(habitMain) : r.main).forEach(s => out.push([s.key, s.say])));
   CH.forEach((c, i) => out.push(['c' + (i + 1), c.say]));
   out.push(['inhale', ['Вдох']], ['exhale', ['Выдох']]);
@@ -2652,7 +2665,7 @@ function fly(ph) {
   if (!ph || reduce || $('player').classList.contains('soft')) { v.style.opacity = 0; setTimeout(() => { if (v.style.opacity === '0') v.pause(); }, 2600); return; }
   if (!v.src) { const h264 = v.canPlayType('video/mp4; codecs="avc1.42E01E"'); v.src = !h264 ? 'media/flybg.webm' : innerWidth < 700 ? 'media/flybg-m.mp4' : 'media/flybg.mp4'; }
   v.play().catch(() => {});
-  v.style.opacity = ph.visual === 'dark' ? 0.6 : 0.95;
+  v.style.opacity = ['cocoon', 'chakras', 'breath'].includes(ph.visual) ? 0.35 : ph.visual === 'dark' ? 0.5 : 0.75;   // a quiet sky behind the sphere and the chakras
 }
 function warp(anchor, from, to) {
   if (reduce || !anchor) return;
@@ -2837,9 +2850,9 @@ const recorded = {};
 function sessKeys(phases) {
   const out = ['eyes-close', 'eyes-open'];
   phases.forEach(ph => {
-    if (ph.stages) for (let n = 1; n <= 5; n++) out.push('cocoon-' + n); else out.push(ph.key);
+    if (ph.stages) SPHERE_STAGES.forEach((_, n) => out.push('cocoon-' + (n + 1))); else out.push(ph.key);
     if (ph.breath && ph.cue) out.push('inhale', 'exhale');
-    if (ph.seq) for (let k = 1; k <= 7; k++) for (let n = 1; n <= (ph.seq === 'clean' ? 5 : 3); n++) out.push((ph.seq === 'clean' ? 'cl' : 'fl') + k + '-' + n);
+    if (ph.seq) for (let k = 1; k <= 7; k++) for (let n = 1; n <= ({ clean: 5, fill: 3, tune: 1 })[ph.seq]; n++) out.push(({ clean: 'cl', fill: 'fl', tune: 'tn' })[ph.seq] + k + '-' + n);
     if (ph.key === 'chakras') for (let k = 1; k <= 7; k++) out.push('c' + k);
   });
   return [...new Set(out)];
@@ -2931,7 +2944,7 @@ function introFor(r, long) {
   const D = (ph, a, b) => Object.assign({}, ph, { dur: long ? b : a });
   if (QUICK.includes(r.id)) return [D(BREATHE, 60, 90)];
   const base = [D(INTENT_PH, 30, 40), D(BREATHE, 60, 120), D(COCOON, 120, 180)];
-  return base.concat(r.id === 'cleanse' ? [D(CLEAN, 630, 840)] : r.id === 'chakras' ? [D(FILL, 600, 900)] : [D(TUNE, 120, 180)]);
+  return base.concat(r.id === 'cleanse' ? [D(CLEAN, 630, 840)] : r.id === 'chakras' ? [D(FILL, 600, 900)] : [D(TUNE, 216, 300)]);
 }
 function phasesFor(r, lvl) {
   if (r.fixed) return r.main.slice();
@@ -2950,14 +2963,14 @@ function levelUI(r) {
   if (locked) $('rLock').textContent = 'Пространство для практикующих. Открывается отдельно (' + PRICE_AJNA.toLocaleString('ru') + ' ₽, навсегда, в подписку не входит), когда вы выберете сессию 40 минут и пройдёте 7 практик (сейчас: ' + Math.min(7, practiceCount()) + ' из 7).';
 }
 $('rLevel').addEventListener('click', e => { const b = e.target.closest('button[data-l]'); if (!b) return; store.set('level', b.dataset.l); const y = scrollY; showRoom(curRoom.id); scrollTo(0, y); });
-function openPlayer(r) {
+function openPlayer(r) { $('heroVid').pause();   // the home video stays still while the player is open
   if (r.pro && !isPro()) return; P.room = r; P.phases = phasesFor(r); P.m0 = introCount(r); P.m1 = P.phases.length - (P.phases[P.phases.length - 1].key === 'return' ? 1 : 0); P.intent = ($('rIntent').value || '').trim() || intentOf(r); $('pIntent').textContent = P.intent; $('pIntent').classList.remove('on'); P.idx = -1; P.running = false; P.elapsed = 0;
   $('player').hidden = false; document.body.style.overflow = 'hidden';
   $('pTtl').textContent = r.name; $('pPhase').textContent = r.name; $('pInstr').textContent = 'Наденьте наушники и сядьте удобно. Сессия начнётся с золотой сферы.';
   $('pEye').textContent = 'Сессия · ' + mins(sum(P.phases)); $('pTime').textContent = fmt(sum(P.phases)); $('pProg').style.width = '0';
   $('pIco').innerHTML = '<path d="M8 5.5v13l11-6.5z"/>';
 }
-function closePlayer() { stop(); $('player').hidden = true; document.body.style.overflow = ''; $('drawer').classList.remove('open'); }
+function closePlayer() { stop(); $('player').hidden = true; document.body.style.overflow = ''; $('heroVid').play().catch(() => {}); $('drawer').classList.remove('open'); }
 function enter(i) {
   P.idx = i; P.start = P.elapsed; P.ch = -1; P.breaths = 0; if (i > 0) dropHeard(i); P.fc = -1; P.lastLabel = ''; P.sol = solFor(P.phases[i], i); if (i === 0) drone(P.room && ROOM_HZ[P.room.id] ? ROOM_HZ[P.room.id][0] : 0);
   const ph = P.phases[i]; setTimeout(() => P.running && P.idx === i && fly(ph), i === 0 ? 2500 : 0); vis(ph); $('pEyes').innerHTML = EYES[eyesOf(ph)][1] + EYES[eyesOf(ph)][0]; $('pPhase').textContent = ph.name; $('pInstr').textContent = ph.text; applyAudio(ph);
@@ -2973,17 +2986,23 @@ function enter(i) {
 }
 const CH_WORDS = [[0, /основани|копчик|корн|стоп/], [1, /низ живота|ниже пупка|таз/], [2, /солнечн|под рёбрами/], [3, /груд|сердц/], [4, /горл/], [5, /между бровей|лоб/], [6, /макушк|темя/]];
 const namedCentre = ph => { const t = ((ph.text || '') + ' ' + (ph.say || []).join(' ')).toLowerCase(); let best = -1, at = 1e9; CH_WORDS.forEach(([c, re]) => { const m = t.search(re); if (m >= 0 && m < at) { at = m; best = c; } }); return best; };
-const ORB_PATH = [[0, null], [0.15, 0.0], [0.42, 0.494], [0.5, 0.494], [1, 0.494]];
+// the sphere: silver energy rises from the root through the crown and dissolves in space, leaving a beam that fades upward;
+// then golden light descends from space to the heart with a beam of falling golden sparks; the heart opens; waves fill the sphere
+const ROOT_Y = 0.615, HEART_Y = 0.494, SPACE_Y = -0.18;
 function sphereStage(u) { const n = SPHERE_STAGES.filter(x => u >= x[0]).length - 1;
   if (n !== P.stage) { P.stage = n; const k = 'cocoon-' + (n + 1), l = SPHERE_STAGES[n][1]; if (P.running && !P.paused) guideSeq([[k, l]]); } }
-function sphereAnim(ph, pt) { const o = $('pOrb'), rg = $('pRings'), img = $('pCoc');
-  if (!ph || !ph.stages || !P.running || !img.classList.contains('on')) { o.className = 'porb'; rg.className = 'prings'; return; }
-  const u = pt / ph.dur, r = img.getBoundingClientRect(); let y = null, mode = '';
-  for (let k = 1; k < ORB_PATH.length; k++) { const [u0, y0] = ORB_PATH[k - 1], [u1, y1] = ORB_PATH[k]; if (u < u1) { if (y0 != null) { const f = (u - u0) / (u1 - u0); y = y0 + (y1 - y0) * f; } mode = ['', 'down', 'open', 'fill'][k - 1]; break; } }
-  if (u >= 0.5) { mode = 'fill'; y = 0.494; }
+function sphereAnim(ph, pt) { const o = $('pOrb'), rg = $('pRings'), bm = $('pBeam'), img = $('pCoc');
+  if (!ph || !ph.stages || !P.running || !img.classList.contains('on')) { o.className = 'porb'; rg.className = 'prings'; bm.className = 'pbeam'; return; }
+  const u = pt / ph.dur, r = img.getBoundingClientRect(), X = r.left + r.width / 2, Y = y => r.top + r.height * y;
+  let y = null, mode = '', beam = '', b0 = 0, b1 = 0;
+  if (u >= 0.14 && u < 0.30) { y = ROOT_Y + (SPACE_Y - ROOT_Y) * ease((u - 0.14) / 0.16); mode = 'up'; beam = 'up on'; b0 = y; b1 = ROOT_Y; }
+  else if (u >= 0.30 && u < 0.33) { beam = 'up gone'; b0 = SPACE_Y; b1 = ROOT_Y; }                       // the silver beam dissolves upward
+  else if (u >= 0.33 && u < 0.46) { y = SPACE_Y + (HEART_Y - SPACE_Y) * ease((u - 0.33) / 0.13); mode = 'down'; beam = 'down on'; b0 = SPACE_Y; b1 = y; }
+  else if (u >= 0.46 && u < 0.56) { y = HEART_Y; mode = 'open'; beam = 'down on'; b0 = SPACE_Y; b1 = HEART_Y; }
+  else if (u >= 0.56) { y = HEART_Y; mode = 'fill'; beam = 'down gone'; b0 = SPACE_Y; b1 = HEART_Y; }
+  bm.className = 'pbeam ' + beam; bm.style.left = X + 'px'; bm.style.top = Y(Math.min(b0, b1)) + 'px'; bm.style.height = Math.max(0, Y(Math.max(b0, b1)) - Y(Math.min(b0, b1))) + 'px';
   if (y == null) { o.className = 'porb'; rg.className = 'prings'; return; }
-  const c = mode === 'up' ? CH[Math.max(0, Math.min(6, Math.round((0.70 - y) / (0.70 - 0.335) * 6)))].c : [255, 205, 110];
-  o.style.left = (r.left + r.width / 2) + 'px'; o.style.top = (r.top + r.height * y) + 'px'; o.style.setProperty('--oc', 'rgb(' + c.join(',') + ')');
+  o.style.left = X + 'px'; o.style.top = Y(y) + 'px'; o.style.setProperty('--oc', mode === 'up' ? 'rgb(225,232,246)' : 'rgb(255,205,110)');
   o.className = 'porb on ' + mode; rg.style.left = o.style.left; rg.style.top = o.style.top; rg.style.setProperty('--rr', (r.height * 0.44) + 'px'); rg.className = 'prings' + (mode === 'fill' ? ' on' : ''); }
 // focus point on the figure: chakra heights as a share of img/cocoon.webp (768×1024), root → crown
 const FOCUS_Y = [0.615, 0.575, 0.534, 0.494, 0.452, 0.371, 0.335];
@@ -3010,13 +3029,14 @@ const CLEAN_SAY = k => [[0, [focusLine(k), 'Почувствуйте там лё
 const SYNC = ['Представьте, как она запускается: начинает мягко вращаться и светиться.', 'Она подхватывает ритм первой, и теперь они работают вместе.', 'Теперь уже три чакры работают в одном ритме.',
   'Она соединяет нижние чакры с верхними.', 'Она подхватывает общий ритм.', 'Шесть чакр работают вместе, синхронно.',
   'Теперь все семь чакр работают как одно целое, и энергия свободно поднимается снизу вверх.'];
+const TUNE_SAY = k => [[0, ['Свет опускается в ' + ORD_A[k] + ' чакру, ' + PLACE[k] + '.', 'Он мягко омывает её. Всё тяжёлое уходит вниз, в землю, а чакра наполняется чистым светом.' + (k === 6 ? ' Теперь все семь чакр светятся вместе, в одном гармоничном ритме.' : '')]]];
 const FILL_SAY = k => [[0, [focusLine(k)]], [0.25, ['Она наполняется своим цветом, тёплым, чистым ' + COLOR[k] + '.']], [0.65, [SYNC[k]]]];
 function chakra(k, mode) {
   P.ch = k; const c = CH[k], W = c.where[0].toUpperCase() + c.where.slice(1), ph = P.phases[P.idx], per = (ph.dur - 6) / 7, idx = P.idx;
-  $('pPhase').textContent = (mode === 'clean' ? 'Очищение · ' : mode === 'fill' ? 'Запуск · ' : '') + c.n;
-  $('pInstr').textContent = mode === 'clean' ? W + '. Бело-золотой свет омывает чакру и уносит всё чужое вниз, в землю.' : mode === 'fill' ? W + '. Чакра наполняется своим цветом — ' + COLOR[k] + ', запускается и входит в общий ритм.' : W + '. Мысленно звучит «' + c.bija + '».';
+  $('pPhase').textContent = (mode === 'clean' ? 'Очищение · ' : mode === 'fill' ? 'Запуск · ' : mode === 'tune' ? 'Чакры · ' : '') + c.n;
+  $('pInstr').textContent = mode === 'clean' ? W + '. Бело-золотой свет омывает чакру и уносит всё чужое вниз, в землю.' : mode === 'fill' ? W + '. Чакра наполняется своим цветом — ' + COLOR[k] + ', запускается и входит в общий ритм.' : mode === 'tune' ? W + '. Золотой свет омывает чакру, тяжёлое уходит вниз, в землю.' : W + '. Мысленно звучит «' + c.bija + '».';
   padRoot(c.tone); P.sol = SOL[k]; bowl(P.sol); applyAudio(ph);
-  const plan = mode === 'clean' ? CLEAN_SAY(k) : mode === 'fill' ? FILL_SAY(k) : [[0, c.say]], tag = mode === 'clean' ? 'cl' : mode === 'fill' ? 'fl' : 'c';
+  const plan = mode === 'clean' ? CLEAN_SAY(k) : mode === 'fill' ? FILL_SAY(k) : mode === 'tune' ? TUNE_SAY(k) : [[0, c.say]], tag = mode === 'clean' ? 'cl' : mode === 'fill' ? 'fl' : mode === 'tune' ? 'tn' : 'c';
   plan.forEach(([at, lines], n) => setTimeout(() => { if (P.running && !P.paused && P.ch === k && P.idx === idx) guide(tag + (k + 1) + (mode ? '-' + (n + 1) : ''), lines); }, (k || mode ? 1200 : 5000) + at * per * 1000));
 }
 async function play() {
