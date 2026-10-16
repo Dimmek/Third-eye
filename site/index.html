@@ -1374,7 +1374,7 @@ const AFF = {
   event: ['Твоё волнение — это энергия.', 'Ты говоришь спокойно и уверенно.', 'Тебя слышат.', 'Опора — внутри тебя.', 'Всё складывается хорошо.', 'Ты знаешь и умеешь больше, чем кажется в эту минуту.', 'Ты встречаешь этот день с ясной головой.', 'Твой голос звучит ровно и сильно.']
 };
 // short stress-relief spaces: no chakra work, 10 or 15 minutes
-const QUICK = ['breathe', 'silence', 'body', 'event'];
+const QUICK = ['breathe', 'silence', 'body', 'event'], CHAKRA_WORK = ['energy', 'ajna', 'awaken'];
 const RETURN = { key: 'return', name: 'Завершение', dur: 60, visual: 'breath', breath: 'calm', beat: 8, tone: 3, eyes: 'closed',
   text: 'Побудьте в этом состоянии. Его не нужно прерывать — оно остаётся с вами. Когда будете готовы, просто откройте глаза.',
   say: ['Побудьте в этом состоянии столько, сколько хочется.', 'Его не нужно прерывать, оно остаётся с вами.', 'Золотая сфера и это спокойствие будут с вами весь день.', 'Когда будете готовы, не торопясь, откройте глаза.'] };
@@ -1497,7 +1497,7 @@ const ROOMS = [
       R(216, 'Звучание чакр', 'chakras', 'Внимание поднимается от основания позвоночника к макушке. Цвет, место и звук каждой чакры.', ['Давайте пройдём по чакрам, снизу вверх, и на каждой немного задержимся.'], { key: 'chakras' }),
       R(90, 'Единство', 'flight', 'Все семь чакр светятся вместе. Побудьте в этом целом.', ['Все семь чакр светятся вместе.', 'Побудьте в этом ощущении целостности.'], { beat: 6 })
     ] },
-  { id: 'blinders', name: 'Работа с убеждениями', ci: 5, wide: true, tag: 'Найти внутренние границы, которые вас держат, и выйти за рамки чужих правил. Увидеть свои возможности.', ev: ['t-a', 'Когнитивный подход'],
+  { id: 'blinders', name: 'Работа с убеждениями и деструктивными программами', ci: 5, wide: true, tag: 'Найти внутренние границы, которые вас держат, и выйти за рамки чужих правил. Увидеть свои возможности.', ev: ['t-a', 'Когнитивный подход'],
     whyT: 'Мир шире, чем нас учили', why: 'С детства нам ставят рамки: «так не принято», «это не для нас», «неудобно попросить». Потом добавляются чужие стандарты: как «правильно» жить, любить, зарабатывать, каким «должен» быть нормальный человек. Их приносят родители, соцсети, эксперты и даже специалисты, которые лучше вас «знают», что с вами не так. Мы смотрим на мир через узкую щель и принимаем её за весь мир. Здесь вы находите одно своё ограничивающее убеждение, проверяете его на правду, примеряете новое и делаете один маленький смелый шаг. Границы раздвигаются постепенно: каждый шаг открывает ещё немного.',
     note: '<b>Основа:</b> когнитивная терапия (А. Бек): найти убеждение и проверить его на факты. Поведенческие эксперименты: маленький реальный шаг меняет убеждение сильнее, чем рассуждения.',
     main: [
@@ -2383,7 +2383,7 @@ function filterCat(c) {
 $('filters').innerHTML = Object.entries(CATS).map(([k, v]) => '<button type="button" data-c="' + k + '" aria-pressed="' + (k === 'all') + '">' + v + '</button>').join('');
 $('filters').addEventListener('click', e => { const b = e.target.closest('button[data-c]'); if (b) filterCat(b.dataset.c); });
 filterCat('all');
-const MOODS = [['Устал после работы', 'Выключить внутренний шум', 'silence'], ['Тревожно, всё сжато', 'Три техники дыхания', 'breathe'], ['Нет сил', 'Поднять энергию', 'energy'], ['Впереди важное событие', 'Спокойствие при любом исходе', 'event'], ['Обида не отпускает', 'Отпустить и стать легче', 'release'], ['Ругаю себя', 'Стать себе другом', 'selflove'], ['Тянет к привычке', 'Пережить волну тяги', 'habits'], ['Хочу перемен', 'Работа с убеждениями', 'blinders'], ['Не понимаю, чего хочу', 'Услышать себя', 'purpose']];
+const MOODS = [['Устал после работы', 'Выключить внутренний шум', 'silence'], ['Тревожно, всё сжато', 'Три техники дыхания', 'breathe'], ['Нет сил', 'Поднять энергию', 'energy'], ['Впереди важное событие', 'Спокойствие при любом исходе', 'event'], ['Обида не отпускает', 'Отпустить и стать легче', 'release'], ['Ругаю себя', 'Стать себе другом', 'selflove'], ['Тянет к привычке', 'Пережить волну тяги', 'habits'], ['Хочу перемен', 'Работа с убеждениями и программами', 'blinders'], ['Не понимаю, чего хочу', 'Услышать себя', 'purpose']];
 $('catMoods').innerHTML = MOODS.map(([t, s, id]) => '<a href="#room-' + id + '"><b>' + t + '</b><small>' + s + ' →</small></a>').join('');
 $('moods').innerHTML = MOODS.map(([t, s, id]) => '<a class="mood" href="#room-' + id + '"><span><b>' + t + '</b><small>' + s + '</small></span>' + ARROW + '</a>').join('');
 const names = ROOMS.filter(r => !r.pro).map(r => '<span>' + r.name + '</span>').join('');
@@ -2507,7 +2507,7 @@ const JOURNAL = [
     lead: '«Неудобно», «у меня не получится», «это не для таких, как я» — звучит как правда о мире, но чаще это привычка мышления. Разбираемся, как работают такие убеждения, что говорят о методах их изменения сотни исследований и почему маленький реальный шаг сильнее любой аффирмации.',
     body: `<p>Когнитивная терапия, созданная Аароном Беком, учит замечать автоматические мысли и проверять их на правду: это факт или привычка? откуда она? всегда ли это так?</p>
 <div class="fact">Обзор <b>269 мета-анализов</b> показал: когнитивно-поведенческий подход — один из самых надёжно подтверждённых методов работы с тревогой и стрессом.</div>
-<p>Сильнее всего убеждение меняет не спор, а опыт: маленький реальный шаг — звонок, вопрос, письмо. Поэтому пространство «Работа с убеждениями» заканчивается выбором одного шага на завтра.</p>`, src: ['hofmann'] },
+<p>Сильнее всего убеждение меняет не спор, а опыт: маленький реальный шаг — звонок, вопрос, письмо. Поэтому пространство «Работа с убеждениями и деструктивными программами» заканчивается выбором одного шага на завтра.</p>`, src: ['hofmann'] },
   { id: 'gratitude', cat: 'Наука', title: 'Благодарность, удача и изобилие — без магии: что на самом деле показывают исследования', read: '12 минут', long: true,
     lead: 'Деньги и удача не приходят от того, что вы правильно «настроились». Но то, куда направлено ваше внимание, действительно меняет, что вы замечаете и что делаете. Разбираемся, что известно о благодарности и «везучести», с цифрами и честными оговорками.',
     body: `<p>В классическом исследовании люди, которые каждую неделю записывали, за что благодарны, через несколько недель оценивали свою жизнь лучше и чаще занимались спортом, чем те, кто записывал неприятности.</p>
@@ -2938,25 +2938,28 @@ const pSurf = surface($('pCv'), { cyr: 0.4, mr: 0.68, visual: () => {
   const ph = P.phases[Math.max(0, P.idx)], pt = P.elapsed - P.start;
   return { flightBg: { ci: ph.tone, phase: P.elapsed * 0.009, speed: 0.009, alpha: ph.visual === 'dark' ? 0.6 : 0.85 }, visual: P.vid === ph.visual || (ph.visual === 'cocoon' && !VMAN.includes('cocoon')) ? 'none' : ph.visual, ci: (ph.visual === 'chakras') && P.ch >= 0 ? P.ch : ph.tone, st: ph.breath && P.running ? breathAt(ph.breath, pt) : null, active: ph.key === 'chakras' || ph.seq ? P.ch : -1, since: pt, open: ph.open && P.running ? ph.open[0] + (ph.open[1] - ph.open[0]) * ease(Math.min(1, pt / ph.dur)) : undefined, shell: P.running && P.idx > 0 && ph.visual !== 'cocoon' && ph.visual !== 'shutters' && !(P.room && P.room.noSphere && P.idx >= P.m0) };
 } });
-// what each space holds: cleansing has the full chakra cleansing, filling has the full filling and launch,
-// stress relief spaces are short and without chakras, the rest get a short tune-up and their own practice
+// what each space holds, nothing extra: cleansing has the full chakra cleansing, filling the full filling and launch,
+// the chakra spaces (energy, ajna, awakening) a pass through the chakras; psychological practices go straight to their work;
+// stress relief spaces are short and without the sphere
 function introFor(r, long) {
   const D = (ph, a, b) => Object.assign({}, ph, { dur: long ? b : a });
   if (QUICK.includes(r.id)) return [D(BREATHE, 60, 90)];
   const base = [D(INTENT_PH, 30, 40), D(BREATHE, 60, 120), D(COCOON, 120, 180)];
-  return base.concat(r.id === 'cleanse' ? [D(CLEAN, 630, 840)] : r.id === 'chakras' ? [D(FILL, 600, 900)] : [D(TUNE, 216, 300)]);
+  return base.concat(r.id === 'cleanse' ? [D(CLEAN, 630, 840)] : r.id === 'chakras' ? [D(FILL, 600, 900)] : CHAKRA_WORK.includes(r.id) ? [D(TUNE, 216, 300)] : []);
 }
 function phasesFor(r, lvl) {
   if (r.fixed) return r.main.slice();
   const long = (lvl || LEVEL()) === 'pro', intro = introFor(r, long), total = QUICK.includes(r.id) ? (long ? 900 : 600) : (long ? 2400 : 1500);
   const end = Object.assign({}, RETURN, { dur: long ? 90 : 60 }), budget = total - sum(intro) - end.dur, tot = sum(r.main);
-  return intro.concat(r.main.map(p => Object.assign({}, p, { dur: Math.max(40, Math.round(p.dur * budget / tot / 5) * 5) })), [end]);
+  const main = r.main.map(p => Object.assign({}, p, { dur: Math.max(40, Math.round(p.dur * budget / tot / 5) * 5) }));
+  if (!QUICK.includes(r.id) && eyesOf(main[0]) === 'any') main[0].eyes = 'closed';   // after the sphere the eyes close before the practice
+  return intro.concat(main, [end]);
 }
 const introCount = r => r.fixed ? 0 : introFor(r).length;
 function levelUI(r) {
   const cur = LEVEL();
   const [bn, bp] = $('rLevel').children; bn.querySelector('b').textContent = mins(sum(phasesFor(r, 'new'))); bp.querySelector('b').textContent = mins(sum(phasesFor(r, 'pro'))); bn.querySelector('em').textContent = bp.querySelector('em').textContent = '';
-  bn.querySelector('small').textContent = QUICK.includes(r.id) ? 'Коротко: успокоить дыхание и сразу к практике' : r.id === 'cleanse' ? 'Намерение, дыхание, сфера, полное очищение всех чакр и водопад света' : r.id === 'chakras' ? 'Намерение, дыхание, сфера, наполнение и запуск всех чакр, их звучание' : 'Намерение, дыхание, сфера, короткая настройка чакр и основная практика';
+  bn.querySelector('small').textContent = QUICK.includes(r.id) ? 'Коротко: успокоить дыхание и сразу к практике' : r.id === 'cleanse' ? 'Намерение, дыхание, сфера, полное очищение всех чакр и водопад света' : r.id === 'chakras' ? 'Намерение, дыхание, сфера, наполнение и запуск всех чакр, их звучание' : CHAKRA_WORK.includes(r.id) ? 'Намерение, дыхание, сфера, проход по чакрам и основная практика' : 'Намерение, дыхание, сфера и основная практика';
   bn.setAttribute('aria-checked', cur === 'new'); bp.setAttribute('aria-checked', cur === 'pro');
   document.querySelector('.rlv').hidden = !!r.fixed;
   const locked = r.pro && !isPro(); $('rLock').hidden = !locked; $('rStart').disabled = locked; $('rStart').style.opacity = locked ? 0.45 : '';
