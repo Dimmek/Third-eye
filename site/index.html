@@ -2811,12 +2811,24 @@ let VGENDER = store.get('vgender') || 'f';
 const VOICE_RECORDED = true;   // recorded narration: voice/<lang>/<f|m>/<key>.mp3 + manifest.json
 const VLANG = 'ru';
 const recorded = {};
-async function loadRecorded() {
-  if (!actx || !VOICE_RECORDED || loadRecorded.done === VGENDER) return; loadRecorded.done = VGENDER;
-  const g = VGENDER; Object.keys(recorded).forEach(k => delete recorded[k]);
-  const dir = 'voice/' + VLANG + '/' + g + '/'; let keys = []; try { const r = await fetch(dir + 'manifest.json'); if (r.ok) keys = (await r.json()).filter(k => !k.startsWith('aff-')); } catch (e) {}   // affirmations load per space
-  await Promise.all(keys.map(async k => { try { const r = await fetch(dir + k + '.mp3'); if (r.ok && VGENDER === g) recorded[k] = await actx.decodeAudioData(await r.arrayBuffer()); } catch (e) {} }));
+// only this session's fragments, in the order they are heard: the first ones are ready in a second or two,
+// the rest load while the session runs; fragments already heard are released from memory
+function sessKeys(phases) {
+  const out = ['eyes-close', 'eyes-open'];
+  phases.forEach(ph => {
+    if (ph.stages) for (let n = 1; n <= 5; n++) out.push('cocoon-' + n); else out.push(ph.key);
+    if (ph.breath && ph.cue) out.push('inhale-count', 'exhale-count', 'inhale', 'exhale');
+    if (ph.seq) for (let k = 1; k <= 7; k++) for (let n = 1; n <= (ph.seq === 'clean' ? 5 : 3); n++) out.push((ph.seq === 'clean' ? 'cl' : 'fl') + k + '-' + n);
+    if (ph.key === 'chakras') for (let k = 1; k <= 7; k++) out.push('c' + k);
+  });
+  return [...new Set(out)];
 }
+async function loadKeys(keys) {
+  if (!actx || !VOICE_RECORDED) return; const g = VGENDER, dir = 'voice/' + VLANG + '/' + g + '/', todo = keys.filter(k => !recorded[k]);
+  const one = async k => { try { const r = await fetch(dir + k + '.mp3'); if (r.ok && VGENDER === g) recorded[k] = await actx.decodeAudioData(await r.arrayBuffer()); } catch (e) {} };
+  for (let i = 0; i < todo.length; i += 4) await Promise.all(todo.slice(i, i + 4).map(one));   // four at a time, in order
+}
+function dropHeard(i) { const keep = new Set(sessKeys(P.phases.slice(i)).concat(['cocoon'])); Object.keys(recorded).forEach(k => { if (!k.startsWith('aff:') && !keep.has(k)) delete recorded[k]; }); }
 let recUntil = 0, affBus = null;
 // background affirmations: one phrase every 30–40 s in the main part, each heard about twice a session,
 // never over the guiding voice and not in the first 18 s after it
@@ -2871,15 +2883,17 @@ function speak(lines, o) {
     u.onstart = () => setDuck(true); u.onend = u.onerror = () => setTimeout(next, (o && o.gap) || 1800); synth.speak(u); };
   next();
 }
-const guide = (key, lines) => { if ($('vInstr').checked && !playRec(key)) speak(lines); };
+// a fragment still on its way is waited for (not replaced by the browser's robotic voice)
+const guide = (key, lines) => { if (!$('vInstr').checked || playRec(key)) return; if (!VOICE_RECORDED) return speak(lines); const i = P.idx; loadKeys([key]).then(() => { if (P.idx === i && P.running && !playRec(key)) speak(lines); }); };
 // several fragments in a row: recorded ones are chained by length, otherwise one spoken sequence
 const guideSeq = parts => { if (!$('vInstr').checked) return;
+  if (VOICE_RECORDED && !parts.every(([k]) => recorded[k]) && !parts.waited) { const i = P.idx; parts.waited = true; return loadKeys(parts.map(([k]) => k)).then(() => { if (P.idx === i && P.running) guideSeq(parts); }); }
   if (parts.every(([k]) => recorded[k])) { let t = 0; parts.forEach(([k]) => { setTimeout(() => { if (P.running && !P.paused) playRec(k); }, t * 1000); t += recorded[k].duration + 0.7; }); }
   else speak(parts.flatMap(([, l]) => l)); };
-$('testVoice').onclick = async () => { initAudio(); if (actx && actx.state === 'suspended') await actx.resume().catch(() => {}); await loadRecorded();
+$('testVoice').onclick = async () => { initAudio(); if (actx && actx.state === 'suspended') await actx.resume().catch(() => {}); await loadKeys(['cocoon']);
   if (!playRec('cocoon')) { if (!curVoice()) { $('voiceNote').textContent = 'Такого голоса на этом устройстве нет. Откройте сайт в Microsoft Edge.'; return; } speak(['Закройте глаза.', 'Вокруг вас золотая аура. Тёплая и спокойная.']); } };
 document.querySelectorAll('#vGender button').forEach(b => { b.classList.toggle('on', b.dataset.g === VGENDER);
-  b.onclick = () => { VGENDER = b.dataset.g; store.set('vgender', VGENDER); document.querySelectorAll('#vGender button').forEach(x => x.classList.toggle('on', x === b)); if (synth) { synth.cancel(); listVoices(); } loadRecorded(); }; });
+  b.onclick = () => { VGENDER = b.dataset.g; store.set('vgender', VGENDER); document.querySelectorAll('#vGender button').forEach(x => x.classList.toggle('on', x === b)); if (synth) { synth.cancel(); listVoices(); } Object.keys(recorded).forEach(k => delete recorded[k]); if (P.running) { loadKeys(sessKeys(P.phases.slice(Math.max(0, P.idx)))); loadAff(P.room && P.room.id); } }; });
 $('voiceSel').onchange = () => synth && synth.cancel();
 
 // ======================= player =======================
@@ -2923,7 +2937,7 @@ function openPlayer(r) {
 }
 function closePlayer() { stop(); $('player').hidden = true; document.body.style.overflow = ''; $('drawer').classList.remove('open'); }
 function enter(i) {
-  P.idx = i; P.start = P.elapsed; P.ch = -1; P.breaths = 0; P.fc = -1; P.lastLabel = ''; P.sol = solFor(P.phases[i], i); if (i === 0) drone(P.room && ROOM_HZ[P.room.id] ? ROOM_HZ[P.room.id][0] : 0);
+  P.idx = i; P.start = P.elapsed; P.ch = -1; P.breaths = 0; if (i > 0) dropHeard(i); P.fc = -1; P.lastLabel = ''; P.sol = solFor(P.phases[i], i); if (i === 0) drone(P.room && ROOM_HZ[P.room.id] ? ROOM_HZ[P.room.id][0] : 0);
   const ph = P.phases[i]; setTimeout(() => P.running && P.idx === i && fly(ph), i === 0 ? 2500 : 0); vis(ph); $('pEyes').innerHTML = EYES[eyesOf(ph)][1] + EYES[eyesOf(ph)][0]; $('pPhase').textContent = ph.name; $('pInstr').textContent = ph.text; applyAudio(ph);
   const tg = P.room && TARGET[P.room.id], c0 = P.room && !P.room.sleep ? namedCentre(ph) : -1, fc0 = c0 >= 0 ? c0 : tg && !P.room.bare ? tg.ch[0] : -1;
   const focus = tg && i === P.m0 && fc0 >= 0 && c0 < 0 ? [focusLine(fc0)] : [];
@@ -2985,7 +2999,7 @@ function chakra(k, mode) {
 }
 async function play() {
   initAudio(); if (actx && actx.state === 'suspended') await actx.resume().catch(() => {});
-  if (!P.running) { await loadRecorded(); await loadAff(P.room && P.room.id); P.affRoom = null; P.running = true; P.paused = false; P.elapsed = 0; P.last = performance.now(); enter(0); if (!$('player').classList.contains('soft')) warp($('pCv'), 1.8, 9.4); }
+  if (!P.running) { const keys = sessKeys(P.phases); await loadKeys(keys.slice(0, 4)); loadKeys(keys).then(() => loadAff(P.room && P.room.id)); P.affRoom = null; P.running = true; P.paused = false; P.elapsed = 0; P.last = performance.now(); enter(0); if (!$('player').classList.contains('soft')) warp($('pCv'), 1.8, 9.4); }
   else { P.paused = !P.paused; P.last = performance.now(); if (P.paused && synth) synth.cancel(); const fv = $('pFly'); if (fv && fv.src) P.paused ? fv.pause() : fv.play().catch(() => {}); }
   $('pIco').innerHTML = P.paused ? '<path d="M8 5.5v13l11-6.5z"/>' : '<rect x="7" y="5.5" width="3.2" height="13" rx="1"/><rect x="13.8" y="5.5" width="3.2" height="13" rx="1"/>';
   levels(P.paused ? 0.4 : 3);
