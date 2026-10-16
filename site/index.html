@@ -1371,6 +1371,7 @@ const AFF = {
   abundance: ['Ты открываешься новым возможностям.', 'Деньги приходят к тебе честным путём.', 'Ты умеешь принимать.', 'Твой труд ценят и хорошо оплачивают.', 'Ты замечаешь возможности вокруг себя.', 'Изобилие растёт в твоей жизни день за днём.', 'Ты заслуживаешь достатка и щедро делишься им.', 'Твои доходы растут.'],
   luck: ['Удача на твоей стороне.', 'Ты оказываешься в нужном месте в нужное время.', 'Нужные люди встречаются на твоём пути.', 'Каждый день приносит хорошие сюрпризы.', 'Хорошие случайности складываются в твою пользу.', 'Ты открываешься новому, и новое открывается тебе.', 'Двери открываются перед тобой одна за другой.', 'Тебе везёт всё чаще.'],
   purpose: ['Твой путь становится яснее.', 'Ты делаешь то, что откликается в сердце.', 'Твои способности нужны этому миру.', 'Ты доверяешь своему внутреннему голосу.', 'Каждый шаг приближает тебя к твоему делу.', 'В тебе есть дар, и он раскрывается.', 'Ты знаешь, что для тебя по-настоящему важно.', 'То, что ты делаешь, приносит пользу и радость.'],
+  silence: ['Если мысль увела, просто вернитесь к опоре.', 'Снова к дыханию.', 'Выдох, и ещё выдох.', 'Плечи мягкие, лицо спокойное.', 'Мысли приходят и уходят, а вы возвращаетесь.', 'Каждое возвращение — это тренировка внимания.', 'Слушайте тишину между звуками.', 'Внимание мягкое и спокойное.'],
   event: ['Твоё волнение — это энергия.', 'Ты говоришь спокойно и уверенно.', 'Тебя слышат.', 'Опора — внутри тебя.', 'Всё складывается хорошо.', 'Ты знаешь и умеешь больше, чем кажется в эту минуту.', 'Ты встречаешь этот день с ясной головой.', 'Твой голос звучит ровно и сильно.']
 };
 // short stress-relief spaces: no chakra work, 10 or 15 minutes
@@ -1445,13 +1446,14 @@ const ROOMS = [
       R(150, 'Вопрос', 'purpose', 'Что для меня по-настоящему важно? Не ищите ответ, просто слушайте.', ['Спросите себя: что для меня по-настоящему важно?', 'Не ищите ответ — просто слушайте.', 'Первое, что придёт, запомните.'], { beat: 6 }),
       R(60, 'Ответ', 'purpose', 'Поблагодарите себя. После сессии запишите ответ.', ['Поблагодарите себя за этот ответ.', 'А после практики обязательно запишите его.'])
     ] },
-  { id: 'silence', name: 'Тишина ума', ci: 4, tag: 'После работы: выключить внутренний шум.', ev: ['t-a', 'Внимание и стресс · подтверждено'],
-    whyT: 'Вы — небо, а не облака', why: 'Самая короткая дорога к покою: не бороться с мыслями, а смотреть, как они проплывают. Классическая практика осознанности, которая лучше всего изучена наукой.',
-    note: '<b>Основа:</b> медитация осознанности (MBSR, Джон Кабат-Зинн): снижение стресса и тревоги в сотнях исследований.',
+  { id: 'silence', name: 'Тишина ума', ci: 4, tag: 'Выключить внутренний шум: внимание на звуке, дыхании и теле.', ev: ['t-a', 'Внимание и стресс · подтверждено'],
+    whyT: 'Опора, к которой возвращается внимание', why: 'Просто «не думать» не получается ни у кого. Поэтому здесь у внимания есть опора: сначала звук поющей чаши, потом счёт выдохов, потом ощущение в ладонях. Мысль увела — вы мягко возвращаетесь, и каждое возвращение тренирует спокойствие. В конце остаётся тишина.',
+    note: '<b>Основа:</b> медитация сосредоточенного внимания (MBSR, Дж. Кабат-Зинн; А. Лутц и соавт., 2008) и счёт дыхания (Д. Левинсон и соавт., 2014): лучше внимание, меньше блуждания мыслей и тревоги.',
     main: [
-      R(90, 'Шум', 'silence', 'Заметьте все мысли, которые сейчас есть. Не спорьте с ними.', ['Заметьте мысли, которые сейчас есть.', 'Не спорьте с ними и ничего с ними не делайте.']),
-      R(150, 'Облака', 'silence', 'Мысли — облака. Они приходят и уходят. Вы — небо.', ['Пусть мысли будут облаками.', 'Они приходят и уходят.', 'А вы — небо, спокойное и большое.'], { beat: 6 }),
-      R(180, 'Паузы', 'flight', 'Между мыслями есть паузы. Побудьте в них.', ['Между мыслями есть паузы.', 'Побудьте в них.', 'Ничего не нужно делать.'], { beat: 6 })
+      R(120, 'Звук', 'silence', 'Слушайте поющую чашу, пока звук полностью не растает. Потом — музыку и тихий тон под ней.', ['Сейчас прозвучит чаша.', 'Слушайте её звук от начала до самого конца, пока он полностью не растает.', 'Когда он затихнет, слушайте музыку и тихий тон под ней.'], { beat: 8, bowls: true }),
+      R(150, 'Выдохи', 'silence', 'Про себя считайте выдохи до десяти, потом снова с одного.', ['Теперь перенесите внимание на дыхание.', 'Про себя считайте каждый выдох, до десяти, и снова с одного.', 'Сбились — просто начните сначала. Это и есть тренировка.'], { beat: 6 }),
+      R(120, 'Ладони', 'silence', 'Внимание в ладонях: тепло, лёгкое покалывание, вес.', ['Почувствуйте ладони.', 'Тепло, лёгкое покалывание, их вес.', 'Просто держите внимание в ладонях.'], { beat: 6 }),
+      R(150, 'Тишина', 'flight', 'Отпустите опору. Побудьте в тишине, которая остаётся.', ['А теперь отпустите опору.', 'Побудьте в тишине, которая остаётся.', 'Если мысль увела, мягко вернитесь к дыханию.'], { beat: 6 })
     ] },
   { id: 'body', name: 'Тело без напряжения', ci: 0, tag: 'Снять зажимы из мышц: ноги, спина, плечи, лицо. Частота 174 Гц.', ev: ['t-a', 'Мышечное расслабление · подтверждено'],
     whyT: 'Отпустить то, что тело держит весь день', why: 'Напряжение копится в мышцах незаметно: сжатая челюсть, поднятые плечи, каменная спина. Здесь вы по очереди слегка напрягаете и отпускаете каждую часть тела — так тело само вспоминает, как это: быть мягким. Под всей практикой звучит 174 Гц, самая низкая из частот сольфеджио.',
@@ -2786,6 +2788,7 @@ async function bed(f) {
 const MUSIC = { heart: ['relations', 'selflove', 'release', 'support'], calm: ['breathe', 'silence', 'body', 'event'], cleanse: ['cleanse', 'chakras'],
   power: ['energy', 'abundance', 'luck', 'purpose', 'blinders'], body: ['health', 'food', 'habits'], spirit: ['awaken', 'ajna', 'sleep'] };
 let songG = null, songSrc = null, bowlBuf = null;
+const AFF_ONLY = ['silence'];   // here the quiet voice only brings attention back, no affirmations
 const fetchBuf = async url => { const r = await fetch(url); if (!r.ok) throw 0; return actx.decodeAudioData(await r.arrayBuffer()); };
 async function song(id) {
   if (songSrc) { try { songSrc.stop(actx.currentTime + 2); } catch (e) {} songSrc = null; }
@@ -2795,11 +2798,13 @@ async function song(id) {
   try { if (!song.cache[k]) song.cache[k] = await fetchBuf('media/music/' + k + '.mp3'); if (!bowlBuf) bowlBuf = await fetchBuf('media/music/bowl.mp3'); } catch (e) { song.on = false; levels(); return; }
   if (!song.on || !P.running) return; songSrc = actx.createBufferSource(); songSrc.buffer = song.cache[k]; songSrc.loop = true; songSrc.connect(songG); songSrc.start(); levels();
 }
-function ringBowl(at) { if (!bowlBuf || !actx) return false; const s = actx.createBufferSource(), g = actx.createGain(); s.buffer = bowlBuf; s.playbackRate.value = 0.92 + Math.random() * 0.16; g.gain.value = 0.9; s.connect(g).connect(duck); s.start(at || 0); return true; }
+function ringBowl(at) { if (!bowlBuf || !actx) return false; const s = actx.createBufferSource(), g = actx.createGain(); s.buffer = bowlBuf; s.playbackRate.value = 0.92 + Math.random() * 0.16; g.gain.value = 0.9; s.connect(g).connect(duck); s.start(at || 0); P.bowlUntil = (at || actx.currentTime) + 7; return true; }
 function bowlTick() {
-  if (!actx || !P.room || P.idx < P.m0 || P.idx >= P.m1 || !$('music').checked) return; const now = actx.currentTime;
+  if (!actx || !P.room || P.idx < P.m0 || P.idx >= P.m1) return; const now = actx.currentTime, cur = P.phases[P.idx];
+  if (cur.bowls) { if (P.bowlIdx !== P.idx) { P.bowlIdx = P.idx; P.bowlNext = now + 9; } if (now >= P.bowlNext && now >= recUntil + 1 && now >= (P.affUntil || 0) + 1) { ringBowl(); P.bowlNext = now + 28 + Math.random() * 6; } return; }
+  if (!$('music').checked) return;
   if (!P.bowlNext) P.bowlNext = now + 60 + Math.random() * 40;
-  if (now < P.bowlNext || now < recUntil + 6) return; const ph = P.phases[P.idx]; if (ph.dur - (P.elapsed - P.start) < 12) return; ringBowl(); P.bowlNext = now + 100 + Math.random() * 60;
+  if (now < P.bowlNext || now < recUntil + 6 || now < (P.affUntil || 0) + 2) return; const ph = P.phases[P.idx]; if (ph.dur - (P.elapsed - P.start) < 12) return; ringBowl(); P.bowlNext = now + 100 + Math.random() * 60;
 }
 function drone(f) { if (!actx) return; bed(f); if (HZ_TRACK.includes(f)) f = 0;
   if (!droneO) { droneG = actx.createGain(); droneG.gain.value = 0; droneG.connect(duck); droneO = [1, 0.5].map((m, i) => { const o = actx.createOscillator(), g = actx.createGain(); o.type = 'sine'; g.gain.value = [1, 0.4][i]; o.connect(g).connect(droneG); o.start(); return { o, m }; }); }
@@ -2872,18 +2877,19 @@ const shuffle = a => a.map(x => [Math.random(), x]).sort((p, q) => p[0] - q[0]).
 async function loadAff(id) {
   if (!actx || !VOICE_RECORDED || !AFF[id]) return; const g = VGENDER, dir = 'voice/' + VLANG + '/' + g + '/';
   try { if (!recorded['aff:index'] || recorded['aff:g'] !== g) { const r = await fetch(dir + 'aff.json'); if (!r.ok) return; recorded['aff:index'] = await r.json(); recorded['aff:g'] = g; } } catch (e) { return; }
-  await Promise.all(['common', id].filter(k => !recorded['aff:' + k]).map(async k => { try { const r = await fetch(dir + 'aff-' + k + '.mp3'); if (r.ok && VGENDER === g) recorded['aff:' + k] = await actx.decodeAudioData(await r.arrayBuffer()); } catch (e) {} }));
+  await Promise.all((AFF_ONLY.includes(id) ? [id] : ['common', id]).filter(k => !recorded['aff:' + k]).map(async k => { try { const r = await fetch(dir + 'aff-' + k + '.mp3'); if (r.ok && VGENDER === g) recorded['aff:' + k] = await actx.decodeAudioData(await r.arrayBuffer()); } catch (e) {} }));
 }
 function affTick() {
   if (!actx || !affBus || !P.room || !AFF[P.room.id] || P.idx < P.m0 || P.idx >= P.m1 || !$('vAff').checked) return;
   const now = actx.currentTime, id = P.room.id;
-  if (P.affRoom !== id) { P.affRoom = id; const one = () => { const s = shuffle(AFF[id].map((_, i) => [id, i])), c = shuffle(AFF.common.map((_, i) => ['common', i])); return s.flatMap((k, i) => [k, c[i]]); }; P.affQ = one().concat(one()); P.affNext = 0; }
+  if (P.affRoom !== id) { P.affRoom = id; const one = () => { const s = shuffle(AFF[id].map((_, i) => [id, i])), c = shuffle(AFF.common.map((_, i) => ['common', i])); return AFF_ONLY.includes(id) ? s : s.flatMap((k, i) => [k, c[i]]); }; P.affQ = one().concat(one()); P.affNext = 0; }
   if (now < recUntil + 18) { P.affNext = Math.max(P.affNext, recUntil + 18); return; }
   const ph = P.phases[P.idx], left = ph.dur - (P.elapsed - P.start); if (left < 12) return;   // the next step's voice is close
   if (now < P.affNext) return;
   const k = P.affQ.shift(), b = k && recorded['aff:' + k[0]], mark = k && recorded['aff:index'] && recorded['aff:index'][k[0]] && recorded['aff:index'][k[0]][k[1]];
   if (!b || !mark) { P.affNext = now + 5; return; }
-  const src = actx.createBufferSource(); src.buffer = b; src.connect(affBus); src.start(0, mark[0], mark[1]); P.affNext = now + mark[1] + 30 + Math.random() * 10;
+  if (now < (P.bowlUntil || 0)) { P.affNext = P.bowlUntil + 1; return; }   // let the bowl ring out first
+  const src = actx.createBufferSource(); src.buffer = b; src.connect(affBus); src.start(0, mark[0], mark[1]); P.affUntil = now + mark[1]; P.affNext = now + mark[1] + 30 + Math.random() * 10;
 }
 const breathKey = (label, ph) => { const k = { 'Вдох': 'inhale', 'Выдох': 'exhale' }[label] || ''; if (!k) return '';
   if (k === 'inhale') P.breaths = (P.breaths || 0) + 1; return k; };
