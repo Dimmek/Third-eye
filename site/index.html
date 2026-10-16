@@ -1332,8 +1332,8 @@ const COCOON = { key: 'cocoon', name: 'Золотая сфера', dur: 180, vis
   text: 'Смотрите на сферу. Золотой свет из космоса входит через макушку в четвёртую чакру. На выдохе он расходится из неё во все стороны, наполняет сферу и уплотняет её — это ваша защита.',
   say: SPHERE_STAGES.flatMap(x => x[1]) };
 const BREATHE = { key: 'breath', name: 'Успокоение', dur: 90, visual: 'breath', breath: 'guide', beat: 10, tone: 3, cue: true, guideBreath: true, eyes: 'any',
-  text: 'Ноги на полу, спина ровная. Вдох через нос на 4 счёта, выдох через рот на 6. Считайте вместе с голосом: шар растёт — вдох, уменьшается — выдох.',
-  say: ['Сядьте поудобнее.', 'Поставьте стопы на пол.', 'Расслабьтесь. Спина ровная, плечи опущены, руки спокойно лежат на коленях.', 'Вдыхайте носом, считая до четырёх, и выдыхайте ртом, медленно, считая до шести.', 'Дышите мягко, не глубже, чем вам удобно.', 'Дышите вместе со мной.'] };
+  text: 'Ноги на полу, спина ровная. Вдох носом, медленный выдох ртом. Шар растёт — вдох, уменьшается — выдох.',
+  say: ['Сядьте поудобнее.', 'Поставьте стопы на пол.', 'Расслабьтесь. Спина ровная, плечи опущены, руки спокойно лежат на коленях.', 'Вдыхайте носом и медленно выдыхайте ртом.', 'Дышите мягко, не глубже, чем вам удобно.', 'Дышите вместе со мной.'] };
 const INTENT_PH = { key: 'intent', name: 'Намерение', dur: 30, visual: 'breath', breath: 'calm', beat: 10, tone: 3, eyes: 'open', text: 'Прочитайте намерение и произнесите его про себя.', say: ['Давайте начнём с намерения.', 'Прочитайте его на экране и тихо повторите про себя.'] };
 const CLEAN = { key: 'clean', name: 'Очищение чакр', dur: 630, visual: 'chakras', breath: 'long', beat: 8, tone: 6, eyes: 'any', seq: 'clean',
   text: 'По одной чакре, снизу вверх: мягкий бело-золотой свет омывает чакру и уносит всё чужое вниз, в землю.', say: ['Теперь давайте очистим чакры, одну за другой, снизу вверх.', 'Начнём с первой.'] };
@@ -1500,7 +1500,7 @@ const ROOMS = [
     note: '<b>Основа:</b> «циклический вздох»: 5 минут в день улучшали настроение сильнее, чем медитация осознанности (Balban и соавт., 2023). Резонансное дыхание: мета-анализ по стрессу и тревоге.',
     main: [
       R(150, 'Циклический вздох', 'breath', 'Два вдоха носом подряд и длинный медленный выдох ртом.', ['Сделайте два вдоха носом подряд — второй короткий, добирающий.', 'И длинный, медленный выдох ртом.', 'Продолжайте в этом ритме.'], { breath: 'sigh', cue: true, beat: 10 }),
-      R(120, 'Длинный выдох', 'breath', 'Вдох носом на четыре счёта, выдох ртом на шесть. Без задержек.', ['Теперь дышим, как в начале: вдох носом, считая до четырёх, и медленный выдох ртом, считая до шести.', 'Выдох длиннее вдоха — так тело успокаивается быстрее.', 'Шары по бокам помогут держать ритм.'], { breath: 'calm', cue: true, beat: 10 }),
+      R(120, 'Длинный выдох', 'breath', 'Спокойный вдох носом и длинный медленный выдох ртом. Без задержек.', ['Теперь дышим спокойно: вдох носом и длинный, медленный выдох ртом.', 'Выдох длиннее вдоха — так тело успокаивается быстрее.', 'Шары по бокам помогут держать ритм.'], { breath: 'calm', cue: true, beat: 10 }),
       R(150, 'Резонанс', 'breath', 'Пять с половиной вдохов в минуту. Мягко, животом.', ['И самое мягкое дыхание.', 'Вдох и выдох одинаковые, спокойные.', 'Тело отдыхает.'], { cue: true, beat: 8 })
     ] },
   { id: 'event', name: 'Перед важным событием', ci: 2, tag: 'Встреча, экзамен, выступление: спокойствие и опора внутри.', ev: ['t-a', 'Волнение · исследования'],
@@ -1665,7 +1665,7 @@ window.AJNA_SCRIPT = () => {
   CH.forEach((c, k) => { CLEAN_SAY(k).forEach((x, n) => out.push(['cl' + (k + 1) + '-' + (n + 1), x[1]])); FILL_SAY(k).forEach((x, n) => out.push(['fl' + (k + 1) + '-' + (n + 1), x[1]])); });
   ROOMS.forEach(r => (r.habit ? Object.keys(HABITS).flatMap(habitMain) : r.main).forEach(s => out.push([s.key, s.say])));
   CH.forEach((c, i) => out.push(['c' + (i + 1), c.say]));
-  out.push(['inhale', ['Вдох']], ['exhale', ['Выдох']], ['inhale-count', COUNT_IN], ['exhale-count', COUNT_OUT]);
+  out.push(['inhale', ['Вдох']], ['exhale', ['Выдох']]);
   return out;
 };
 
@@ -2786,7 +2786,7 @@ function ringBowl(at) { if (!bowlBuf || !actx) return false; const s = actx.crea
 function bowlTick() {
   if (!actx || !P.room || P.idx < P.m0 || P.idx >= P.m1 || !$('music').checked) return; const now = actx.currentTime;
   if (!P.bowlNext) P.bowlNext = now + 60 + Math.random() * 40;
-  if (now < P.bowlNext || now < recUntil + 6) return; ringBowl(); P.bowlNext = now + 100 + Math.random() * 60;
+  if (now < P.bowlNext || now < recUntil + 6) return; const ph = P.phases[P.idx]; if (ph.dur - (P.elapsed - P.start) < 12) return; ringBowl(); P.bowlNext = now + 100 + Math.random() * 60;
 }
 function drone(f) { if (!actx) return; bed(f); if (HZ_TRACK.includes(f)) f = 0;
   if (!droneO) { droneG = actx.createGain(); droneG.gain.value = 0; droneG.connect(duck); droneO = [1, 0.5].map((m, i) => { const o = actx.createOscillator(), g = actx.createGain(); o.type = 'sine'; g.gain.value = [1, 0.4][i]; o.connect(g).connect(droneG); o.start(); return { o, m }; }); }
@@ -2838,7 +2838,7 @@ function sessKeys(phases) {
   const out = ['eyes-close', 'eyes-open'];
   phases.forEach(ph => {
     if (ph.stages) for (let n = 1; n <= 5; n++) out.push('cocoon-' + n); else out.push(ph.key);
-    if (ph.breath && ph.cue) out.push('inhale-count', 'exhale-count', 'inhale', 'exhale');
+    if (ph.breath && ph.cue) out.push('inhale', 'exhale');
     if (ph.seq) for (let k = 1; k <= 7; k++) for (let n = 1; n <= (ph.seq === 'clean' ? 5 : 3); n++) out.push((ph.seq === 'clean' ? 'cl' : 'fl') + k + '-' + n);
     if (ph.key === 'chakras') for (let k = 1; k <= 7; k++) out.push('c' + k);
   });
@@ -2866,15 +2866,16 @@ function affTick() {
   const now = actx.currentTime, id = P.room.id;
   if (P.affRoom !== id) { P.affRoom = id; const one = () => { const s = shuffle(AFF[id].map((_, i) => [id, i])), c = shuffle(AFF.common.map((_, i) => ['common', i])); return s.flatMap((k, i) => [k, c[i]]); }; P.affQ = one().concat(one()); P.affNext = 0; }
   if (now < recUntil + 18) { P.affNext = Math.max(P.affNext, recUntil + 18); return; }
+  const ph = P.phases[P.idx], left = ph.dur - (P.elapsed - P.start); if (left < 12) return;   // the next step's voice is close
   if (now < P.affNext) return;
   const k = P.affQ.shift(), b = k && recorded['aff:' + k[0]], mark = k && recorded['aff:index'] && recorded['aff:index'][k[0]] && recorded['aff:index'][k[0]][k[1]];
   if (!b || !mark) { P.affNext = now + 5; return; }
   const src = actx.createBufferSource(); src.buffer = b; src.connect(affBus); src.start(0, mark[0], mark[1]); P.affNext = now + mark[1] + 30 + Math.random() * 10;
 }
-const COUNT_IN = ['Вдох', 'два', 'три', 'четыре'], COUNT_OUT = ['Выдох', 'два', 'три', 'четыре', 'пять', 'шесть'], COUNTED = 3;
 const breathKey = (label, ph) => { const k = { 'Вдох': 'inhale', 'Выдох': 'exhale' }[label] || ''; if (!k) return '';
-  if (k === 'inhale') P.breaths = (P.breaths || 0) + 1; return ph.key === 'breath' && P.breaths <= COUNTED && recorded[k + '-count'] ? k + '-count' : k; };
-function playRec(k) { const b = recorded[k]; if (!b || !actx) return false; const s = actx.createBufferSource(); s.buffer = b; s.connect(voiceBus); setDuck(true); s.onended = () => setDuck(false); s.start(); recUntil = actx.currentTime + b.duration; return true; }
+  if (k === 'inhale') P.breaths = (P.breaths || 0) + 1; return k; };
+function playRec(k) { const b = recorded[k]; if (!b || !actx) return false; const s = actx.createBufferSource(); s.buffer = b; s.connect(voiceBus); setDuck(true); s.onended = () => setDuck(false);
+  const at = Math.max(actx.currentTime, recUntil + 0.6); s.start(at); recUntil = at + b.duration; return true; }   // never over the previous phrase
 const synth = window.speechSynthesis;
 const FEMALE = /svetlana|dariya|darya|milena|katya|ekaterina|anna|irina|elena|alena|alyona|yuliya|julia|tatyana|natalia|google\s*рус|google ru|female|женск/i;
 const MALE = /pavel|dmitr|yuri|maxim|denis|ruslan|nikolai|aleksandr|artem|male\b|мужск/i;
