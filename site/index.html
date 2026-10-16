@@ -334,7 +334,7 @@ body:has(.safe:not([hidden])) :is(.totop, .mbar, .owner-sw), body:has(#player:no
 .paura.on { opacity: var(--ao, .6); } @keyframes aurarot { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .paura::before { animation: none; } }
 .player.soft .paura { opacity: .2; }
-.porb { position: absolute; z-index: 3; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; pointer-events: none; opacity: 0; transition: opacity .8s, transform 1s;
+.porb { position: absolute; z-index: 4; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; pointer-events: none; opacity: 0; transition: opacity .8s, transform 1s;
   background: radial-gradient(circle, #fff 0 18%, var(--oc, #ffd27a) 45%, transparent 72%); box-shadow: 0 0 30px 10px var(--oc, #ffd27a), 0 0 90px 30px var(--oc, #ffd27a); }
 .porb.on { opacity: 1; } .porb.up, .porb.down, .porb.rise { animation: orbtrail 2s ease-in-out infinite alternate; }
 .porb.open { transform: scale(2.6); transition: transform 3s ease-out; }
@@ -345,17 +345,23 @@ body:has(.safe:not([hidden])) :is(.totop, .mbar, .owner-sw), body:has(#player:no
 .prings i:nth-child(2) { animation-delay: 3s; } .prings i:nth-child(3) { animation-delay: 6s; }
 @keyframes ringout { 0% { transform: scale(.05); opacity: 1; } 100% { transform: scale(1); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .prings i, .porb { animation: none !important; } }
-.pbeam { position: absolute; z-index: 2; width: 6px; margin-left: -3px; border-radius: 3px; pointer-events: none; opacity: 0; transition: opacity 1.2s, transform 3.5s ease-out, filter 3.5s; }
+/* a channel of light, not a line: a wide soft shaft fading at the edges, with dust drifting along it */
+.pbeam { position: absolute; z-index: 3; mix-blend-mode: screen; width: 96px; margin-left: -48px; pointer-events: none; opacity: 0; transition: opacity 1.6s, transform 3.5s ease-out, filter 3.5s;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent); mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent); }
+.pbeam::before { content: ''; position: absolute; inset: 0; filter: blur(6px); mix-blend-mode: screen; }
 .pbeam.on { opacity: 1; }
-.pbeam.up { background: linear-gradient(to top, rgba(225,232,246,.95), rgba(225,232,246,.6) 75%, rgba(225,232,246,0)); box-shadow: 0 0 18px 4px rgba(210,222,245,.45); }
-.pbeam.down { background: linear-gradient(to bottom, rgba(255,214,130,0), rgba(255,214,130,.85) 22%, rgba(255,222,150,.95)); box-shadow: 0 0 22px 6px rgba(255,200,110,.4); }
-.pbeam.gone { opacity: 0; transform: translateY(-60px) scaleX(3); filter: blur(8px); transition: opacity 3.5s ease-out, transform 3.5s ease-out, filter 3.5s; }
-.pbeam.down::after { content: ''; position: absolute; top: 0; bottom: 0; left: -16px; right: -16px;
-  background-image: radial-gradient(circle, rgba(255,226,150,.95) 0 1.3px, transparent 1.8px), radial-gradient(circle, rgba(255,244,205,.85) 0 1px, transparent 1.5px);
-  background-size: 22px 36px, 32px 52px; background-position: 4px 0, 15px 18px; animation: sparkfall 3.2s linear infinite;
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 85%, transparent); mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 85%, transparent); }
-@keyframes sparkfall { to { background-position: 4px 36px, 15px 70px; } }
-@media (prefers-reduced-motion: reduce) { .pbeam.down::after { animation: none; } }
+.pbeam.up::before { background: linear-gradient(to right, transparent, rgba(220,228,246,.16) 22%, rgba(236,242,252,.42) 50%, rgba(220,228,246,.16) 78%, transparent); }
+.pbeam.down::before { background: linear-gradient(to right, transparent, rgba(255,206,120,.22) 18%, rgba(255,240,205,.62) 50%, rgba(255,206,120,.22) 82%, transparent); }
+.pbeam.gone { opacity: 0; transform: translateY(-60px) scaleX(2); filter: blur(10px); transition: opacity 3.5s ease-out, transform 3.5s ease-out, filter 3.5s; }
+.pbeam::after { content: ''; position: absolute; top: 0; bottom: 0; left: 14px; right: 14px;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 25%, #000 75%, transparent); mask-image: linear-gradient(to right, transparent, #000 25%, #000 75%, transparent); }
+.pbeam.down::after { background-image: radial-gradient(circle, rgba(255,250,225,1) 0 1.7px, rgba(255,214,130,.6) 2.2px, transparent 3px), radial-gradient(circle, rgba(255,240,195,.95) 0 1.2px, transparent 2px), radial-gradient(circle, rgba(255,220,140,.85) 0 1px, transparent 1.6px);
+  background-size: 19px 34px, 27px 50px, 13px 23px; background-position: 3px 0, 12px 17px, 7px 9px; animation: sparkfall 4s linear infinite; }
+.pbeam.up::after { background-image: radial-gradient(circle, rgba(236,242,255,.8) 0 1px, transparent 1.5px), radial-gradient(circle, rgba(220,230,250,.6) 0 .8px, transparent 1.3px);
+  background-size: 23px 42px, 15px 28px; background-position: 5px 0, 11px 14px; animation: sparkrise 4s linear infinite; }
+@keyframes sparkfall { to { background-position: 3px 68px, 12px 117px, 7px 55px; } }
+@keyframes sparkrise { to { background-position: 5px -84px, 11px -42px; } }
+@media (prefers-reduced-motion: reduce) { .pbeam::after { animation: none; } }
 .player.soft .pbeam { opacity: 0 !important; }
 .pfocus { position: absolute; z-index: 3; width: 0; height: 0; pointer-events: none; opacity: 0; transition: opacity 1s, left .8s, top .8s; }
 .pfocus.on { opacity: 1; }
@@ -815,7 +821,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
         <h1 class="display">Здесь затихает шум. <em>И меняется жизнь.</em></h1>
         <p class="lead">25 минут в день: очищение, наполнение и шаг за шагом — к переменам.</p>
         <div class="hoffers">
-        <a class="hmap hmap--gold" href="#prostranstva"><svg class="hmap__i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M12 5c2 2.2 3 4.6 3 7s-1 4.4-3 6c-2-1.6-3-3.6-3-6s1-4.8 3-7z"/><path d="M12 18c-2.5.3-5.5-.6-7.5-3 1.3-1.6 3.3-2.3 5.2-2.1M12 18c2.5.3 5.5-.6 7.5-3-1.3-1.6-3.3-2.3-5.2-2.1"/><path d="M5 19.5h14"/></svg><span><b>Выберите пространство под ваше состояние</b><small>«Очищение» — бесплатно после регистрации</small></span><em class="btn btn--gold btn--sm">Выбрать практику <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></em></a>
+        <a class="hmap hmap--gold" href="#prostranstva"><svg class="hmap__i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M12 5c2 2.2 3 4.6 3 7s-1 4.4-3 6c-2-1.6-3-3.6-3-6s1-4.8 3-7z"/><path d="M12 18c-2.5.3-5.5-.6-7.5-3 1.3-1.6 3.3-2.3 5.2-2.1M12 18c2.5.3 5.5-.6 7.5-3-1.3-1.6-3.3-2.3-5.2-2.1"/><path d="M5 19.5h14"/></svg><span><b>Выберите пространство под ваше состояние</b><small>«Дыхание» и «Очищение» — бесплатно после регистрации</small></span><em class="btn btn--gold btn--sm">Выбрать практику <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></em></a>
         <a class="hmap" href="#karta"><svg class="hmap__i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9.5"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2"/><path d="M15.5 8.5L13 13l-4.5 2.5L11 11z" fill="currentColor" fill-opacity=".35"/></svg><span><b>Карта жизни: что говорят звёзды о вашем пути</b><small>Профиль и тема года бесплатно</small></span><em class="btn btn--astro btn--sm">Построить карту <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></em></a>
         </div>
         <div class="hero__meta"><span>Засыпать без мыслей по кругу</span><span>Меньше тревоги и раздражения</span><span>Свобода от того, что держит</span></div>
@@ -834,7 +840,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
   <section class="section" id="way">
     <div class="container">
       <div class="shead"><div><span class="eyebrow">Как это устроено</span><h2 class="h2">Два инструмента — <em>один путь.</em></h2></div>
-        <p class="lead">Карта жизни показывает, где вы сейчас и какая тема у вашего периода. Практики помогают пройти этот путь спокойно и осознанно — каждый день по пятнадцать минут.</p></div>
+        <p class="lead">Карта жизни показывает, где вы сейчас и какая тема у вашего периода. Практики помогают пройти этот путь спокойно и осознанно — каждый день от 10 до 25 минут.</p></div>
       <ol class="way">
         <li><span class="way__n">01</span><h3>Узнайте себя</h3><p>Введите дату, время и место рождения. Через минуту — ваша карта: сильные стороны, тема года, влияния сейчас. Профиль бесплатно.</p><a class="btn btn--astro btn--sm" href="#karta">Построить карту <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></li>
         <li><span class="way__n">02</span><h3>Выберите практику</h3><p>Карта подскажет три пространства под ваш период. Или выберите по самочувствию: тревога, усталость, важное событие, привычка.</p><a class="btn btn--line btn--sm" href="#prostranstva">Выбрать практику <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></li>
@@ -883,18 +889,18 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
       <div class="benefits">
         <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8"/><path d="M12 4v16M4 12h16" opacity=".5"/><circle cx="12" cy="12" r="2"/></svg></span><h3>Своё пространство под задачу</h3><p>Не «медитация вообще», а место для одной цели. В «Глубоком сне» — медленные волны и тишина, в «Жизненной энергии» — бодрый ритм, в «Отношениях» — тепло и образ близкого человека. Образ, музыка, частота и сценарий собраны под то, что вам нужно сейчас.</p></div>
         <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></span><h3>Голос ведёт за руку</h3><p>Опыт медитации не нужен. Спокойный живой голос подскажет, как сесть, когда вдохнуть и что представить, — и даст время всё сделать. Вам остаётся только слушать и дышать.</p></div>
-        <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg></span><h3>Глубокое погружение</h3><p>Сначала подготовка: дыхание со счётом, золотая сфера, очищение и запуск всех чакр. Тело успокаивается, ум затихает — и только потом начинается работа с вашей задачей. Поэтому эффект ощущается уже с первого раза.</p></div>
+        <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg></span><h3>Глубокое погружение</h3><p>Сначала подготовка: намерение, спокойное дыхание, золотая сфера, а где нужно — очищение или наполнение чакр. Тело успокаивается, ум затихает — и только потом начинается работа с вашей задачей. Поэтому погружение приходит уже с первого раза.</p></div>
         <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 12h2l2-6 3 12 3-9 2 5 2-2h4"/></svg></span><h3>Видно, что меняется</h3><p>До и после каждой практики — два коротких вопроса. Дневник показывает, как меняются тревога, энергия и настроение, сколько дней подряд вы практикуете и какие пространства помогают вам лучше всего.</p></div>
         <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg></span><h3>Карта жизни и подсказка на день</h3><p>После регистрации — бесплатная карта: ваши сильные стороны, стиль решений и тема года. А каждый день карта подсказывает, в какое пространство зайти: снять напряжение, набрать сил или прояснить цель.</p></div>
         <div class="benefit card"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span><h3>Основано на исследованиях</h3><p>Медленное дыхание, осознанность, работа с убеждениями из когнитивной терапии, аутогенная тренировка — у каждого метода есть научная база. В каждом пространстве указано, на чём оно основано и что показывают исследования.</p></div>
       </div>
-      <div class="ctarow"><p>Начните бесплатно: «Дыхание», «Очищение» и карта жизни — в подарок после регистрации.</p><div><a class="btn btn--gold" href="#room-cleanse">Начать с Очищения <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><a class="btn btn--line" href="#karta">Построить карту <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div></div>
+      <div class="ctarow"><p>Начните бесплатно: «Дыхание», «Очищение» и карта жизни — в подарок после регистрации.</p><div><a class="btn btn--gold" href="#room-breathe">Начать с Дыхания <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><a class="btn btn--line" href="#karta">Построить карту <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div></div>
     </div>
   </section>
 
   <section class="section" id="featured">
     <div class="container">
-      <div class="shead"><div><span class="eyebrow">Путь</span><h2 class="h2">Сначала основа, <em>потом трансформация.</em></h2><p class="lead" style="margin-top:14px">Очищение, наполнение и жизненная энергия дают силу. С ней работа с убеждениями, отношениями и деньгами действительно двигается.</p></div>
+      <div class="shead"><div><span class="eyebrow">Путь</span><h2 class="h2">Сначала основа, <em>потом трансформация.</em></h2><p class="lead" style="margin-top:14px">Дыхание, очищение, наполнение и жизненная энергия дают силу. С ней работа с убеждениями, отношениями и деньгами действительно двигается.</p></div>
         <a class="btn btn--line" href="#prostranstva">Все пространства <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
       <div class="nextstep" id="nextHome"></div>
       <div class="rooms" id="featGrid"></div>
@@ -906,19 +912,19 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
       <div class="shead"><div><span class="eyebrow">Как проходит сеанс</span><h2 class="h2">Вы просто слушаете. <em>Остальное происходит само.</em></h2></div>
         <p class="lead">Наденьте наушники, сядьте удобно и нажмите «Начать». Дальше голос и музыка бережно проведут вас от начала до конца.</p></div>
       <div class="steps">
-        <div class="step card"><span class="n">01</span><h3>Вход</h3><p>Голос помогает отпустить день. Вокруг вас появляется золотая сфера — пространство, где спокойно и безопасно.</p></div>
-        <div class="step card"><span class="n">02</span><h3>Погружение</h3><p>Дыхание замедляется, звук становится глубже. Мысли отступают, тело тяжелеет и отдыхает.</p></div>
-        <div class="step card"><span class="n">03</span><h3>Сеанс</h3><p>Вы внутри своей практики. Образы, музыка и голос ведут к тому, ради чего вы пришли.</p></div>
-        <div class="step card"><span class="n">04</span><h3>Возвращение</h3><p>Мягкий выход. Остаются лёгкость, ясность и ощущение, что вы снова на своей стороне.</p></div>
+        <div class="step card"><span class="n">01</span><h3>Вход</h3><p>Намерение и спокойное дыхание: вдох носом, длинный выдох ртом. Тело успокаивается, день отступает.</p></div>
+        <div class="step card"><span class="n">02</span><h3>Золотая сфера</h3><p>Вокруг вас появляется золотая сфера — пространство, где спокойно и безопасно. Где нужно, следом очищение или наполнение чакр.</p></div>
+        <div class="step card"><span class="n">03</span><h3>Сеанс</h3><p>Вы внутри своей практики. Образы, музыка, частота и голос ведут к тому, ради чего вы пришли.</p></div>
+        <div class="step card"><span class="n">04</span><h3>Возвращение</h3><p>Мягкий выход: звук чаши, вы открываете глаза, когда готовы. Спокойствие остаётся с вами.</p></div>
       </div>
-      <div class="ctarow"><p>Наденьте наушники — первый сеанс займёт 25 минут.</p><div><a class="btn btn--gold" href="#room-cleanse">Попробовать бесплатно <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div></div>
+      <div class="ctarow"><p>Наденьте наушники — первый сеанс, «Дыхание», займёт 10 минут.</p><div><a class="btn btn--gold" href="#room-breathe">Попробовать бесплатно <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div></div>
     </div>
   </section>
 
   <section class="section mission" id="about">
     <div class="container">
       <span class="eyebrow">Зачем мы это сделали</span>
-      <blockquote>Мир шумит всё громче. <em>Пятнадцать минут тишины</em> возвращают вас себе.</blockquote>
+      <blockquote>Мир шумит всё громче. <em>Двадцать пять минут тишины</em> в день возвращают вас себе.</blockquote>
       <p>Новости, чаты, чужие ожидания — внимание раздёргано, и своё желание трудно отличить от навязанного. «Дорога к себе» — место, где можно выдохнуть, услышать себя и шаг за шагом стать спокойнее, сильнее и свободнее.</p>
       <div class="ctarow ctarow--c"><div><a class="btn btn--astro" href="#karta">Построить карту жизни <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><a class="btn btn--gold" href="#prostranstva">Выбрать практику <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div></div>
     </div>
@@ -945,15 +951,15 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
         <details><summary>Что такое карта жизни и как её считают?<i></i></summary><p>По дате, времени и месту рождения сайт рассчитывает положение планет по астрономическим эфемеридам — с точностью до минуты дуги. Затем карта описывает ваши сильные стороны, тему года, периоды и подбирает практики. Профиль и тема года — бесплатно.</p></details>
         <details><summary>Карта — это предсказание судьбы?<i></i></summary><p>Нет. Положения планет точны, а толкования — традиция и язык для размышления о себе. Карта описывает темы и периоды, а не события. Что произойдёт, зависит от ваших решений и обстоятельств. <a href="#j-fate">Подробнее в журнале</a>.</p></details>
         <details><summary>Что если я не знаю время рождения?<i></i></summary><p>Карту всё равно можно построить: планеты и периоды будут верными, а Асцендент и дома — нет. Точное время сайт уточнит автоматически по датам важных событий вашей жизни.</p></details>
-        <details><summary>Мне нужен опыт медитации?<i></i></summary><p>Нет. Голос ведёт каждый шаг: что представить, как дышать, когда открыть глаза. Достаточно наушников и пятнадцати спокойных минут.</p></details>
+        <details><summary>Мне нужен опыт медитации?<i></i></summary><p>Нет. Голос ведёт каждый шаг: что представить, как дышать, когда открыть глаза. Достаточно наушников и 10–25 спокойных минут.</p></details>
         <details><summary>Как часто практиковать?<i></i></summary><p>Лучше понемногу, но регулярно: один сеанс в день или через день, не больше двух в день и не подряд. Если после практики болит голова, сделайте перерыв на день-два. Эффект накапливается, и первые перемены обычно заметны через одну–две недели.</p></details>
-        <details><summary>Сколько это стоит?<i></i></summary><p>«Дыхание: снять стресс» и «Очищение» — бесплатно. Любое другое пространство — 990 ₽ на месяц: изменить жизнь по цене чашки кофе в неделю. Все пространства и курсы — 2 990 ₽ в месяц или 24 990 ₽ в год, это на 30% выгоднее. Карта жизни: профиль бесплатно, отдельный раздел — 990 ₽, вся карта — 3 990 ₽.</p></details>
-        <details><summary>Что такое золотая сфера?<i></i></summary><p>Это ваше защищённое пространство в начале каждого сеанса. Когда внутри есть ощущение безопасности, ум перестаёт ждать угрозу и погружение идёт глубже.</p></details>
-        <details><summary>Почему нужны наушники?<i></i></summary><p>Музыка и ритмы покоя звучат по-разному в каждом ухе — так они работают в полную силу. Громкость — тихая, на грани слышимости.</p></details>
+        <details><summary>Сколько это стоит?<i></i></summary><p>«Дыхание: снять стресс» и «Очищение» — бесплатно. Любое другое пространство — 990 ₽ на месяц: изменить жизнь по цене чашки кофе в неделю. Все пространства (кроме «Аджны» для практикующих) и курсы — 2 990 ₽ в месяц или 24 990 ₽ в год, это на 30% выгоднее. Карта жизни: профиль бесплатно, отдельный раздел — 990 ₽, вся карта — 3 990 ₽.</p></details>
+        <details><summary>Что такое золотая сфера?<i></i></summary><p>Это ваше защищённое пространство в начале сеанса. Когда внутри есть ощущение безопасности, ум перестаёт ждать угрозу и погружение идёт глубже.</p></details>
+        <details><summary>Почему нужны наушники?<i></i></summary><p>Ритмы покоя (бинауральные) звучат чуть по-разному в каждом ухе — без наушников этот эффект пропадает. Громкость по умолчанию 30%: голос слышен ясно, музыка и частота — лёгким фоном.</p></details>
         <details><summary>А если не получается сосредоточиться?<i></i></summary><p>Это нормально. Мысли уходят — вы возвращаетесь. Каждое такое возвращение и есть тренировка.</p></details>
         <details><summary>Кому стоит быть осторожнее?<i></i></summary><p>При эпилепсии, серьёзных психических расстройствах и после травм головы сначала посоветуйтесь с врачом. Не слушайте за рулём. Практика поддерживает, но не заменяет лечение.</p></details>
       </div>
-      <div class="ctarow"><p>Остались вопросы? Лучший ответ — один спокойный сеанс.</p><div><a class="btn btn--gold" href="#room-cleanse">Начать бесплатно <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><a class="btn btn--line" href="#karta">Карта жизни <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div></div>
+      <div class="ctarow"><p>Остались вопросы? Лучший ответ — один спокойный сеанс.</p><div><a class="btn btn--gold" href="#room-breathe">Начать бесплатно <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><a class="btn btn--line" href="#karta">Карта жизни <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div></div>
     </div>
   </section>
 
@@ -966,8 +972,8 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
   </section>
 
   <section class="cta-band"><div class="container">
-    <div><h2 class="h2">Начните с <em>очищения.</em></h2><p>Двенадцать минут, чтобы сбросить день и освободить место для нового.</p></div>
-    <a class="btn btn--ink" href="#room-cleanse">Войти в пространство <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    <div><h2 class="h2">Начните с <em>дыхания.</em></h2><p>Десять минут, чтобы сбросить напряжение дня и вдохнуть свободнее.</p></div>
+    <a class="btn btn--ink" href="#room-breathe">Войти в пространство <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
   </div></section>
 </main>
 
@@ -1076,7 +1082,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
         <li><b>Стороны и акцепт.</b> Настоящий документ — публичная оферта (ст. 435, п. 2 ст. 437 ГК РФ). Регистрация на сайте и/или оплата означают полное принятие условий (п. 3 ст. 438 ГК РФ). Изменения публикуются не позднее чем за 10 дней; для уже оплаченного периода действуют прежние условия.</li>
         <li><b>Возраст.</b> Сервис предназначен для лиц старше 18 лет (18+).</li>
         <li><b>Предмет.</b> Исполнитель предоставляет доступ к аудиовизуальным практикам, статьям и персональным астрологическим отчётам. Это информационно-развлекательные и wellness-услуги, не медицинские и не психологические.</li>
-        <li><b>Бесплатная и платная части.</b> Бесплатно после регистрации: практики «Дыхание: снять стресс» и «Очищение», базовая часть Карты жизни, дневник. Без регистрации практики недоступны. Платно: отдельное пространство на 30 дней; подписка (месяц или год) на все пространства, все курсы и «Практику дня»; годовая подписка дополнительно включает прогноз на год по Карте жизни; отдельный курс — доступ на 30 дней, его стоимость засчитывается в годовую подписку, оформленную в эти 30 дней; полная Карта жизни — разово; карта для другого человека — разово. Уточнение времени рождения (ректификация) выполняется автоматически и бесплатно. Отдельные пространства навсегда не продаются, кроме «Аджны»: она не входит в подписку и курсы, открывается отдельной покупкой навсегда и только после 7 практик на полном уровне. Цены указываются на сайте до оплаты, в рублях — для России, с налогами — для Великобритании и ЕС.</li>
+        <li><b>Бесплатная и платная части.</b> Бесплатно после регистрации: практики «Дыхание: снять стресс» и «Очищение», базовая часть Карты жизни, дневник. Без регистрации практики недоступны. Платно: отдельное пространство на 30 дней; подписка (месяц или год) на все пространства, кроме «Аджны», все курсы и «Практику дня»; «Аджна» — отдельный бессрочный доступ; годовая подписка дополнительно включает прогноз на год по Карте жизни; отдельный курс — доступ на 30 дней, его стоимость засчитывается в годовую подписку, оформленную в эти 30 дней; полная Карта жизни — разово; карта для другого человека — разово. Уточнение времени рождения (ректификация) выполняется автоматически и бесплатно. Отдельные пространства навсегда не продаются, кроме «Аджны»: она не входит в подписку и курсы, открывается отдельной покупкой навсегда и только после 7 практик на полном уровне. Цены указываются на сайте до оплаты, в рублях — для России, с налогами — для Великобритании и ЕС.</li>
         <li><b>Подписка.</b> Подписка продлевается автоматически на тот же срок по той же цене, пока вы её не отмените. Отдельное согласие на автопродление даётся при оплате. Мы напоминаем о списании заранее (для годовой подписки — за 7–30 дней). Отключить продление можно в личном кабинете в один-два клика; доступ сохраняется до конца оплаченного периода. Об изменении цены сообщаем за 30 дней.</li>
         <li><b>Персональные отчёты.</b> Отчёт формируется автоматически по данным, которые вы ввели. За точность данных рождения отвечаете вы. Пересчёт по исправленным данным в течение 30 дней — бесплатно.</li>
         <li><b>Обязанности пользователя.</b> Перед практикой ознакомиться с предупреждением о безопасности; не использовать практики за рулём, при работе с техникой и в воде; прекратить практику при ухудшении самочувствия.</li>
@@ -1153,14 +1159,14 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     <div class="container">
       <nav class="crumbs" aria-label="Путь"><a href="#top">Главная</a><span>Пространства</span></nav>
       <h1 class="display">Все <em>пространства.</em></h1>
-      <p class="lead">21 пространство, выстроенное в путь. Сначала основа: очищение, наполнение чакр и жизненная энергия. Потом — трансформация и воплощение желаний. А дыхание и тишина помогают в любой день, когда нужно снять стресс.</p>
+      <p class="lead">21 пространство, выстроенное в путь. Старт — дыхание. Потом основа: очищение, наполнение чакр и жизненная энергия. Дальше — трансформация и воплощение желаний. А тишина ума, тело, сон и подготовка к важному событию помогают в любой день.</p>
     </div>
   </section>
   <section class="section" style="padding-top:20px">
     <div class="container">
       <div class="nextstep" id="nextCat"></div>
       <div class="pick">
-        <div class="pick__h"><span class="eyebrow">Подбор за 5 секунд</span><h2>Не знаете, с чего начать?</h2><p>Выберите, как вы себя чувствуете, — откроется практика, которая поможет именно сейчас. Впервые здесь — начните с Очищения, оно бесплатное.</p><a class="btn btn--gold" href="#room-cleanse">Начать с Очищения <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
+        <div class="pick__h"><span class="eyebrow">Подбор за 5 секунд</span><h2>Не знаете, с чего начать?</h2><p>Выберите, как вы себя чувствуете, — откроется практика, которая поможет именно сейчас. Впервые здесь — начните с Дыхания, оно бесплатное.</p><a class="btn btn--gold" href="#room-breathe">Начать с Дыхания <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
         <div class="pick__g" id="catMoods"></div>
       </div>
       <div class="filters" id="filters" role="group" aria-label="Фильтр"></div>
@@ -1197,7 +1203,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
 
 <footer class="footer"><div class="container">
   <div><a class="logo" href="#top" style="color:var(--ink)"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="17" stroke="#b0844a" stroke-width="1"/><path d="M20 5l3.2 11.8L35 20l-11.8 3.2L20 35l-3.2-11.8L5 20l11.8-3.2z" stroke="#b0844a" stroke-width="1.1" stroke-linejoin="round"/><circle cx="20" cy="20" r="3" fill="#b0844a"/></svg>ДОРОГА К СЕБЕ</a>
-    <p class="about">Пространство медитации. Пятнадцать минут, чтобы выдохнуть, услышать себя и вернуться в день спокойнее.</p></div>
+    <p class="about">Пространство медитации. Время, чтобы выдохнуть, услышать себя и вернуться в день спокойнее.</p></div>
   <div><h4>Пространства</h4><ul id="footRooms"></ul></div>
   <div><h4>Проект</h4><ul><li><a href="#benefits">Что вы получите</a></li><li><a href="#how">Как проходит сеанс</a></li><li><a href="#path">Ваш путь</a></li><li><a href="#zhurnal">Журнал</a></li><li><a href="#faq">Вопросы</a></li><li><a href="#dokumenty">Документы и условия</a></li><li><a href="#d-map">Как относиться к Карте жизни</a></li></ul></div>
   <div class="bottom"><span>© Дорога к себе</span><span>Слушайте в наушниках · практика не заменяет лечение</span></div>
@@ -1243,7 +1249,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     <span class="eyebrow">Перед началом</span>
     <h2 id="safeT">Короткая проверка безопасности</h2>
     <p class="small" id="safeLimit" hidden style="color:#f0c987"></p>
-    <div class="safe__exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M9 9l6 6M15 9l-6 6"/></svg><div><b>Выйти из практики можно в любой момент.</b><span>Если стало плохо, тревожно или неприятно — нажмите <b>✕</b> в левом верхнем углу или кнопку паузы. Откройте глаза и дышите обычно. С непривычки так бывает: начните с сессии 25 минут и входите постепенно.</span></div></div>
+    <div class="safe__exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M9 9l6 6M15 9l-6 6"/></svg><div><b>Выйти из практики можно в любой момент.</b><span>Если стало плохо, тревожно или неприятно — нажмите <b>✕</b> в левом верхнем углу или кнопку паузы. Откройте глаза и дышите обычно. С непривычки так бывает: начните с короткой сессии и входите постепенно.</span></div></div>
     <ul>
       <li><b>Не за рулём</b> и не во время работы с техникой. Только сидя или лёжа.</li>
       <li class="safe__ep"><b>Эпилепсия или судороги, светочувствительность:</b> включите «Спокойный экран» ниже или слушайте с закрытыми глазами. Ритмичный звук и движущееся изображение могут быть нежелательны.</li>
@@ -1306,7 +1312,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     <label class="check"><input type="checkbox" id="music" checked> Тихая музыка</label>
     <label class="check"><input type="checkbox" id="melody" checked> Мелодия: редкие мягкие ноты</label>
     <label class="check"><input type="checkbox" id="beat" checked> Ритмы покоя (бинауральные)</label>
-    <label class="check"><input type="checkbox" id="noise"> Мягкий шум</label>
+    <label class="check"><input type="checkbox" id="noise"> Мягкий шум: тихий фон, как дождь или прибой</label>
     <p class="small">Ритмы покоя слышны только в стереонаушниках.</p></div>
 </aside>
 
@@ -1335,14 +1341,14 @@ const focusLine = c => 'Перенесите внимание на ' + ORD_A[c] 
 
 const SPHERE_STAGES = [
   [0, ['Посмотрите на картинку на экране.', 'Представьте, что вы внутри этой золотой сферы и она окружает вас со всех сторон.']],
-  [0.14, ['Серебристая энергия поднимается от основания позвоночника, через все чакры, выше макушки, и мягко растворяется в космосе.']],
+  [0.14, ['Снизу, через стопы, в вас входит серебристая энергия.', 'Она поднимается через все чакры, выше макушки, и мягко растворяется в космосе.']],
   [0.32, ['Сверху, из космоса, к вам опускается мягкий золотой свет.', 'Он проходит через макушку и спускается в центр груди, в четвёртую чакру.']],
   [0.47, ['Почувствуйте, как грудь наполняется этим тёплым, спокойным светом.']],
   [0.56, ['А теперь, на выдохе, отпустите свет из груди во все стороны.', 'Он заполняет сферу, и она становится плотнее.']],
   [0.78, ['С каждым выдохом сфера всё плотнее и ярче.', 'Это ваша защита.']]
 ];
 const COCOON = { key: 'cocoon', name: 'Золотая сфера', dur: 180, visual: 'cocoon', breath: 'calm', beat: 8, tone: 3, eyes: 'open', stages: true,
-  text: 'Смотрите на сферу. Серебристая энергия поднимается снизу вверх и растворяется в космосе. Из космоса опускается золотой свет — в сердце, в четвёртую чакру. На выдохе он расходится во все стороны и наполняет сферу.',
+  text: 'Смотрите на сферу. Снизу, через стопы, входит серебристая энергия, поднимается через все чакры и растворяется в космосе. Из космоса опускается золотой свет — в сердце, в четвёртую чакру. На выдохе он расходится во все стороны и наполняет сферу.',
   say: SPHERE_STAGES.flatMap(x => x[1]) };
 const BREATHE = { key: 'breath', name: 'Успокоение', dur: 90, visual: 'breath', breath: 'guide', beat: 10, tone: 3, cue: true, guideBreath: true, eyes: 'any',
   text: 'Ноги на полу, спина ровная. Вдох носом, медленный выдох ртом. Шар растёт — вдох, уменьшается — выдох.',
@@ -1358,17 +1364,17 @@ const TUNE = { key: 'tune', name: 'Чакры', dur: 216, visual: 'chakras', bre
   say: ['А теперь мягко закройте глаза.', 'Пройдём по чакрам, снизу вверх. Из космоса в каждую из них опускается золотой свет.'] };
 // quiet affirmations in the silences of goal-oriented spaces: warm, in the present, about movement, never denying anything
 const AFF = {
-  common: ['Ты заслуживаешь всего самого хорошего.', 'Ты хороший человек, и это видно.', 'В тебе много тепла и света.', 'У тебя получается — шаг за шагом.', 'Всё, что тебе нужно, уже есть внутри тебя.', 'Ты идёшь своим путём, и он ведёт тебя туда, куда нужно.', 'Жизнь поддерживает тебя.', 'Ты можешь доверять себе.'],
+  common: ['Хорошее приходит в твою жизнь.', 'С каждым днём в тебе больше спокойствия.', 'В тебе много тепла и света.', 'У тебя получается — шаг за шагом.', 'Всё, что тебе нужно, уже есть внутри тебя.', 'Ты идёшь своим путём, и он ведёт тебя туда, куда нужно.', 'Жизнь поддерживает тебя.', 'Ты можешь доверять себе.'],
   energy: ['С каждым вдохом сил становится больше.', 'Энергия свободно течёт через всё твоё тело.', 'Твоя сила просыпается и растёт.', 'Энергии хватает на всё, что для тебя важно.', 'Ты наполняешься жизнью до кончиков пальцев.', 'Твоя энергия ведёт тебя к твоим желаниям.', 'В тебе столько силы, сколько нужно для перемен.', 'Каждое утро ты просыпаешься с новыми силами.'],
   blinders: ['Мир шире, чем казалось.', 'Ты выбираешь, во что верить.', 'Перед тобой открываются новые пути.', 'Смелость растёт в тебе с каждым днём.', 'Каждый шаг расширяет твои возможности.', 'Ты видишь больше, чем раньше.', 'Новое приходит в твою жизнь легко.', 'Тебе по силам гораздо больше, чем казалось раньше.'],
-  release: ['С каждым выдохом становится легче.', 'Ты отпускаешь то, что больше не нужно.', 'Прошлое учит, но больше не держит тебя.', 'В сердце становится просторнее.', 'Ты выбираешь покой.', 'Ты освобождаешь место для нового.', 'Тепло возвращается в твоё сердце.', 'Ты идёшь дальше налегке.'],
-  selflove: ['Ты относишься к себе с теплом.', 'Тебя можно любить просто за то, что ты есть.', 'Твои чувства важны.', 'Ты встречаешь себя с нежностью.', 'С каждым днём ты принимаешь себя всё больше.', 'В тебе много красоты — внутри и снаружи.', 'Ты дружишь с собой.', 'Ты делаешь для себя много хорошего.'],
-  relations: ['Ты заслуживаешь любви.', 'Ты открываешься новым тёплым знакомствам.', 'Рядом с тобой появляются добрые, надёжные люди.', 'Тебя любят просто за то, что ты есть.', 'Любовь приходит в твою жизнь естественно.', 'В твоих отношениях становится больше тепла и понимания.', 'Твоё сердце открыто, и это прекрасно.', 'Ты встречаешь людей, с которыми легко и радостно.'],
-  health: ['Твоё тело знает, как восстанавливаться.', 'Каждая клетка наполняется покоем.', 'Силы возвращаются к тебе.', 'Ты бережно заботишься о своём теле.', 'С каждым выдохом тело отдыхает глубже.', 'Тело отвечает тебе благодарностью.', 'В тебе прибывают здоровье и лёгкость.', 'Ты чувствуешь себя всё лучше и лучше.'],
+  release: ['С каждым выдохом становится легче.', 'Ты отпускаешь лишнее, и становится легче.', 'Прошлое становится опытом, а ты идёшь дальше.', 'В сердце становится просторнее.', 'Ты выбираешь покой.', 'Ты освобождаешь место для нового.', 'Тепло возвращается в твоё сердце.', 'Ты идёшь дальше налегке.'],
+  selflove: ['Ты относишься к себе с теплом.', 'Тебя можно любить просто за то, что ты есть.', 'Твои чувства важны.', 'Ты встречаешь себя с нежностью.', 'С каждым днём ты принимаешь себя всё больше.', 'Ты замечаешь в себе всё больше хорошего.', 'Ты дружишь с собой.', 'Ты делаешь для себя много хорошего.'],
+  relations: ['Любовь находит дорогу к тебе.', 'Ты открываешься новым тёплым знакомствам.', 'Рядом с тобой появляются добрые, надёжные люди.', 'Тебя любят просто за то, что ты есть.', 'Любовь приходит в твою жизнь естественно.', 'В твоих отношениях становится больше тепла и понимания.', 'Твоё сердце открывается теплу.', 'Ты встречаешь людей, с которыми легко и радостно.'],
+  health: ['Твоё тело знает, как восстанавливаться.', 'Всё тело наполняется покоем.', 'Силы возвращаются к тебе.', 'Ты бережно заботишься о своём теле.', 'С каждым выдохом тело отдыхает глубже.', 'Тело отвечает тебе благодарностью.', 'В тебе прибывают силы и лёгкость.', 'Ты чувствуешь себя всё лучше и лучше.'],
   food: ['Ты слышишь своё тело.', 'Ты ешь спокойно и с удовольствием.', 'Ты замечаешь, когда уже достаточно.', 'Ты даёшь себе ту заботу, которая действительно нужна.', 'Ты и твоё тело — в согласии.', 'Каждый твой выбор — это забота о себе.', 'Ты находишь радость во многом, что тебя окружает.', 'Лёгкость приходит в твоё тело естественно.'],
-  habits: ['Каждый раз ты выбираешь себя.', 'Тяга приходит и уходит, а свобода остаётся с тобой.', 'С каждым днём становится легче.', 'Ты уже на пути к свободе.', 'Ты сильнее любой волны.', 'Твоё тело благодарит тебя за этот выбор.', 'Каждый свободный день — твоя победа.', 'Ты дышишь свободно и легко.'],
+  habits: ['Каждый раз ты выбираешь себя.', 'Тяга приходит и уходит, а свобода остаётся с тобой.', 'С каждым днём становится легче.', 'Ты уже на пути к свободе.', 'С каждой волной твоя сила растёт.', 'Твоё тело благодарит тебя за этот выбор.', 'Каждый свободный день — твоя победа.', 'Ты дышишь свободно и легко.'],
   support: ['Тебя поддерживают.', 'Помощь приходит вовремя.', 'Рядом есть те, кто на твоей стороне.', 'Можно опереться и отдохнуть.', 'Тебя бережно хранят.', 'Поддержка всегда рядом с тобой.', 'Мир заботится о тебе.', 'Твои просьбы слышат.'],
-  abundance: ['Ты открываешься новым возможностям.', 'Деньги приходят к тебе честным путём.', 'Ты умеешь принимать.', 'Твой труд ценят и хорошо оплачивают.', 'Ты замечаешь возможности вокруг себя.', 'Изобилие растёт в твоей жизни день за днём.', 'Ты заслуживаешь достатка и щедро делишься им.', 'Твои доходы растут.'],
+  abundance: ['Ты открываешься новым возможностям.', 'Деньги приходят к тебе честным путём.', 'Ты умеешь принимать.', 'Твой труд ценят и хорошо оплачивают.', 'Ты замечаешь возможности вокруг себя.', 'Изобилие растёт в твоей жизни день за днём.', 'Достаток растёт, и ты щедро делишься им.', 'Твои доходы растут.'],
   luck: ['Удача на твоей стороне.', 'Ты оказываешься в нужном месте в нужное время.', 'Нужные люди встречаются на твоём пути.', 'Каждый день приносит хорошие сюрпризы.', 'Хорошие случайности складываются в твою пользу.', 'Ты открываешься новому, и новое открывается тебе.', 'Двери открываются перед тобой одна за другой.', 'Тебе везёт всё чаще.'],
   purpose: ['Твой путь становится яснее.', 'Ты делаешь то, что откликается в сердце.', 'Твои способности нужны этому миру.', 'Ты доверяешь своему внутреннему голосу.', 'Каждый шаг приближает тебя к твоему делу.', 'В тебе есть дар, и он раскрывается.', 'Ты знаешь, что для тебя по-настоящему важно.', 'То, что ты делаешь, приносит пользу и радость.'],
   silence: ['Если мысль увела, просто вернитесь к опоре.', 'Снова к дыханию.', 'Выдох, и ещё выдох.', 'Плечи мягкие, лицо спокойное.', 'Мысли приходят и уходят, а вы возвращаетесь.', 'Каждое возвращение — это тренировка внимания.', 'Слушайте тишину между звуками.', 'Внимание мягкое и спокойное.'],
@@ -1395,7 +1401,7 @@ const ROOMS = [
       R(300, 'Тишина', 'dark', 'Звук затихает. Можно засыпать.', ['Можно засыпать.'], { breath: 'long' })
     ] },
   { id: 'cleanse', name: 'Очищение', ci: 4, tag: 'Смыть день: чужие слова, новости, напряжение.', ev: ['t-a', 'Расслабление · подтверждено'],
-    whyT: 'Сначала — освободить место', why: 'За день на нас оседает много чужого: разговоры, новости, тревоги. Поток света сверху смывает это слой за слоем: тело, затем мысли. После очищения любая другая практика идёт глубже.',
+    whyT: 'Сначала — освободить место', why: 'За день на нас оседает много чужого: разговоры, новости, тревоги. Сначала свет очищает чакры, одну за другой, снизу вверх, потом смывает день с тела и мыслей. После очищения любая другая практика идёт глубже.',
     note: '<b>Основа:</b> визуализация + резонансное дыхание. Доказанный эффект — снижение стресса и мышечного напряжения.',
     main: [
       R(120, 'Светлый поток', 'cleanse', 'Над головой источник чистого света. Он льётся вниз, как тёплый водопад.', ['Представьте над головой мягкий источник света.', 'Свет льётся вниз, как тёплый водопад, — через макушку, лицо, шею и плечи.', 'Всё тяжёлое за день смывается и уходит в землю.']),
@@ -1505,9 +1511,9 @@ const ROOMS = [
     main: [
       R(90, 'Узкая щель', 'shutters', 'Какая мысль вас останавливает: «неудобно», «не получится», «не для меня»?', ['Вспомните то, что вы давно хотите сделать, но откладываете.', 'И мягко заметьте мысль, которая вас останавливает.', 'Может быть, «неудобно». Или «не получится». Или «это не для меня».'], { beat: 10, open: [0.06, 0.1] }),
       R(150, 'Проверка', 'shutters', 'Это факт или привычка так думать? Откуда эта мысль? Всегда ли она правда?', ['Посмотрите на эту мысль со стороны, спокойно.', 'Это факт — или просто привычка так думать?', 'И откуда она к вам пришла?'], { beat: 8, open: [0.1, 0.18] }),
-      R(150, 'Чужие стандарты', 'shutters', 'Чья это норма? Ваша — или её принесли родители, соцсети, эксперты? Вы вправе её не брать.', ['Многие правила о том, какими нам быть, дали другие — родители, учителя, соцсети, даже специалисты.', 'Спросите себя: это моё — или чужое?', 'Если чужое, мысленно положите его на землю. Можно с благодарностью.', 'Вы сами решаете, что для вас норма.'], { beat: 8, open: [0.18, 0.26] }),
+      R(150, 'Чужие стандарты', 'shutters', 'Чья это норма? Ваша — или её принесли родители, соцсети, эксперты? Вы сами выбираете, что взять.', ['Многие правила о том, какими нам быть, дали другие — родители, учителя, соцсети, даже специалисты.', 'Спросите себя: это моё — или чужое?', 'Если чужое, мысленно положите его на землю. Можно с благодарностью.', 'Вы сами решаете, что для вас норма.'], { beat: 8, open: [0.18, 0.26] }),
       R(150, 'Шире', 'shutters', 'Рамки раздвигаются. Видно больше: людей, путей, возможностей.', ['Представьте, что рамки вокруг вас медленно раздвигаются.', 'Становится видно больше — людей, готовых помочь, и пути, которых вы раньше не замечали.', 'Мир шире, чем казалось.'], { beat: 6, open: [0.26, 0.95] }),
-      R(120, 'Новая мысль', 'purpose', 'Найдите мысль чуть смелее старой. Не идеальную — просто смелее.', ['Найдите мысль чуть смелее старой.', 'Например: «я имею право спросить». Или: «попробовать — это уже шаг».', 'Повторите её про себя несколько раз.'], { beat: 6 }),
+      R(120, 'Новая мысль', 'purpose', 'Найдите мысль чуть смелее старой. Не идеальную — просто смелее.', ['Найдите мысль чуть смелее старой.', 'Например: «я могу спросить». Или: «попробовать — это уже шаг».', 'Повторите её про себя несколько раз.'], { beat: 6 }),
       R(90, 'Один шаг', 'purpose', 'Один маленький шаг сегодня или завтра: звонок, письмо, вопрос.', ['Выберите один маленький шаг — на сегодня или на завтра.', 'Один звонок, одно письмо, один вопрос.', 'Шаг за шагом мир становится шире.'], { beat: 10 })
     ] },
   { id: 'breathe', name: 'Дыхание: снять стресс', ci: 4, tag: 'Три техники дыхания, когда напряжение уже на пределе.', ev: ['t-a', 'Стресс · подтверждено'],
@@ -1595,22 +1601,22 @@ const OWNER = window.OWNER = () => store.get('owner') !== '0';
 const MODES = { major: [0, 2, 4, 7, 9, 12, 14, 16, 19], minor: [0, 3, 5, 7, 10, 12, 15, 17, 19], lydian: [0, 2, 4, 6, 7, 11, 12, 14, 16], dorian: [0, 2, 3, 7, 9, 12, 14, 15, 19], suspended: [0, 2, 5, 7, 10, 12, 14, 17, 19] };
 const MODE_RU = { major: 'светлый мажор', minor: 'мягкий минор', lydian: 'лидийский лад', dorian: 'дорийский лад', suspended: 'открытый лад' };
 // each space's solfeggio / «angel number» frequency, chosen by meaning — a drone under the whole session
-const ROOM_HZ = { cleanse: [741, 'очищение от чужих программ'], energy: [1111, 'целительная энергия'], health: [285, 'восстановление'],
+const ROOM_HZ = { cleanse: [741, 'очищение от чужих программ'], energy: [1111, 'энергия и обновление'], health: [285, 'восстановление'],
   blinders: [222, 'снятие блоков, решения'], abundance: [555, 'дело и достаток'], luck: [888, 'удача'], purpose: [999, 'лучшее в вас, цели'], silence: [432, 'гармония'],
-  sleep: [111, 'здоровый сон, лёгкость'], breathe: [432, 'гармония, покой'], event: [444, 'устойчивость, терпение'], release: [417, 'отпускание прошлого'],
+  sleep: [111, 'спокойный сон, лёгкость'], breathe: [432, 'гармония, покой'], event: [444, 'устойчивость, терпение'], release: [417, 'отпускание прошлого'],
   selflove: [528, 'любовь'], relations: [639, 'хорошие отношения'], food: [528, 'любовь к телу'], chakras: [963, 'единение, настройка «Я есмь»'],
   habits: [396, 'освобождение от блоков'], body: [174, 'покой в теле'], support: [333, 'поддержка свыше'], awaken: [777, 'духовное пробуждение'], ajna: [852, 'пробуждение интуиции'] };
 const SOUND = {
   cleanse:   { beats: [8, 7, 6], carrier: 180, breath: 'long',      mode: 'suspended', tempo: [9, 14], noise: 'pink',  goal: 'отпустить напряжение' },
-  energy:    { beats: [10, 12, 14], carrier: 240, breath: 'lift',   mode: 'major',     tempo: [3, 5],  noise: 'white', goal: 'бодрость без суеты' },
+  energy:    { beats: [10, 12, 12], carrier: 240, breath: 'lift',   mode: 'major',     tempo: [3, 5],  noise: 'white', goal: 'бодрость без суеты' },
   health:    { beats: [9, 8, 6], carrier: 195, breath: 'resonance', mode: 'suspended', tempo: [8, 12], noise: 'pink',  goal: 'восстановление' },
-  blinders:  { beats: [10, 10, 12, 12, 14], carrier: 220, breath: 'calm', mode: 'lydian', tempo: [5, 8],  noise: 'pink',  goal: 'ясность и смелость' },
+  blinders:  { beats: [10, 10, 12, 12, 12], carrier: 220, breath: 'calm', mode: 'lydian', tempo: [5, 8],  noise: 'pink',  goal: 'ясность и смелость' },
   abundance: { beats: [10, 10, 12], carrier: 230, breath: 'heart',  mode: 'major',     tempo: [4, 7],  noise: 'pink',  goal: 'открытость возможностям' },
   luck:      { beats: [11, 12, 10], carrier: 250, breath: 'calm',   mode: 'lydian',    tempo: [5, 8],  noise: 'white', goal: 'внимательность к шансам' },
   purpose:   { beats: [6, 6, 8], carrier: 200, breath: 'resonance', mode: 'lydian',    tempo: [7, 11], noise: 'pink',  goal: 'услышать себя' },
   silence:   { beats: [6, 5, 4], carrier: 160, breath: 'long',      mode: 'suspended', tempo: [12, 18], noise: 'brown', goal: 'тишина ума и сон' },
   breathe:   { beats: [8, 6, 6], carrier: 180, breath: null,        mode: 'suspended', tempo: [10, 15], noise: 'brown', goal: 'снять стресс' },
-  event:     { beats: [10, 12, 10], carrier: 220, breath: 'box',    mode: 'dorian',    tempo: [5, 8],  noise: 'pink',  goal: 'собранность' },
+  event:     { beats: [10, 12, 10], carrier: 220, breath: 'calm',   mode: 'dorian',    tempo: [5, 8],  noise: 'pink',  goal: 'собранность' },
   release:   { beats: [6, 6, 5], carrier: 170, breath: 'long',      mode: 'minor',     tempo: [9, 14], noise: 'brown', goal: 'отпустить и простить' },
   selflove:  { beats: [8, 8, 7], carrier: 190, breath: 'heart',     mode: 'major',     tempo: [7, 11], noise: 'pink',  goal: 'тепло к себе' },
   relations: { beats: [9, 8, 8, 7, 7], carrier: 205, breath: 'calm', mode: 'dorian',    tempo: [6, 10], noise: 'pink',  goal: 'тепло к другим' },
@@ -1659,7 +1665,7 @@ ROOMS.sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id));
 ROOMS.forEach(r => { r.color = CH[r.ci].c; if (r.id === 'habits') setHabit(r, store.get('ajna-habit') in HABITS ? store.get('ajna-habit') : 'smoke'); else setPhases(r); });
 const intentOf = r => store.get('ajna-intent-' + r.id + (r.habit ? '-' + r.habit : '')) || (r.habit ? HABITS[r.habit].intent : INTENT[r.id]);
 
-const BREATH = { guide: [4, 1, 6, 1], resonance: [5.45, 0, 5.45, 0], calm: [4, 0, 6, 0], box: [4, 4, 4, 4], sigh: [3, 0, 6, 0], long: [4, 0, 8, 0], lift: [3, 0, 3, 0], heart: [5, 0, 5, 0] };
+const BREATH = { guide: [4, 0, 6, 0], resonance: [5.45, 0, 5.45, 0], calm: [4, 0, 6, 0], box: [4, 4, 4, 4], sigh: [3, 0, 6, 0], long: [4, 0, 8, 0], lift: [3, 0, 3, 0], heart: [5, 0, 5, 0] };
 const EYES = { open: ['Смотрите на экран', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>'],
   closed: ['Можно закрыть глаза', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10c2.5 3 5.5 4.5 9 4.5s6.5-1.5 9-4.5M6 13.5l-1.5 2M12 15v2.5M18 13.5l1.5 2"/></svg>'],
   any: ['Смотрите или закройте глаза', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12z" opacity=".5"/><circle cx="12" cy="12" r="3"/></svg>'] };
@@ -2469,7 +2475,7 @@ const JOURNAL = [
 <blockquote>Сегодня я больше десяти лет не пью и не курю. Это не про запреты. Это про то, что внутри наконец стало тихо.</blockquote>
 <p>Сейчас у меня своё дело, которое я развиваю, семья и двое детей. Я тренируюсь — бокс помогает держать голову ясной, мотоцикл даёт ощущение дороги. Практики остались со мной каждый день: не как ритуал, а как способ вернуться к себе, когда мир становится слишком громким.</p>
 <h2>Зачем я это делаю</h2>
-<p>Я знаю, каково это — жить в шуме и не понимать, чего ты хочешь на самом деле. И знаю, что из этого есть дорога. Я собрал в «Дороге к себе» то, что прошло проверку моей жизнью и подтверждается исследованиями, чтобы каждый мог начать свой путь — с пятнадцати минут в день.</p>`, src: [] },
+<p>Я знаю, каково это — жить в шуме и не понимать, чего ты хочешь на самом деле. И знаю, что из этого есть дорога. Я собрал в «Дороге к себе» то, что прошло проверку моей жизнью и подтверждается исследованиями, чтобы каждый мог начать свой путь — с десяти минут в день.</p>`, src: [] },
   { id: 'astro-science', cat: 'Карта жизни', title: 'Астрология и наука: что проверяли и что получилось', read: '13 минут', long: true,
     lead: 'Астрологию проверяли десятки лет — двойными слепыми тестами, тысячами «близнецов по времени», большими медицинскими базами. Рассказываем честно, что нашли, что не нашли, где спор до сих пор не закрыт и почему карта всё равно может быть полезной — если понимать, чем она является, а чем нет.',
     body: '<p>' + 'Астрологию проверяли десятки лет — двойными слепыми тестами, тысячами «близнецов по времени», большими медицинскими базами. Рассказываем честно, что нашли, что не нашли, где спор до сих пор не закрыт и почему карта всё равно может быть полезной — если понимать, чем она является, а чем нет.' + '</p>', src: [] },
@@ -2612,7 +2618,7 @@ function showRoom(id) {
     const tg = TARGET[r.id], rs = results(r.id).filter(x => x.a != null), avg = rs.length ? rs.reduce((a, x) => a + (x.a - x.b) * tg.m[3], 0) / rs.length : null;
     $('rSound').innerHTML = '<span class="eyebrow">Звучание пространства</span><div class="rsnd">'
       + '<div class="rsnd__w"><small>Центр внимания</small><b>' + tg.ch.slice(0, 3).map(c => CH[c].n).join(' · ') + (tg.ch.length > 3 ? ' и все чакры' : '') + ' — ' + tg.ch.slice(0, 2).map(c => CH[c].where).join(', ') + '</b></div>'
-      + '<div class="rsnd__w"><small>Частота пространства</small><b>' + ROOM_HZ[r.id][0] + ' Гц — ' + ROOM_HZ[r.id][1] + ' (звучит всю практику)</b></div>'
+      + '<div class="rsnd__w"><small>Частота пространства · по традиции сольфеджио</small><b>' + ROOM_HZ[r.id][0] + ' Гц — ' + ROOM_HZ[r.id][1] + ' (звучит всю практику)</b></div>'
       + '<div class="rsnd__w"><small>Частоты центров</small><b>' + (r.sleep ? 'нет — только частота сна' : tg.ch.length > 3 ? '396 → 963 Гц, по чакре за раз' : [...new Set(tg.ch.map(c => SOL[c]))].join(' · ') + ' Гц' + (r.bare ? '' : ' · вход и завершение 639 Гц')) + ' — вместе с бинауральным ритмом</b></div>'
       + '<div class="rsnd__w"><small>Результат, который мы измеряем</small><b>' + tg.m[4] + (tg.m[3] > 0 ? ' ↑' : ' ↓') + (avg != null ? ' · ваш средний результат: ' + (avg > 0 ? '+' : '') + avg.toFixed(1) + ' балла за ' + rs.length + ' сеанс' + (rs.length === 1 ? '' : rs.length < 5 ? 'а' : 'ов') : ' · оценка до и после каждого сеанса') + '</b></div>'
       + '<div><small>Ритм</small><b>' + bands + ' ' + rng + '</b></div><div><small>Дыхание</small><b>' + (sp.breath ? BREATH_RU[sp.breath] : 'три техники по очереди') + '</b></div><div><small>Музыка</small><b>' + MODE_RU[sp.mode] + ', ' + (sp.tempo[0] < 5 ? 'живой темп' : sp.tempo[0] > 9 ? 'очень редкие ноты' : 'спокойный темп') + '</b></div><div><small>Задача</small><b>' + sp.goal + '</b></div></div>'; $('rSound').hidden = false; }
@@ -2763,7 +2769,7 @@ function applyAudio(ph) {
   if (!actx) return; beatOn = ph.beat > 0 ? 1 : 0;
   const sp = (P.room && SOUND[P.room.id]) || {}, car = carrierFor(P.sol) || sp.carrier || CARRIER;
   if (beatOn) { oscL.frequency.setTargetAtTime(car, actx.currentTime, 3); oscR.frequency.setTargetAtTime(car + ph.beat, actx.currentTime, 3); }
-  if (window.noiseLP) noiseLP.frequency.setTargetAtTime(sp.noise === 'brown' ? 380 : sp.noise === 'white' ? 6000 : 1600, actx.currentTime, 2);
+  if (window.noiseLP) noiseLP.frequency.setTargetAtTime(sp.noise === 'brown' ? 380 : sp.noise === 'white' ? 3000 : 1600, actx.currentTime, 2);   // ≤ 3 kHz: energy above 8 kHz stays 30+ dB below
   padRoot(CH[ph.tone].tone); levels(4);
 }
 let bowlO = null, bowlG = null;
@@ -2829,14 +2835,15 @@ function levels(tc) {
   if (!actx) return; const t = actx.currentTime, on = P.running && !P.paused;
   master.gain.setTargetAtTime(on ? volGain() : 0, t, tc || 0.4);
   beatGain.gain.setTargetAtTime(beatOn && $('beat').checked ? 0.12 : 0, t, 0.6);   // binaural beats work at a low level; louder they become a hum
-  noiseGain.gain.setTargetAtTime($('noise').checked ? 0.5 : 0, t, 0.5);
+  noiseGain.gain.setTargetAtTime($('noise').checked ? 0.3 : 0, t, 0.5);   // a soft hiss like rain or surf, under everything
   padBus.gain.setTargetAtTime($('music').checked && !song.on ? 0.55 : 0, t, 1.5);
   melBus.gain.setTargetAtTime($('music').checked && $('melody').checked && !song.on ? 0.5 : 0, t, 1);
   if (songG) songG.gain.setTargetAtTime(on && song.on && $('music').checked && $('melody').checked ? 0.32 : 0, t, 2);   // music is a light veil over the frequency, not the main sound
 }
 const setDuck = on => { if (actx) duck.gain.setTargetAtTime(on ? 0.45 : 1, actx.currentTime, 0.6); };
-$('vol').oninput = () => { $('volV').textContent = $('vol').value + '%'; levels(0.2); };
-['noise', 'music', 'beat', 'melody'].forEach(id => $(id).onchange = () => levels());
+if (+store.get('snd-vol') > 0) { $('vol').value = store.get('snd-vol'); $('volV').textContent = $('vol').value + '%'; }
+$('vol').oninput = () => { $('volV').textContent = $('vol').value + '%'; store.set('snd-vol', $('vol').value); levels(0.2); };
+['noise', 'music', 'beat', 'melody', 'sbreath'].forEach(id => { const v = store.get('snd-' + id); if (v) $(id).checked = v === '1'; $(id).onchange = () => { store.set('snd-' + id, $(id).checked ? '1' : '0'); levels(); }; });   // the listener's sound choices are remembered
 function bell(n, f0) { // a soft swelling chime: no strike, slow attack, long fade
   if (!actx) return;
   const v = 0.05 * Math.max(0.35, +$('vol').value / 60);
@@ -2997,15 +3004,15 @@ const CH_WORDS = [[0, /основани|копчик|корн|стоп/], [1, /�
 const namedCentre = ph => { const t = ((ph.text || '') + ' ' + (ph.say || []).join(' ')).toLowerCase(); let best = -1, at = 1e9; CH_WORDS.forEach(([c, re]) => { const m = t.search(re); if (m >= 0 && m < at) { at = m; best = c; } }); return best; };
 // the sphere: silver energy rises from the root through the crown and dissolves in space, leaving a beam that fades upward;
 // then golden light descends from space to the heart with a beam of falling golden sparks; the heart opens; waves fill the sphere
-const ROOT_Y = 0.615, HEART_Y = 0.494, SPACE_Y = -0.18;
+const ROOT_Y = 0.615, HEART_Y = 0.494, SPACE_Y = -0.18, BELOW_Y = 0.8;   // BELOW_Y: under the sphere, where the energy comes in through the feet
 function sphereStage(u) { const n = SPHERE_STAGES.filter(x => u >= x[0]).length - 1;
   if (n !== P.stage) { P.stage = n; const k = 'cocoon-' + (n + 1), l = SPHERE_STAGES[n][1]; if (P.running && !P.paused) guideSeq([[k, l]]); } }
 function sphereAnim(ph, pt) { const o = $('pOrb'), rg = $('pRings'), bm = $('pBeam'), img = $('pCoc');
   if (!ph || !ph.stages || !P.running || !img.classList.contains('on')) { o.className = 'porb'; rg.className = 'prings'; bm.className = 'pbeam'; return; }
   const u = pt / ph.dur, r = img.getBoundingClientRect(), X = r.left + r.width / 2, Y = y => r.top + r.height * y;
   let y = null, mode = '', beam = '', b0 = 0, b1 = 0;
-  if (u >= 0.14 && u < 0.30) { y = ROOT_Y + (SPACE_Y - ROOT_Y) * ease((u - 0.14) / 0.16); mode = 'up'; beam = 'up on'; b0 = y; b1 = ROOT_Y; }
-  else if (u >= 0.30 && u < 0.33) { beam = 'up gone'; b0 = SPACE_Y; b1 = ROOT_Y; }                       // the silver beam dissolves upward
+  if (u >= 0.14 && u < 0.30) { y = BELOW_Y + (SPACE_Y - BELOW_Y) * ease((u - 0.14) / 0.16); mode = 'up'; beam = 'up on'; b0 = y; b1 = BELOW_Y; }
+  else if (u >= 0.30 && u < 0.33) { beam = 'up gone'; b0 = SPACE_Y; b1 = BELOW_Y; }                       // the silver beam dissolves upward
   else if (u >= 0.33 && u < 0.46) { y = SPACE_Y + (HEART_Y - SPACE_Y) * ease((u - 0.33) / 0.13); mode = 'down'; beam = 'down on'; b0 = SPACE_Y; b1 = y; }
   else if (u >= 0.46 && u < 0.56) { y = HEART_Y; mode = 'open'; beam = 'down on'; b0 = SPACE_Y; b1 = HEART_Y; }
   else if (u >= 0.56) { y = HEART_Y; mode = 'fill'; beam = 'down gone'; b0 = SPACE_Y; b1 = HEART_Y; }
