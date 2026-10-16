@@ -2768,6 +2768,26 @@ async function bed(f) {
   try { if (!bed.cache[f]) { const r = await fetch('media/hz/' + f + '.mp3'); bed.cache[f] = await actx.decodeAudioData(await r.arrayBuffer()); } } catch (e) { bed.on = false; return; }
   if (!bed.on) return; trackSrc = actx.createBufferSource(); trackSrc.buffer = bed.cache[f]; trackSrc.loop = true; trackSrc.connect(trackG); trackSrc.start();
 }
+// space music (ElevenLabs Music, 2-minute seamless loops at −23 LUFS) replaces the synthesised pad and melody;
+// a real singing bowl now and then in the quiet of the main part and three times at the end
+const MUSIC = { heart: ['relations', 'selflove', 'release', 'support'], calm: ['breathe', 'silence', 'body', 'event'], cleanse: ['cleanse', 'chakras'],
+  power: ['energy', 'abundance', 'luck', 'purpose', 'blinders'], body: ['health', 'food', 'habits'], spirit: ['awaken', 'ajna', 'sleep'] };
+let songG = null, songSrc = null, bowlBuf = null;
+const fetchBuf = async url => { const r = await fetch(url); if (!r.ok) throw 0; return actx.decodeAudioData(await r.arrayBuffer()); };
+async function song(id) {
+  if (songSrc) { try { songSrc.stop(actx.currentTime + 2); } catch (e) {} songSrc = null; }
+  const k = id && Object.keys(MUSIC).find(m => MUSIC[m].includes(id)); song.on = !!k; levels(); if (!k || !actx) return;
+  if (!songG) { songG = actx.createGain(); songG.gain.value = 0; songG.connect(duck); }
+  song.cache = song.cache || {};
+  try { if (!song.cache[k]) song.cache[k] = await fetchBuf('media/music/' + k + '.mp3'); if (!bowlBuf) bowlBuf = await fetchBuf('media/music/bowl.mp3'); } catch (e) { song.on = false; levels(); return; }
+  if (!song.on || !P.running) return; songSrc = actx.createBufferSource(); songSrc.buffer = song.cache[k]; songSrc.loop = true; songSrc.connect(songG); songSrc.start(); levels();
+}
+function ringBowl(at) { if (!bowlBuf || !actx) return false; const s = actx.createBufferSource(), g = actx.createGain(); s.buffer = bowlBuf; s.playbackRate.value = 0.92 + Math.random() * 0.16; g.gain.value = 0.9; s.connect(g).connect(duck); s.start(at || 0); return true; }
+function bowlTick() {
+  if (!actx || !P.room || P.idx < P.m0 || P.idx >= P.m1 || !$('music').checked) return; const now = actx.currentTime;
+  if (!P.bowlNext) P.bowlNext = now + 60 + Math.random() * 40;
+  if (now < P.bowlNext || now < recUntil + 6) return; ringBowl(); P.bowlNext = now + 100 + Math.random() * 60;
+}
 function drone(f) { if (!actx) return; bed(f); if (HZ_TRACK.includes(f)) f = 0;
   if (!droneO) { droneG = actx.createGain(); droneG.gain.value = 0; droneG.connect(duck); droneO = [1, 0.5].map((m, i) => { const o = actx.createOscillator(), g = actx.createGain(); o.type = 'sine'; g.gain.value = [1, 0.4][i]; o.connect(g).connect(droneG); o.start(); return { o, m }; }); }
   droneO.forEach(v => v.o.frequency.setTargetAtTime((f || 200) * v.m, actx.currentTime, 2)); drone.on = !!f; }
@@ -2790,10 +2810,11 @@ function bowl(f) { // the focus centre's solfeggio tone (with a soft sub-octave)
 function levels(tc) {
   if (!actx) return; const t = actx.currentTime, on = P.running && !P.paused;
   master.gain.setTargetAtTime(on ? volGain() : 0, t, tc || 0.4);
-  beatGain.gain.setTargetAtTime(beatOn && $('beat').checked ? 0.55 : 0, t, 0.6);   // the binaural layer stays in the background
+  beatGain.gain.setTargetAtTime(beatOn && $('beat').checked ? 0.12 : 0, t, 0.6);   // binaural beats work at a low level; louder they become a hum
   noiseGain.gain.setTargetAtTime($('noise').checked ? 0.5 : 0, t, 0.5);
-  padBus.gain.setTargetAtTime($('music').checked ? 0.55 : 0, t, 1.5);
-  melBus.gain.setTargetAtTime($('music').checked && $('melody').checked ? 0.5 : 0, t, 1);
+  padBus.gain.setTargetAtTime($('music').checked && !song.on ? 0.55 : 0, t, 1.5);
+  melBus.gain.setTargetAtTime($('music').checked && $('melody').checked && !song.on ? 0.5 : 0, t, 1);
+  if (songG) songG.gain.setTargetAtTime(on && song.on && $('music').checked && $('melody').checked ? 0.32 : 0, t, 2);   // music is a light veil over the frequency, not the main sound
 }
 const setDuck = on => { if (actx) duck.gain.setTargetAtTime(on ? 0.45 : 1, actx.currentTime, 0.6); };
 $('vol').oninput = () => { $('volV').textContent = $('vol').value + '%'; levels(0.2); };
@@ -2999,7 +3020,7 @@ function chakra(k, mode) {
 }
 async function play() {
   initAudio(); if (actx && actx.state === 'suspended') await actx.resume().catch(() => {});
-  if (!P.running) { const keys = sessKeys(P.phases); await loadKeys(keys.slice(0, 4)); loadKeys(keys).then(() => loadAff(P.room && P.room.id)); P.affRoom = null; P.running = true; P.paused = false; P.elapsed = 0; P.last = performance.now(); enter(0); if (!$('player').classList.contains('soft')) warp($('pCv'), 1.8, 9.4); }
+  if (!P.running) { P.bowlNext = 0; const keys = sessKeys(P.phases); await loadKeys(keys.slice(0, 4)); loadKeys(keys).then(() => loadAff(P.room && P.room.id)); P.affRoom = null; P.running = true; song(P.room && P.room.id); P.paused = false; P.elapsed = 0; P.last = performance.now(); enter(0); if (!$('player').classList.contains('soft')) warp($('pCv'), 1.8, 9.4); }
   else { P.paused = !P.paused; P.last = performance.now(); if (P.paused && synth) synth.cancel(); const fv = $('pFly'); if (fv && fv.src) P.paused ? fv.pause() : fv.play().catch(() => {}); }
   $('pIco').innerHTML = P.paused ? '<path d="M8 5.5v13l11-6.5z"/>' : '<rect x="7" y="5.5" width="3.2" height="13" rx="1"/><rect x="13.8" y="5.5" width="3.2" height="13" rx="1"/>';
   levels(P.paused ? 0.4 : 3);
@@ -3007,10 +3028,10 @@ async function play() {
   poke();
 }
 function stop(done) {
-  if (!P.running) return; if (droneG) droneG.gain.setTargetAtTime(0, actx.currentTime, 1.5); if (trackG) trackG.gain.setTargetAtTime(0, actx.currentTime, 1.5); bed(0); P.running = false; P.paused = false; sayTok++; fly(null); vis(null); if (synth) synth.cancel(); levels(done ? 5 : 0.6);
+  if (!P.running) return; if (droneG) droneG.gain.setTargetAtTime(0, actx.currentTime, 1.5); if (trackG) trackG.gain.setTargetAtTime(0, actx.currentTime, 1.5); bed(0); song(null); P.running = false; P.paused = false; sayTok++; fly(null); vis(null); if (synth) synth.cancel(); levels(done ? 5 : 0.6);
   if (P.elapsed > 240) markPractice();
   sessionEnded(done);
-  if (done) { bell(3, 220); $('pPhase').textContent = 'Сессия завершена'; $('pInstr').textContent = 'Посидите минуту с закрытыми глазами. Заметьте, что изменилось. Каждая практика — ещё один шаг.'; }
+  if (done) { if (!(ringBowl() && ringBowl(actx.currentTime + 4.5) && ringBowl(actx.currentTime + 9))) bell(3, 220); $('pPhase').textContent = 'Сессия завершена'; $('pInstr').textContent = 'Посидите минуту с закрытыми глазами. Заметьте, что изменилось. Каждая практика — ещё один шаг.'; }
   else { $('pPhase').textContent = P.room ? P.room.name : ''; $('pInstr').textContent = 'Можно начать снова, когда будете готовы.'; }
   $('pIco').innerHTML = '<path d="M8 5.5v13l11-6.5z"/>'; $('pProg').style.width = '0'; P.idx = -1; $('pEyes').innerHTML = ''; $('pIntent').classList.remove('on', 'big'); focusUI(-1); breathUI(null); cocoonGlow(null); sphereAnim(null);
   try { P.wake && P.wake.release(); } catch (e) {} P.wake = null; poke();
@@ -3259,9 +3280,9 @@ function frame(now) {
       const st = ph.breath ? breathAt(ph.breath, pt) : null;
       if (actx && breathGain) { const on = st && $('sbreath').checked, lvl = on ? (ph.cue ? 0.42 : 0.2) * (0.06 + 0.94 * st.b) : 0; breathGain.gain.setTargetAtTime(lvl, actx.currentTime, 0.18); breathLP.frequency.setTargetAtTime(280 + 1400 * (st ? st.b : 0), actx.currentTime, 0.18); }
       if (droneG) droneG.gain.setTargetAtTime(drone.on && P.running && !P.paused && $('music').checked ? 0.04 : 0, actx.currentTime, 1.2);
-      if (trackG) trackG.gain.setTargetAtTime(bed.on && P.running && !P.paused && $('music').checked ? 0.7 : 0, actx.currentTime, 1.5);
-      if (bowlG) bowlG.gain.setTargetAtTime(bowl.on && P.running && !P.paused && $('music').checked ? 0.055 * (0.45 + 0.55 * (st ? 1 - st.b : 0.5)) : 0, actx.currentTime, 0.4);
-      if (!P.paused) affTick();
+      if (trackG) trackG.gain.setTargetAtTime(bed.on && P.running && !P.paused && $('music').checked ? 2.0 : 0, actx.currentTime, 1.5);
+      if (bowlG) bowlG.gain.setTargetAtTime(bowl.on && P.running && !P.paused && $('music').checked ? 0.025 * (0.45 + 0.55 * (st ? 1 - st.b : 0.5)) : 0, actx.currentTime, 0.4);
+      if (!P.paused) { affTick(); bowlTick(); }
       if (st && ph.cue && st.label !== P.lastLabel) { if (P.lastLabel && st.label !== 'Пауза' && ($('vBreath').checked || ph.guideBreath) && !(actx && actx.currentTime < recUntil) && !playRec(breathKey(st.label, ph)) && synth && !synth.speaking) speak([st.label], { rate: 0.7, gap: 0 }); P.lastLabel = st.label; }
       const inMain = P.idx >= P.m0 && P.idx < P.m1, el = P.elapsed - P.phases.slice(0, P.m0).reduce((a, p) => a + p.dur, 0);
       $('pIntent').classList.toggle('big', ph.key === 'intent'); $('pIntent').classList.toggle('on', ph.key === 'intent' || (inMain && (el % 75) < 9));
