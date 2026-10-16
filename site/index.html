@@ -2726,13 +2726,14 @@ function bell(n, f0) { // a soft swelling chime: no strike, slow attack, long fa
 
 // ======================= voice (female / male) =======================
 let VGENDER = store.get('vgender') || 'f';
-const VOICE_RECORDED = false;   // true once voice/manifest.json and the mp3 files are published with the page
+const VOICE_RECORDED = true;   // recorded narration: voice/<lang>/<f|m>/<key>.mp3 + manifest.json
+const VLANG = 'ru';
 const recorded = {};
 async function loadRecorded() {
   if (!actx || !VOICE_RECORDED || loadRecorded.done === VGENDER) return; loadRecorded.done = VGENDER;
   const g = VGENDER; Object.keys(recorded).forEach(k => delete recorded[k]);
-  let keys = []; try { const r = await fetch('voice/' + g + '/manifest.json'); if (r.ok) keys = await r.json(); } catch (e) {}
-  await Promise.all(keys.map(async k => { try { const r = await fetch('voice/' + g + '/' + k + '.mp3'); if (r.ok && VGENDER === g) recorded[k] = await actx.decodeAudioData(await r.arrayBuffer()); } catch (e) {} }));
+  const dir = 'voice/' + VLANG + '/' + g + '/'; let keys = []; try { const r = await fetch(dir + 'manifest.json'); if (r.ok) keys = await r.json(); } catch (e) {}
+  await Promise.all(keys.map(async k => { try { const r = await fetch(dir + k + '.mp3'); if (r.ok && VGENDER === g) recorded[k] = await actx.decodeAudioData(await r.arrayBuffer()); } catch (e) {} }));
 }
 let recUntil = 0;
 const COUNT_IN = ['Вдох', 'два', 'три', 'четыре'], COUNT_OUT = ['Выдох', 'два', 'три', 'четыре', 'пять', 'шесть'], COUNTED = 3;
