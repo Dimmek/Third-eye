@@ -2810,20 +2810,21 @@ let recUntil = 0, affBus = null;
 // never over the guiding voice and not in the first 18 s after it
 $('vAff').checked = store.get('vaff') !== '0'; $('vAff').onchange = () => store.set('vaff', $('vAff').checked ? '1' : '0');
 const shuffle = a => a.map(x => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map(x => x[1]);
+// one file per set (aff-<set>.mp3) + aff.json with [start, length] of each phrase
 async function loadAff(id) {
   if (!actx || !VOICE_RECORDED || !AFF[id]) return; const g = VGENDER, dir = 'voice/' + VLANG + '/' + g + '/';
-  const keys = ['common', id].flatMap(k => AFF[k].map((_, i) => 'aff-' + k + '-' + (i + 1))).filter(k => !recorded[k]);
-  await Promise.all(keys.map(async k => { try { const r = await fetch(dir + k + '.mp3'); if (r.ok && VGENDER === g) recorded[k] = await actx.decodeAudioData(await r.arrayBuffer()); } catch (e) {} }));
+  try { if (!recorded['aff:index'] || recorded['aff:g'] !== g) { const r = await fetch(dir + 'aff.json'); if (!r.ok) return; recorded['aff:index'] = await r.json(); recorded['aff:g'] = g; } } catch (e) { return; }
+  await Promise.all(['common', id].filter(k => !recorded['aff:' + k]).map(async k => { try { const r = await fetch(dir + 'aff-' + k + '.mp3'); if (r.ok && VGENDER === g) recorded['aff:' + k] = await actx.decodeAudioData(await r.arrayBuffer()); } catch (e) {} }));
 }
 function affTick() {
   if (!actx || !affBus || !P.room || !AFF[P.room.id] || P.idx < P.m0 || P.idx >= P.m1 || !$('vAff').checked) return;
   const now = actx.currentTime, id = P.room.id;
-  if (P.affRoom !== id) { P.affRoom = id; const one = () => { const s = shuffle(AFF[id].map((_, i) => 'aff-' + id + '-' + (i + 1))), c = shuffle(AFF.common.map((_, i) => 'aff-common-' + (i + 1))); return s.flatMap((k, i) => [k, c[i]]); }; P.affQ = one().concat(one()); P.affNext = 0; }
+  if (P.affRoom !== id) { P.affRoom = id; const one = () => { const s = shuffle(AFF[id].map((_, i) => [id, i])), c = shuffle(AFF.common.map((_, i) => ['common', i])); return s.flatMap((k, i) => [k, c[i]]); }; P.affQ = one().concat(one()); P.affNext = 0; }
   if (now < recUntil + 18) { P.affNext = Math.max(P.affNext, recUntil + 18); return; }
   if (now < P.affNext) return;
-  const k = P.affQ.shift(), b = k && recorded[k];
-  if (!b) { P.affNext = now + 5; return; }
-  const src = actx.createBufferSource(); src.buffer = b; src.connect(affBus); src.start(); P.affNext = now + b.duration + 30 + Math.random() * 10;
+  const k = P.affQ.shift(), b = k && recorded['aff:' + k[0]], mark = k && recorded['aff:index'] && recorded['aff:index'][k[0]] && recorded['aff:index'][k[0]][k[1]];
+  if (!b || !mark) { P.affNext = now + 5; return; }
+  const src = actx.createBufferSource(); src.buffer = b; src.connect(affBus); src.start(0, mark[0], mark[1]); P.affNext = now + mark[1] + 30 + Math.random() * 10;
 }
 const COUNT_IN = ['Вдох', 'два', 'три', 'четыре'], COUNT_OUT = ['Выдох', 'два', 'три', 'четыре', 'пять', 'шесть'], COUNTED = 3;
 const breathKey = (label, ph) => { const k = { 'Вдох': 'inhale', 'Выдох': 'exhale' }[label] || ''; if (!k) return '';
