@@ -2782,12 +2782,12 @@ let droneO = null, droneG = null;
 const HZ_TRACK = [111, 174, 222, 285, 333, 396, 417, 432, 444, 528, 555, 639, 741, 777, 852, 888, 963, 999, 1111];   // 174–528: live recordings; the rest built by make_beds.py to the same recipe
 let trackG = null, trackSrc = null;
 async function bed(f) {
-  if (trackSrc) { try { trackSrc.stop(actx.currentTime + 2); } catch (e) {} trackSrc = null; }
+  if (trackSrc) { trackSrc.stop(); trackSrc = null; }
   bed.on = HZ_TRACK.includes(f); if (!bed.on || !actx) return;
   if (!trackG) { trackG = actx.createGain(); trackG.gain.value = 0; const hp = actx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 120; hp.Q.value = 0.5; trackG.connect(hp).connect(duck); }   // no rumble: the low end is cut
   bed.cache = bed.cache || {};
-  try { if (!bed.cache[f]) { const r = await fetch('media/hz/' + f + '.mp3'); bed.cache[f] = await actx.decodeAudioData(await r.arrayBuffer()); } } catch (e) { bed.on = false; return; }
-  if (!bed.on) return; trackSrc = actx.createBufferSource(); trackSrc.buffer = bed.cache[f]; trackSrc.loop = true; trackSrc.connect(trackG); trackSrc.start();
+  try { if (!bed.cache[f]) { const r = await fetch('media/hz/' + f + '.mp3'); bed.cache[f] = seamless(await actx.decodeAudioData(await r.arrayBuffer())); } } catch (e) { bed.on = false; return; }
+  if (!bed.on) return; trackSrc = loopSrc(bed.cache[f], trackG); trackSrc.start();
 }
 // space music (ElevenLabs Music, 2-minute seamless loops at −23 LUFS) replaces the synthesised pad and melody;
 // a real singing bowl now and then in the quiet of the main part and three times at the end
@@ -2796,15 +2796,27 @@ const MUSIC = { heart: ['relations', 'selflove', 'release', 'support'], calm: ['
 let songG = null, songSrc = null, bowlBuf = null;
 const AFF_ONLY = ['silence'];   // here the quiet voice only brings attention back, no affirmations
 const fetchBuf = async url => { const r = await fetch(url); if (!r.ok) throw 0; return actx.decodeAudioData(await r.arrayBuffer()); };
+// a seamless loop: MP3 edges are a few samples off, so the loop would tick once per turn. Skip the near-silent
+// first milliseconds and bend the last 25 ms smoothly onto the loop start, so the seam is continuous.
+function seamless(buf) {
+  const sr = buf.sampleRate, M = Math.round(sr * 0.025); let lead = 0;
+  const d0 = buf.getChannelData(0); while (lead < sr * 0.01 && Math.abs(d0[lead]) < 0.002) lead++;
+  for (let c = 0; c < buf.numberOfChannels; c++) { const d = buf.getChannelData(c), n = d.length, gap = d[lead] - d[n - 1];
+    for (let i = 0; i < M; i++) { const w = 0.5 - 0.5 * Math.cos(Math.PI * (i + 1) / M); d[n - M + i] += w * gap; } }
+  buf.loopFrom = lead / sr; return buf; }
+// each loop fades in over ~2 s and out over ~3 s, so starting, switching or ending is never a cut
+const loopSrc = (buf, dest) => { const s = actx.createBufferSource(), g = actx.createGain(); s.buffer = buf; s.loop = true; s.loopStart = buf.loopFrom || 0; s.loopEnd = buf.duration; g.gain.value = 0; s.connect(g).connect(dest);
+  return { start() { const t = actx.currentTime; s.start(t); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(1, t + 2); },
+    stop() { const t = actx.currentTime; g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.setTargetAtTime(0, t, 0.7); try { s.stop(t + 5); } catch (e) {} } }; };
 async function song(id) {
-  if (songSrc) { try { songSrc.stop(actx.currentTime + 2); } catch (e) {} songSrc = null; }
+  if (songSrc) { songSrc.stop(); songSrc = null; }
   const k = id && Object.keys(MUSIC).find(m => MUSIC[m].includes(id)); song.on = !!k; levels(); if (!k || !actx) return;
   if (!songG) { songG = actx.createGain(); songG.gain.value = 0; songG.connect(duck); }
   song.cache = song.cache || {};
-  try { if (!song.cache[k]) song.cache[k] = await fetchBuf('media/music/' + k + '.mp3'); if (!bowlBuf) bowlBuf = await fetchBuf('media/music/bowl.mp3'); } catch (e) { song.on = false; levels(); return; }
-  if (!song.on || !P.running) return; songSrc = actx.createBufferSource(); songSrc.buffer = song.cache[k]; songSrc.loop = true; songSrc.connect(songG); songSrc.start(); levels();
+  try { if (!song.cache[k]) song.cache[k] = seamless(await fetchBuf('media/music/' + k + '.mp3')); if (!bowlBuf) bowlBuf = await fetchBuf('media/music/bowl.mp3'); } catch (e) { song.on = false; levels(); return; }
+  if (!song.on || !P.running) return; songSrc = loopSrc(song.cache[k], songG); songSrc.start(); levels();
 }
-function ringBowl(at) { if (!bowlBuf || !actx) return false; const s = actx.createBufferSource(), g = actx.createGain(); s.buffer = bowlBuf; s.playbackRate.value = 0.92 + Math.random() * 0.16; g.gain.value = 0.9; s.connect(g).connect(duck); s.start(at || 0); P.bowlUntil = (at || actx.currentTime) + 7; return true; }
+function ringBowl(at) { if (!bowlBuf || !actx) return false; const s = actx.createBufferSource(), g = actx.createGain(); s.buffer = bowlBuf; s.playbackRate.value = 0.92 + Math.random() * 0.16; g.gain.value = 0.5; /* the bowl peaks at the level of the voice, never above it */ s.connect(g).connect(duck); s.start(at || 0); P.bowlUntil = (at || actx.currentTime) + 7; return true; }
 function bowlTick() {
   if (!actx || !P.room || P.idx < P.m0 || P.idx >= P.m1) return; const now = actx.currentTime, cur = P.phases[P.idx];
   if (cur.bowls) { if (P.bowlIdx !== P.idx) { P.bowlIdx = P.idx; P.bowlNext = now + 9; } if (now >= P.bowlNext && now >= recUntil + 1 && now >= (P.affUntil || 0) + 1) { ringBowl(); P.bowlNext = now + 28 + Math.random() * 6; } return; }
