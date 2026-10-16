@@ -750,6 +750,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
 .small { font-size: 13px; color: #a8a094; }
 .ghost { border: 1px solid rgba(246,241,232,.25); border-radius: 999px; padding: 10px 18px; font-size: 14px; justify-self: start; }
 .ghost:hover { border-color: var(--gold-l); }
+.dask { display: grid; gap: 10px; font-size: 14.5px; color: #e7ddcc; } .dask__b { display: flex; flex-wrap: wrap; gap: 10px; } .dask__b .ghost { color: #f6f1e8; } .dask__b .ghost.on { border-color: var(--gold-l); background: rgba(246,200,110,.16); color: var(--gold-l); }
 /* journal */
 .jgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
 @media (max-width: 1000px) { .jgrid { grid-template-columns: 1fr 1fr; } }
@@ -1260,16 +1261,16 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     </ul>
     <p class="small">Практики помогают расслабиться и лучше понимать себя. Они не заменяют врача, психотерапевта или лечение. Если вам плохо прямо сейчас — позвоните в экстренную службу (112).</p>
     <label class="check"><input type="checkbox" id="safeOk"> Я прочитал(а) и подтверждаю, что практика мне подходит. Ответственность за своё состояние беру на себя.</label>
-    <div class="chk" id="mBefore"><b>Дневник · перед практикой</b><div id="mBeforeQs"></div></div>
+    <div class="chk" id="mBefore"><b>Дневник</b><div class="dask"><span>Заполнить дневник до и после практики? Так видно, что помогает именно вам.</span><div class="dask__b"><button type="button" class="ghost" id="diaryYes">Да</button><button type="button" class="ghost" id="diaryNo">Нет, без дневника</button></div></div><div id="mBeforeQs" class="chk" hidden></div></div>
     <label class="check"><input type="checkbox" id="safeSoft"> Спокойный экран: приглушить изображение (только звук и голос)</label>
     <div class="safe__act"><button class="ghost" id="safeNo" type="button">Не сейчас</button><button class="btn btn--gold" id="safeGo" type="button" disabled>Начать сеанс</button></div>
   </div>
 </div>
 
 <div class="safe" id="after" hidden role="dialog" aria-modal="true" aria-labelledby="afterT"><div class="safe__box">
-  <span class="eyebrow">Практика завершена · дневник</span><h2 id="afterT">Как вы теперь?</h2><p class="small" style="color:#cfc6b8">Ответьте честно — так вы увидите, что вам действительно помогает.</p>
+  <span class="eyebrow" id="afterEye">Практика завершена · дневник</span><h2 id="afterT">Как вы теперь?</h2><p class="small" id="afterIntro" style="color:#cfc6b8">Ответьте честно — так вы увидите, что вам действительно помогает.</p>
   <div class="chk" id="mAfterQs"></div>
-  <label class="chk__note">Что заметили? <span>необязательно</span><textarea id="afterNote" rows="2" maxlength="400" placeholder="Например: стало теплее в груди, мысли тише"></textarea></label>
+  <label class="chk__note" id="afterNoteW">Что заметили? <span>необязательно</span><textarea id="afterNote" rows="2" maxlength="400" placeholder="Например: стало теплее в груди, мысли тише"></textarea></label>
   <div class="side" id="afterSide"><span>Было что-то неприятное?</span><label class="check"><input type="checkbox" value="head"> Головная боль</label><label class="check"><input type="checkbox" value="dizzy"> Головокружение</label><label class="check"><input type="checkbox" value="anx"> Тревога</label></div>
   <p class="after__res" id="afterRes" hidden></p>
   <div class="safe__act"><button class="ghost" id="afterSkip" type="button">Пропустить</button><button class="btn btn--gold" id="afterOk" type="button">Сохранить в дневник</button></div>
@@ -1290,9 +1291,6 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
   <p class="small" style="color:#cfc6b8">Цена видна до оплаты. Напомним до продления. Отмена — в один клик в личном кабинете.</p>
   <p class="small" style="color:#8f8677">Тестовый режим: оплата подключается к запуску, сейчас доступ открывается без списания.</p>
   <div class="safe__act"><button class="ghost" id="buyNo" type="button">Закрыть</button></div>
-</div></div>
-  <p class="after__res" id="afterRes" hidden></p>
-  <div class="safe__act"><button class="btn btn--gold" id="afterOk" type="button">Сохранить результат</button></div>
 </div></div>
 
 <aside class="drawer" id="drawer" aria-label="Звук и голос">
@@ -3129,7 +3127,13 @@ const SIDE_TIP = { head: 'Головная боль: в следующий ра�
 const sideAdvice = side => { if (!side.length) return ''; const week = SESS().filter(x => x.t > Date.now() - 7 * DAY_MS && (x.side || []).includes('head')).length;
   return side.map(k => SIDE_TIP[k]).join('<br>') + (side.includes('head') && week >= 2 ? '<br><b>Голова болела уже несколько раз за неделю — сделайте перерыв в практиках и посоветуйтесь с врачом.</b>' : '') + '<br><br>'; };
 const todayCount = () => { const d = new Date(); d.setHours(0, 0, 0, 0); return SESS().filter(x => x.t >= +d).length; };
-function afterCheck(r, rec) {
+function afterMode(full) { ['mAfterQs', 'afterNoteW', 'afterIntro'].forEach(id => $(id).hidden = !full); $('afterEye').textContent = full ? 'Практика завершена · дневник' : 'Практика завершена'; $('afterT').textContent = full ? 'Как вы теперь?' : 'Как вы себя чувствуете?'; }
+// without the diary: only the safety question about unpleasant effects, then advice if needed
+function sideCheck(rec) { afterMode(false); $('afterSide').querySelectorAll('input').forEach(i => i.checked = false); $('afterRes').hidden = true; $('afterSkip').hidden = true; $('afterOk').textContent = 'Готово'; $('after').hidden = false;
+  $('afterOk').onclick = () => { if (!$('afterRes').hidden) { $('after').hidden = true; return; }
+    rec.side = [...$('afterSide').querySelectorAll('input:checked')].map(i => i.value); const tip = sideAdvice(rec.side); saveSession(rec);
+    if (!tip) { $('after').hidden = true; return; } $('afterRes').innerHTML = tip; $('afterRes').hidden = false; $('afterOk').textContent = 'Закрыть'; }; }
+function afterCheck(r, rec) { afterMode(true);
   const qs = qsFor(r), el = $('mAfterQs'); el.innerHTML = slidersHTML(qs, rec.before); bindSliders(el); $('afterSide').querySelectorAll('input').forEach(i => i.checked = false); $('afterNote').value = ''; $('afterRes').hidden = true; $('after').hidden = false; $('afterOk').textContent = 'Сохранить в дневник'; $('afterSkip').hidden = false;
   $('afterSkip').onclick = () => { saveSession(rec); $('after').hidden = true; };
   $('afterOk').onclick = () => { if (!$('afterRes').hidden) { $('after').hidden = true; return; }
@@ -3142,15 +3146,17 @@ function afterCheck(r, rec) {
 function safety(go) {
   const box = $('safe'), ok = $('safeOk'), soft = $('safeSoft'), sos = !!(P.room && P.room.id === 'sos'); box.classList.toggle('safe--sos', sos);
   ok.checked = +store.get('safeOk') > Date.now() - 864e5 * 30; soft.checked = store.get('soft') === '1'; $('safeGo').disabled = !ok.checked;
-  const r = P.room, qs = r && TARGET[r.id] && !sos ? qsFor(r) : null; if (sos) { ok.checked = true; $('safeGo').disabled = false; } $('safeT').textContent = sos ? 'Одна проверка — и начинаем' : 'Короткая проверка безопасности'; const nToday = todayCount(); $('safeLimit').hidden = sos || nToday < 2; $('safeLimit').textContent = 'Сегодня у вас уже ' + nToday + ' ' + (nToday < 5 ? 'сессии' : 'сессий') + '. Лучше не больше двух в день: сделайте перерыв до завтра или выберите короткое «Дыхание: снять стресс».'; $('mBefore').hidden = !qs; if (qs) { $('mBeforeQs').innerHTML = slidersHTML(qs); bindSliders($('mBeforeQs')); }
+  const r = P.room, qs = r && TARGET[r.id] && !sos ? qsFor(r) : null; if (sos) { ok.checked = true; $('safeGo').disabled = false; } $('safeT').textContent = sos ? 'Одна проверка — и начинаем' : 'Короткая проверка безопасности'; const nToday = todayCount(); $('safeLimit').hidden = sos || nToday < 2; $('safeLimit').textContent = 'Сегодня у вас уже ' + nToday + ' ' + (nToday < 5 ? 'сессии' : 'сессий') + '. Лучше не больше двух в день: сделайте перерыв до завтра или выберите короткое «Дыхание: снять стресс».'; $('mBefore').hidden = !qs; let diary = false; if (qs) { $('mBeforeQs').innerHTML = slidersHTML(qs); bindSliders($('mBeforeQs')); $('mBeforeQs').hidden = true; $('diaryYes').classList.remove('on'); $('diaryNo').classList.remove('on');
+    $('diaryYes').onclick = () => { diary = true; $('mBeforeQs').hidden = false; $('diaryYes').classList.add('on'); $('diaryNo').classList.remove('on'); };
+    $('diaryNo').onclick = () => { diary = false; $('mBeforeQs').hidden = true; $('diaryNo').classList.add('on'); $('diaryYes').classList.remove('on'); }; }
   box.hidden = false; ok.onchange = () => { $('safeGo').disabled = !ok.checked; };
   $('safeNo').onclick = () => { box.hidden = true; };
   $('safeGo').onclick = () => { if (!sos) store.set('safeOk', Date.now()); store.set('soft', soft.checked ? '1' : '0'); $('player').classList.toggle('soft', soft.checked); box.hidden = true;
-    P.rec = qs ? { t: Date.now(), room: r.id, lvl: LEVEL(), planned: sum(P.phases), before: readSliders($('mBeforeQs'), r), course: store.get('activeCourse') || null } : null; P.before = qs ? P.rec.before.own : null; go(); };
+    P.rec = qs ? { t: Date.now(), room: r.id, lvl: LEVEL(), planned: sum(P.phases), diary, before: diary ? readSliders($('mBeforeQs'), r) : null, course: store.get('activeCourse') || null } : null; go(); };   // without the diary the session is still counted: path, daily limit, side effects
 }
 function sessionEnded(done) { const rec = P.rec; P.rec = null; if (!rec) return; rec.elapsed = Math.round(Math.min(P.elapsed, rec.planned)); rec.completed = !!done;
   if (P.room && P.room.sleep) { if (rec.elapsed > 30) saveSession(rec); return; } // asleep: no after-check pop-up
-  if (done) setTimeout(() => afterCheck(P.room, rec), 2200); else if (rec.elapsed > 30) saveSession(rec); }
+  if (done) setTimeout(() => rec.diary ? afterCheck(P.room, rec) : sideCheck(rec), 2200); else if (rec.elapsed > 30) saveSession(rec); }
 
 // ---------- practice of the day: today's transits to the natal chart pick one space ----------
 const DAILY = {
