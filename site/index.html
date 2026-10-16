@@ -213,6 +213,13 @@ body:has(.safe:not([hidden])) :is(.totop, .mbar, .owner-sw), body:has(#player:no
 .room.wide .body { padding: 30px 40px; gap: 12px; }
 .room.wide h3 { font-size: clamp(28px, 2.8vw, 40px); }
 @media (max-width: 800px) { .room.wide { grid-template-columns: minmax(0, 1fr); } .room.wide .art2 { aspect-ratio: 4 / 3; } .room.wide .body { padding: 22px 16px 14px; } }
+.stagehd { grid-column: 1 / -1; display: grid; grid-template-columns: auto 1fr; gap: 4px 18px; align-items: baseline; margin-top: 26px; padding-top: 26px; border-top: 1px solid var(--line); }
+.stagehd:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.stagehd b { grid-row: span 2; font-family: var(--ff-serif); font-size: clamp(34px, 4vw, 48px); line-height: 1; color: var(--gold-d); }
+.stagehd h3 { font-size: clamp(22px, 2.2vw, 28px); letter-spacing: -.02em; } .stagehd p { color: var(--mute); font-size: 15px; } .stagehd p em { color: var(--gold-d); font-style: normal; font-weight: 600; }
+.nextstep:empty { display: none; }
+.nextstep { display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center; justify-content: space-between; margin-bottom: 26px; padding: 18px 22px; border-radius: var(--r-lg); background: var(--white); border: 1px solid var(--gold-l); }
+.nextstep span { display: grid; gap: 4px; } .nextstep small { color: var(--gold-d); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; } .nextstep b { font-size: 18px; } .nextstep p { color: var(--mute); font-size: 14.5px; }
 .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 36px; }
 .filters button { padding: 11px 20px; border-radius: 999px; border: 1px solid var(--line); background: var(--white); font-size: 15px; font-weight: 500; color: var(--ink-2); transition: border-color .3s, background .3s, color .3s; }
 .filters button:hover { border-color: var(--gold-l); }
@@ -875,8 +882,9 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
 
   <section class="section" id="featured">
     <div class="container">
-      <div class="shead"><div><span class="eyebrow">Пространства</span><h2 class="h2">Пространство под каждое состояние, <em>где становится легче.</em></h2></div>
+      <div class="shead"><div><span class="eyebrow">Путь</span><h2 class="h2">Сначала основа, <em>потом трансформация.</em></h2><p class="lead" style="margin-top:14px">Очищение, наполнение и жизненная энергия дают силу. С ней работа с убеждениями, отношениями и деньгами действительно двигается.</p></div>
         <a class="btn btn--line" href="#prostranstva">Все пространства <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
+      <div class="nextstep" id="nextHome"></div>
       <div class="rooms" id="featGrid"></div>
     </div>
   </section>
@@ -1132,11 +1140,12 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     <div class="container">
       <nav class="crumbs" aria-label="Путь"><a href="#top">Главная</a><span>Пространства</span></nav>
       <h1 class="display">Все <em>пространства.</em></h1>
-      <p class="lead">Семнадцать пространств — у каждого своя атмосфера, музыка и свой путь. Выберите то, что откликается сегодня.</p>
+      <p class="lead">21 пространство, выстроенное в путь. Сначала основа: очищение, наполнение чакр и жизненная энергия. Потом — трансформация и воплощение желаний. А дыхание и тишина помогают в любой день, когда нужно снять стресс.</p>
     </div>
   </section>
   <section class="section" style="padding-top:20px">
     <div class="container">
+      <div class="nextstep" id="nextCat"></div>
       <div class="pick">
         <div class="pick__h"><span class="eyebrow">Подбор за 5 секунд</span><h2>Не знаете, с чего начать?</h2><p>Выберите, как вы себя чувствуете, — откроется практика, которая поможет именно сейчас. Впервые здесь — начните с Очищения, оно бесплатное.</p><a class="btn btn--gold" href="#room-cleanse">Начать с Очищения <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
         <div class="pick__g" id="catMoods"></div>
@@ -2281,23 +2290,53 @@ function paint(s, t) {
 const visible = el => { const r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight && r.width > 0 && !el.closest('[hidden]'); };
 
 // ======================= pages =======================
-const CATS = { all: 'Все', state: 'Состояние', heart: 'Сердце и отношения', body: 'Тело', goals: 'Цели и перемены', mind: 'Сознание', habits: 'Привычки' };
+const CATS = { all: 'Путь по этапам', state: 'Состояние', heart: 'Сердце и отношения', body: 'Тело', goals: 'Цели и перемены', mind: 'Сознание', habits: 'Привычки' };
 const CAT = { body: 'body', support: 'heart', awaken: 'mind', sleep: 'state', silence: 'state', breathe: 'state', event: 'state', cleanse: 'state', health: 'body', food: 'body', energy: 'body', release: 'heart', selflove: 'heart', relations: 'heart', abundance: 'goals', luck: 'goals', purpose: 'goals', blinders: 'goals', ajna: 'mind', chakras: 'mind', habits: 'habits' };
 const ARROW = '<svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg>';
 const roomVisual = r => ({ visual: r.main[0].visual === 'silence' && r.id === 'purpose' ? 'purpose' : r.main[0].visual, ci: r.ci, active: r.id === 'chakras' ? 5 : undefined });
 function card(r, wide) {
   const a = document.createElement('a'); a.className = 'room' + (wide ? ' wide' : ''); a.href = '#room-' + r.id; a.style.setProperty('--rc', rgba(r.color, 1)); a.dataset.id = r.id;
-  a.innerHTML = '<div class="art2"><canvas></canvas><span class="num">' + String(ROOMS.indexOf(r) + 1).padStart(2, '0') + '</span><span class="tag ' + r.ev[0] + '">' + r.ev[1].split(' · ')[0] + '</span></div>' +
+  a.innerHTML = '<div class="art2"><canvas></canvas><span class="num">' + (stageOf(r.id).n === '∞' ? '∞' : 'Этап ' + stageOf(r.id).n) + '</span><span class="tag ' + r.ev[0] + '">' + r.ev[1].split(' · ')[0] + '</span></div>' +
     '<div class="body"><h3>' + r.name + '</h3><p>' + r.tag + '</p><div class="meta"><span>' + mins(sum(phasesFor(r))) + (ROOM_HZ[r.id] ? ' · ' + ROOM_HZ[r.id][0] + ' Гц' : '') + '</span><span>Войти ' + ARROW + '</span></div></div>';
   a._surf = surface(a.querySelector('canvas'), { cyr: 0.5, mr: 1, visual: roomVisual(r) });
   return a;
 }
-const FEATURED = ['blinders', 'cleanse', 'energy', 'breathe', 'release', 'selflove', 'event'];
-FEATURED.forEach(id => { const r = ROOMS.find(x => x.id === id); $('featGrid').appendChild(card(r, !!r.wide)); });
-const catCards = ROOMS.map(r => { const a = card(r, !!r.wide); if (r.pro) a.dataset.pro = '1'; $('roomGrid').appendChild(a); return a; });
+// the path: a foundation first (cleansing, filling, life energy), then transformation and making wishes real;
+// the order is shown and recommended, every space stays open
+const PATH = [
+  { n: '1', name: 'Очищение', sub: 'Каждый день, от 3 до 10 дней — сколько нужно именно вам.', rooms: ['cleanse'], goal: ['cleanse', 3] },
+  { n: '2', name: 'Очищение и наполнение', sub: 'Через день: сегодня очищение, завтра — наполнение всех чакр. Около недели.', rooms: ['chakras'], goal: ['chakras', 3] },
+  { n: '3', name: 'Жизненная энергия', sub: 'Наполниться силой. Без неё следующие шаги работают слабо.', rooms: ['energy'], goal: ['energy', 3] },
+  { n: '4', name: 'Трансформация', sub: 'Когда основа пройдена: убеждения, обиды, любовь к себе, отношения, тело и привычки.', rooms: ['blinders', 'release', 'selflove', 'relations', 'health', 'food', 'habits', 'support'] },
+  { n: '5', name: 'Воплощение', sub: 'Когда есть энергия и сняты внутренние границы: деньги, удача, предназначение.', rooms: ['abundance', 'luck', 'purpose'] },
+  { n: '6', name: 'Для практикующих', sub: 'Глубокие практики сознания — после нескольких недель на пути.', rooms: ['awaken', 'ajna'] },
+  { n: '∞', name: 'В любой день', sub: 'Утром, на работе, перед сном — когда нужно снять стресс. Не зависит от этапа.', rooms: ['breathe', 'silence', 'body', 'event', 'sleep'] }
+];
+const stageOf = id => PATH.find(s => s.rooms.includes(id));
+const doneIn = id => SESS().filter(x => x.room === id && x.completed).length;
+// what to do today: cleansing first, then cleansing and filling on alternate days, then life energy
+function nextStep() {
+  const c = doneIn('cleanse'), f = doneIn('chakras'), e = doneIn('energy'), last = (SESS().filter(x => x.completed && ['cleanse', 'chakras'].includes(x.room)).pop() || {}).room;
+  if (c < 3) return ['cleanse', 'Этап 1 · Очищение', 'Очищение — день ' + (c + 1), 'Начинаем с очищения: 3–10 дней подряд. Потом — наполнение и жизненная энергия.'];
+  if (f < 3) return last === 'cleanse' ? ['chakras', 'Этап 2 · Очищение и наполнение', 'Сегодня — наполнение чакр', 'Чередуйте: день очищения, день наполнения. Наполнений: ' + f + ' из 3.']
+    : ['cleanse', 'Этап 2 · Очищение и наполнение', 'Сегодня — очищение', 'Чередуйте: день очищения, день наполнения. Наполнений: ' + f + ' из 3.'];
+  if (e < 3) return ['energy', 'Этап 3 · Жизненная энергия', 'Жизненная энергия — день ' + (e + 1), 'Наполнитесь силой: 3 сессии, и основа пройдена.'];
+  return ['blinders', 'Основа пройдена', 'Начните трансформацию', 'Энергия есть — время работать с убеждениями, отношениями и желаниями. Очищение и наполнение — раз в неделю для поддержки.'];
+}
+function renderNext() { const [id, small, b, p] = nextStep(), r = ROOMS.find(x => x.id === id);
+  const html = '<span><small>Ваш следующий шаг · ' + small + '</small><b>' + b + '</b><p>' + p + '</p></span><a class="btn btn--gold" href="#room-' + id + '">' + r.name + ' ' + ARROW + '</a>';
+  $('nextHome').innerHTML = html; $('nextCat').innerHTML = html; }
+const FEATURED = ['cleanse', 'chakras', 'energy', 'blinders', 'abundance', 'breathe'];
+FEATURED.forEach(id => { const r = ROOMS.find(x => x.id === id); $('featGrid').appendChild(card(r, false)); });
+const stageHds = [];
+const catCards = PATH.flatMap(st => { const h = document.createElement('div'); h.className = 'stagehd'; h._st = st; stageHds.push(h); $('roomGrid').appendChild(h);
+  return st.rooms.map(id => { const r = ROOMS.find(x => x.id === id), a = card(r, st.rooms.length === 1); if (r.pro) a.dataset.pro = '1'; $('roomGrid').appendChild(a); return a; }); });
+function renderPath() { stageHds.forEach(h => { const st = h._st, g = st.goal, d = g ? doneIn(g[0]) : 0;
+  h.innerHTML = '<b>' + st.n + '</b><h3>' + st.name + '</h3><p>' + st.sub + (g ? ' <em>Пройдено: ' + Math.min(d, g[1]) + ' из ' + g[1] + (d >= g[1] ? ' ✓' : '') + '</em>' : '') + '</p>'; }); renderNext(); }
+setTimeout(renderPath, 0);   // the diary helpers are defined further down
 function filterCat(c) {
   [...$('filters').children].forEach(b => b.setAttribute('aria-pressed', b.dataset.c === c));
-  catCards.forEach(a => { const r = ROOMS.find(x => x.id === a.dataset.id); a.hidden = c !== 'all' && CAT[r.id] !== c; a.classList.toggle('wide', c === 'all' && !!r.wide); a._surf.dirty = true; });
+  catCards.forEach(a => { const r = ROOMS.find(x => x.id === a.dataset.id); a.hidden = c !== 'all' && CAT[r.id] !== c; a.classList.toggle('wide', c === 'all' && stageOf(r.id).rooms.length === 1); a._surf.dirty = true; }); stageHds.forEach(h => h.hidden = c !== 'all');
 }
 $('filters').innerHTML = Object.entries(CATS).map(([k, v]) => '<button type="button" data-c="' + k + '" aria-pressed="' + (k === 'all') + '">' + v + '</button>').join('');
 $('filters').addEventListener('click', e => { const b = e.target.closest('button[data-c]'); if (b) filterCat(b.dataset.c); });
@@ -2520,7 +2559,7 @@ function showRoom(id) {
   curRoom = r; r.enterT = performance.now() / 1000; show('roomPage');
   document.querySelectorAll('.rhero .warpv').forEach(v => v.remove()); warp($('roomCv'), 2.6, 6.4);
   const idx = ROOMS.indexOf(r);
-  $('rNum').textContent = 'Пространство ' + String(idx + 1).padStart(2, '0') + ' · ' + CATS[CAT[r.id]];
+  const st = stageOf(r.id); $('rNum').textContent = (st.n === '∞' ? 'В любой день' : 'Этап ' + st.n + ' · ' + st.name) + ' · ' + CATS[CAT[r.id]];
   $('rCrumb').textContent = r.name;
   $('rName').textContent = r.name; $('rTag').textContent = r.tag;
   $('rChips').innerHTML = '<span class="chip">' + mins(sum(phasesFor(r))) + '</span><span class="chip">' + r.ev[1] + '</span><span class="chip">Наушники</span><span class="chip">' + (r.main.some(p => eyesOf(p) === 'open') ? 'Есть шаги с открытыми глазами' : 'Можно с закрытыми глазами') + '</span>';
@@ -2614,7 +2653,7 @@ function loadKarta() {
   io.observe(sec); })();
 function route() {
   const h = location.hash.slice(1);
-  if (h === 'prostranstva') { show('catalog'); scrollTo(0, 0); }
+  if (h === 'prostranstva') { renderPath(); show('catalog'); scrollTo(0, 0); }
   else if (h === 'zhurnal') { show('journal'); scrollTo(0, 0); }
   else if (h === 'kabinet') { show('cabinet'); scrollTo(0, 0); renderCabinet(); }
   else if (h === 'karta') { show('karta'); scrollTo(0, 0); loadKarta(); }
@@ -2912,7 +2951,7 @@ const slidersHTML = (qs, vals, pre) => qs.map(([k, q, lo, hi]) => '<div class="m
 const bindSliders = el => el.querySelectorAll('input[type=range]').forEach(i => i.oninput = () => i.closest('.mood10').querySelector('em').textContent = i.value);
 const readSliders = (el, r) => { const o = {}; el.querySelectorAll('input[type=range]').forEach(i => o[i.dataset.k] = +i.value); const m = r && TARGET[r.id].m[4]; if (m && /тревог|напряж/.test(m)) o.anx = o.own; if (m && /энерги/.test(m)) o.energy = o.own; return o; };
 const SESS = () => J('diary', []);
-function saveSession(rec) { const l = SESS(); l.push(rec); SJ('diary', l.slice(-500)); const res = J('res-' + rec.room, []); if (rec.after) { res.push({ t: rec.t, b: rec.before.own, a: rec.after.own }); SJ('res-' + rec.room, res.slice(-60)); } }
+function saveSession(rec) { const l = SESS(); l.push(rec); SJ('diary', l.slice(-500)); renderPath(); const res = J('res-' + rec.room, []); if (rec.after) { res.push({ t: rec.t, b: rec.before.own, a: rec.after.own }); SJ('res-' + rec.room, res.slice(-60)); } }
 
 // unpleasant effects after a session: advice right away, and a doctor if headaches repeat
 const SIDE_TIP = { head: 'Головная боль: в следующий раз дышите мягче, не глубже обычного, держите лоб расслабленным и сделайте звук тише. Сделайте перерыв на день-два.',
@@ -2984,12 +3023,12 @@ function fillDaily(el) {
 
 // ---------- courses ----------
 const COURSES = [
-  { id: 'sleep14', name: 'Крепкий сон · 14 дней', for: 'Долго не могу уснуть, просыпаюсь ночью', days: ['cleanse', 'sleep', 'breathe', 'sleep', 'release', 'sleep', 'silence', 'sleep', 'selflove', 'sleep', 'breathe', 'sleep', 'release', 'sleep'], why: 'Днём — короткая практика, которая снимает напряжение, вечером в постели — «Глубокий сон». Чередование учит тело засыпать без борьбы, а дневник показывает, как меняется сон.' },
-  { id: 'reset7', name: 'Перезагрузка за 7 дней', for: 'Устали, всё навалилось, нужно восстановиться', days: ['cleanse', 'breathe', 'energy', 'silence', 'cleanse', 'selflove', 'purpose'], why: 'Сначала очищение и дыхание снимают напряжение, затем возвращаем силы, тишину и тепло к себе, а в конце — ясность, куда двигаться дальше.' },
-  { id: 'calm14', name: 'Спокойствие за 14 дней', for: 'Тревога, мысли по кругу, плохо спится', days: ['cleanse', 'breathe', 'silence', 'breathe', 'release', 'silence', 'cleanse', 'breathe', 'selflove', 'silence', 'release', 'breathe', 'silence', 'purpose'], why: 'Дыхание и тишина чередуются каждый день: так навык успокаиваться закрепляется. Отпускание и тепло к себе убирают источник напряжения.' },
-  { id: 'habit21', name: 'Свобода от привычки · 21 день', for: 'Курение, алкоголь, сладкое — хочу перестать', days: ['cleanse', 'habits', 'breathe', 'habits', 'energy', 'habits', 'selflove', 'habits', 'breathe', 'habits', 'release', 'habits', 'energy', 'habits', 'silence', 'habits', 'selflove', 'habits', 'blinders', 'habits', 'purpose'], why: 'Практика «Привычки» через день тренирует пережить волну тяги, а между ними — опора: дыхание, энергия, тепло к себе. При физической зависимости — вместе с врачом.' },
-  { id: 'money10', name: 'Деньги и возможности · 10 дней', for: 'Застой, страх просить, хочу больше', days: ['cleanse', 'blinders', 'abundance', 'energy', 'luck', 'blinders', 'event', 'abundance', 'purpose', 'luck'], why: 'Сначала раздвигаем рамки чужих правил, затем тренируем внимание к возможностям и смелость сделать шаг.' },
-  { id: 'love10', name: 'Тепло и отношения · 10 дней', for: 'Обиды, одиночество, сложно с близкими', days: ['cleanse', 'selflove', 'release', 'selflove', 'relations', 'breathe', 'release', 'relations', 'selflove', 'relations'], why: 'Отношения с другими начинаются с отношения к себе: сначала тепло к себе и отпускание обид, потом — близость.' }
+  { id: 'sleep14', name: 'Крепкий сон · 14 дней', for: 'Долго не могу уснуть, просыпаюсь ночью', days: ['cleanse', 'sleep', 'breathe', 'sleep', 'cleanse', 'sleep', 'chakras', 'sleep', 'release', 'sleep', 'selflove', 'sleep', 'silence', 'sleep'], why: 'Днём — короткая практика, которая снимает напряжение, вечером в постели — «Глубокий сон». Чередование учит тело засыпать без борьбы, а дневник показывает, как меняется сон.' },
+  { id: 'reset7', name: 'Перезагрузка за 7 дней', for: 'Устали, всё навалилось, нужно восстановиться', days: ['cleanse', 'breathe', 'cleanse', 'chakras', 'cleanse', 'chakras', 'energy'], why: 'Сначала очищение и дыхание снимают напряжение, затем через день очищение и наполнение чакр, а в конце — жизненная энергия, чтобы силы вернулись.' },
+  { id: 'calm14', name: 'Спокойствие за 14 дней', for: 'Тревога, мысли по кругу, плохо спится', days: ['breathe', 'cleanse', 'silence', 'cleanse', 'chakras', 'breathe', 'cleanse', 'chakras', 'silence', 'energy', 'release', 'breathe', 'selflove', 'silence'], why: 'Дыхание и тишина каждый день снимают напряжение, а под ними — основа: очищение, наполнение и энергия. Отпускание и тепло к себе убирают источник тревоги.' },
+  { id: 'habit21', name: 'Свобода от привычки · 21 день', for: 'Курение, алкоголь, сладкое — хочу перестать', days: ['cleanse', 'breathe', 'cleanse', 'chakras', 'cleanse', 'chakras', 'energy', 'habits', 'breathe', 'habits', 'energy', 'habits', 'selflove', 'habits', 'breathe', 'habits', 'release', 'habits', 'energy', 'habits', 'silence'], why: 'Первая неделя — основа: очищение, наполнение и энергия, чтобы было на что опереться. Дальше практика «Привычки» через день учит пережить волну тяги. При физической зависимости — вместе с врачом.' },
+  { id: 'money10', name: 'Деньги и возможности · 14 дней', for: 'Застой, страх просить, хочу больше', days: ['cleanse', 'cleanse', 'chakras', 'cleanse', 'chakras', 'energy', 'energy', 'blinders', 'blinders', 'abundance', 'luck', 'event', 'abundance', 'purpose'], why: 'Без энергии на деньги не поработаешь. Сначала основа: очищение, наполнение и жизненная энергия. Потом раздвигаем внутренние границы и только затем работаем на изобилие, удачу и смелые шаги.' },
+  { id: 'love10', name: 'Тепло и отношения · 14 дней', for: 'Обиды, одиночество, сложно с близкими', days: ['cleanse', 'cleanse', 'chakras', 'cleanse', 'chakras', 'energy', 'selflove', 'release', 'selflove', 'relations', 'release', 'relations', 'selflove', 'relations'], why: 'Сначала основа: очищение, наполнение и энергия. Потом отношения с собой — тепло к себе и отпускание обид — и только затем близость с другими.' }
 ];
 const courseProgress = c => { const done = SESS().filter(x => x.course === c.id && x.completed).length; return Math.min(done, c.days.length); };
 
