@@ -2756,7 +2756,19 @@ let bowlO = null, bowlG = null;
 const SOL = [396, 417, 528, 639, 741, 852, 963];
 // each space's own frequency (by the popular solfeggio/«angel numbers» tradition) — a quiet drone under the whole session
 let droneO = null, droneG = null;
-function drone(f) { if (!actx) return;
+// recorded solfeggio beds (bass, a slow swell every ~3 s, a 1–3 Hz difference between the ears in 417 and 528):
+// a seamless 3-minute loop replaces the synthesised drone in the spaces tuned to these frequencies
+const HZ_TRACK = [174, 285, 396, 417, 528];
+let trackG = null, trackSrc = null;
+async function bed(f) {
+  if (trackSrc) { try { trackSrc.stop(actx.currentTime + 2); } catch (e) {} trackSrc = null; }
+  bed.on = HZ_TRACK.includes(f); if (!bed.on || !actx) return;
+  if (!trackG) { trackG = actx.createGain(); trackG.gain.value = 0; trackG.connect(duck); }
+  bed.cache = bed.cache || {};
+  try { if (!bed.cache[f]) { const r = await fetch('media/hz/' + f + '.mp3'); bed.cache[f] = await actx.decodeAudioData(await r.arrayBuffer()); } } catch (e) { bed.on = false; return; }
+  if (!bed.on) return; trackSrc = actx.createBufferSource(); trackSrc.buffer = bed.cache[f]; trackSrc.loop = true; trackSrc.connect(trackG); trackSrc.start();
+}
+function drone(f) { if (!actx) return; bed(f); if (HZ_TRACK.includes(f)) f = 0;
   if (!droneO) { droneG = actx.createGain(); droneG.gain.value = 0; droneG.connect(duck); droneO = [1, 0.5].map((m, i) => { const o = actx.createOscillator(), g = actx.createGain(); o.type = 'sine'; g.gain.value = [1, 0.4][i]; o.connect(g).connect(droneG); o.start(); return { o, m }; }); }
   droneO.forEach(v => v.o.frequency.setTargetAtTime((f || 200) * v.m, actx.currentTime, 2)); drone.on = !!f; }
 // the step's tone: its focus centre; heart (639) for entry, breathing and ending; 174 Hz for sleep
@@ -2981,7 +2993,7 @@ async function play() {
   poke();
 }
 function stop(done) {
-  if (!P.running) return; if (droneG) droneG.gain.setTargetAtTime(0, actx.currentTime, 1.5); P.running = false; P.paused = false; sayTok++; fly(null); vis(null); if (synth) synth.cancel(); levels(done ? 5 : 0.6);
+  if (!P.running) return; if (droneG) droneG.gain.setTargetAtTime(0, actx.currentTime, 1.5); if (trackG) trackG.gain.setTargetAtTime(0, actx.currentTime, 1.5); bed(0); P.running = false; P.paused = false; sayTok++; fly(null); vis(null); if (synth) synth.cancel(); levels(done ? 5 : 0.6);
   if (P.elapsed > 240) markPractice();
   sessionEnded(done);
   if (done) { bell(3, 220); $('pPhase').textContent = 'Сессия завершена'; $('pInstr').textContent = 'Посидите минуту с закрытыми глазами. Заметьте, что изменилось. Каждая практика — ещё один шаг.'; }
@@ -3233,6 +3245,7 @@ function frame(now) {
       const st = ph.breath ? breathAt(ph.breath, pt) : null;
       if (actx && breathGain) { const on = st && $('sbreath').checked, lvl = on ? (ph.cue ? 0.42 : 0.2) * (0.06 + 0.94 * st.b) : 0; breathGain.gain.setTargetAtTime(lvl, actx.currentTime, 0.18); breathLP.frequency.setTargetAtTime(280 + 1400 * (st ? st.b : 0), actx.currentTime, 0.18); }
       if (droneG) droneG.gain.setTargetAtTime(drone.on && P.running && !P.paused && $('music').checked ? 0.04 : 0, actx.currentTime, 1.2);
+      if (trackG) trackG.gain.setTargetAtTime(bed.on && P.running && !P.paused && $('music').checked ? 0.55 : 0, actx.currentTime, 1.5);
       if (bowlG) bowlG.gain.setTargetAtTime(bowl.on && P.running && !P.paused && $('music').checked ? 0.055 * (0.45 + 0.55 * (st ? 1 - st.b : 0.5)) : 0, actx.currentTime, 0.4);
       if (!P.paused) affTick();
       if (st && ph.cue && st.label !== P.lastLabel) { if (P.lastLabel && st.label !== 'Пауза' && ($('vBreath').checked || ph.guideBreath) && !(actx && actx.currentTime < recUntil) && !playRec(breathKey(st.label, ph)) && synth && !synth.speaking) speak([st.label], { rate: 0.7, gap: 0 }); P.lastLabel = st.label; }
