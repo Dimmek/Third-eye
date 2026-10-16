@@ -1333,7 +1333,7 @@ const COCOON = { key: 'cocoon', name: 'Золотая сфера', dur: 180, vis
   say: SPHERE_STAGES.flatMap(x => x[1]) };
 const BREATHE = { key: 'breath', name: 'Успокоение', dur: 90, visual: 'breath', breath: 'guide', beat: 10, tone: 3, cue: true, guideBreath: true, eyes: 'any',
   text: 'Ноги на полу, спина ровная. Вдох через нос на 4 счёта, выдох через рот на 6. Считайте вместе с голосом: шар растёт — вдох, уменьшается — выдох.',
-  say: ['Сядьте поудобнее.', 'Поставьте обе ступни на пол.', 'Спину держите ровно, а плечи пусть опустятся. Руки спокойно лежат на коленях.', 'Сейчас мы немного подышим вместе: вдыхайте носом на четыре счёта, а выдыхайте ртом, медленно, на шесть.', 'Дышите мягко, не глубже, чем вам удобно.', 'Я буду считать, а вы просто дышите со мной.'] };
+  say: ['Сядьте поудобнее.', 'Поставьте обе ступни на пол.', 'Спину держите ровно, а плечи пусть опустятся. Руки спокойно лежат на коленях.', 'Сейчас мы немного подышим вместе: вдыхайте носом, считая до четырёх, а выдыхайте ртом, медленно, считая до шести.', 'Дышите мягко, не глубже, чем вам удобно.', 'Я буду считать, а вы просто дышите со мной.'] };
 const INTENT_PH = { key: 'intent', name: 'Намерение', dur: 30, visual: 'breath', breath: 'calm', beat: 10, tone: 3, eyes: 'open', text: 'Прочитайте намерение и произнесите его про себя.', say: ['Давайте начнём с намерения.', 'Прочитайте его на экране и тихо повторите про себя.'] };
 const CLEAN = { key: 'clean', name: 'Очищение чакр', dur: 630, visual: 'chakras', breath: 'long', beat: 8, tone: 6, eyes: 'any', seq: 'clean',
   text: 'По одной чакре, снизу вверх: мягкий бело-золотой свет омывает чакру и уносит всё чужое вниз, в землю.', say: ['Теперь давайте очистим чакры, одну за другой, снизу вверх.', 'Начнём с первой.'] };
@@ -1496,11 +1496,11 @@ const ROOMS = [
       R(90, 'Один шаг', 'purpose', 'Один маленький шаг сегодня или завтра: звонок, письмо, вопрос.', ['Выберите один маленький шаг — на сегодня или на завтра.', 'Один звонок, одно письмо, один вопрос.', 'Шаг за шагом мир становится шире.'], { beat: 10 })
     ] },
   { id: 'breathe', name: 'Дыхание: снять стресс', ci: 4, tag: 'Три техники дыхания, когда напряжение уже на пределе.', ev: ['t-a', 'Стресс · подтверждено'],
-    whyT: 'Самый быстрый путь к покою', why: 'Дыхание работает само, но им можно управлять. Длинный выдох включает систему отдыха. Здесь три техники по очереди: двойной вдох с длинным выдохом, квадрат и резонансное дыхание. Их можно взять с собой в любой трудный момент.',
+    whyT: 'Самый быстрый путь к покою', why: 'Дыхание работает само, но им можно управлять. Длинный выдох включает систему отдыха. Здесь три техники по очереди: двойной вдох с длинным выдохом, дыхание 4–6 и резонансное дыхание. Все — без задержек. Их можно взять с собой в любой трудный момент.',
     note: '<b>Основа:</b> «циклический вздох»: 5 минут в день улучшали настроение сильнее, чем медитация осознанности (Balban и соавт., 2023). Резонансное дыхание: мета-анализ по стрессу и тревоге.',
     main: [
       R(150, 'Циклический вздох', 'breath', 'Два вдоха носом подряд и длинный медленный выдох ртом.', ['Сделайте два вдоха носом подряд — второй короткий, добирающий.', 'И длинный, медленный выдох ртом.', 'Продолжайте в этом ритме.'], { breath: 'sigh', cue: true, beat: 10 }),
-      R(120, 'Квадрат', 'breath', 'Вдох на четыре, пауза, выдох на четыре, пауза.', ['Теперь дыхание квадратом.', 'Вдох на четыре счёта, пауза, выдох на четыре, пауза.', 'Шары по бокам помогут держать ритм.'], { breath: 'box', cue: true, beat: 10 }),
+      R(120, 'Длинный выдох', 'breath', 'Вдох носом на четыре счёта, выдох ртом на шесть. Без задержек.', ['Теперь дышим, как в начале: вдох носом, считая до четырёх, и медленный выдох ртом, считая до шести.', 'Выдох длиннее вдоха — так тело успокаивается быстрее.', 'Шары по бокам помогут держать ритм.'], { breath: 'calm', cue: true, beat: 10 }),
       R(150, 'Резонанс', 'breath', 'Пять с половиной вдохов в минуту. Мягко, животом.', ['И самое мягкое дыхание.', 'Вдох и выдох одинаковые, спокойные.', 'Тело отдыхает.'], { cue: true, beat: 8 })
     ] },
   { id: 'event', name: 'Перед важным событием', ci: 2, tag: 'Встреча, экзамен, выступление: спокойствие и опора внутри.', ev: ['t-a', 'Волнение · исследования'],
@@ -2763,7 +2763,7 @@ let trackG = null, trackSrc = null;
 async function bed(f) {
   if (trackSrc) { try { trackSrc.stop(actx.currentTime + 2); } catch (e) {} trackSrc = null; }
   bed.on = HZ_TRACK.includes(f); if (!bed.on || !actx) return;
-  if (!trackG) { trackG = actx.createGain(); trackG.gain.value = 0; trackG.connect(duck); }
+  if (!trackG) { trackG = actx.createGain(); trackG.gain.value = 0; const hp = actx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 120; hp.Q.value = 0.5; trackG.connect(hp).connect(duck); }   // no rumble: the low end is cut
   bed.cache = bed.cache || {};
   try { if (!bed.cache[f]) { const r = await fetch('media/hz/' + f + '.mp3'); bed.cache[f] = await actx.decodeAudioData(await r.arrayBuffer()); } } catch (e) { bed.on = false; return; }
   if (!bed.on) return; trackSrc = actx.createBufferSource(); trackSrc.buffer = bed.cache[f]; trackSrc.loop = true; trackSrc.connect(trackG); trackSrc.start();
@@ -2790,7 +2790,7 @@ function bowl(f) { // the focus centre's solfeggio tone (with a soft sub-octave)
 function levels(tc) {
   if (!actx) return; const t = actx.currentTime, on = P.running && !P.paused;
   master.gain.setTargetAtTime(on ? volGain() : 0, t, tc || 0.4);
-  beatGain.gain.setTargetAtTime(beatOn && $('beat').checked ? 1 : 0, t, 0.6);
+  beatGain.gain.setTargetAtTime(beatOn && $('beat').checked ? 0.55 : 0, t, 0.6);   // the binaural layer stays in the background
   noiseGain.gain.setTargetAtTime($('noise').checked ? 0.5 : 0, t, 0.5);
   padBus.gain.setTargetAtTime($('music').checked ? 0.55 : 0, t, 1.5);
   melBus.gain.setTargetAtTime($('music').checked && $('melody').checked ? 0.5 : 0, t, 1);
@@ -3245,7 +3245,7 @@ function frame(now) {
       const st = ph.breath ? breathAt(ph.breath, pt) : null;
       if (actx && breathGain) { const on = st && $('sbreath').checked, lvl = on ? (ph.cue ? 0.42 : 0.2) * (0.06 + 0.94 * st.b) : 0; breathGain.gain.setTargetAtTime(lvl, actx.currentTime, 0.18); breathLP.frequency.setTargetAtTime(280 + 1400 * (st ? st.b : 0), actx.currentTime, 0.18); }
       if (droneG) droneG.gain.setTargetAtTime(drone.on && P.running && !P.paused && $('music').checked ? 0.04 : 0, actx.currentTime, 1.2);
-      if (trackG) trackG.gain.setTargetAtTime(bed.on && P.running && !P.paused && $('music').checked ? 0.9 : 0, actx.currentTime, 1.5);
+      if (trackG) trackG.gain.setTargetAtTime(bed.on && P.running && !P.paused && $('music').checked ? 0.7 : 0, actx.currentTime, 1.5);
       if (bowlG) bowlG.gain.setTargetAtTime(bowl.on && P.running && !P.paused && $('music').checked ? 0.055 * (0.45 + 0.55 * (st ? 1 - st.b : 0.5)) : 0, actx.currentTime, 0.4);
       if (!P.paused) affTick();
       if (st && ph.cue && st.label !== P.lastLabel) { if (P.lastLabel && st.label !== 'Пауза' && ($('vBreath').checked || ph.guideBreath) && !(actx && actx.currentTime < recUntil) && !playRec(breathKey(st.label, ph)) && synth && !synth.speaking) speak([st.label], { rate: 0.7, gap: 0 }); P.lastLabel = st.label; }
