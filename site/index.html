@@ -1285,6 +1285,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
     <button class="ghost" id="testVoice" type="button">Послушать</button>
     <label class="check"><input type="checkbox" id="vInstr" checked> Голос ведёт по сеансу</label>
     <label class="check"><input type="checkbox" id="vBreath"> Подсказывать «вдох» и «выдох» голосом</label>
+    <label class="check"><input type="checkbox" id="vAff" checked> Фоновые аффирмации — тихий голос в паузах</label>
     <p class="small" id="voiceNote"></p></div>
   <div class="sect"><span class="eyebrow">Звук</span>
     <input type="range" id="vol" min="0" max="100" value="30" aria-label="Громкость">
@@ -1342,6 +1343,23 @@ const FILL = { key: 'fill', name: 'Запуск чакр', dur: 280, visual: 'ch
 const TUNE = { key: 'tune', name: 'Настройка чакр', dur: 120, visual: 'chakras', breath: 'resonance', beat: 8, tone: 3, eyes: 'any',
   text: 'Бело-золотой свет проходит через все семь чакр: очищает их, наполняет цветом и выравнивает в общий ритм.',
   say: ['Теперь коротко настроим чакры.', 'Сверху, через макушку, опускается мягкий бело-золотой свет.', 'Он проходит через все семь чакр, от макушки до копчика, и мягко очищает их.', 'Каждая чакра наполняется своим цветом, и все они начинают светиться вместе, в одном ритме.', 'Побудьте в этом ощущении. Дальше — ваша практика.'] };
+// quiet affirmations in the silences of goal-oriented spaces: warm, in the present, about movement, never denying anything
+const AFF = {
+  common: ['Ты заслуживаешь всего самого хорошего.', 'Ты хороший человек, и это видно.', 'В тебе много тепла и света.', 'У тебя получается — шаг за шагом.', 'Всё, что тебе нужно, уже есть внутри тебя.', 'Ты идёшь своим путём, и он ведёт тебя туда, куда нужно.', 'Жизнь поддерживает тебя.', 'Ты можешь доверять себе.'],
+  energy: ['С каждым вдохом сил становится больше.', 'Энергия свободно течёт через всё твоё тело.', 'Твоя сила просыпается и растёт.', 'Энергии хватает на всё, что для тебя важно.', 'Ты наполняешься жизнью до кончиков пальцев.', 'Твоя энергия ведёт тебя к твоим желаниям.', 'В тебе столько силы, сколько нужно для перемен.', 'Каждое утро ты просыпаешься с новыми силами.'],
+  blinders: ['Мир шире, чем казалось.', 'Ты выбираешь, во что верить.', 'Перед тобой открываются новые пути.', 'Смелость растёт в тебе с каждым днём.', 'Каждый шаг расширяет твои возможности.', 'Ты видишь больше, чем раньше.', 'Новое приходит в твою жизнь легко.', 'Тебе по силам гораздо больше, чем казалось раньше.'],
+  release: ['С каждым выдохом становится легче.', 'Ты отпускаешь то, что больше не нужно.', 'Прошлое учит, но больше не держит тебя.', 'В сердце становится просторнее.', 'Ты выбираешь покой.', 'Ты освобождаешь место для нового.', 'Тепло возвращается в твоё сердце.', 'Ты идёшь дальше налегке.'],
+  selflove: ['Ты относишься к себе с теплом.', 'Тебя можно любить просто за то, что ты есть.', 'Твои чувства важны.', 'Ты встречаешь себя с нежностью.', 'С каждым днём ты принимаешь себя всё больше.', 'В тебе много красоты — внутри и снаружи.', 'Ты дружишь с собой.', 'Ты делаешь для себя много хорошего.'],
+  relations: ['Ты заслуживаешь любви.', 'Ты открываешься новым тёплым знакомствам.', 'Рядом с тобой появляются добрые, надёжные люди.', 'Тебя любят просто за то, что ты есть.', 'Любовь приходит в твою жизнь естественно.', 'В твоих отношениях становится больше тепла и понимания.', 'Твоё сердце открыто, и это прекрасно.', 'Ты встречаешь людей, с которыми легко и радостно.'],
+  health: ['Твоё тело знает, как восстанавливаться.', 'Каждая клетка наполняется покоем.', 'Силы возвращаются к тебе.', 'Ты бережно заботишься о своём теле.', 'С каждым выдохом тело отдыхает глубже.', 'Тело отвечает тебе благодарностью.', 'В тебе прибывают здоровье и лёгкость.', 'Ты чувствуешь себя всё лучше и лучше.'],
+  food: ['Ты слышишь своё тело.', 'Ты ешь спокойно и с удовольствием.', 'Ты замечаешь, когда уже достаточно.', 'Ты даёшь себе ту заботу, которая действительно нужна.', 'Ты и твоё тело — в согласии.', 'Каждый твой выбор — это забота о себе.', 'Ты находишь радость во многом, что тебя окружает.', 'Лёгкость приходит в твоё тело естественно.'],
+  habits: ['Каждый раз ты выбираешь себя.', 'Тяга приходит и уходит, а свобода остаётся с тобой.', 'С каждым днём становится легче.', 'Ты уже на пути к свободе.', 'Ты сильнее любой волны.', 'Твоё тело благодарит тебя за этот выбор.', 'Каждый свободный день — твоя победа.', 'Ты дышишь свободно и легко.'],
+  support: ['Тебя поддерживают.', 'Помощь приходит вовремя.', 'Рядом есть те, кто на твоей стороне.', 'Можно опереться и отдохнуть.', 'Тебя бережно хранят.', 'Поддержка всегда рядом с тобой.', 'Мир заботится о тебе.', 'Твои просьбы слышат.'],
+  abundance: ['Ты открываешься новым возможностям.', 'Деньги приходят к тебе честным путём.', 'Ты умеешь принимать.', 'Твой труд ценят и хорошо оплачивают.', 'Ты замечаешь возможности вокруг себя.', 'Изобилие растёт в твоей жизни день за днём.', 'Ты заслуживаешь достатка и щедро делишься им.', 'Твои доходы растут.'],
+  luck: ['Удача на твоей стороне.', 'Ты оказываешься в нужном месте в нужное время.', 'Нужные люди встречаются на твоём пути.', 'Каждый день приносит хорошие сюрпризы.', 'Хорошие случайности складываются в твою пользу.', 'Ты открываешься новому, и новое открывается тебе.', 'Двери открываются перед тобой одна за другой.', 'Тебе везёт всё чаще.'],
+  purpose: ['Твой путь становится яснее.', 'Ты делаешь то, что откликается в сердце.', 'Твои способности нужны этому миру.', 'Ты доверяешь своему внутреннему голосу.', 'Каждый шаг приближает тебя к твоему делу.', 'В тебе есть дар, и он раскрывается.', 'Ты знаешь, что для тебя по-настоящему важно.', 'То, что ты делаешь, приносит пользу и радость.'],
+  event: ['Твоё волнение — это энергия.', 'Ты говоришь спокойно и уверенно.', 'Тебя слышат.', 'Опора — внутри тебя.', 'Всё складывается хорошо.', 'Ты знаешь и умеешь больше, чем кажется в эту минуту.', 'Ты встречаешь этот день с ясной головой.', 'Твой голос звучит ровно и сильно.']
+};
 // short stress-relief spaces: no chakra work, 10 or 15 minutes
 const QUICK = ['breathe', 'silence', 'body', 'event'];
 const RETURN = { key: 'return', name: 'Завершение', dur: 60, visual: 'breath', breath: 'calm', beat: 8, tone: 3, eyes: 'closed',
@@ -1643,6 +1661,7 @@ const EYES_SAY = { close: ['А теперь мягко закройте глаз
 window.AJNA_SCRIPT = () => {
   const out = [['cocoon', COCOON.say], ['breath', BREATHE.say], ['return', RETURN.say], ['intent', INTENT_PH.say], ['clean', CLEAN.say], ['fill', FILL.say], ['tune', TUNE.say], ['eyes-close', EYES_SAY.close], ['eyes-open', EYES_SAY.open]];
   SPHERE_STAGES.forEach((x, i) => out.push(['cocoon-' + (i + 1), x[1]]));
+  Object.entries(AFF).forEach(([k, l]) => l.forEach((x, i) => out.push(['aff-' + k + '-' + (i + 1), [x]])));
   CH.forEach((c, k) => { CLEAN_SAY(k).forEach((x, n) => out.push(['cl' + (k + 1) + '-' + (n + 1), x[1]])); FILL_SAY(k).forEach((x, n) => out.push(['fl' + (k + 1) + '-' + (n + 1), x[1]])); });
   ROOMS.forEach(r => (r.habit ? Object.keys(HABITS).flatMap(habitMain) : r.main).forEach(s => out.push([s.key, s.say])));
   CH.forEach((c, i) => out.push(['c' + (i + 1), c.say]));
@@ -2712,6 +2731,7 @@ function initAudio() {
     if (pan) { pan.pan.value = det * 0.5; og.connect(pan).connect(padBus); } else og.connect(padBus); o.start(); padVoices.push({ o, mult }); }));
   voiceBus = actx.createGain(); const conv = actx.createConvolver(); conv.buffer = ir(actx, 2.4); const wet = actx.createGain(); wet.gain.value = 0.18;
   voiceBus.connect(actx.destination); voiceBus.connect(conv).connect(wet).connect(actx.destination);
+  affBus = actx.createGain(); affBus.gain.value = 0.24; const affLP = actx.createBiquadFilter(); affLP.type = 'lowpass'; affLP.frequency.value = 3500; affBus.connect(affLP).connect(voiceBus);
 }
 const PENTA = [0, 2, 4, 7, 9, 12, 14, 16, 19];
 function melodyNote() { // a slow random walk on the major pentatonic of the current room's tone
@@ -2782,10 +2802,29 @@ const recorded = {};
 async function loadRecorded() {
   if (!actx || !VOICE_RECORDED || loadRecorded.done === VGENDER) return; loadRecorded.done = VGENDER;
   const g = VGENDER; Object.keys(recorded).forEach(k => delete recorded[k]);
-  const dir = 'voice/' + VLANG + '/' + g + '/'; let keys = []; try { const r = await fetch(dir + 'manifest.json'); if (r.ok) keys = await r.json(); } catch (e) {}
+  const dir = 'voice/' + VLANG + '/' + g + '/'; let keys = []; try { const r = await fetch(dir + 'manifest.json'); if (r.ok) keys = (await r.json()).filter(k => !k.startsWith('aff-')); } catch (e) {}   // affirmations load per space
   await Promise.all(keys.map(async k => { try { const r = await fetch(dir + k + '.mp3'); if (r.ok && VGENDER === g) recorded[k] = await actx.decodeAudioData(await r.arrayBuffer()); } catch (e) {} }));
 }
-let recUntil = 0;
+let recUntil = 0, affBus = null;
+// background affirmations: one phrase every 30–40 s in the main part, each heard about twice a session,
+// never over the guiding voice and not in the first 18 s after it
+$('vAff').checked = store.get('vaff') !== '0'; $('vAff').onchange = () => store.set('vaff', $('vAff').checked ? '1' : '0');
+const shuffle = a => a.map(x => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map(x => x[1]);
+async function loadAff(id) {
+  if (!actx || !VOICE_RECORDED || !AFF[id]) return; const g = VGENDER, dir = 'voice/' + VLANG + '/' + g + '/';
+  const keys = ['common', id].flatMap(k => AFF[k].map((_, i) => 'aff-' + k + '-' + (i + 1))).filter(k => !recorded[k]);
+  await Promise.all(keys.map(async k => { try { const r = await fetch(dir + k + '.mp3'); if (r.ok && VGENDER === g) recorded[k] = await actx.decodeAudioData(await r.arrayBuffer()); } catch (e) {} }));
+}
+function affTick() {
+  if (!actx || !affBus || !P.room || !AFF[P.room.id] || P.idx < P.m0 || P.idx >= P.m1 || !$('vAff').checked) return;
+  const now = actx.currentTime, id = P.room.id;
+  if (P.affRoom !== id) { P.affRoom = id; const one = () => { const s = shuffle(AFF[id].map((_, i) => 'aff-' + id + '-' + (i + 1))), c = shuffle(AFF.common.map((_, i) => 'aff-common-' + (i + 1))); return s.flatMap((k, i) => [k, c[i]]); }; P.affQ = one().concat(one()); P.affNext = 0; }
+  if (now < recUntil + 18) { P.affNext = Math.max(P.affNext, recUntil + 18); return; }
+  if (now < P.affNext) return;
+  const k = P.affQ.shift(), b = k && recorded[k];
+  if (!b) { P.affNext = now + 5; return; }
+  const src = actx.createBufferSource(); src.buffer = b; src.connect(affBus); src.start(); P.affNext = now + b.duration + 30 + Math.random() * 10;
+}
 const COUNT_IN = ['Вдох', 'два', 'три', 'четыре'], COUNT_OUT = ['Выдох', 'два', 'три', 'четыре', 'пять', 'шесть'], COUNTED = 3;
 const breathKey = (label, ph) => { const k = { 'Вдох': 'inhale', 'Выдох': 'exhale' }[label] || ''; if (!k) return '';
   if (k === 'inhale') P.breaths = (P.breaths || 0) + 1; return ph.key === 'breath' && P.breaths <= COUNTED && recorded[k + '-count'] ? k + '-count' : k; };
@@ -2933,7 +2972,7 @@ function chakra(k, mode) {
 }
 async function play() {
   initAudio(); if (actx && actx.state === 'suspended') await actx.resume().catch(() => {});
-  if (!P.running) { await loadRecorded(); P.running = true; P.paused = false; P.elapsed = 0; P.last = performance.now(); enter(0); if (!$('player').classList.contains('soft')) warp($('pCv'), 1.8, 9.4); }
+  if (!P.running) { await loadRecorded(); await loadAff(P.room && P.room.id); P.affRoom = null; P.running = true; P.paused = false; P.elapsed = 0; P.last = performance.now(); enter(0); if (!$('player').classList.contains('soft')) warp($('pCv'), 1.8, 9.4); }
   else { P.paused = !P.paused; P.last = performance.now(); if (P.paused && synth) synth.cancel(); const fv = $('pFly'); if (fv && fv.src) P.paused ? fv.pause() : fv.play().catch(() => {}); }
   $('pIco').innerHTML = P.paused ? '<path d="M8 5.5v13l11-6.5z"/>' : '<rect x="7" y="5.5" width="3.2" height="13" rx="1"/><rect x="13.8" y="5.5" width="3.2" height="13" rx="1"/>';
   levels(P.paused ? 0.4 : 3);
@@ -3194,6 +3233,7 @@ function frame(now) {
       if (actx && breathGain) { const on = st && $('sbreath').checked, lvl = on ? (ph.cue ? 0.42 : 0.2) * (0.06 + 0.94 * st.b) : 0; breathGain.gain.setTargetAtTime(lvl, actx.currentTime, 0.18); breathLP.frequency.setTargetAtTime(280 + 1400 * (st ? st.b : 0), actx.currentTime, 0.18); }
       if (droneG) droneG.gain.setTargetAtTime(drone.on && P.running && !P.paused && $('music').checked ? 0.04 : 0, actx.currentTime, 1.2);
       if (bowlG) bowlG.gain.setTargetAtTime(bowl.on && P.running && !P.paused && $('music').checked ? 0.055 * (0.45 + 0.55 * (st ? 1 - st.b : 0.5)) : 0, actx.currentTime, 0.4);
+      if (!P.paused) affTick();
       if (st && ph.cue && st.label !== P.lastLabel) { if (P.lastLabel && st.label !== 'Пауза' && ($('vBreath').checked || ph.guideBreath) && !(actx && actx.currentTime < recUntil) && !playRec(breathKey(st.label, ph)) && synth && !synth.speaking) speak([st.label], { rate: 0.7, gap: 0 }); P.lastLabel = st.label; }
       const inMain = P.idx >= P.m0 && P.idx < P.m1, el = P.elapsed - P.phases.slice(0, P.m0).reduce((a, p) => a + p.dur, 0);
       $('pIntent').classList.toggle('big', ph.key === 'intent'); $('pIntent').classList.toggle('on', ph.key === 'intent' || (inMain && (el % 75) < 9));
