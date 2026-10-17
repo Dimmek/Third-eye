@@ -2796,7 +2796,7 @@ let trackG = null, trackSrc = null;
 async function bed(f) {
   if (trackSrc) { trackSrc.stop(); trackSrc = null; }
   bed.on = HZ_TRACK.includes(f); if (!bed.on || !actx) return;
-  if (!trackG) { trackG = actx.createGain(); trackG.gain.value = 0; const hp = actx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 120; hp.Q.value = 0.5; trackG.connect(hp).connect(duck); }   // no rumble: the low end is cut
+  if (!trackG) { trackG = actx.createGain(); trackG.gain.value = 0; const hp = actx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 120; hp.Q.value = 0.5; const lp = actx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1400; lp.Q.value = 0.5; trackG.connect(hp).connect(lp).connect(duck); }   // no rumble and no ringing overtones: the tone lies soft under the music
   bed.cache = bed.cache || {};
   try { if (!bed.cache[f]) { const r = await fetch('media/hz/' + f + '.mp3'); bed.cache[f] = seamless(await actx.decodeAudioData(await r.arrayBuffer())); } } catch (e) { bed.on = false; return; }
   if (!bed.on) return; trackSrc = loopSrc(bed.cache[f], trackG); trackSrc.start();
@@ -2858,11 +2858,11 @@ function bowl(f) { // the focus centre's solfeggio tone (with a soft sub-octave)
 function levels(tc) {
   if (!actx) return; const t = actx.currentTime, on = P.running && !P.paused;
   master.gain.setTargetAtTime(on ? volGain() : 0, t, tc || 0.4);
-  beatGain.gain.setTargetAtTime(beatOn && $('beat').checked ? 0.12 : 0, t, 0.6);   // binaural beats work at a low level; louder they become a hum
+  beatGain.gain.setTargetAtTime(beatOn && $('beat').checked ? 0.015 : 0, t, 0.6);   // ~21 dB under the music: each ear still hears its own tone, so the beat works, without a hum
   noiseGain.gain.setTargetAtTime($('noise').checked ? 0.3 : 0, t, 0.5);   // a soft hiss like rain or surf, under everything
   padBus.gain.setTargetAtTime($('music').checked && !song.on ? 0.55 : 0, t, 1.5);
   melBus.gain.setTargetAtTime($('music').checked && $('melody').checked && !song.on ? 0.5 : 0, t, 1);
-  if (songG) songG.gain.setTargetAtTime(on && song.on && $('music').checked && $('melody').checked ? 0.32 : 0, t, 2);   // music is a light veil over the frequency, not the main sound
+  if (songG) songG.gain.setTargetAtTime(on && song.on && $('music').checked && $('melody').checked ? 1 : 0, t, 2);   // the music is the soft base of the space; the frequency and the beat lie under it
 }
 const setDuck = on => { if (actx) duck.gain.setTargetAtTime(on ? 0.45 : 1, actx.currentTime, 0.6); };
 if (+store.get('snd-vol') > 0) { $('vol').value = store.get('snd-vol'); $('volV').textContent = $('vol').value + '%'; }
@@ -3349,7 +3349,7 @@ function frame(now) {
       const st = ph.breath ? breathAt(ph.breath, pt) : null;
       if (actx && breathGain) { const on = st && $('sbreath').checked, lvl = on ? (ph.cue ? 0.42 : 0.2) * (0.06 + 0.94 * st.b) : 0; breathGain.gain.setTargetAtTime(lvl, actx.currentTime, 0.18); breathLP.frequency.setTargetAtTime(280 + 1400 * (st ? st.b : 0), actx.currentTime, 0.18); }
       if (droneG) droneG.gain.setTargetAtTime(drone.on && P.running && !P.paused && $('music').checked ? 0.04 : 0, actx.currentTime, 1.2);
-      if (trackG) trackG.gain.setTargetAtTime(bed.on && P.running && !P.paused && $('music').checked ? 2.0 : 0, actx.currentTime, 1.5);
+      if (trackG) trackG.gain.setTargetAtTime(bed.on && P.running && !P.paused && $('music').checked ? 0.35 : 0, actx.currentTime, 1.5);   // the frequency ~9 dB under the music: it works without pressing
       if (bowlG) bowlG.gain.setTargetAtTime(bowl.on && P.running && !P.paused && $('music').checked ? 0.025 * (0.45 + 0.55 * (st ? 1 - st.b : 0.5)) : 0, actx.currentTime, 0.4);
       if (!P.paused) { affTick(); bowlTick(); }
       if (st && ph.cue && st.label !== P.lastLabel) { if (P.lastLabel && st.label !== 'Пауза' && ($('vBreath').checked || ph.guideBreath) && !(actx && actx.currentTime < recUntil) && !playRec(breathKey(st.label, ph)) && synth && !synth.speaking) speak([st.label], { rate: 0.7, gap: 0 }); P.lastLabel = st.label; }
