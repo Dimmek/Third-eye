@@ -338,6 +338,12 @@ body:has(.safe:not([hidden])) :is(.totop, .mbar, .owner-sw), body:has(#player:no
   background: radial-gradient(circle, #fff 0 18%, var(--oc, #ffd27a) 45%, transparent 72%); box-shadow: 0 0 30px 10px var(--oc, #ffd27a), 0 0 90px 30px var(--oc, #ffd27a); }
 .porb.on { opacity: 1; } .porb.up, .porb.down, .porb.rise { animation: orbtrail 2s ease-in-out infinite alternate; }
 .porb.open { transform: scale(2.6); transition: transform 3s ease-out; }
+.porb.burst { opacity: 0; transform: scale(7); filter: blur(12px); transition: opacity 4s ease-out, transform 4s ease-out, filter 4s ease-out; }   /* it spreads as light in space */
+/* energy centres light up one by one as the silver energy passes them */
+.pcen { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0; transition: opacity 1.5s; } .pcen.on { opacity: 1; }
+.pcen i { position: fixed; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; background: radial-gradient(circle, #fff 0 14%, var(--cc, #fff) 42%, transparent 70%); box-shadow: 0 0 16px 5px var(--cc, #fff); opacity: 0; transform: scale(.3); transition: opacity 1.4s ease-out, transform 1.4s ease-out; }
+.pcen i.on { opacity: .85; transform: scale(1); }
+.player.soft .pcen { opacity: 0 !important; }
 .porb.fill { transform: scale(1.4); animation: orbbeat 7s ease-in-out infinite; }   /* slow, like a calm breath */
 @keyframes orbtrail { to { box-shadow: 0 0 40px 14px var(--oc, #ffd27a), 0 20px 70px 24px var(--oc, #ffd27a); } } @keyframes orbbeat { 50% { transform: scale(1.8); } }
 .prings { position: absolute; z-index: 3; width: 0; height: 0; pointer-events: none; opacity: 0; transition: opacity 1.2s; } .prings.on { opacity: 1; }
@@ -393,7 +399,7 @@ body:has(.safe:not([hidden])) :is(.totop, .mbar, .owner-sw), body:has(#player:no
 .pbottom { position: relative; z-index: 5; display: grid; justify-items: center; gap: 12px; text-align: center; }   /* text always above the sphere's glow */
 .pbottom .eyebrow { margin: 0; }
 .pbottom .eyebrow::before { display: none; }
-.peyes { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; border: 1px solid rgba(220,189,134,.35); background: rgba(6,5,11,.45); font-size: 13px; color: var(--gold-l); }
+.peyes { transition: opacity 1.2s; display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; border: 1px solid rgba(220,189,134,.35); background: rgba(6,5,11,.45); font-size: 13px; color: var(--gold-l); }
 .peyes:empty { display: none; }
 .peyes svg, .timeline .eyes svg { width: 16px; height: 16px; }
 .timeline .eyes { display: flex; align-items: center; gap: 6px; font-size: 12px; letter-spacing: .06em; color: var(--gold-d); margin-bottom: 2px; }
@@ -1215,7 +1221,7 @@ input[type=range] { width: 100%; accent-color: var(--gold-l); }
   <video class="pfly" id="pFly" muted loop playsinline preload="none" aria-hidden="true"></video>
   <img class="pcoc" id="pCoc" src="img/cocoon.webp" alt="" aria-hidden="true">
   <div class="paura" id="pAura" aria-hidden="true"></div>
-  <div class="prings" id="pRings" aria-hidden="true"><i></i><i></i><i></i></div><div class="pbeam" id="pBeam" aria-hidden="true"></div><div class="porb" id="pOrb" aria-hidden="true"></div>
+  <div class="prings" id="pRings" aria-hidden="true"><i></i><i></i><i></i></div><div class="pbeam" id="pBeam" aria-hidden="true"></div><div class="porb" id="pOrb" aria-hidden="true"></div><div class="pcen" id="pCen" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <video class="pvis" id="pVis" muted loop playsinline preload="none" aria-hidden="true"></video>
   <div class="pintent" id="pIntent" aria-live="off"></div>
   <div class="pfocus" id="pFocus" aria-hidden="true"><i></i><span></span></div>
@@ -1339,14 +1345,14 @@ const focusLine = c => 'Перенесите внимание на ' + ORD_A[c] 
 
 const SPHERE_STAGES = [
   [0, ['Посмотрите на картинку на экране.', 'Представьте, что вы внутри этой золотой сферы и она окружает вас со всех сторон.']],
-  [0.14, ['Снизу, через стопы, в вас входит серебристая энергия.', 'Она поднимается через все чакры, выше макушки, и мягко растворяется в космосе.']],
-  [0.32, ['Сверху, из космоса, к вам опускается мягкий золотой свет.', 'Он проходит через макушку и спускается в центр груди, в четвёртую чакру.']],
+  [0.14, ['Снизу, через стопы, в вас входит серебристая энергия.', 'Она поднимается через все энергоцентры, выше макушки, и мягко растворяется в космосе.']],
+  [0.32, ['Сверху, из космоса, к вам опускается мягкий золотой свет.', 'Он проходит через макушку и спускается в центр груди, в четвёртый энергоцентр.']],
   [0.47, ['Почувствуйте, как грудь наполняется этим тёплым, спокойным светом.']],
   [0.56, ['А теперь, на выдохе, отпустите свет из груди во все стороны.', 'Он заполняет сферу, и она становится плотнее.']],
   [0.74, ['С каждым выдохом сфера всё плотнее и ярче.', 'Мысленно попросите светлые высшие силы наполнить и защитить ваше пространство.', 'Это ваша защита.']]
 ];
 const COCOON = { key: 'cocoon', name: 'Золотая сфера', dur: 180, visual: 'cocoon', breath: 'calm', beat: 8, tone: 3, eyes: 'open', stages: true,
-  text: 'Смотрите на сферу. Снизу, через стопы, входит серебристая энергия, поднимается через все чакры и растворяется в космосе. Из космоса опускается золотой свет — в сердце, в четвёртую чакру. На выдохе он расходится во все стороны и наполняет сферу. Светлые высшие силы наполняют и защищают ваше пространство.',
+  text: 'Смотрите на сферу. Снизу, через стопы, входит серебристая энергия, поднимается через все энергоцентры и растворяется в космосе. Из космоса опускается золотой свет — в сердце, в четвёртый энергоцентр. На выдохе он расходится во все стороны и наполняет сферу. Светлые высшие силы наполняют и защищают ваше пространство.',
   say: SPHERE_STAGES.flatMap(x => x[1]) };
 const BREATHE = { key: 'breath', name: 'Успокоение', dur: 90, visual: 'breath', breath: 'guide', beat: 10, tone: 3, cue: true, guideBreath: true, eyes: 'any',
   text: 'Ноги на полу, спина ровная. Вдох носом, медленный выдох ртом. Шар растёт — вдох, уменьшается — выдох.',
@@ -2924,8 +2930,9 @@ function affTick() {
 }
 const breathKey = (label, ph) => { const k = { 'Вдох': 'inhale', 'Выдох': 'exhale' }[label] || ''; if (!k) return '';
   if (k === 'inhale') P.breaths = (P.breaths || 0) + 1; return k; };
+const lastPlay = {};   // when each fragment started and ended (audio clock): the sphere follows the voice
 function playRec(k) { const b = recorded[k]; if (!b || !actx) return false; const s = actx.createBufferSource(); s.buffer = b; s.connect(voiceBus); setDuck(true); s.onended = () => setDuck(false);
-  const at = Math.max(actx.currentTime, recUntil + 0.6); s.start(at); recUntil = at + b.duration; return true; }   // never over the previous phrase
+  const at = Math.max(actx.currentTime, recUntil + 0.6); s.start(at); recUntil = at + b.duration; lastPlay[k] = { t: actx.currentTime, at, end: recUntil }; return true; }   // never over the previous phrase
 const synth = window.speechSynthesis;
 const FEMALE = /svetlana|dariya|darya|milena|katya|ekaterina|anna|irina|elena|alena|alyona|yuliya|julia|tatyana|natalia|google\s*рус|google ru|female|женск/i;
 const MALE = /pavel|dmitr|yuri|maxim|denis|ruslan|nikolai|aleksandr|artem|male\b|мужск/i;
@@ -3026,24 +3033,47 @@ function enter(i) {
 }
 const CH_WORDS = [[0, /основани|копчик|корн|стоп/], [1, /низ живота|ниже пупка|таз/], [2, /солнечн|под рёбрами/], [3, /груд|сердц/], [4, /горл/], [5, /между бровей|лоб/], [6, /макушк|темя/]];
 const namedCentre = ph => { const t = ((ph.text || '') + ' ' + (ph.say || []).join(' ')).toLowerCase(); let best = -1, at = 1e9; CH_WORDS.forEach(([c, re]) => { const m = t.search(re); if (m >= 0 && m < at) { at = m; best = c; } }); return best; };
-// the sphere: silver energy rises from the root through the crown and dissolves in space, leaving a beam that fades upward;
-// then golden light descends from space to the heart with a beam of falling golden sparks; the heart opens; waves fill the sphere
-const ROOT_Y = 0.615, HEART_Y = 0.494, SPACE_Y = -0.18, BELOW_Y = 0.8;   // BELOW_Y: under the sphere, where the energy comes in through the feet
-function sphereStage(u) { const n = SPHERE_STAGES.filter(x => u >= x[0]).length - 1;
-  if (n !== P.stage) { P.stage = n; const k = 'cocoon-' + (n + 1), l = SPHERE_STAGES[n][1]; if (P.running && !P.paused) guideSeq([[k, l]]); } }
-function sphereAnim(ph, pt) { const o = $('pOrb'), rg = $('pRings'), bm = $('pBeam'), img = $('pCoc');
-  if (!ph || !ph.stages || !P.running || !img.classList.contains('on')) { o.className = 'porb'; rg.className = 'prings'; bm.className = 'pbeam'; return; }
-  const u = pt / ph.dur, r = img.getBoundingClientRect(), X = r.left + r.width / 2, Y = y => r.top + r.height * y;
-  let y = null, mode = '', beam = '', b0 = 0, b1 = 0;
-  if (u >= 0.14 && u < 0.30) { y = BELOW_Y + (SPACE_Y - BELOW_Y) * ease((u - 0.14) / 0.16); mode = 'up'; beam = 'up on'; b0 = y; b1 = BELOW_Y; }
-  else if (u >= 0.30 && u < 0.33) { beam = 'up gone'; b0 = SPACE_Y; b1 = BELOW_Y; }                       // the silver beam dissolves upward
-  else if (u >= 0.33 && u < 0.46) { y = SPACE_Y + (HEART_Y - SPACE_Y) * ease((u - 0.33) / 0.13); mode = 'down'; beam = 'down on'; b0 = SPACE_Y; b1 = y; }
-  else if (u >= 0.46 && u < 0.56) { y = HEART_Y; mode = 'open'; beam = 'down on'; b0 = SPACE_Y; b1 = HEART_Y; }
-  else if (u >= 0.56) { y = HEART_Y; mode = 'fill'; beam = 'down gone'; b0 = SPACE_Y; b1 = HEART_Y; }
+// the stages follow the voice: the next one starts only after the previous phrase has been spoken (plus a quiet gap);
+// without the recorded voice they follow the clock
+const STAGE_GAP = [2.5, 3.5, 2.5, 3, 4];
+const sphereVoiced = () => VOICE_RECORDED && $('vInstr').checked && actx;
+function startStage(n) { P.stage = n; P.stageReq = actx ? actx.currentTime : 0; if (P.running && !P.paused) guideSeq([['cocoon-' + (n + 1), SPHERE_STAGES[n][1]]]); }
+function sphereStage(u, pt) { const N = SPHERE_STAGES.length;
+  if (!sphereVoiced()) { const n = SPHERE_STAGES.filter(x => u >= x[0]).length - 1; if (n !== P.stage) startStage(n); return; }
+  if (P.stage === -1) { if (pt >= 0.8) startStage(0); return; }
+  if (P.stage >= N - 1) return;
+  const lp = lastPlay['cocoon-' + (P.stage + 1)], now = actx.currentTime;
+  if (lp && lp.t >= P.stageReq - 0.01 ? now >= lp.end + STAGE_GAP[P.stage] : now - P.stageReq > 25) startStage(P.stage + 1); }
+// progress of a stage, 0..1: by its voice when it is playing, else by the clock
+function stageP(n, u) { const lp = lastPlay['cocoon-' + (n + 1)];
+  if (sphereVoiced() && lp && lp.t >= (n === P.stage ? P.stageReq : 0) - 0.01) return Math.min(1, Math.max(0, (actx.currentTime - lp.at) / (lp.end - lp.at)));
+  if (sphereVoiced() && n === P.stage) return 0;
+  const a = SPHERE_STAGES[n][0], b = (SPHERE_STAGES[n + 1] || [1])[0]; return Math.min(1, Math.max(0, (u - a) / (b - a))); }
+// the sphere: silver energy comes in through the feet, rises through every energy centre (each lights up as it passes)
+// and dissolves into light above the sphere; then golden light descends from space to the heart as a channel of falling dust
+const ROOT_Y = 0.615, HEART_Y = 0.494, SPACE_Y = -0.18, BELOW_Y = 0.8, FEET_Y = 0.66, OUT_Y = 0.08;
+function sphereAnim(ph, pt) { const o = $('pOrb'), rg = $('pRings'), bm = $('pBeam'), img = $('pCoc'), cen = $('pCen');
+  if (!ph || !ph.stages || !P.running || !img.classList.contains('on')) { o.className = 'porb'; rg.className = 'prings'; bm.className = 'pbeam'; cen.className = 'pcen'; $('pEyes').style.opacity = ''; return; }
+  $('pEyes').style.opacity = P.stage >= 1 ? '0' : '';   // the badge would cover the feet, where the energy comes in
+  const u = pt / ph.dur, r = img.getBoundingClientRect(), X = r.left + r.width / 2, Y = y => r.top + r.height * y, n = P.stage;
+  let y = null, mode = '', beam = '', b0 = 0, b1 = 0, lit = n >= 2 ? 7 : 0;
+  if (n === 1) { const p = stageP(1, u);
+    if (p <= 0) {}
+    else if (p < 0.35) { y = BELOW_Y + (FEET_Y - BELOW_Y) * ease(p / 0.35); mode = 'up'; beam = 'up on'; b0 = y; b1 = BELOW_Y; }       // in through the feet
+    else if (p < 0.38) { y = FEET_Y; mode = 'up'; beam = 'up on'; b0 = y; b1 = BELOW_Y; }
+    else if (p < 0.82) { y = FEET_Y + (FOCUS_Y[6] - FEET_Y) * (p - 0.38) / 0.44; mode = 'up'; beam = 'up on'; b0 = y; b1 = BELOW_Y; }   // slowly up through the centres, one by one
+    else if (p < 0.97) { y = FOCUS_Y[6] + (OUT_Y - FOCUS_Y[6]) * ease((p - 0.82) / 0.15); mode = 'up'; beam = 'up on'; b0 = y; b1 = BELOW_Y; }   // above the crown, out of the sphere
+    else { y = OUT_Y; mode = 'burst'; beam = 'up gone'; b0 = OUT_Y; b1 = BELOW_Y; }                                                   // out of the sphere: it spreads as light
+    lit = y == null ? 0 : FOCUS_Y.filter(f => y <= f + 0.004).length; }
+  else if (n === 2) { const p = stageP(2, u);
+    if (p > 0) { y = p < 0.45 ? SPACE_Y + (FOCUS_Y[6] - SPACE_Y) * ease(p / 0.45) : FOCUS_Y[6] + (HEART_Y - FOCUS_Y[6]) * ease((p - 0.45) / 0.55); mode = 'down'; beam = 'down on'; b0 = SPACE_Y; b1 = y; } }
+  else if (n === 3) { y = HEART_Y; mode = 'open'; beam = 'down on'; b0 = SPACE_Y; b1 = HEART_Y; }
+  else if (n >= 4) { y = HEART_Y; mode = 'fill'; beam = 'down gone'; b0 = SPACE_Y; b1 = HEART_Y; }
   bm.className = 'pbeam ' + beam; bm.style.left = X + 'px'; bm.style.top = Y(Math.min(b0, b1)) + 'px'; bm.style.height = Math.max(0, Y(Math.max(b0, b1)) - Y(Math.min(b0, b1))) + 'px';
+  cen.className = 'pcen' + (lit ? ' on' : ''); [...cen.children].forEach((d, c) => { d.style.left = X + 'px'; d.style.top = Y(FOCUS_Y[c]) + 'px'; d.style.setProperty('--cc', 'rgb(' + CH[c].c.join(',') + ')'); d.classList.toggle('on', c < lit); });
   if (y == null) { o.className = 'porb'; rg.className = 'prings'; return; }
-  o.style.left = X + 'px'; o.style.top = Y(y) + 'px'; o.style.setProperty('--oc', mode === 'up' ? 'rgb(225,232,246)' : 'rgb(255,205,110)');
-  o.className = 'porb on ' + mode; rg.style.left = o.style.left; rg.style.top = o.style.top; rg.style.setProperty('--rr', (r.height * 0.44) + 'px'); rg.className = 'prings' + (mode === 'fill' ? ' on' : ''); }
+  o.style.left = X + 'px'; o.style.top = Y(y) + 'px'; o.style.setProperty('--oc', mode === 'up' || mode === 'burst' ? 'rgb(225,232,246)' : 'rgb(255,205,110)');
+  o.className = 'porb ' + (mode === 'burst' ? 'burst' : 'on ' + mode); rg.style.left = o.style.left; rg.style.top = o.style.top; rg.style.setProperty('--rr', (r.height * 0.44) + 'px'); rg.className = 'prings' + (mode === 'fill' ? ' on' : ''); }
 // focus point on the figure: chakra heights as a share of img/cocoon.webp (768×1024), root → crown
 const FOCUS_Y = [0.615, 0.575, 0.534, 0.494, 0.452, 0.371, 0.335];
 function focusUI(c, ph) { const f = $('pFocus'), img = $('pCoc');
@@ -3345,7 +3375,7 @@ function frame(now) {
     if (P.running) {
       const ph = P.phases[P.idx], pt = P.elapsed - P.start, tot = sum(P.phases);
       if ((ph.key === 'chakras' || ph.seq) && pt > 4) { const per = (ph.dur - 6) / 7, k = Math.min(6, Math.floor((pt - 4) / per)); if (k !== P.ch) chakra(k, ph.seq); }
-      if (ph.stages) sphereStage(pt / ph.dur);
+      if (ph.stages) sphereStage(pt / ph.dur, pt);
       const st = ph.breath ? breathAt(ph.breath, pt) : null;
       if (actx && breathGain) { const on = st && $('sbreath').checked, lvl = on ? (ph.cue ? 0.42 : 0.2) * (0.06 + 0.94 * st.b) : 0; breathGain.gain.setTargetAtTime(lvl, actx.currentTime, 0.18); breathLP.frequency.setTargetAtTime(280 + 1400 * (st ? st.b : 0), actx.currentTime, 0.18); }
       if (droneG) droneG.gain.setTargetAtTime(drone.on && P.running && !P.paused && $('music').checked ? 0.04 : 0, actx.currentTime, 1.2);
@@ -3356,7 +3386,7 @@ function frame(now) {
       const inMain = P.idx >= P.m0 && P.idx < P.m1, el = P.elapsed - P.phases.slice(0, P.m0).reduce((a, p) => a + p.dur, 0);
       $('pIntent').classList.toggle('big', ph.key === 'intent'); $('pIntent').classList.toggle('on', ph.key === 'intent' || (inMain && (el % 75) < 9));
       focusUI(ph.key === 'chakras' || ph.seq ? P.ch : ph.key === 'cocoon' ? -1 : ph.key === 'intent' ? (TARGET[P.room.id] ? TARGET[P.room.id].ch[0] : -1) : inMain ? P.fc : -1, ph); breathUI(st, ph); cocoonGlow(ph, pt, st); sphereAnim(ph, pt);
-      $('pEye').textContent = 'Шаг ' + (P.idx + 1) + ' из ' + P.phases.length + ' · ' + fmt(ph.dur - pt);
+      $('pEye').textContent = '';   // one practice, not a list of steps
       $('pTime').textContent = fmt(tot - P.elapsed); $('pProg').style.width = (P.elapsed / tot * 100).toFixed(2) + '%';
     }
   }
