@@ -389,7 +389,7 @@ body:has(.safe:not([hidden])) :is(.totop, .mbar, .owner-sw), body:has(#player:no
 .pbr em { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); font: 700 20px/1 var(--ff); color: #fff; font-style: normal; }
 @media (max-width: 700px) { .player { --ob: 58px; } .pbr b { font-size: 13px; } .pbr em { font-size: 16px; } }
 .pintent.big::before { content: 'Ваше намерение'; display: block; margin-bottom: 10px; font: 600 13px/1 var(--ff); font-style: normal; letter-spacing: .2em; text-transform: uppercase; color: var(--gold-l); }
-.pintent.big { top: calc(70px + env(safe-area-inset-top, 0px)); font-size: clamp(30px, 4.4vw, 54px); opacity: 1; padding-inline: 24px; text-shadow: 0 0 30px rgba(0,0,0,.7); }
+.pintent.big { top: calc(70px + env(safe-area-inset-top, 0px)); font-size: clamp(26px, 4.2vw, 50px); opacity: 1; margin-inline: auto; max-width: min(900px, calc(100% - 24px)); padding: 14px 22px 18px; border-radius: 22px; background: rgba(6,5,11,.58); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); text-shadow: 0 0 24px rgba(0,0,0,.7); }   /* readable over the bright sphere */
 .ptop { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .ptop .ttl { font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold-l); font-weight: 600; text-align: center; }
 .icon { width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(246,241,232,.2); display: grid; place-items: center; background: rgba(6,5,11,.4); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: border-color .3s; }
@@ -2346,7 +2346,7 @@ function scene(visual, t, o) {
 const surfaces = [];
 function surface(canvas, opts) {
   const s = Object.assign({ canvas, ctx: canvas.getContext('2d'), w: 0, h: 0, cyr: 0.45, mr: 0.9, live: true }, opts);
-  const fit = () => { const r = canvas.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio || 1); s.w = r.width; s.h = r.height; canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr); s.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); s.dirty = true; };
+  const fit = () => { const r = canvas.getBoundingClientRect(), dpr = Math.min(canvas.id === 'pCv' ? 1.25 : 2, devicePixelRatio || 1); /* the player's soft sky needs no retina pixels */ s.w = r.width; s.h = r.height; canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr); s.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); s.dirty = true; };
   new ResizeObserver(fit).observe(canvas); fit(); surfaces.push(s); return s;
 }
 function paint(s, t) {
@@ -3394,13 +3394,16 @@ function frame(now) {
       const inMain = P.idx >= P.m0 && P.idx < P.m1, el = P.elapsed - P.phases.slice(0, P.m0).reduce((a, p) => a + p.dur, 0);
       $('pIntent').classList.toggle('big', ph.key === 'intent'); $('pIntent').classList.toggle('on', ph.key === 'intent' || (inMain && (el % 75) < 9));
       focusUI(ph.key === 'chakras' || ph.seq ? P.ch : ph.key === 'cocoon' ? -1 : ph.key === 'intent' ? (TARGET[P.room.id] ? TARGET[P.room.id].ch[0] : -1) : inMain ? P.fc : -1, ph); breathUI(st, ph); cocoonGlow(ph, pt, st); sphereAnim(ph, pt);
-      $('pEye').textContent = '';   // one practice, not a list of steps
-      $('pTime').textContent = fmt(tot - P.elapsed); $('pProg').style.width = (P.elapsed / tot * 100).toFixed(2) + '%';
+      const tm = fmt(tot - P.elapsed), pw = (P.elapsed / tot * 100).toFixed(1) + '%';   // touch the page only when something changed
+      if ($('pTime').textContent !== tm) $('pTime').textContent = tm; if ($('pProg').style.width !== pw) $('pProg').style.width = pw;
     }
   }
   P.last = now;
   const t = now / 1000, inPlayer = !$('player').hidden;
   if (!inPlayer) NETS.forEach(n => { if (n.canvas.id === 'siteNet' || visible(n.canvas)) n.tick(t); });
+  // the player's sky moves slowly: ~30 frames a second are enough (25 on a phone, 6 on the calm screen) and halve the load
+  const gap = inPlayer ? ($('player').classList.contains('soft') ? 160 : innerWidth < 700 ? 40 : 32) : 0;
+  if (gap && now - (frame.painted || 0) < gap) { requestAnimationFrame(frame); return; } frame.painted = now;
   for (const s of surfaces) {
     if (inPlayer ? s !== pSurf : s === pSurf) continue;
     if (!visible(s.canvas)) continue;
